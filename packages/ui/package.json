@@ -15,7 +15,8 @@
     "@types/react-dom": "^18.2.0",
     "eslint-config-custom": "workspace:*",
     "react": "^18.2.0",
+    "tailwindcss-animate": "^1.0.7",
     "tsconfig": "workspace:*",
-    "typescript": "^4.5.2"
+    "typescript": "^5.2.2"
   }
 }
