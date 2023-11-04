@@ -2,6 +2,15 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [ "**/.env.*local", "**/.env", "tsconfig.json" ],
   "globalDotEnv": [ ".env" ],
+  "globalEnv": [
+    "DB_URL",
+    "DB_AUTH_TOKEN",
+    "ADMIN_IDENT",
+    "NEXTAUTH_SECRET",
+    "NEXT_PUBLIC_BASE_URL",
+    "GITHUB_ID",
+    "GITHUB_SECRET"
+  ],
   "pipeline": {
     "build": {
       "dependsOn": [ "^build" ],
