@@ -1,14 +1,12 @@
-import { AppProvider } from "@/components/providers/AppProvider";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Merriweather_Sans } from "next/font/google";
-import { Navbar } from "@/components/navbar/Navbar";
-import { Toaster } from "@/components/ui/toaster";
-
-const inter = Merriweather_Sans({ subsets: ["latin"], display: "swap" });
+import { GeistSans } from "geist/font";
+import { AppProvider } from "@db-center/components/providers/AppProvider";
+import { Navbar } from "@db-center/components/navbar/Navbar";
+import { Toaster } from "ui/primitive";
 
 export const metadata: Metadata = {
-  title: "Othi's DB Center ",
+  title: "Othi's DB Center",
 };
 
 export default function RootLayout({
@@ -18,11 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={GeistSans.className}>
         <AppProvider>
           <Navbar />
 
-          <main className="container">{children}</main>
+          <main className="py-8 px-4">{children}</main>
           <Toaster />
         </AppProvider>
       </body>

@@ -1,5 +1,4 @@
-import { env } from "../env.mjs";
-import { Card } from "ui";
+import { Button } from "ui/primitive/button";
 import { HELLO } from "@docs/app/test";
 
 export default function Page() {
@@ -8,10 +7,8 @@ export default function Page() {
   return (
     <main className="font-bold">
       hello docs <br />
-      {env.SECRET} {test}
-      <Card title="hi" href="/">
-        hello
-      </Card>
+      {test}
+      <Button>hello</Button>
     </main>
   );
 }

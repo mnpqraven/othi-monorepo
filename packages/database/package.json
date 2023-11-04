@@ -1,0 +1,32 @@
+{
+  "name": "database",
+  "version": "0.0.0",
+  "main": "index.ts",
+  "types": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint .",
+    "dev": "docker run -p 8080:8080 -d ghcr.io/libsql/sqld:latest",
+    "db:migrate": "drizzle-kit generate:sqlite && npx tsx ./migrate.ts",
+    "db:push": "drizzle-kit push:sqlite",
+    "db:drop": "drizzle-kit drop",
+    "db:studio": "drizzle-kit studio --port 5174 --host 127.0.0.1 --verbose"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.3.5",
+    "@t3-oss/env-nextjs": "^0.6.1",
+    "better-sqlite3": "^8.7.0",
+    "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.28.6",
+    "drizzle-zod": "^0.5.1",
+    "ulid": "^2.3.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "drizzle-kit": "^0.19.13",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.0",
+    "typescript": "^5"
+  }
+}

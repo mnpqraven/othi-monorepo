@@ -1,6 +1,6 @@
-import { Home, Newspaper } from "lucide-react";
+import { Home } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export interface NavbarItem {
   label?: string;
@@ -10,14 +10,12 @@ export interface NavbarItem {
 
 export const routes: NavbarItem[] = [
   { label: "Home", path: "/", icon: <Home /> },
-  { label: "About", path: "/about", icon: <Home /> },
-  { label: "Blog", path: "/blog", icon: <Newspaper /> },
 ];
 
 export function usePathCompare() {
   const pathname = usePathname();
   function isSamePath(path: string) {
-    if (path == "/") return pathname == "/";
+    if (path === "/") return pathname === "/";
     return pathname.startsWith(path);
   }
   return { isSamePath };

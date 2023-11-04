@@ -1,10 +1,10 @@
 "use client";
 
 import { signIn, signOut, useSession } from "next-auth/react";
-import { routes, usePathCompare } from "./routes";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { ThemeToggle } from "./ThemeToggle";
+import { cn } from "lib/utils";
+import { ThemeToggle } from "ui/shared/ThemeToggle";
+import { routes, usePathCompare } from "./routes";
 
 export function Navbar() {
   const { status } = useSession();
@@ -19,9 +19,9 @@ export function Navbar() {
     <div className="sticky top-0 z-50 flex h-12 items-center justify-between border-b bg-background px-4">
       <div className="flex items-center gap-2">
         {routes
-          .filter((_) => (isSamePath("/login") ? false : true))
+          .filter((_) => !isSamePath("/login"))
           .map(({ icon, label, path }) => (
-            <Link href={path} key={path} className={pathnameClass(path)}>
+            <Link className={pathnameClass(path)} href={path} key={path}>
               {icon}
               {label}
             </Link>
@@ -30,11 +30,15 @@ export function Navbar() {
 
       <div className="flex items-center gap-1">
         <ThemeToggle />
-        {status == "authenticated" && (
-          <button onClick={() => signOut()}>Sign out</button>
+        {status === "authenticated" && (
+          <button onClick={() => void signOut()} type="button">
+            Sign out
+          </button>
         )}
-        {status == "unauthenticated" && (
-          <button onClick={() => signIn()}>Sign in</button>
+        {status === "unauthenticated" && (
+          <button onClick={() => void signIn()} type="button">
+            Sign in
+          </button>
         )}
       </div>
     </div>

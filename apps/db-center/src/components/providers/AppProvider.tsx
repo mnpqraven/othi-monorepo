@@ -1,18 +1,16 @@
 "use client";
+
 import { Provider } from "jotai";
-import {
-  QueryClient,
-  QueryClientConfig,
-  QueryClientProvider,
-} from "@tanstack/react-query";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import type { QueryClientConfig } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { DevTools } from "jotai-devtools";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { SessionProvider } from "next-auth/react";
 import { useState } from "react";
-import { trpc } from "@/app/_trpc/client";
+import { TooltipProvider } from "ui/primitive/tooltip";
 import { httpBatchLink } from "@trpc/client";
+import { trpc } from "@db-center/app/_trpc/client";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
   defaultOptions: {

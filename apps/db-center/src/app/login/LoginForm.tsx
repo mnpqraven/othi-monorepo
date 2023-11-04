@@ -1,20 +1,20 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
-import { env } from "@/env.mjs";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
+import {
+  useToast,
+  Button,
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  Input,
+  FormMessage,
+} from "ui/primitive";
+import { env } from "@db-center/env";
 
 export default function LoginForm() {
   const form = useForm<{ username: string; password: string }>({
@@ -52,7 +52,9 @@ export default function LoginForm() {
     <div className="flex flex-col gap-4 items-center container pt-12">
       <Button
         className="w-fit"
-        onClick={() => signIn("github", { callbackUrl: callbackUrl ?? "/" })}
+        onClick={() =>
+          void signIn("github", { callbackUrl: callbackUrl ?? "/" })
+        }
       >
         Sign in with Github
       </Button>
@@ -61,8 +63,8 @@ export default function LoginForm() {
 
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-6 items-center"
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField
             control={form.control}

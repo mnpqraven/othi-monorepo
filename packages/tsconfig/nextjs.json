@@ -24,16 +24,10 @@
     "target": "es5",
     "baseUrl": ".",
     "paths": {
-      "@docs/*": [
-        "../../apps/docs/src/*"
-      ]
+      "@docs/*": [ "../../apps/docs/src/*" ],
+      "@db-center/*": [ "../../apps/db-center/src/*" ]
     }
   },
-  "include": [
-    "src",
-    "next-env.d.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": [ "src", "next-env.d.ts" ],
+  "exclude": [ "node_modules" ]
 }

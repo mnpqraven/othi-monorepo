@@ -1,19 +1,16 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
+import { Button } from "ui/primitive";
 import { routeDict } from "./tables";
-import { HTMLAttributes, forwardRef } from "react";
-import { ClientTest } from "./honkai/avatar/ClientTest";
 
 export default function Home() {
   return (
-    <>
-      <ClientTest />
-      <div className="flex flex-col gap-4">
-        {routeDict.map((data, index) => (
-          <DictItem key={index} data={data} />
-        ))}
-      </div>
-    </>
+    <div className="flex flex-col gap-4">
+      {routeDict.map((data) => (
+        <DictItem data={data} key={data.category.route} />
+      ))}
+    </div>
   );
 }
 
@@ -22,19 +19,19 @@ interface DictProps extends HTMLAttributes<HTMLDivElement> {
 }
 const DictItem = forwardRef<HTMLDivElement, DictProps>(function DictItem(
   { data, ...props },
-  ref,
+  ref
 ) {
   return (
     <div {...props} ref={ref}>
-      <p className="py-4 text-xl font-bold">{data.category.name}</p>
-      <div className="flex flex-col gap-4 rounded-md border p-4">
-        {data.tables.map((table, index) => (
-          <div className="flex flex-col gap-2" key={index}>
-            <div className="flex items-center justify-between">
+      <p className="py-4 font-bold text-xl">{data.category.name}</p>
+      <div className="grid grid-cols-2 border rounded-md p-4 gap-4">
+        {data.tables.map((table) => (
+          <div className="flex flex-col gap-2" key={table.route}>
+            <div className="flex justify-between items-center">
               <span>{table.name}</span>
               <div className="flex gap-2">
                 <Button asChild>
-                  <Link href={data.category.route + "/" + table.route}>
+                  <Link href={`/table/${data.category.route}/${table.route}`}>
                     Table
                   </Link>
                 </Button>
@@ -43,11 +40,11 @@ const DictItem = forwardRef<HTMLDivElement, DictProps>(function DictItem(
 
             {table.api?.map((api) => (
               <Link
-                key={api}
-                href={
-                  "/api/" + [data.category.route, table.route, api].join(".")
-                }
                 className="text-sm text-muted-foreground"
+                href={`/api/${[data.category.route, table.route, api].join(
+                  "."
+                )}`}
+                key={api}
               >
                 {">"} {api}
               </Link>

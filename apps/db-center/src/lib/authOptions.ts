@@ -1,7 +1,7 @@
 import GithubProvider from "next-auth/providers/github";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { NextAuthOptions } from "next-auth";
-import { env } from "@/env.mjs";
+import Credentials from "next-auth/providers/credentials";
+import type { NextAuthOptions } from "next-auth";
+import { env } from "@db-center/env";
 
 export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GITHUB_ID,
       clientSecret: env.GITHUB_SECRET,
     }),
-    CredentialsProvider({
+    Credentials({
       name: "Credentials",
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
