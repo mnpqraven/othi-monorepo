@@ -1,4 +1,5 @@
-import { HTMLAttributes, forwardRef } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "../primitive";
@@ -6,7 +7,7 @@ import { Button } from "../primitive";
 export const ThemeToggle = forwardRef<
   HTMLButtonElement,
   HTMLAttributes<HTMLButtonElement>
->(function ThemeToggle({ onClick, ...props }, ref) {
+>(function ThemeToggle({ onClick: _, ...props }, ref) {
   const { theme, setTheme } = useTheme();
 
   function toggleTheme() {
@@ -14,9 +15,9 @@ export const ThemeToggle = forwardRef<
   }
   return (
     <Button
-      variant="ghost"
-      size="sm"
       onClick={toggleTheme}
+      size="sm"
+      variant="ghost"
       {...props}
       ref={ref}
     >

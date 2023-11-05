@@ -7,22 +7,22 @@ const Table = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div className="relative w-full overflow-auto">
     <table
-      ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}
+      ref={ref}
       {...props}
     />
   </div>
 ));
-// @ts-ignore
+// @ts-expect-error override
 Table.displayName = "Table";
 
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("[&_tr]:border-b", className)} {...props} />
+  <thead className={cn("[&_tr]:border-b", className)} ref={ref} {...props} />
 ));
-// @ts-ignore
+// @ts-expect-error override
 TableHeader.displayName = "TableHeader";
 
 const TableBody = React.forwardRef<
@@ -30,12 +30,12 @@ const TableBody = React.forwardRef<
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
   <tbody
-    ref={ref}
     className={cn("[&_tr:last-child]:border-0", className)}
+    ref={ref}
     {...props}
   />
 ));
-// @ts-ignore
+// @ts-expect-error override
 TableBody.displayName = "TableBody";
 
 const TableFooter = React.forwardRef<
@@ -43,12 +43,12 @@ const TableFooter = React.forwardRef<
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
   <tfoot
-    ref={ref}
     className={cn("bg-primary font-medium text-primary-foreground", className)}
+    ref={ref}
     {...props}
   />
 ));
-// @ts-ignore
+// @ts-expect-error override
 TableFooter.displayName = "TableFooter";
 
 const TableRow = React.forwardRef<
@@ -56,15 +56,15 @@ const TableRow = React.forwardRef<
   React.HTMLAttributes<HTMLTableRowElement>
 >(({ className, ...props }, ref) => (
   <tr
-    ref={ref}
     className={cn(
       "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
       className
     )}
+    ref={ref}
     {...props}
   />
 ));
-// @ts-ignore
+// @ts-expect-error override
 TableRow.displayName = "TableRow";
 
 const TableHead = React.forwardRef<
@@ -72,15 +72,15 @@ const TableHead = React.forwardRef<
   React.ThHTMLAttributes<HTMLTableCellElement>
 >(({ className, ...props }, ref) => (
   <th
-    ref={ref}
     className={cn(
       "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
       className
     )}
+    ref={ref}
     {...props}
   />
 ));
-// @ts-ignore
+// @ts-expect-error override
 TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
@@ -88,12 +88,12 @@ const TableCell = React.forwardRef<
   React.TdHTMLAttributes<HTMLTableCellElement>
 >(({ className, ...props }, ref) => (
   <td
-    ref={ref}
     className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className)}
+    ref={ref}
     {...props}
   />
 ));
-// @ts-ignore
+// @ts-expect-error override
 TableCell.displayName = "TableCell";
 
 const TableCaption = React.forwardRef<
@@ -101,12 +101,12 @@ const TableCaption = React.forwardRef<
   React.HTMLAttributes<HTMLTableCaptionElement>
 >(({ className, ...props }, ref) => (
   <caption
-    ref={ref}
     className={cn("mt-4 text-sm text-muted-foreground", className)}
+    ref={ref}
     {...props}
   />
 ));
-// @ts-ignore
+// @ts-expect-error override
 TableCaption.displayName = "TableCaption";
 
 export {

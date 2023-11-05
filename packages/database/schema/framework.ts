@@ -10,9 +10,9 @@ export const frameworks = sqliteTable(
     url: text("url"),
     stars: int("stars"),
   },
-  (frameworks) => ({
-    nameIdx: uniqueIndex("idx_frameworks_name").on(frameworks.name),
-    urlIdx: uniqueIndex("idx_frameworks_url").on(frameworks.url),
+  (t) => ({
+    nameIdx: uniqueIndex("idx_frameworks_name").on(t.name),
+    urlIdx: uniqueIndex("idx_frameworks_url").on(t.url),
   })
 );
 

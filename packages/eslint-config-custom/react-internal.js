@@ -31,9 +31,19 @@ module.exports = {
       },
     },
   },
-  ignorePatterns: ["node_modules/", "dist/", ".eslintrc.js"],
+  ignorePatterns: ["node_modules/", "dist/", ".eslintrc.js", "postcss.config.*"],
 
   rules: {
     // add specific rules configurations here
+    "import/no-default-export": "off",
+    "unicorn/filename-case": "off",
+    "import/no-cycle": "off",
+    "eslint-comments/require-description": "off",
+    "tsdoc/syntax": "off",
+    "no-console": "off",
+    "jsx-a11y/heading-has-content": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "react/hook-use-state": "off",
+    "@typescript-eslint/no-empty-interface": "warn",
   },
 };

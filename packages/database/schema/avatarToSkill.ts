@@ -1,13 +1,14 @@
 import {
   index,
   int,
-  primaryKey,
   sqliteTable,
   text,
   uniqueIndex,
 } from "drizzle-orm/sqlite-core";
-import { avatars, skillTypes } from ".";
-import { InferSelectModel, relations } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
+import { relations } from "drizzle-orm";
+import { avatars } from "./avatar";
+import { skillTypes } from "./skillType";
 
 export const avatarToSkills = sqliteTable(
   "honkai_avatarSkill",

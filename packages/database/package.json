@@ -23,6 +23,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "eslint-config-custom": "workspace:*",
     "@types/node": "^20",
     "drizzle-kit": "^0.19.13",
     "eslint": "^8",

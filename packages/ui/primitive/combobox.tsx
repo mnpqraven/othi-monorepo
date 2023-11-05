@@ -1,6 +1,9 @@
 "use client";
 
-import { ForwardedRef, HTMLAttributes, forwardRef, useState } from "react";
+import type { ForwardedRef, HTMLAttributes } from "react";
+import { forwardRef, useState } from "react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { cn } from "lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Button } from "./button";
 import {
@@ -10,11 +13,9 @@ import {
   CommandInput,
   CommandItem,
 } from "./command";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { ScrollArea } from "./scroll-area";
-import { cn } from "lib/utils";
 
-interface Props<T> extends HTMLAttributes<HTMLButtonElement> {
+interface Prop<T> extends HTMLAttributes<HTMLButtonElement> {
   options: T[];
   labelAccessor: (item: T) => string;
   valueAccessor: (item: T) => string;
@@ -41,7 +42,7 @@ function ComboboxInner<T>(
     searchLabel = "Search...",
     emptyLabel = "No result found.",
     ...props
-  }: Props<T>,
+  }: Prop<T>,
   ref: ForwardedRef<HTMLButtonElement>
 ) {
   const [open, setOpen] = useState(false);
@@ -51,17 +52,17 @@ function ComboboxInner<T>(
 
   const current = options.find((kvPair) => valueAccessor(kvPair) === value);
 
-  const placeholderLabel = !!current ? labelAccessor(current) : placeholder;
+  const placeholderLabel = current ? labelAccessor(current) : placeholder;
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
-          role="combobox"
           aria-expanded={open}
           className={cn("h-full w-full justify-between", className)}
           ref={ref}
+          role="combobox"
+          variant="outline"
           {...props}
         >
           {placeholderLabel}
@@ -71,7 +72,7 @@ function ComboboxInner<T>(
 
       <PopoverContent className="p-0">
         <Command>
-          <CommandInput placeholder={searchLabel} className="h-9" />
+          <CommandInput className="h-9" placeholder={searchLabel} />
           <CommandEmpty>{emptyLabel}</CommandEmpty>
 
           <ScrollArea viewportClassName="max-h-[24rem]">
@@ -80,10 +81,9 @@ function ComboboxInner<T>(
                 options.map((item) => (
                   <CommandItem
                     key={valueAccessor(item)}
-                    value={valueAccessor(item)}
                     onSelect={() => {
                       const currentValue = valueAccessor(item);
-                      if (!!onValueChange)
+                      if (onValueChange)
                         onValueChange(
                           currentValue === value ? "" : currentValue
                         );
@@ -91,6 +91,7 @@ function ComboboxInner<T>(
                       setValue(currentValue === value ? "" : currentValue);
                       setOpen(false);
                     }}
+                    value={valueAccessor(item)}
                   >
                     {labelAccessor(item)}
                     <Check

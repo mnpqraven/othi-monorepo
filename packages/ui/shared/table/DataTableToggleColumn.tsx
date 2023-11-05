@@ -1,4 +1,6 @@
-import { Table } from "@tanstack/react-table";
+import type { Table } from "@tanstack/react-table";
+import { SlidersHorizontal } from "lucide-react";
+import type { ComponentPropsWithoutRef } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -8,14 +10,12 @@ import {
   DropdownMenuCheckboxItem,
   Button,
 } from "../../primitive";
-import { SlidersHorizontal } from "lucide-react";
-import { ComponentPropsWithoutRef } from "react";
 
-interface Props<TData> extends ComponentPropsWithoutRef<typeof Button> {
+interface Prop<TData> extends ComponentPropsWithoutRef<typeof Button> {
   table: Table<TData>;
 }
 
-function DataTableToggleColumn<TData>({ table, ...props }: Props<TData>) {
+function DataTableToggleColumn<TData>({ table, ...props }: Prop<TData>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,12 +36,12 @@ function DataTableToggleColumn<TData>({ table, ...props }: Props<TData>) {
           .map((column) => {
             return (
               <DropdownMenuCheckboxItem
-                key={column.id}
-                className="capitalize"
                 checked={column.getIsVisible()}
-                onCheckedChange={(value: boolean) =>
-                  column.toggleVisibility(!!value)
-                }
+                className="capitalize"
+                key={column.id}
+                onCheckedChange={(value: boolean) => {
+                  column.toggleVisibility(Boolean(value));
+                }}
               >
                 {column.id}
               </DropdownMenuCheckboxItem>

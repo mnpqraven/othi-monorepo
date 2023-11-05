@@ -1,5 +1,9 @@
-import { Row, Table as TableType, flexRender } from "@tanstack/react-table";
-import { ForwardedRef, Fragment, HTMLAttributes, forwardRef } from "react";
+import type { Row, Table as TableType } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
+import type { ForwardedRef, HTMLAttributes } from "react";
+import { Fragment, forwardRef } from "react";
+import { Loader2 } from "lucide-react";
+import { cn } from "lib/utils";
 import {
   Table,
   TableBody,
@@ -8,18 +12,9 @@ import {
   TableHeader,
   TableRow,
 } from "../../primitive/table";
-import { Loader2 } from "lucide-react";
-import { cn } from "lib/utils";
 
-// Redecalare forwardRef to accept generic types
-// INFO: https://fettblog.eu/typescript-react-generic-forward-refs/
-declare module "react" {
-  function forwardRef<T, P = NonNullable<unknown>>(
-    render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
-  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
-}
 
-interface Props<TData> extends HTMLAttributes<HTMLDivElement> {
+interface Prop<TData> extends HTMLAttributes<HTMLDivElement> {
   table: TableType<TData>;
   isLoading?: boolean;
   stickyHeader?: boolean;
@@ -36,11 +31,11 @@ function DataTableInner<TData>(
     spacing = "md",
     className,
     ...props
-  }: Props<TData>,
+  }: Prop<TData>,
   ref: ForwardedRef<HTMLDivElement>
 ) {
   return (
-    <div ref={ref} className={className} {...props}>
+    <div className={className} ref={ref} {...props}>
       <Table className="border-separate border-spacing-0">
         <TableHeader
           className={cn(
@@ -52,8 +47,8 @@ function DataTableInner<TData>(
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead
-                    key={header.id}
                     className="border-b border-b-border"
+                    key={header.id}
                     style={{
                       width:
                         header.getSize() === Number.MAX_SAFE_INTEGER
@@ -83,8 +78,8 @@ function DataTableInner<TData>(
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
+                      className={spacing === "sm" ? "p-2" : "p-4"}
                       key={cell.id}
-                      className={spacing == "sm" ? "p-2" : "p-4"}
                       style={{
                         width:
                           cell.column.getSize() === Number.MAX_SAFE_INTEGER
@@ -99,24 +94,24 @@ function DataTableInner<TData>(
                     </TableCell>
                   ))}
                 </TableRow>
-                {row.getIsExpanded() && !!renderSubComponent && (
+                {row.getIsExpanded() && renderSubComponent ? (
                   <TableCell
+                    className={spacing === "sm" ? "p-2" : "p-4"}
                     colSpan={row.getVisibleCells().length}
-                    className={spacing == "sm" ? "p-2" : "p-4"}
                   >
                     {renderSubComponent({ row })}
                   </TableCell>
-                )}
+                ) : null}
               </Fragment>
             ))
           ) : (
             <TableRow className="[&_tr]:border-border">
               <TableCell
-                colSpan={table.getAllColumns().length}
                 className={cn(
                   "h-24 text-center",
-                  spacing == "sm" ? "p-2" : "p-4"
+                  spacing === "sm" ? "p-2" : "p-4"
                 )}
+                colSpan={table.getAllColumns().length}
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-1">

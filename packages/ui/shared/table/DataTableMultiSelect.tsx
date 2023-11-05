@@ -1,3 +1,8 @@
+import type { Column } from "@tanstack/react-table";
+import type { LucideIcon } from "lucide-react";
+import { Check } from "lucide-react";
+import type { ComponentPropsWithoutRef } from "react";
+import { cn } from "lib/utils";
 import {
   Command,
   CommandEmpty,
@@ -11,17 +16,13 @@ import {
   PopoverContent,
   Button,
 } from "../../primitive";
-import { Column } from "@tanstack/react-table";
-import { Check, LucideIcon } from "lucide-react";
-import { ComponentPropsWithoutRef } from "react";
-import { cn } from "lib/utils";
 
 interface OptionItem {
   label: string;
   value: string;
   icon?: LucideIcon;
 }
-interface Props<TData> extends ComponentPropsWithoutRef<typeof Button> {
+interface Prop<TData> extends ComponentPropsWithoutRef<typeof Button> {
   placeholder: string;
   buttonPlaceholder?: string;
   options: OptionItem[];
@@ -34,7 +35,7 @@ export function DataTableMultiSelect<TData>({
   placeholder,
   buttonPlaceholder,
   ...props
-}: Props<TData>) {
+}: Prop<TData>) {
   const selectedValues = new Set(column?.getFilterValue() as string[]);
   const facets = column?.getFacetedUniqueValues();
 
@@ -45,7 +46,7 @@ export function DataTableMultiSelect<TData>({
       </PopoverTrigger>
       <PopoverContent>
         <Command>
-          <CommandInput placeholder={placeholder} className="border-none" />
+          <CommandInput className="border-none" placeholder={placeholder} />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
@@ -74,15 +75,15 @@ export function DataTableMultiSelect<TData>({
                     >
                       <Check className={cn("h-4 w-4")} />
                     </div>
-                    {option.icon && (
+                    {option.icon ? (
                       <option.icon className="text-muted-foreground mr-2 h-4 w-4" />
-                    )}
+                    ) : null}
                     <span>{option.label}</span>
-                    {facets?.get(option.value) && (
+                    {facets?.get(option.value) ? (
                       <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
                         {facets.get(option.value)}
                       </span>
-                    )}
+                    ) : null}
                   </CommandItem>
                 );
               })}
@@ -92,8 +93,8 @@ export function DataTableMultiSelect<TData>({
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
-                    onSelect={() => column?.setFilterValue(undefined)}
                     className="justify-center text-center"
+                    onSelect={() => column?.setFilterValue(undefined)}
                   >
                     Clear filters
                   </CommandItem>

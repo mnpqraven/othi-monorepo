@@ -1,5 +1,6 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { InferSelectModel, relations } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import { lightCones } from "./lightCone";
 
 export const lightConeToSkills = sqliteTable("honkai_lightConeSkill", {
@@ -17,8 +18,10 @@ export type LightConeSkillSchema = InferSelectModel<typeof lightConeToSkills>;
 
 export const lightConeToSkillRelations = relations(
   lightConeToSkills,
-  ({ one }) => ({ lightCone: one(lightCones, {
-    fields: [lightConeToSkills.id],
-    references: [lightCones.skillId]
-  }) })
+  ({ one }) => ({
+    lightCone: one(lightCones, {
+      fields: [lightConeToSkills.id],
+      references: [lightCones.skillId],
+    }),
+  })
 );

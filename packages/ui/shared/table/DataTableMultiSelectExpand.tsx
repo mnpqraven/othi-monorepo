@@ -1,4 +1,7 @@
-import { Table } from "@tanstack/react-table";
+import type { Table } from "@tanstack/react-table";
+import { cn } from "lib/utils";
+import { Check, Command } from "lucide-react";
+import type { ComponentPropsWithoutRef } from "react";
 import {
   CommandInput,
   CommandList,
@@ -11,11 +14,8 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "../../primitive";
-import { cn } from "lib/utils";
-import { Check, Command } from "lucide-react";
-import { ComponentPropsWithoutRef } from "react";
 
-interface Props<TData, TFilter extends string>
+interface Prop<TData, TFilter extends string>
   extends ComponentPropsWithoutRef<typeof Button> {
   table: Table<TData>;
   options: TFilter[];
@@ -28,7 +28,7 @@ export function DataTableMultiSelectExpand<TData, TFilter extends string>({
   columnKey,
   placeholder,
   ...props
-}: Props<TData, TFilter>) {
+}: Prop<TData, TFilter>) {
   // removes duplications
   const selectedEvents = table.getIsSomePageRowsSelected();
   const { rows } = table.getRowModel();
@@ -40,13 +40,13 @@ export function DataTableMultiSelectExpand<TData, TFilter extends string>({
       </PopoverTrigger>
       <PopoverContent>
         <Command>
-          <CommandInput placeholder="Enter event" className="border-none" />
+          <CommandInput className="border-none" placeholder="Enter event" />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
                 const rowsWithEventName = rows.filter(
-                  (row) => row.getValue(columnKey as string) == option
+                  (row) => row.getValue(columnKey as string) === option
                 );
 
                 const isSelected = rowsWithEventName.every((row) =>
@@ -60,12 +60,16 @@ export function DataTableMultiSelectExpand<TData, TFilter extends string>({
                       // probably will need to pass this filterFn as props for
                       // more complex selectors
                       const filtered = rows.filter(
-                        (row) => row.getValue(columnKey as string) == option
+                        (row) => row.getValue(columnKey as string) === option
                       );
                       if (filtered.every((row) => row.getIsSelected())) {
-                        filtered.forEach((row) => row.toggleSelected(false));
+                        filtered.forEach((row) => {
+                          row.toggleSelected(false);
+                        });
                       } else
-                        filtered.forEach((row) => row.toggleSelected(true));
+                        filtered.forEach((row) => {
+                          row.toggleSelected(true);
+                        });
                     }}
                   >
                     <div
@@ -89,19 +93,21 @@ export function DataTableMultiSelectExpand<TData, TFilter extends string>({
                 );
               })}
             </CommandGroup>
-            {selectedEvents && (
+            {selectedEvents ? (
               <>
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
-                    onSelect={() => table.toggleAllPageRowsSelected(false)}
                     className="justify-center text-center"
+                    onSelect={() => {
+                      table.toggleAllPageRowsSelected(false);
+                    }}
                   >
                     Clear selection
                   </CommandItem>
                 </CommandGroup>
               </>
-            )}
+            ) : null}
           </CommandList>
         </Command>
       </PopoverContent>

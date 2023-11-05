@@ -1,7 +1,10 @@
 import { int, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { InferSelectModel, relations } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
+import { relations } from "drizzle-orm";
+import { elements } from "./element";
 import { avatarToSkills } from "./avatarToSkill";
-import { elements, paths, traces } from ".";
+import { paths } from "./path";
+import { traces } from "./trace";
 
 export const avatars = sqliteTable("honkai_avatar", {
   id: int("id").primaryKey(),

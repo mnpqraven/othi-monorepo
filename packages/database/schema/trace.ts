@@ -1,5 +1,5 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { items } from ".";
+import { items } from "./item";
 
 const ANCHORS = [
   "Point01",

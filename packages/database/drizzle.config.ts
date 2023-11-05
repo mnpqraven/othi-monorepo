@@ -1,8 +1,8 @@
 import type { Config } from "drizzle-kit";
-import dotenv from "dotenv";
+import { config } from "dotenv";
 import { z } from "zod";
 
-dotenv.config();
+config();
 
 export default {
   schema: "schema/*",
