@@ -104,7 +104,7 @@ async function getTableData(
     const totalQ = await db
       .select({ count: sql<number>`count(*)` })
       .from(dbStruct);
-    const totalItems = totalQ[0].count;
+    const totalItems = totalQ.at(0)?.count ?? 0;
 
     const data = (await db
       .select()

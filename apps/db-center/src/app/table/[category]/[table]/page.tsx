@@ -6,7 +6,7 @@ import type {
   EitherArray,
   ValidTableSchemas,
 } from "protocol/trpc/routers/table";
-import { DEFAULT_PAGINATION, cn, search, useTable } from "lib";
+import { DEFAULT_PAGINATION, search, useTable } from "lib";
 import { Input, ScrollArea } from "ui/primitive";
 import {
   DataTable,

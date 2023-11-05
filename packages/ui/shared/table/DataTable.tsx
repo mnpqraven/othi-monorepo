@@ -13,7 +13,6 @@ import {
   TableRow,
 } from "../../primitive/table";
 
-
 interface Prop<TData> extends HTMLAttributes<HTMLDivElement> {
   table: TableType<TData>;
   isLoading?: boolean;
