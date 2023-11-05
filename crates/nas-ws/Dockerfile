@@ -13,7 +13,9 @@ RUN apt-get update && apt-get upgrade && apt-get install -y protobuf-compiler li
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 COPY . .
 
-RUN . "$HOME/.cargo/env" && PROTOC=/usr/bin/protoc cargo install --path . --bin nas-ws
+RUN pwd && ls
+
+RUN . "$HOME/.cargo/env" && PROTOC=/usr/bin/protoc cargo install --path ./crates/nas-ws --bin nas-ws
 
 FROM rust:bullseye
 COPY --from=builder /root/.cargo/bin/nas-ws /usr/local/bin/nas-ws
