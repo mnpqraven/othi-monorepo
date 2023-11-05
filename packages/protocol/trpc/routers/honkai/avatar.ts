@@ -1,6 +1,7 @@
 import { db } from "database";
+import type { AvatarSchema } from "database/schema";
+import { avatars } from "database/schema";
 import { publicProcedure, router } from "../../trpc";
-import { AvatarSchema, avatars } from "database/schema";
 
 export const avatarRouter = router({
   list: publicProcedure.query(async () => {

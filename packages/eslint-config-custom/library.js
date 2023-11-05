@@ -30,5 +30,17 @@ module.exports = {
       },
     },
   },
-  ignorePatterns: ["node_modules/", "dist/"],
+  ignorePatterns: ["node_modules/", "dist/", ".eslintrc.js"],
+
+  rules: {
+    "import/no-default-export": "off",
+    "import/no-cycle": "off",
+    "unicorn/filename-case": "off",
+    "eslint-comments/require-description": "off",
+    "tsdoc/syntax": "off",
+    "no-console": "warn",
+    "jsx-a11y/heading-has-content": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-empty-interface": "warn",
+  },
 };

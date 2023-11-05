@@ -330,6 +330,9 @@ importers:
         specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../eslint-config-custom
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig

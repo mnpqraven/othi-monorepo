@@ -1,8 +1,9 @@
-import { ItemSchema, items } from "database/schema/item";
+import type { ItemSchema } from "database/schema/item";
+import { items } from "database/schema/item";
 import * as z from "zod";
-import { publicProcedure, router } from "../../trpc";
 import { db } from "database";
 import { sql } from "drizzle-orm";
+import { publicProcedure, router } from "../../trpc";
 
 export const itemRouter = router({
   list: publicProcedure.query(
@@ -37,7 +38,7 @@ export const itemRouter = router({
           limit,
           offset,
           page,
-          total: total[0].count,
+          total: total.at(0)?.count ?? 0,
         },
         nextCursor,
       };

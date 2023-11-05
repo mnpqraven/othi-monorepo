@@ -1,10 +1,7 @@
 import { z } from "zod";
-import { publicProcedure, router } from "../trpc";
 import { sql } from "drizzle-orm";
+import type { AvatarSchema, ItemSchema, SkillSchema } from "database/schema";
 import {
-  AvatarSchema,
-  ItemSchema,
-  SkillSchema,
   avatarToSkills,
   avatarTraces,
   avatars,
@@ -24,6 +21,7 @@ import {
   traces,
 } from "database/schema";
 import { db } from "database";
+import { publicProcedure, router } from "../trpc";
 
 export type EitherArray<T> = T extends object ? T[] : never;
 
@@ -50,9 +48,8 @@ export const TableSearch = z.object({
 export const tableRouter = router({
   list: publicProcedure
     .input(TableSearch)
-    .query(
-      async ({ input: { tableName, pagination } }) =>
-        await getTableData(tableName, pagination)
+    .query(async ({ input: { tableName, pagination } }) =>
+      getTableData(tableName, pagination)
     ),
 });
 
@@ -78,7 +75,7 @@ function tableMap() {
   };
 }
 
-type ServerTableResponse = {
+export interface ServerTableResponse {
   data: EitherArray<ValidTableSchemas>;
   pagination: {
     pageIndex: number;
@@ -86,7 +83,7 @@ type ServerTableResponse = {
     totalPages: number;
     totalItems: number;
   };
-};
+}
 
 async function getTableData(
   tableName: z.TypeOf<typeof ValidTableNames>,
@@ -94,34 +91,31 @@ async function getTableData(
 ): Promise<ServerTableResponse> {
   const parsing = ValidTableNames.safeParse(tableName);
 
-  if (!parsing.success) return Promise.reject("invalid table name");
-  else {
-    const { data: name } = parsing;
-    const { pageIndex, pageSize } = PaginationSearch.parse(pagination);
+  if (!parsing.success) return Promise.reject(Error("invalid table name"));
 
-    const dbStruct = tableMap()[name];
+  const { data: name } = parsing;
+  const { pageIndex, pageSize } = PaginationSearch.parse(pagination);
 
-    const totalQ = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(dbStruct);
-    const totalItems = totalQ.at(0)?.count ?? 0;
+  const dbStruct = tableMap()[name];
 
-    const data = (await db
-      .select()
-      .from(dbStruct)
-      .limit(pageSize)
-      .offset(
-        pageIndex * pageSize
-      )) as unknown as EitherArray<ValidTableSchemas>; // safe typecast
+  const totalQ = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(dbStruct);
+  const totalItems = totalQ.at(0)?.count ?? 0;
 
-    return {
-      data,
-      pagination: {
-        pageIndex,
-        pageSize,
-        totalItems,
-        totalPages: Math.ceil(totalItems / pageSize),
-      },
-    };
-  }
+  const data = (await db
+    .select()
+    .from(dbStruct)
+    .limit(pageSize)
+    .offset(pageIndex * pageSize)) as unknown as EitherArray<ValidTableSchemas>; // safe typecast
+
+  return {
+    data,
+    pagination: {
+      pageIndex,
+      pageSize,
+      totalItems,
+      totalPages: Math.ceil(totalItems / pageSize),
+    },
+  };
 }

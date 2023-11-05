@@ -7,6 +7,7 @@ import { ZodError } from "zod";
 const t = initTRPC.create({
   errorFormatter(opts) {
     const { shape, error } = opts;
+    // eslint-disable-next-line no-console
     console.log(error);
     return {
       ...shape,

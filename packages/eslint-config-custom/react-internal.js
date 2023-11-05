@@ -31,13 +31,18 @@ module.exports = {
       },
     },
   },
-  ignorePatterns: ["node_modules/", "dist/", ".eslintrc.js", "postcss.config.*"],
+  ignorePatterns: [
+    "node_modules/",
+    "dist/",
+    ".eslintrc.js",
+    "postcss.config.*",
+  ],
 
   rules: {
     // add specific rules configurations here
     "import/no-default-export": "off",
-    "unicorn/filename-case": "off",
     "import/no-cycle": "off",
+    "unicorn/filename-case": "off",
     "eslint-comments/require-description": "off",
     "tsdoc/syntax": "off",
     "no-console": "off",

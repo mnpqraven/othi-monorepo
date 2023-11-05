@@ -21,6 +21,7 @@ const TANSTACK_CONFIG: QueryClientConfig = {
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient(TANSTACK_CONFIG));
   const [trpcClient] = useState(() =>
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     trpc.createClient({
       links: [httpBatchLink({ url: "/api" })],
     })

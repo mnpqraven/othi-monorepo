@@ -1,10 +1,11 @@
 import { z } from "zod";
-import { publicProcedure, router } from "../../trpc";
-import { SkillSchema, skills } from "database/schema";
+import type { SkillSchema } from "database/schema";
+import { skills } from "database/schema";
 import { db } from "database";
+import { publicProcedure, router } from "../../trpc";
 
 export const skillRouter = router({
-  list: publicProcedure.query(async ({ input }) => {
+  list: publicProcedure.query(async () => {
     return (await db.select().from(skills)) satisfies Awaited<SkillSchema[]>;
   }),
   byCharId: publicProcedure
