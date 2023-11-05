@@ -1,3 +1,5 @@
+[![ci](https://github.com/mnpqraven/othi-monorepo/actions/workflows/main.yml/badge.svg)](https://github.com/mnpqraven/othi-monorepo/actions/workflows/main.yml)
+
 # Synology caveats
 ### updating the docker image
 ```
