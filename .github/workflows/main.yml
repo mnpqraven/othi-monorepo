@@ -27,7 +27,7 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./crates/nas-ws
+          context: .
           file: ./crates/nas-ws/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/nas-ws:latest
