@@ -38,3 +38,7 @@ config.*.toml
 
 # vercel
 .vercel
+
+# rust
+target
+assets

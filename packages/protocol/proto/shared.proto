@@ -1,0 +1,6 @@
+syntax = "proto3";
+package dm.shared;
+
+message CharId {
+    uint32 char_id = 1;
+}
