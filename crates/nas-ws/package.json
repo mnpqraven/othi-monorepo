@@ -1,11 +1,10 @@
 {
-	"name": "nas-ws",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"dev": "cargo watch -- cargo run --bin nas-ws",
-		"build": "docker build ."
-	},
-	"dependencies": {
-	}
+  "name": "nas-ws",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "cargo watch -- cargo run --bin nas-ws",
+    "dockerize": "docker build ."
+  },
+  "dependencies": {}
 }
