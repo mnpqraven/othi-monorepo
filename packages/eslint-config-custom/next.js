@@ -18,6 +18,8 @@ module.exports = {
     "@vercel/style-guide/eslint/typescript",
     "@vercel/style-guide/eslint/react",
     "@vercel/style-guide/eslint/next",
+    "@tanstack/eslint-plugin-query/recommended",
+    "storybook/recommended",
     "eslint-config-turbo",
   ].map(require.resolve),
   parserOptions: {
@@ -50,5 +52,6 @@ module.exports = {
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
     "react/hook-use-state": "off",
+    "@tanstack/query/exhaustive-deps": "warn",
   },
 };
