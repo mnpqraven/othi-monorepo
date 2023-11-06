@@ -8,10 +8,10 @@ plugins:
     # Use target=js+dts to generate JavaScript and TypeScript declaration files
     # like remote generation does.
     opt: target=ts
-    # probably won't need this
-    # - plugin: connect-es
-    #   out: ../../packages/protocols/proto
-    #   # With target=ts, we generate TypeScript files.
-    #   opt:
-      #     - target=ts
-      #     - import_extension=none
+  - plugin: connect-es
+    out:
+      ts
+      # With target=ts, we generate TypeScript files.
+    opt:
+      - target=ts
+      - import_extension=none
