@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { get } from "@vercel/edge-config";
-import { List } from "@hsr/lib/generics";
+import type { List } from "lib/generics";
 
 export async function GET() {
   const patch_banners = await get<PatchBanner[]>("patch_banners");
