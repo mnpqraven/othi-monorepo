@@ -1,14 +1,19 @@
 import { UseFormReturn } from "react-hook-form";
+import { cva } from "class-variance-authority";
+import { JadeEstimateCfg } from "protocol/ts";
 import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../../components/ui/Tabs";
-import * as F from "../../components/ui/Form";
-import { Input } from "../../components/ui/Input";
-import { JadeEstimateCfg } from "@grpc/jadeestimate_pb";
-import { cva } from "class-variance-authority";
+} from "ui/primitive";
 
 type Props = {
   form: UseFormReturn<JadeEstimateCfg>;
@@ -42,19 +47,19 @@ const CurrentRollTab = ({ form }: Props) => {
         </TabsList>
 
         <TabsContent value="currentRolls">
-          <F.FormField
+          <FormField
             control={form.control}
             name="currentRolls"
             render={({ field }) => (
-              <F.FormItem>
+              <FormItem>
                 <div className="flex">
                   <div className="flex-1 space-y-1">
-                    <F.FormLabel>Current passes</F.FormLabel>
-                    <F.FormDescription>
+                    <FormLabel>Current passes</FormLabel>
+                    <FormDescription>
                       Amount of special passes you currently possess
-                    </F.FormDescription>
+                    </FormDescription>
                   </div>
-                  <F.FormControl>
+                  <FormControl>
                     <Input
                       className="w-20"
                       type="number"
@@ -66,28 +71,28 @@ const CurrentRollTab = ({ form }: Props) => {
                         } else e.preventDefault();
                       }}
                     />
-                  </F.FormControl>
+                  </FormControl>
                 </div>
-                <F.FormMessage />
-              </F.FormItem>
+                <FormMessage />
+              </FormItem>
             )}
           />
         </TabsContent>
 
         <TabsContent value="currentJades">
-          <F.FormField
+          <FormField
             control={form.control}
             name="currentJades"
             render={({ field }) => (
-              <F.FormItem>
+              <FormItem>
                 <div className="flex">
                   <div className="flex-1 space-y-1">
-                    <F.FormLabel>Current jades</F.FormLabel>
-                    <F.FormDescription>
+                    <FormLabel>Current jades</FormLabel>
+                    <FormDescription>
                       Amount of jades you currently possess
-                    </F.FormDescription>
+                    </FormDescription>
                   </div>
-                  <F.FormControl>
+                  <FormControl>
                     <Input
                       className="w-20"
                       type="number"
@@ -99,28 +104,28 @@ const CurrentRollTab = ({ form }: Props) => {
                         } else e.preventDefault();
                       }}
                     />
-                  </F.FormControl>
+                  </FormControl>
                 </div>
-                <F.FormMessage />
-              </F.FormItem>
+                <FormMessage />
+              </FormItem>
             )}
           />
         </TabsContent>
 
         <TabsContent value="dailyRefills">
-          <F.FormField
+          <FormField
             control={form.control}
             name="dailyRefills"
             render={({ field }) => (
-              <F.FormItem>
+              <FormItem>
                 <div className="flex">
                   <div className="flex-1 space-y-1">
-                    <F.FormLabel>Daily Refills</F.FormLabel>
-                    <F.FormDescription>
+                    <FormLabel>Daily Refills</FormLabel>
+                    <FormDescription>
                       Amount of refills (using Jades) everyday
-                    </F.FormDescription>
+                    </FormDescription>
                   </div>
-                  <F.FormControl>
+                  <FormControl>
                     <Input
                       className="w-20"
                       type="number"
@@ -133,10 +138,10 @@ const CurrentRollTab = ({ form }: Props) => {
                         } else e.preventDefault();
                       }}
                     />
-                  </F.FormControl>
+                  </FormControl>
                 </div>
-                <F.FormMessage />
-              </F.FormItem>
+                <FormMessage />
+              </FormItem>
             )}
           />
         </TabsContent>

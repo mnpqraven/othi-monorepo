@@ -2,12 +2,10 @@
 
 import Image from "next/image";
 import { Fragment, useState } from "react";
-import { Toggle } from "../ui/Toggle";
-import { sanitizeNewline } from "@/lib/utils";
-import { Badge } from "../ui/Badge";
-import { AvatarRankConfig } from "@/bindings/AvatarRankConfig";
-import { Skeleton } from "../ui/Skeleton";
-import { useSuspendedCharacterEidolon } from "@/hooks/queries/useCharacterEidolon";
+import { sanitizeNewline } from "lib/utils";
+import { AvatarRankConfig } from "@hsr/bindings/AvatarRankConfig";
+import { useSuspendedCharacterEidolon } from "@hsr/hooks/queries/useCharacterEidolon";
+import { Badge, Skeleton, Toggle } from "ui/primitive";
 
 type Props = {
   characterId: number;

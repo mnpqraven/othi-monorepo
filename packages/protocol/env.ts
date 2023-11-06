@@ -7,9 +7,9 @@ export const env = createEnv({
     DB_AUTH_TOKEN: z.string(),
   },
   client: {
-    NEXT_PUBLIC_WORKER_API: z.string(),
+    NEXT_PUBLIC_HOST_NAS_WS: z.string(),
   },
   experimental__runtimeEnv: {
-    NEXT_PUBLIC_WORKER_API: process.env.NEXT_PUBLIC_WORKER_API,
+    NEXT_PUBLIC_HOST_NAS_WS: process.env.NEXT_PUBLIC_HOST_NAS_WS,
   },
 });

@@ -9,10 +9,13 @@ import { useCallback, useRef } from "react";
  * @returns function with debounce behaviour, replace the onChange function
  * with this function
  */
-export function useDebounce(onChange: (val: any) => void, duration: number) {
+export function useDebounce(
+  onChange: (val: never) => unknown,
+  duration: number
+) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const onEdit = useCallback(
-    (val: any) => {
+    (val: never) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }

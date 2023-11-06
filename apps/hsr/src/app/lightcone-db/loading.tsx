@@ -1,9 +1,8 @@
-import { range } from "@/lib/utils";
-import { Toggle } from "../components/ui/Toggle";
+import { range } from "lib/utils";
 import { PathIcon } from "../character-db/PathIcon";
 import Image from "next/image";
-import { Input } from "../components/ui/Input";
-import { Path } from "@/bindings/AvatarConfig";
+import { Path } from "@hsr/bindings/AvatarConfig";
+import { Input, Toggle } from "ui/primitive";
 
 export default function Loading() {
   const mockList = Array.from(range(1, 24, 1));

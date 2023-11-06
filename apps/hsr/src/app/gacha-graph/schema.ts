@@ -1,4 +1,4 @@
-import { BannerType } from "@grpc/probabilityrate_pb";
+import { BannerType } from "protocol/ts";
 import * as z from "zod";
 
 export const schema = z.object({

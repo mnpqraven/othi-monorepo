@@ -18,12 +18,16 @@ module.exports = {
     "@vercel/style-guide/eslint/typescript",
     "@vercel/style-guide/eslint/react",
     "@vercel/style-guide/eslint/next",
-    "@tanstack/eslint-plugin-query/recommended",
-    "storybook/recommended",
     "eslint-config-turbo",
-  ].map(require.resolve),
+  ]
+    .map(require.resolve)
+    .concat([
+      "plugin:@tanstack/eslint-plugin-query/recommended",
+      "plugin:storybook/recommended",
+    ]),
   parserOptions: {
-    project,
+    project: true,
+    tsconfigRootDir: process.cwd()
   },
   globals: {
     React: true,
@@ -53,5 +57,6 @@ module.exports = {
     "@typescript-eslint/no-unsafe-assignment": "off",
     "react/hook-use-state": "off",
     "@tanstack/query/exhaustive-deps": "warn",
+    camelcase: "off",
   },
 };

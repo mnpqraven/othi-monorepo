@@ -1,6 +1,17 @@
 "use client";
 
+import { AlertCircle } from "lucide-react";
+import { placeholderTableData } from "./defaultTableData";
+import { PlainMessage } from "@bufbuild/protobuf";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { estimateFormAtom } from "./_store/main";
+import { rpc } from "protocol/rpc";
+import { JadeEstimateResponse, JadeEstimateService } from "protocol/ts";
 import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
   Table,
   TableBody,
   TableCaption,
@@ -8,21 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../components/ui/Table";
-import { AlertCircle } from "lucide-react";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "../components/ui/HoverCard";
-import { JadeEstimateResponse } from "@grpc/jadeestimate_pb";
-import { placeholderTableData } from "./defaultTableData";
-import { PlainMessage } from "@bufbuild/protobuf";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
-import { estimateFormAtom } from "./_store/main";
-import { rpc } from "@/server/typedEndpoints";
-import { JadeEstimateService } from "@grpc/jadeestimate_connect";
+} from "ui/primitive";
 
 const JadeRewardTable = () => {
   const formPayload = useAtomValue(estimateFormAtom);

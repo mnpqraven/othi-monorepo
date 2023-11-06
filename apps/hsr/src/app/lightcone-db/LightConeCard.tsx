@@ -4,11 +4,12 @@ import Image from "next/image";
 import { ElementIcon } from "../character-db/ElementIcon";
 import { PathIcon } from "../character-db/PathIcon";
 import { HTMLAttributes, forwardRef } from "react";
-import { cn, range } from "@/lib/utils";
-import styles from "@/css/floating-card.module.css";
-import { Element } from "@/bindings/PatchBanner";
-import useCardEffect from "@/hooks/animation/useCardEffect";
-import { Path } from "@/bindings/AvatarConfig";
+import { range } from "lib/utils";
+import styles from "@hsr/css/floating-card.module.css";
+import { Element } from "@hsr/bindings/PatchBanner";
+import useCardEffect from "@hsr/hooks/animation/useCardEffect";
+import { Path } from "@hsr/bindings/AvatarConfig";
+import { cn } from "lib";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   rarity?: number;

@@ -5,14 +5,11 @@ import { HTMLAttributes } from "react";
 import {
   Github,
   LineChart,
-  Moon,
-  Sun,
   Ticket,
   UserSquare,
   GalleryHorizontalEnd,
   BookCopy,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { CommandCenter } from "./CommandCenter";
 import {
@@ -23,6 +20,7 @@ import {
   Button,
 } from "ui/primitive";
 import { cn } from "lib";
+import { ThemeToggle } from "ui/shared/ThemeToggle";
 
 const menu = [
   {
@@ -103,20 +101,6 @@ const Navbar = ({ className, ...props }: HTMLAttributes<HTMLElement>) => {
         <ThemeToggle />
       </div>
     </div>
-  );
-};
-const ThemeToggle = () => {
-  const { theme, setTheme } = useTheme();
-
-  function toggleTheme() {
-    setTheme(theme === "light" ? "dark" : "light");
-  }
-  return (
-    <Button variant="ghost" size="sm" onClick={toggleTheme}>
-      <Sun className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      <span className="sr-only">Toggle theme</span>
-    </Button>
   );
 };
 export default Navbar;

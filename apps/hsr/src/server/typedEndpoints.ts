@@ -1,27 +1,34 @@
+import type { SignatureAtlas } from "@hsr/bindings/SignatureAtlas";
+import type { List } from "@hsr/lib/generics";
+import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
+import type { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
+import type { AvatarSkillConfig } from "@hsr/bindings/AvatarSkillConfig";
+import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
+import type { EquipmentSkillConfig } from "@hsr/bindings/EquipmentSkillConfig";
+import type { EquipmentRanking } from "@hsr/bindings/EquipmentRanking";
+import type { AvatarPropertyConfig } from "@hsr/bindings/AvatarPropertyConfig";
+import type { AvatarRankConfig } from "@hsr/bindings/AvatarRankConfig";
+import type { Patch } from "@hsr/bindings/Patch";
+import type { PatchBanner } from "@hsr/bindings/PatchBanner";
+import type { EquipmentPromotionConfig } from "@hsr/bindings/EquipmentPromotionConfig";
+import type { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
+import type { Banner } from "@hsr/bindings/Banner";
+import type { RelicSetConfig } from "@hsr/bindings/RelicSetConfig";
+import type { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
+import type { RelicMainAffixConfig } from "@hsr/bindings/RelicMainAffixConfig";
+import type { RelicSetSkillConfig } from "@hsr/bindings/RelicSetSkillConfig";
+import type { RelicConfig, RelicType } from "@hsr/bindings/RelicConfig";
+import { z } from "zod";
 import { serverFetch } from "./serverFetch";
-import { SignatureAtlas } from "@hsr/bindings/SignatureAtlas";
-import { List } from "@hsr/lib/generics";
-import { AvatarConfig } from "@hsr/bindings/AvatarConfig";
-import { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
-import { AvatarSkillConfig } from "@hsr/bindings/AvatarSkillConfig";
-import { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
-import { EquipmentSkillConfig } from "@hsr/bindings/EquipmentSkillConfig";
-import { EquipmentRanking } from "@hsr/bindings/EquipmentRanking";
-import { AvatarPropertyConfig } from "@hsr/bindings/AvatarPropertyConfig";
-import { AvatarRankConfig } from "@hsr/bindings/AvatarRankConfig";
-import { Patch } from "@hsr/bindings/Patch";
-import { PatchBanner } from "@hsr/bindings/PatchBanner";
-import { EquipmentPromotionConfig } from "@hsr/bindings/EquipmentPromotionConfig";
-import { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
-import { Banner } from "@hsr/bindings/Banner";
-import { RelicSetConfig } from "@hsr/bindings/RelicSetConfig";
-import { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
-import { RelicMainAffixConfig } from "@hsr/bindings/RelicMainAffixConfig";
-import { RelicSetSkillConfig } from "@hsr/bindings/RelicSetSkillConfig";
-import { RelicConfig, RelicType } from "@hsr/bindings/RelicConfig";
 
-type CharId = { characterId: number };
-type LcId = { lcId: number };
+const CharId = z.object({
+  characterId: z.number(),
+});
+type CharId = z.TypeOf<typeof CharId>;
+
+interface LcId {
+  lcId: number;
+}
 const API = {
   patchDates: get<List<Patch>>("/honkai/patch_dates"),
   lightConeMetadata: get<EquipmentConfig, LcId>(
@@ -42,7 +49,7 @@ const API = {
     ({ lcId }) => `/honkai/light_cone/${lcId}/promotion`
   ),
   character: get<AvatarConfig, CharId>(
-    ({ characterId }) => `/honkai/avatar/${characterId}`
+    (data) => `/honkai/avatar/${CharId.parse(data).characterId}`
   ),
   characterByIds: getPost<List<AvatarConfig>, List<number>>("/honkai/avatar"),
   signatureAtlas: get<List<SignatureAtlas>>("/honkai/signature_atlas"),
@@ -80,14 +87,18 @@ const API = {
   ),
 };
 
-type Get<TRes, P> = { get: (params: P) => Promise<TRes> };
-type DirectGet<TRes> = { get: () => Promise<TRes> };
-type Post<TRes, TPayload, P> = {
+interface Get<TRes, P> {
+  get: (params: P) => Promise<TRes>;
+}
+interface DirectGet<TRes> {
+  get: () => Promise<TRes>;
+}
+interface Post<TRes, TPayload, P> {
   post: (params: P, payload?: TPayload) => Promise<TRes>;
-};
-type DirectPost<TRes, TPayload> = {
+}
+interface DirectPost<TRes, TPayload> {
   post: (payload?: TPayload) => Promise<TRes>;
-};
+}
 
 // type ReturnDev<TRes, U> = { get: (params: U) => Promise<TRes> };
 // type OptionalReturnDev<TRes> = { get: () => Promise<TRes> };
@@ -99,12 +110,11 @@ function get<TRes, TParam>(
 ): DirectGet<TRes> | Get<TRes, TParam> {
   if (typeof path === "string")
     return {
-      get: async () => await serverFetch<unknown, TRes>(path),
+      get: async () => serverFetch<unknown, TRes>(path),
     };
 
   return {
-    get: async (params: TParam) =>
-      await serverFetch<unknown, TRes>(path(params)),
+    get: async (params: TParam) => serverFetch<unknown, TRes>(path(params)),
   };
 }
 
@@ -118,12 +128,12 @@ function post<TRes, TPayload, TParam>(
   if (typeof path === "string")
     return {
       post: async (payload?: TPayload) =>
-        await serverFetch<TPayload, TRes>(path, { method: "POST", payload }),
+        serverFetch<TPayload, TRes>(path, { method: "POST", payload }),
     };
 
   return {
     post: async (params: TParam, payload?: TPayload) =>
-      await serverFetch<TPayload, TRes>(path(params), {
+      serverFetch<TPayload, TRes>(path(params), {
         method: "POST",
         payload,
       }),
@@ -145,24 +155,22 @@ function getPost<TRes, TPayload, TParam>(
   | (Get<TRes, TParam> & Post<TRes, TPayload, TParam>) {
   if (typeof path === "string") {
     return {
-      get: async () => await serverFetch<unknown, TRes>(path),
+      get: async () => serverFetch<unknown, TRes>(path),
       post: async (payload?: TPayload) =>
-        await serverFetch<TPayload, TRes>(path, {
-          method: "POST",
-          payload,
-        }),
-    };
-  } else {
-    return {
-      get: async (params: TParam) =>
-        await serverFetch<unknown, TRes>(path(params)),
-      post: async (params: TParam, payload?: TPayload) =>
-        await serverFetch<TPayload, TRes>(path(params), {
+        serverFetch<TPayload, TRes>(path, {
           method: "POST",
           payload,
         }),
     };
   }
+  return {
+    get: async (params: TParam) => serverFetch<unknown, TRes>(path(params)),
+    post: async (params: TParam, payload?: TPayload) =>
+      serverFetch<TPayload, TRes>(path(params), {
+        method: "POST",
+        payload,
+      }),
+  };
 }
 
 export default API;

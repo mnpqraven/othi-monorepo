@@ -62,8 +62,11 @@ export function FormSelect<TOptions, TForm extends object>({
             </FormControl>
 
             <SelectContent position="popper">
-              {options.map((item, index) => (
-                <SelectItem key={index} value={valueAccessor(item)}>
+              {options.map((item) => (
+                <SelectItem
+                  key={valueAccessor(item)}
+                  value={valueAccessor(item)}
+                >
                   {typeof labelAccessor === "function"
                     ? labelAccessor(item)
                     : labelAccessor}

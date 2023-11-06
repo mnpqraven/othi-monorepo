@@ -1,15 +1,15 @@
-import { UseFormReturn } from "react-hook-form";
-import * as F from "../../components/ui/Form";
-import * as S from "../../components/ui/Select";
-import { Separator } from "../../components/ui/Separator";
-import { Input } from "../../components/ui/Input";
-import { BattlePassType, JadeEstimateCfg } from "@grpc/jadeestimate_pb";
+import type { JadeEstimateCfg } from "protocol/ts";
+import { BattlePassType } from "protocol/ts";
+import type { UseFormReturn } from "react-hook-form";
+import { Input, Separator } from "ui/primitive";
+import * as F from "ui/primitive/form";
+import * as S from "ui/primitive/select";
 
-type Props = {
+interface Prop {
   form: UseFormReturn<JadeEstimateCfg>;
-};
+}
 
-const BattlePassField = ({ form }: Props) => {
+function BattlePassField({ form }: Prop) {
   const battlePassType = form.watch("battlePass.battlePassType");
 
   return (
@@ -23,7 +23,7 @@ const BattlePassField = ({ form }: Props) => {
               <div className="space-y-1 sm:w-3/4">
                 <F.FormLabel>Nameless Honor</F.FormLabel>
                 <F.FormDescription className="text-justify">
-                  If not selecting F2P, this assumes you{"'"}ve received the
+                  If not selecting F2P, this assumes you&apos;ve received the
                   current patch{"'"}s first time purchase rewards and those won
                   {"'"}t be calculated.
                 </F.FormDescription>
@@ -100,5 +100,5 @@ const BattlePassField = ({ form }: Props) => {
       )}
     </div>
   );
-};
+}
 export { BattlePassField };

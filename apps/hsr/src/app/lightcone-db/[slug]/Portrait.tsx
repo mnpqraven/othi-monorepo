@@ -1,10 +1,11 @@
 "use client";
 
-import useCardEffect from "@/hooks/animation/useCardEffect";
+import useCardEffect from "@hsr/hooks/animation/useCardEffect";
 import Image from "next/image";
-import styles from "@/css/floating-card.module.css";
-import { cn, img } from "@/lib/utils";
-import { EquipmentConfig } from "@/bindings/EquipmentConfig";
+import styles from "@hsr/css/floating-card.module.css";
+import { img } from "@hsr/lib/utils";
+import { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
+import { cn } from "lib";
 
 type Props = {
   data: EquipmentConfig;

@@ -1,4 +1,4 @@
-import { AvatarConfig, Element, Path } from "@/bindings/AvatarConfig";
+import { AvatarConfig, Element, Path } from "@hsr/bindings/AvatarConfig";
 import { useState } from "react";
 
 export default function useCharacterFilter() {

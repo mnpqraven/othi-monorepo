@@ -2,10 +2,10 @@
 
 import { HTMLAttributes, forwardRef } from "react";
 import Image from "next/image";
-import { asPercentage } from "@/lib/utils";
-import { SkillTreeConfig } from "@/bindings/SkillTreeConfig";
-import { AvatarPropertyConfig } from "@/bindings/AvatarPropertyConfig";
-import { IMAGE_URL } from "@/lib/constants";
+import { asPercentage } from "lib/utils";
+import { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
+import { AvatarPropertyConfig } from "@hsr/bindings/AvatarPropertyConfig";
+import { IMAGE_URL } from "@hsr/lib/constants";
 
 type Haystack = {
   [key in string]?: { value: number; icon: string; label: string };

@@ -1,17 +1,17 @@
-import { AvatarConfig } from "@hsr/bindings/AvatarConfig";
+import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
 import API from "@hsr/server/typedEndpoints";
-import {
+import type {
   UseQueryOptions,
   UseSuspenseQueryOptions,
-  queryOptions,
-  useQuery,
 } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import { z } from "zod";
 
 export const optionCharacterMetadata = (charId: number | undefined) =>
   queryOptions<AvatarConfig>({
     queryKey: ["character", charId],
-    queryFn: async () => await API.character.get({ characterId: charId! }),
-    enabled: !!charId,
+    queryFn: () => API.character.get({ characterId: charId }),
+    enabled: Boolean(charId),
   });
 
 export function useCharacterMetadata(

@@ -1,11 +1,13 @@
-import { EquipmentConfig } from "@/bindings/EquipmentConfig";
-import { Dialog, DialogTrigger, DialogContent } from "../components/ui/Dialog";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "../components/ui/Tooltip";
+import { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
 import Image from "next/image";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "ui/primitive";
 
 interface Props {
   data: EquipmentConfig;

@@ -2,16 +2,13 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Slider } from "../ui/Slider";
-import { getImagePath, parseSkillType } from "@/lib/utils";
-import { Toggle } from "../ui/Toggle";
-import { Separator } from "../ui/Separator";
+import { getImagePath, parseSkillType } from "@hsr/lib/utils";
 import { SkillDescription } from "../Db/SkillDescription";
-import { AvatarSkillConfig, SkillType } from "@/bindings/AvatarSkillConfig";
-import { Skeleton } from "../ui/Skeleton";
-import { useCharacterSkill } from "@/hooks/queries/useCharacterSkill";
-import { useCharacterMetadata } from "@/hooks/queries/useCharacterMetadata";
+import { AvatarSkillConfig, SkillType } from "@hsr/bindings/AvatarSkillConfig";
+import { useCharacterSkill } from "@hsr/hooks/queries/useCharacterSkill";
+import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
 import { Loader2 } from "lucide-react";
+import { Separator, Skeleton, Toggle, Slider } from "ui/primitive";
 
 type Props = {
   characterId: number;
@@ -96,7 +93,9 @@ const SkillOverview = ({ characterId }: Props) => {
                 defaultValue={[0]}
                 min={0}
                 max={selectedSkill.param_list.length - 1}
-                onValueChange={(e) => setSelectedSlv(e[0])}
+                onValueChange={(e) => {
+                  if (e[0]) setSelectedSlv(e[0]);
+                }}
               />
             </div>
           )}

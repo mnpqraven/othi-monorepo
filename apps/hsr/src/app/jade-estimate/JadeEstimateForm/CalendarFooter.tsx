@@ -1,26 +1,27 @@
-import { cn, sameDate } from "@/lib/utils";
-import { useBannerList } from "@/hooks/queries/useBannerList";
+import { sameDate } from "lib/utils";
+import { useBannerList } from "@hsr/hooks/queries/useBannerList";
 import { useMemo } from "react";
 import { useQueries } from "@tanstack/react-query";
-import API from "@/server/typedEndpoints";
-import { usePatchDateHelper } from "@/hooks/usePatchDateHelper";
-import { LightConeIcon } from "@/app/lightcone-db/LightConeIcon";
-import { CharacterIcon } from "@/app/character-db/CharacterIcon";
-import { Skeleton } from "@/app/components/ui/Skeleton";
+import API from "@hsr/server/typedEndpoints";
+import { usePatchDateHelper } from "@hsr/hooks/usePatchDateHelper";
+import { LightConeIcon } from "@hsr/app/lightcone-db/LightConeIcon";
+import { CharacterIcon } from "@hsr/app/character-db/CharacterIcon";
+import { useFuturePatchDateList } from "@hsr/hooks/queries/useFuturePatchDate";
+import { ExternalLink } from "lucide-react";
+import Link from "next/link";
 import {
+  Skeleton,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/app/components/ui/Tooltip";
-import { useFuturePatchDateList } from "@/hooks/queries/useFuturePatchDate";
-import { ExternalLink } from "lucide-react";
-import Link from "next/link";
+} from "ui/primitive";
+import { cn } from "lib";
 
-type Props = {
+type Prop = {
   date: Date;
 };
 
-const CalendarFooter = ({ date }: Props) => {
+function CalendarFooter({ date }: Prop) {
   const { futurePatchDateList } = useFuturePatchDateList();
   const { bannerList } = useBannerList();
   const { getVersion, currentPatch } = usePatchDateHelper();
@@ -41,11 +42,11 @@ const CalendarFooter = ({ date }: Props) => {
     queries: charas.map((chara) => ({
       queryKey: ["character", chara?.id],
       queryFn: async () => {
-        if (chara && !!chara.id)
-          return await API.character.get({ characterId: chara.id });
+        if (chara && Boolean(chara.id))
+          return API.character.get({ characterId: chara.id! });
         else return Promise.reject();
       },
-      enabled: !!banner && !!chara && !!chara.id,
+      enabled: Boolean(banner) && Boolean(chara) && Boolean(chara?.id),
     })),
   });
 
@@ -53,11 +54,11 @@ const CalendarFooter = ({ date }: Props) => {
     queries: lcs.map((lc) => ({
       queryKey: ["lightConeMetadata", lc?.id],
       queryFn: async () => {
-        if (lc && !!lc.id)
-          return await API.lightConeMetadata.get({ lcId: lc.id });
+        if (lc && Boolean(lc.id))
+          return API.lightConeMetadata.get({ lcId: lc.id! });
         else return Promise.reject();
       },
-      enabled: !!lc && !!lc.id,
+      enabled: Boolean(lc) && Boolean(lc?.id),
     })),
   });
 
@@ -67,8 +68,8 @@ const CalendarFooter = ({ date }: Props) => {
     <div className="mt-2.5 flex w-full flex-col items-center justify-center gap-2.5">
       <div id="patch-header" className="text-center">
         {start ? "Start of patch" : "Patch"} {getVersion(date)}
-        {versionInfo && <br />}
-        {versionInfo && versionInfo.name}
+        {versionInfo ? <br /> : null}
+        {versionInfo?.name}
       </div>
 
       <div>Character Banner</div>
@@ -101,7 +102,7 @@ const CalendarFooter = ({ date }: Props) => {
       <div className="flex gap-2.5">
         {lcQueries.map((query, index) =>
           query.data ? (
-            <Link href={`/lightcone-db/${query.data.equipment_id}`} key={index} >
+            <Link href={`/lightcone-db/${query.data.equipment_id}`} key={index}>
               <LightConeIcon data={query.data} />
             </Link>
           ) : (
@@ -120,7 +121,7 @@ const CalendarFooter = ({ date }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 const LoadingIcon = ({
   rounded = false,

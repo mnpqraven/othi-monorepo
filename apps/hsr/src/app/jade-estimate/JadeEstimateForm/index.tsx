@@ -1,11 +1,28 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { cn, range } from "@/lib/utils";
+import { range } from "lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useDebounce } from "@hsr/hooks/useDebounce";
+import { useEffect, useMemo, useState } from "react";
+import { useFuturePatchDateList } from "@hsr/hooks/queries/useFuturePatchDate";
+import equal from "fast-deep-equal/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCacheValidate } from "@hsr/hooks/useCacheValidate";
+import { useAtom } from "jotai";
+import type { JadeEstimateCfg } from "protocol/ts";
+import { EqTier, Server } from "protocol/ts";
+import type { PartialMessage } from "@bufbuild/protobuf";
 import {
+  Button,
+  Calendar,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
   Form,
   FormControl,
   FormDescription,
@@ -13,59 +30,38 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../components/ui/Form";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../../components/ui/Popover";
-import { Button } from "../../components/ui/Button";
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/Select";
-import { Calendar } from "../../components/ui/Calendar";
-import { useEffect, useMemo, useState } from "react";
-import { objToDate } from "../../components/schemas";
-import { useFuturePatchDateList } from "@/hooks/queries/useFuturePatchDate";
-import {
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandDialog,
-} from "../../components/ui/Command";
-import equal from "fast-deep-equal/react";
-import { CalendarFooter } from "./CalendarFooter";
-import { CurrentRollTab } from "./CurrentRollTab";
-import { RailPassField } from "./RailPassField";
-import { BattlePassField } from "./BattlePassField";
-import { Switch } from "../../components/ui/Switch";
-import { PartialMessage } from "@bufbuild/protobuf";
-import { EqTier, JadeEstimateCfg, Server } from "@grpc/jadeestimate_pb";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { schema } from "./schema";
-import { useCacheValidate } from "@/hooks/useCacheValidate";
-import { useAtom } from "jotai";
+  Switch,
+} from "ui/primitive";
+import { cn } from "lib";
+import type { Patch } from "../../../bindings/Patch";
 import {
   defaultValues,
   estimateFormAtom,
   selectedCalendarDateAtom,
   selectedMonthAtom,
 } from "../_store/main";
-import { Patch } from "@/bindings/Patch";
+import { objToDate } from "../../components/schemas";
+import { schema } from "./schema";
+import { BattlePassField } from "./BattlePassField";
+import { RailPassField } from "./RailPassField";
+import { CurrentRollTab } from "./CurrentRollTab";
+import { CalendarFooter } from "./CalendarFooter";
 
-type Props = {
+interface Prop {
   submitButton?: boolean;
-};
+}
 
 type FormSchema = PartialMessage<JadeEstimateCfg>;
 
-export default function JadeEstimateForm({ submitButton = false }: Props) {
+export default function JadeEstimateForm({ submitButton = false }: Prop) {
   const [open, setOpen] = useState(false);
   const [beforeFirstRender, setBeforeFirstRender] = useState(true);
   // INFO: month marker on calendar
@@ -126,7 +122,7 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
   function onSelectDatePreset(date: string) {
     // today
     if (date === "0") {
-      let nextDate = new Date();
+      const nextDate = new Date();
       setSelectedCalendarDate(nextDate);
       setMonthController(nextDate);
     } else {
@@ -139,20 +135,22 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "c" && (e.altKey || e.metaKey)) {
-        setOpen((open) => !open);
+        setOpen((prev) => !prev);
       }
     };
 
     document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
+    return () => {
+      document.removeEventListener("keydown", down);
+    };
   }, []);
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4"
         onChange={debounceOnChange}
+        onSubmit={void form.handleSubmit(onSubmit)}
       >
         <FormField
           control={form.control}
@@ -162,8 +160,7 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
               <div className="flex items-center space-x-4 rounded-md border p-4">
                 <div className="flex-1 space-y-1">
                   <FormLabel>Goal Date</FormLabel>
-                  {/* eslint-disable-next-line react/no-unescaped-entities */}
-                  <FormDescription>The date that you'll pull</FormDescription>
+                  <FormDescription>The date that you will pull</FormDescription>
                   <FormMessage />
                 </div>
                 <div className="flex flex-col gap-4 lg:flex-row">
@@ -173,11 +170,11 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
                     render={({ field: serverField }) => (
                       <FormItem>
                         <Select
+                          defaultValue="0"
                           onValueChange={(data) => {
                             const asInt = parseInt(data);
                             serverField.onChange(asInt);
                           }}
-                          defaultValue="0"
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -200,11 +197,11 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
-                          variant="outline"
                           className={cn(
                             "min-w-[208px] justify-between pl-3 text-left font-normal",
                             !dateField.value && "text-muted-foreground"
                           )}
+                          variant="outline"
                         >
                           {dateField.value ? (
                             format(objToDate.parse(dateField.value), "PPP")
@@ -216,33 +213,39 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent
-                      className="flex w-auto flex-col space-y-2 p-2"
                       align="start"
+                      className="flex w-auto flex-col space-y-2 p-2"
                     >
                       <Button
-                        variant={"outline"}
                         className="justify-between"
-                        onClick={() => setOpen(true)}
+                        onClick={() => {
+                          setOpen(true);
+                        }}
+                        variant="outline"
                       >
                         <span>Jump to ...</span>
                         <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
                           <span className="text-xs">⌘/Alt + C</span>
                         </kbd>
                       </Button>
-                      <CommandDialog open={open} onOpenChange={setOpen}>
+                      <CommandDialog onOpenChange={setOpen} open={open}>
                         <CommandInput placeholder="Click on a result or search..." />
                         <CommandList>
                           <CommandEmpty>No results found.</CommandEmpty>
                           <CommandGroup>
                             <CommandItem
-                              onSelect={() => onSelectDatePreset("0")}
+                              onSelect={() => {
+                                onSelectDatePreset("0");
+                              }}
                             >
                               Today
                             </CommandItem>
                             {futurePatchDateList.map((e) => (
                               <CommandItem
                                 key={e.version}
-                                onSelect={() => onSelectDatePreset(e.dateStart)}
+                                onSelect={() => {
+                                  onSelectDatePreset(e.dateStart);
+                                }}
                               >
                                 {e.name} - {new Date(e.dateStart).getUTCDate()}/
                                 {new Date(e.dateStart).getUTCMonth() + 1}
@@ -254,17 +257,10 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
 
                       <Calendar
                         className="py-0"
-                        mode="single"
-                        selected={selectedCalendarDate}
-                        onSelect={(e) => {
-                          if (e) {
-                            setSelectedCalendarDate(e);
-                            // dateField.onChange(dateToISO.parse(e));
-                          }
-                        }}
                         disabled={beforeToday}
-                        month={monthController}
-                        onMonthChange={setMonthController}
+                        footer={<CalendarFooter date={selectedCalendarDate} />}
+                        initialFocus
+                        mode="single"
                         modifiers={{
                           patchStart: futurePatchDateList.map(
                             (e) => new Date(e.dateStart)
@@ -288,8 +284,15 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
                             textUnderlinePosition: "under",
                           },
                         }}
-                        footer={<CalendarFooter date={selectedCalendarDate} />}
-                        initialFocus
+                        month={monthController}
+                        onMonthChange={setMonthController}
+                        onSelect={(e) => {
+                          if (e) {
+                            setSelectedCalendarDate(e);
+                            // dateField.onChange(dateToISO.parse(e));
+                          }
+                        }}
+                        selected={selectedCalendarDate}
                       />
                     </PopoverContent>
                   </Popover>
@@ -313,12 +316,12 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
                   </FormDescription>
                 </div>
                 <Select
-                  value={String(form.watch("eq"))}
+                  defaultValue="0"
                   onValueChange={(data) => {
                     const asInt = parseInt(data);
                     field.onChange(asInt);
                   }}
-                  defaultValue="0"
+                  value={String(form.watch("eq"))}
                 >
                   <FormControl>
                     <SelectTrigger className="w-fit">
@@ -327,7 +330,7 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
                   </FormControl>
                   <SelectContent>
                     {tbLevels.map(({ value, label }) => (
-                      <SelectItem value={String(value)} key={value}>
+                      <SelectItem key={value} value={String(value)}>
                         {label}
                       </SelectItem>
                     ))}
@@ -352,9 +355,11 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
                     </FormDescription>
                   </div>
                   <Select
-                    onValueChange={(e) => field.onChange(Number(e))}
-                    value={String(form.watch("moc"))}
                     defaultValue={String(field.value)}
+                    onValueChange={(e) => {
+                      field.onChange(Number(e));
+                    }}
+                    value={String(form.watch("moc"))}
                   >
                     <FormControl>
                       <SelectTrigger className="w-fit place-self-center">
@@ -363,7 +368,7 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
                     </FormControl>
                     <SelectContent>
                       {mocStars().map((value) => (
-                        <SelectItem value={String(value)} key={value}>
+                        <SelectItem key={value} value={String(value)}>
                           {value} ✦
                         </SelectItem>
                       ))}
@@ -389,9 +394,9 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
                   </div>
                   <FormControl>
                     <Switch
+                      checked={field.value}
                       className="place-self-center"
                       onCheckedChange={field.onChange}
-                      checked={field.value}
                     />
                   </FormControl>
                 </div>
@@ -400,7 +405,7 @@ export default function JadeEstimateForm({ submitButton = false }: Props) {
           />
         </div>
         <CurrentRollTab form={form} />
-        {submitButton && <Button type="submit">Calculate</Button>}
+        {submitButton ? <Button type="submit">Calculate</Button> : null}
       </form>
     </Form>
   );
@@ -417,19 +422,15 @@ const tbLevels = [
 ];
 
 function getPatchDates(patches: Patch[], server: Server) {
-  const asia_us_diff = 10 * 60 * 60 * 1000; // h m s ms
-  if (server == Server.Asia) return patches;
+  const diff = 10 * 60 * 60 * 1000; // h m s ms
+  if (server === Server.Asia) return patches;
   return patches.map((e) => ({
     ...e,
     date2ndBanner: new Date(
-      new Date(e.date2ndBanner).getTime() + asia_us_diff
+      new Date(e.date2ndBanner).getTime() + diff
     ).toISOString(),
-    dateEnd: new Date(
-      new Date(e.dateEnd).getTime() + asia_us_diff
-    ).toISOString(),
-    dateStart: new Date(
-      new Date(e.dateStart).getTime() + asia_us_diff
-    ).toISOString(),
+    dateEnd: new Date(new Date(e.dateEnd).getTime() + diff).toISOString(),
+    dateStart: new Date(new Date(e.dateStart).getTime() + diff).toISOString(),
   }));
 }
 

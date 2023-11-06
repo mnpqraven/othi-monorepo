@@ -1,9 +1,16 @@
+import { JadeEstimateCfg } from "protocol/ts";
 import { UseFormReturn } from "react-hook-form";
-import * as F from "../../components/ui/Form";
-import { Switch } from "../../components/ui/Switch";
-import { Separator } from "../../components/ui/Separator";
-import { Input } from "../../components/ui/Input";
-import { JadeEstimateCfg } from "@grpc/jadeestimate_pb";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  Separator,
+  Switch,
+} from "ui/primitive";
 
 type Props = {
   form: UseFormReturn<JadeEstimateCfg>;
@@ -13,43 +20,43 @@ const RailPassField = ({ form }: Props) => {
 
   return (
     <div className="rounded-md border p-4">
-      <F.FormField
+      <FormField
         control={form.control}
         name="railPass.useRailPass"
         render={({ field }) => (
-          <F.FormItem>
+          <FormItem>
             <div className="flex items-center">
               <div className="flex-1">
-                <F.FormLabel>Rail Pass</F.FormLabel>
-                <F.FormDescription>Opt-in</F.FormDescription>
+                <FormLabel>Rail Pass</FormLabel>
+                <FormDescription>Opt-in</FormDescription>
               </div>
-              <F.FormControl>
+              <FormControl>
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
-              </F.FormControl>
+              </FormControl>
             </div>
-            <F.FormMessage />
-          </F.FormItem>
+            <FormMessage />
+          </FormItem>
         )}
       />
       {useRailPass && (
         <>
           <Separator className="my-4" />
-          <F.FormField
+          <FormField
             control={form.control}
             name="railPass.daysLeft"
             render={({ field }) => (
-              <F.FormItem>
+              <FormItem>
                 <div className="flex items-center">
                   <div className="flex-1">
-                    <F.FormLabel>Days Left</F.FormLabel>
-                    <F.FormDescription>
+                    <FormLabel>Days Left</FormLabel>
+                    <FormDescription>
                       You{"'"}ll receive 300 jades for renewing the subscription
-                    </F.FormDescription>
+                    </FormDescription>
                   </div>
-                  <F.FormControl>
+                  <FormControl>
                     <Input
                       type="number"
                       min={0}
@@ -61,9 +68,9 @@ const RailPassField = ({ form }: Props) => {
                       }}
                       className="w-20"
                     />
-                  </F.FormControl>
+                  </FormControl>
                 </div>
-              </F.FormItem>
+              </FormItem>
             )}
           />
         </>

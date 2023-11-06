@@ -8,7 +8,7 @@ export async function serverFetch<TPayload, TResponse>(
   }
   // params?: string | number
 ): Promise<TResponse> {
-  let url = env.NEXT_PUBLIC_WORKER_API + endpoint;
+  const url = env.NEXT_PUBLIC_HOST_NAS_WS + endpoint;
 
   // POST
   if (opt) {

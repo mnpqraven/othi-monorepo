@@ -1,11 +1,10 @@
-import { Input } from "../ui/Input";
-import { range } from "@/lib/utils";
-import { Toggle } from "../ui/Toggle";
+import { range } from "lib/utils";
 import Image from "next/image";
-import { PathIcon } from "@/app/character-db/PathIcon";
-import { ElementIcon } from "@/app/character-db/ElementIcon";
+import { PathIcon } from "@hsr/app/character-db/PathIcon";
+import { ElementIcon } from "@hsr/app/character-db/ElementIcon";
 import { useEffect, useRef } from "react";
-import { Element, Path } from "@/bindings/AvatarConfig";
+import { Element, Path } from "@hsr/bindings/AvatarConfig";
+import { Input, Toggle } from "ui/primitive";
 
 type Props = {
   onEnterKey?: (searchText: string) => void;

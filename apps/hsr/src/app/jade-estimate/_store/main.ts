@@ -1,13 +1,9 @@
-import { dateToISO, objToDate } from "@/app/components/schemas";
-import { PartialMessage } from "@bufbuild/protobuf";
-import {
-  BattlePassType,
-  EqTier,
-  JadeEstimateCfg,
-  Server,
-} from "@grpc/jadeestimate_pb";
+import { dateToISO, objToDate } from "@hsr/app/components/schemas";
+import type { PartialMessage } from "@bufbuild/protobuf";
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
+import type { JadeEstimateCfg } from "protocol/ts";
+import { BattlePassType, EqTier, Server } from "protocol/ts";
 
 type FormSchema = PartialMessage<JadeEstimateCfg>;
 

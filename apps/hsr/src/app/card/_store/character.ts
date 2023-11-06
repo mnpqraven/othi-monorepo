@@ -3,14 +3,14 @@ import { atom } from "jotai";
 import { atomWithImmer } from "jotai-immer";
 import { atomsWithQuery } from "jotai-tanstack-query";
 
-type CharacterSchema = {
+interface CharacterSchema {
   id: number | undefined;
   level: number;
   ascension: number;
   eidolon: number;
   trace: Record<string | number, boolean>;
   skills: Record<string, number>;
-};
+}
 export const charIdAtom = atom<number | undefined>(undefined);
 
 export const charLevelAtom = atom(1);

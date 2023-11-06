@@ -1,9 +1,11 @@
-import { AvatarConfig } from "@hsr/bindings/AvatarConfig";
-import { List } from "@hsr/lib/generics";
+import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
+import type { List } from "@hsr/lib/generics";
 import API from "@hsr/server/typedEndpoints";
-import {
+import type {
   UseQueryOptions,
   UseSuspenseQueryOptions,
+} from "@tanstack/react-query";
+import {
   queryOptions,
   useQuery,
   useSuspenseQuery,
@@ -12,7 +14,7 @@ import {
 export const optionsCharacterList = () =>
   queryOptions<List<AvatarConfig>, unknown, AvatarConfig[]>({
     queryKey: ["characterList"],
-    queryFn: async () => await API.characterByIds.get(),
+    queryFn: () => API.characterByIds.get(),
     initialData: { list: [] },
     select: (data) =>
       data.list.sort(

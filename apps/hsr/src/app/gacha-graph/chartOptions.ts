@@ -1,8 +1,8 @@
-import { Banner } from "@/bindings/Banner";
-import { range } from "@/lib/utils";
+import { Banner } from "@hsr/bindings/Banner";
+import { range } from "lib/utils";
 import { PlainMessage } from "@bufbuild/protobuf";
-import { ProbabilityRateResponse } from "@grpc/probabilityrate_pb";
 import { EChartsOption, SeriesOption } from "echarts";
+import { ProbabilityRateResponse } from "protocol/ts";
 
 type ChartData = PlainMessage<ProbabilityRateResponse>;
 

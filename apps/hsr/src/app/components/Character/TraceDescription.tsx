@@ -1,11 +1,9 @@
-import { AvatarSkillConfig } from "@/bindings/AvatarSkillConfig";
-import { SkillTreeConfig } from "@/bindings/SkillTreeConfig";
-import { asPercentage } from "@/lib/utils";
-import API from "@/server/typedEndpoints";
-import { useQuery } from "@tanstack/react-query";
-import { Slider } from "../ui/Slider";
+import { AvatarSkillConfig } from "@hsr/bindings/AvatarSkillConfig";
+import { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
+import { asPercentage } from "lib/utils";
 import { useState } from "react";
 import { SkillDescription } from "../Db/SkillDescription";
+import { Slider } from "ui/primitive";
 
 type Props = {
   traceType: "CORE" | "SMALL" | "BIG";
@@ -17,7 +15,8 @@ const TraceDescription = ({ trace, traceType, maxEnergy, skill }: Props) => {
   if (traceType === "SMALL")
     return (
       <span>
-        {trace.point_name}: {asPercentage(trace.status_add_list[0].value.value)}
+        {trace.point_name}:{" "}
+        {asPercentage(trace.status_add_list.at(0)?.value.value)}
       </span>
     );
 
@@ -66,7 +65,9 @@ const SkillDescriptionWrapper = ({
             defaultValue={[0]}
             min={0}
             max={skill.param_list.length - 1}
-            onValueChange={(sl) => setSelectedSlv(sl[0])}
+            onValueChange={(sl) => {
+              if (!!sl[0]) setSelectedSlv(sl[0]);
+            }}
           />
         </div>
       )}

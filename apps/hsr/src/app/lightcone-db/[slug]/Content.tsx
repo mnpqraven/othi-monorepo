@@ -1,19 +1,19 @@
 "use client";
 
-import { SkillDescription } from "@/app/components/Db/SkillDescription";
+import { SkillDescription } from "@hsr/app/components/Db/SkillDescription";
+import { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
+import { EquipmentSkillConfig } from "@hsr/bindings/EquipmentSkillConfig";
+import { ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/app/components/ui/Card";
-import { Slider } from "@/app/components/ui/Slider";
-import { EquipmentConfig } from "@/bindings/EquipmentConfig";
-import { EquipmentSkillConfig } from "@/bindings/EquipmentSkillConfig";
-import { ExternalLink } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
+  Slider,
+} from "ui/primitive";
 
 type Props = {
   data: EquipmentConfig;
@@ -51,7 +51,9 @@ function Content({ data, skill, link = false }: Props) {
                 className="my-1.5"
                 min={0}
                 max={4}
-                onValueChange={(e) => setPromotion(e[0])}
+                onValueChange={(e) => {
+                  if (e[0]) setPromotion(e[0]);
+                }}
               />
             </CardDescription>
           </CardHeader>

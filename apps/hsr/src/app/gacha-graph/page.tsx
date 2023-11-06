@@ -6,22 +6,25 @@ import { useTheme } from "next-themes";
 import {
   defaultBanner,
   useBannerList,
-} from "@/hooks/queries/useGachaBannerList";
+} from "@hsr/hooks/queries/useGachaBannerList";
 import { ReactECharts } from "../components/ReactEcharts";
 import { GachaForm } from "./GachaForm";
 import { defaultGachaQuery } from "./types";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import STORAGE from "@/server/storage";
+import { useLocalStorage } from "@hsr/hooks/useLocalStorage";
+import STORAGE from "@hsr/server/storage";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import equal from "fast-deep-equal/react";
-import { rpc } from "@/server/typedEndpoints";
-import { ProbabilityRateService } from "@grpc/probabilityrate_connect";
 import { PlainMessage } from "@bufbuild/protobuf";
-import { BannerType, ProbabilityRatePayload } from "@grpc/probabilityrate_pb";
 import { schema } from "./schema";
 import { chartOptions } from "./chartOptions";
-import { useCacheValidate } from "@/hooks/useCacheValidate";
+import { useCacheValidate } from "@hsr/hooks/useCacheValidate";
+import {
+  BannerType,
+  ProbabilityRatePayload,
+  ProbabilityRateService,
+} from "protocol/ts";
+import { rpc } from "protocol";
 
 type FormSchema = PlainMessage<ProbabilityRatePayload>;
 

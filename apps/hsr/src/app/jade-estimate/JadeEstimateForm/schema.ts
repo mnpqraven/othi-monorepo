@@ -1,4 +1,4 @@
-import { BattlePassType, EqTier, Server } from "@grpc/jadeestimate_pb";
+import { BattlePassType, EqTier, Server } from "protocol/ts";
 import * as z from "zod";
 
 export const schema = z.object({

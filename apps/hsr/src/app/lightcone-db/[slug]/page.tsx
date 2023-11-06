@@ -1,4 +1,4 @@
-import API from "@/server/typedEndpoints";
+import API from "@hsr/server/typedEndpoints";
 import { Portrait } from "./Portrait";
 import { Content } from "./Content";
 import { LightConeRanking } from "./LightConeRanking";

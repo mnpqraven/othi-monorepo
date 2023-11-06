@@ -3,13 +3,12 @@
 import Link from "next/link";
 import { DbFilter } from "../components/Db/DbFilter";
 import Fuse from "fuse.js";
-import { useEffect, useState } from "react";
 import { LightConeCard } from "./LightConeCard";
 import useLightConeFilter from "../components/Db/useLightConeFilter";
 import { useRouter } from "next/navigation";
-import { IMAGE_URL } from "@/lib/constants";
-import { useLightConeList } from "@/hooks/queries/useLightConeList";
-import { EquipmentConfig } from "@/bindings/EquipmentConfig";
+import { IMAGE_URL } from "@hsr/lib/constants";
+import { useLightConeList } from "@hsr/hooks/queries/useLightConeList";
+import { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
 
 const keys = ["metadata.equipment_name", "metadata.equipment_id", "max_sp"];
 
@@ -32,7 +31,7 @@ const LightConeCatalogue = () => {
 
   function onEnter(_query: string) {
     if (processedData.length > 0)
-      router.push(`/lightcone-db/${processedData[0].equipment_id}`);
+      router.push(`/lightcone-db/${processedData.at(0)?.equipment_id}`);
   }
 
   return (

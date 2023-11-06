@@ -1,5 +1,5 @@
 import { PlainMessage } from "@bufbuild/protobuf";
-import { BannerType, ProbabilityRatePayload } from "@grpc/probabilityrate_pb";
+import { ProbabilityRatePayload, BannerType } from "protocol/ts";
 
 export const defaultGachaQuery: PlainMessage<ProbabilityRatePayload> = {
   currentEidolon: -1,

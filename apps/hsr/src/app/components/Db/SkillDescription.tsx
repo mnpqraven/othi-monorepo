@@ -1,5 +1,5 @@
-import { ParameterizedDescription } from "@/bindings/SkillTreeConfig";
-import { sanitizeNewline } from "@/lib/utils";
+import { ParameterizedDescription } from "@hsr/bindings/SkillTreeConfig";
+import { sanitizeNewline } from "lib/utils";
 import { Fragment } from "react";
 
 type SkillDescriptionProps = {
@@ -29,7 +29,7 @@ export const SkillDescription = ({
             {sanitizeNewline(descPart)}
           </span>
           <span className="font-semibold text-accent-foreground">
-            {currentParam[index]}
+            {currentParam ? currentParam[index] : null}
           </span>
         </Fragment>
       ))}

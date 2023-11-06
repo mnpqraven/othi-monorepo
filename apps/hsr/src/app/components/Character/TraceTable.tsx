@@ -1,23 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
-import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 import Xarrow, { Xwrapper, useXarrow } from "react-xarrows";
 import { useTheme } from "next-themes";
-import { SkillTreeConfig } from "@/bindings/SkillTreeConfig";
+import { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
 import { getLineTrips, traceVariants } from "./lineTrips";
 import { TraceDescription } from "./TraceDescription";
-import { useCharacterTrace } from "@/hooks/queries/useCharacterTrace";
-import { useCharacterSkill } from "@/hooks/queries/useCharacterSkill";
-import { Checkbox } from "../ui/Checkbox";
+import { useCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
+import { useCharacterSkill } from "@hsr/hooks/queries/useCharacterSkill";
 import { useImmer } from "use-immer";
 import { useEffect } from "react";
-import { useCharacterMetadata } from "@/hooks/queries/useCharacterMetadata";
-import { Path } from "@/bindings/AvatarConfig";
+import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
+import { Path } from "@hsr/bindings/AvatarConfig";
+import { cn } from "lib";
+import {
+  Checkbox,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "ui/primitive";
 
-const DEBUG = true;
+const DEBUG = false;
 
 type Props = {
   characterId: number;
@@ -180,21 +184,22 @@ const TraceTableInner = ({
             </div>
           ))}
 
-        {data &&
-          getLineTrips(path).map(([a, b], index) => (
-            <Xarrow
-              key={index}
-              start={a}
-              end={b}
-              color={theme !== "dark" ? "black" : "white"}
-              zIndex={-1}
-              showHead={false}
-              curveness={0}
-              startAnchor={"middle"}
-              endAnchor={"middle"}
-              strokeWidth={2}
-            />
-          ))}
+        {data
+          ? getLineTrips(path).map(([a, b], index) => (
+              <Xarrow
+                key={index}
+                start={a!}
+                end={b!}
+                color={theme !== "dark" ? "black" : "white"}
+                zIndex={-1}
+                showHead={false}
+                curveness={0}
+                startAnchor={"middle"}
+                endAnchor={"middle"}
+                strokeWidth={2}
+              />
+            ))
+          : null}
       </Xwrapper>
     </div>
   );

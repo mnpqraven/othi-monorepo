@@ -1,21 +1,7 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/app/components/ui/Card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/app/components/ui/Select";
-import { EquipmentRanking } from "@/bindings/EquipmentRanking";
-import API from "@/server/typedEndpoints";
+import { EquipmentRanking } from "@hsr/bindings/EquipmentRanking";
+import API from "@hsr/server/typedEndpoints";
 import { useQuery } from "@tanstack/react-query";
 import { AxisRight } from "@visx/axis";
 import { localPoint } from "@visx/event";
@@ -26,6 +12,18 @@ import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale";
 import { Bar, BarStackHorizontal } from "@visx/shape";
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
 import { useCallback, useMemo, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "ui/primitive";
 
 type Props = {
   id: number;

@@ -1,27 +1,11 @@
-import { useBannerList } from "@/hooks/queries/useGachaBannerList";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../components/ui/Select";
-import { Input } from "../components/ui/Input";
-import { range } from "@/lib/utils";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../components/ui/Form";
+import { useBannerList } from "@hsr/hooks/queries/useGachaBannerList";
+import { range } from "lib/utils";
 import { UseFormReturn } from "react-hook-form";
-import { useDebounce } from "@/hooks/useDebounce";
-import { Switch } from "../components/ui/Switch";
+import { useDebounce } from "@hsr/hooks/useDebounce";
 import { PlainMessage } from "@bufbuild/protobuf";
-import { BannerType, ProbabilityRatePayload } from "@grpc/probabilityrate_pb";
-import { Banner } from "@/bindings/Banner";
+import { Banner } from "@hsr/bindings/Banner";
+import { BannerType, ProbabilityRatePayload } from "protocol/ts";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Switch } from "ui/primitive";
 
 type FormSchema = PlainMessage<ProbabilityRatePayload>;
 

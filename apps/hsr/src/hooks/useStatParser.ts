@@ -1,26 +1,30 @@
-import { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
-import { useCharacterPromotion } from "./queries/useCharacterPromotion";
-import { useCharacterTrace } from "./queries/useCharacterTrace";
-import { useLightConePromotion } from "./queries/useLightConePromotion";
-import { EquipmentPromotionConfig } from "@hsr/bindings/EquipmentPromotionConfig";
-import { Property } from "@hsr/bindings/RelicSubAffixConfig";
-import { useRelicSetBonuses } from "./queries/useRelicSetBonus";
-import { useLightConeSkill } from "./queries/useLightConeSkill";
+import type { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
+import type { EquipmentPromotionConfig } from "@hsr/bindings/EquipmentPromotionConfig";
+import type { Property } from "@hsr/bindings/RelicSubAffixConfig";
 import {
   charAfterPromotion,
   lcAfterPromotion,
 } from "@hsr/app/card/[uid]/_components/useDataProcess";
-import { RelicType } from "@hsr/bindings/RelicConfig";
+import type { RelicType } from "@hsr/bindings/RelicConfig";
 import { useAtomValue } from "jotai";
 import { mainstatSpreadAtom } from "@hsr/store/queries";
+import { useLightConeSkill } from "./queries/useLightConeSkill";
+import { useRelicSetBonuses } from "./queries/useRelicSetBonus";
+import { useLightConePromotion } from "./queries/useLightConePromotion";
+import { useCharacterTrace } from "./queries/useCharacterTrace";
+import { useCharacterPromotion } from "./queries/useCharacterPromotion";
 
-type BasicMetadata = { id: number; level: number; ascension: number };
+interface BasicMetadata {
+  id: number;
+  level: number;
+  ascension: number;
+}
 export interface SubStatSchema {
   property: Property;
   value: number;
   step: number;
 }
-export type ParsedRelicSchema = {
+export interface ParsedRelicSchema {
   id?: number;
   rarity: number;
   setId: number;
@@ -29,16 +33,16 @@ export type ParsedRelicSchema = {
   level: number;
   property: Property;
   subStats: (SubStatSchema | undefined)[];
-};
+}
 
-export type BaseValueSchema = {
+export interface BaseValueSchema {
   atk: number;
   hp: number;
   def: number;
   speed: number;
   critical_chance: number;
   critical_damage: number;
-};
+}
 
 export interface ParsedStatRecord {
   baseValues: BaseValueSchema;
@@ -103,11 +107,11 @@ export function useStatParser(props?: StatParserConstructor) {
   };
 
   // INFO: PERCENT FROM LC
-  let lcTotal: Partial<Record<Property, number>> = {};
+  const lcTotal: Partial<Record<Property, number>> = {};
   const lcProps = lcSkillData?.ability_property.at(
     props.lightCone?.imposition ?? 0
   );
-  if (!!lcProps) {
+  if (lcProps) {
     lcProps.forEach(({ property_type, value }) => {
       if (!lcTotal[property_type]) lcTotal[property_type] = value.value;
       else lcTotal[property_type]! += value.value;
@@ -119,13 +123,13 @@ export function useStatParser(props?: StatParserConstructor) {
     .filter((trace) =>
       Object.keys(props.traceTable).includes(String(trace.point_id))
     )
-    .filter((trace) => !!trace.status_add_list.length)
+    .filter((trace) => Boolean(trace.status_add_list.length))
     .map((trace) => ({
-      property: trace.status_add_list[0].property_type,
-      value: trace.status_add_list[0].value.value,
+      property: trace.status_add_list.at(0)?.property_type,
+      value: trace.status_add_list.at(0)?.value.value,
     }));
 
-  let traceTotal: Partial<Record<Property, number>> = {};
+  const traceTotal: Partial<Record<Property, number>> = {};
 
   tracePropList.forEach(({ property, value }) => {
     if (!traceTotal[property]) traceTotal[property] = value;
@@ -134,13 +138,13 @@ export function useStatParser(props?: StatParserConstructor) {
 
   // INFO: PERCENT FROM RELIC SET BONUSES
   // Record<setId, num>
-  let setTracker: Record<string, number> = {};
+  const setTracker: Record<string, number> = {};
   props.relic.forEach(({ setId }) => {
     if (!setTracker[setId]) setTracker[setId] = 1;
     else setTracker[setId] += 1;
   });
   // Record<Property, number>
-  let setBonusTotal: Partial<Record<Property, number>> = {};
+  const setBonusTotal: Partial<Record<Property, number>> = {};
   Object.entries(setTracker).forEach(([setId, possessingCount]) => {
     const find = relicBonuses.find((e) => e.set_id == Number(setId));
     if (!find) return;
@@ -160,7 +164,7 @@ export function useStatParser(props?: StatParserConstructor) {
   const subStatNoStep = (relic: ParsedRelicSchema) =>
     relic.subStats
       .filter(Boolean)
-      .map((ss) => ({ property: ss?.property!, value: ss?.value! }));
+      .map((ss) => ({ property: ss?.property, value: ss?.value! }));
 
   const relicPropList: {
     property: Property;
@@ -178,7 +182,7 @@ export function useStatParser(props?: StatParserConstructor) {
     ];
   });
 
-  let relicTotal: Partial<Record<Property, number>> = {};
+  const relicTotal: Partial<Record<Property, number>> = {};
 
   relicPropList.forEach((props) => {
     props.forEach(({ property, value }) => {
@@ -206,18 +210,18 @@ export function useStatParser(props?: StatParserConstructor) {
   const normalized = {
     atk:
       (baseValues.atk +
-        orZero(summed["AttackDelta"]) +
-        baseValues.atk * orZero(summed["AttackAddedRatio"])) /
+        orZero(summed.AttackDelta) +
+        baseValues.atk * orZero(summed.AttackAddedRatio)) /
       (maxChAtk + maxLcAtk),
     def:
       (baseValues.def +
-        orZero(summed["DefenceDelta"]) +
-        baseValues.def * orZero(summed["DefenceAddedRatio"])) /
+        orZero(summed.DefenceDelta) +
+        baseValues.def * orZero(summed.DefenceAddedRatio)) /
       (maxChDef + maxLcDef),
     hp:
       (baseValues.hp +
-        orZero(summed["HPDelta"]) +
-        baseValues.hp * orZero(summed["HPAddedRatio"])) /
+        orZero(summed.HPDelta) +
+        baseValues.hp * orZero(summed.HPAddedRatio)) /
       (maxChHp + maxLcHp),
   };
 
@@ -250,7 +254,7 @@ function baseLc(
   ascension: number,
   promoteData: EquipmentPromotionConfig | undefined
 ) {
-  if (!!promoteData) {
+  if (promoteData) {
     const {
       base_attack,
       base_attack_add,
@@ -271,7 +275,7 @@ function baseLc(
 function sumProps(
   props: Partial<Record<Property, number>>[]
 ): Partial<Record<Property, number>> {
-  let ret: Partial<Record<Property, number>> = {};
+  const ret: Partial<Record<Property, number>> = {};
   props.forEach((prop) => {
     Object.entries(prop).forEach(([p, value]) => {
       const property = p as Property;
@@ -343,6 +347,6 @@ function toStatTable(
 }
 
 function orZero(n: number | null | undefined, def?: number): number {
-  if (!n) return !!def ? def : 0;
-  else return n;
+  if (!n) return def ? def : 0;
+  return n;
 }

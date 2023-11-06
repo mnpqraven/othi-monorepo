@@ -15,7 +15,7 @@ type DottablePaths<T, P extends Prev[number] = 10> =
   | []
   | ([P] extends [never]
       ? never
-      : T extends readonly any[]
+      : T extends readonly never[]
       ? never
       : T extends object
       ? {

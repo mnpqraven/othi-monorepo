@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { RefObject } from "react";
+import type { RefObject } from "react";
 import { relicsStructAtom } from "./relic";
 
 export const enkaRefAtom = atom<RefObject<HTMLDivElement> | undefined>(

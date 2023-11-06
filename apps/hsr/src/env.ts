@@ -6,12 +6,11 @@ export const env = createEnv({
     EDGE_CONFIG: z.string().url(),
   },
   client: {
-    NEXT_PUBLIC_BASE_URL: z.string().url(),
-    NEXT_PUBLIC_WORKER_API: z.string().url(),
+    NEXT_PUBLIC_HOST_HSR: z.string().url(),
+    NEXT_PUBLIC_HOST_NAS_WS: z.string().url(),
   },
-  runtimeEnv: {
-    EDGE_CONFIG: process.env["EDGE_CONFIG"],
-    NEXT_PUBLIC_BASE_URL: process.env["NEXT_PUBLIC_BASE_URL"],
-    NEXT_PUBLIC_WORKER_API: process.env["NEXT_PUBLIC_WORKER_API"],
+  experimental__runtimeEnv: {
+    NEXT_PUBLIC_HOST_HSR: process.env.NEXT_PUBLIC_HOST_HSR,
+    NEXT_PUBLIC_HOST_NAS_WS: process.env.NEXT_PUBLIC_HOST_NAS_WS,
   },
 });

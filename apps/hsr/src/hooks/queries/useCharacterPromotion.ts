@@ -1,6 +1,7 @@
-import { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
+import type { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
 import API from "@hsr/server/typedEndpoints";
-import { UseQueryOptions, queryOptions, useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 
 type Options = Omit<
   UseQueryOptions<AvatarPromotionConfig>,
@@ -9,8 +10,8 @@ type Options = Omit<
 export const optionCharacterPromotion = (charId: number | undefined) =>
   queryOptions<AvatarPromotionConfig>({
     queryKey: ["promotion", charId],
-    queryFn: async () => await API.promotion.get({ characterId: charId! }),
-    enabled: !!charId,
+    queryFn: () => API.promotion.get({ characterId: charId! }),
+    enabled: Boolean(charId),
   });
 
 export function useCharacterPromotion(

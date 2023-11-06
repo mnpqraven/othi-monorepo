@@ -9,7 +9,9 @@
     "NEXTAUTH_SECRET",
     "NEXT_PUBLIC_BASE_URL",
     "GITHUB_ID",
-    "GITHUB_SECRET"
+    "GITHUB_SECRET",
+    "NEXT_PUBLIC_HOST_DB_CENTER",
+    "NEXT_PUBLIC_HOST_HSR"
   ],
   "pipeline": {
     "build": {

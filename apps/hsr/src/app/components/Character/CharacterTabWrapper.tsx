@@ -1,9 +1,9 @@
 import { SkillOverview } from "./SkillOverview";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "ui/primitive";
 import { TraceTable } from "./TraceTable";
 import { EidolonTable } from "./EidolonTable";
 import { useQueryClient } from "@tanstack/react-query";
-import API from "@/server/typedEndpoints";
+import API from "@hsr/server/typedEndpoints";
 
 type Props = {
   characterId: number;

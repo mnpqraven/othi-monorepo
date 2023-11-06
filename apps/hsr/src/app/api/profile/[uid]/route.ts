@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest} from "next/server";
+import { NextResponse } from "next/server";
 
 interface Params {
   params: { uid: number };
@@ -13,11 +14,11 @@ export async function GET(request: NextRequest, { params }: Params) {
       { next: { revalidate: 15 } }
     );
     const data = await req.json();
-    if (data["player"] === undefined || data["characters"] === undefined) {
-      return NextResponse.json({ error: data["detail"] }, { status: 400 });
-    } else {
-      return NextResponse.json(data);
+    if (data.player === undefined || data.characters === undefined) {
+      return NextResponse.json({ error: data.detail }, { status: 400 });
     }
+      return NextResponse.json(data);
+
   } catch (error) {
     return NextResponse.json({ error }, { status: 400 });
   }

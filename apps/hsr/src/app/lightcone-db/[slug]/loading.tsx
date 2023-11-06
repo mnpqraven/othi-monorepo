@@ -1,6 +1,6 @@
-import { Card, CardHeader, CardTitle } from "@/app/components/ui/Card";
-import styles from "@/css/floating-card.module.css";
-import { cn } from "@/lib/utils";
+import styles from "@hsr/css/floating-card.module.css";
+import { cn } from "lib";
+import { Card, CardHeader, CardTitle } from "ui/primitive";
 
 export default function Loading() {
   return (
