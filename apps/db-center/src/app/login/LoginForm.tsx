@@ -43,13 +43,13 @@ export default function LoginForm() {
       });
     } else {
       router.push(
-        callbackUrl?.startsWith(env.NEXT_PUBLIC_BASE_URL) ? callbackUrl : "/"
+        callbackUrl?.startsWith(env.NEXT_PUBLIC_BASE_URL) ? callbackUrl : "/",
       );
     }
   }
 
   return (
-    <div className="flex flex-col gap-4 items-center container pt-12">
+    <div className="container flex flex-col items-center gap-4 pt-12">
       <Button
         className="w-fit"
         onClick={() =>
@@ -63,8 +63,8 @@ export default function LoginForm() {
 
       <Form {...form}>
         <form
-          className="flex flex-col gap-6 items-center"
-          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col items-center gap-6"
+          onSubmit={void form.handleSubmit(onSubmit)}
         >
           <FormField
             control={form.control}
