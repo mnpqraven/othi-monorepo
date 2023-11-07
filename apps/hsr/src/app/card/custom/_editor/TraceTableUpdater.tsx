@@ -5,7 +5,6 @@ import {
 import { groupTrips } from "@hsr/app/components/Character/lineTrips";
 import type { Path } from "@hsr/bindings/AvatarConfig";
 import type { Anchor, SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
-import { useCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
 import { cva } from "class-variance-authority";
 import { useAtomValue, useSetAtom } from "jotai";
 import Image from "next/image";
@@ -13,6 +12,8 @@ import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
 import { asPercentage, cn } from "lib";
 import { Skeleton, Toggle } from "ui/primitive";
+import { useQuery } from "@tanstack/react-query";
+import { characterTraceQ } from "@hsr/hooks/queries/character";
 import {
   charIdAtom,
   charTraceAtom,
@@ -41,8 +42,9 @@ interface Prop {
 
 export function TraceTableUpdater({ path }: Prop) {
   const characterId = useAtomValue(charIdAtom);
-  const { data: traces, isFetching } = useCharacterTrace(characterId);
-  if (isFetching) return "loading...";
+  const { data: traces, status } = useQuery(characterTraceQ(characterId));
+  if (status !== "success") return "loading...";
+
   const splittedTraces = groupTrips(path);
 
   return (

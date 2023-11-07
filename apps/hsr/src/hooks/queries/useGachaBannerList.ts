@@ -19,7 +19,7 @@ export const defaultBanner: Banner = {
 export const useBannerList = () => {
   const query = useQuery({
     queryKey: ["gachaBannerList"],
-    queryFn: async () => await API.warpBanner.get(),
+    queryFn: () => API.warpBanner.get(),
     initialData: { list: [defaultBanner] },
     select: (data) => data.list,
   });

@@ -3,13 +3,11 @@
 import { DbFilter } from "@hsr/app/components/Db/DbFilter";
 import useCharacterFilter from "@hsr/app/components/Db/useCharacterFilter";
 import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
-import { useCharacterList } from "@hsr/hooks/queries/useCharacterList";
 import { img } from "@hsr/lib/utils";
 import { useAtom, useSetAtom } from "jotai";
 import Image from "next/image";
 import type { HTMLAttributes } from "react";
 import { Suspense, forwardRef, useState } from "react";
-import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
 import { CharacterCard } from "@hsr/app/character-db/CharacterCardWrapper";
 import { cn } from "lib";
 import {
@@ -19,6 +17,11 @@ import {
   DialogTrigger,
   Toggle,
 } from "ui/primitive";
+import { useQuery } from "@tanstack/react-query";
+import {
+  characterMetadataQ,
+  characterMetadatasQ,
+} from "@hsr/hooks/queries/character";
 import { CharacterUpdater } from "../_editor/CharacterUpdater";
 import { TraceTableUpdater } from "../_editor/TraceTableUpdater";
 import { charIdAtom, lcIdAtom } from "../../_store";
@@ -29,8 +32,11 @@ export const CharacterEditorTab = forwardRef<
 >(({ className, ...props }, ref) => {
   const [charId, updateId] = useAtom(charIdAtom);
   const updateLcId = useSetAtom(lcIdAtom);
-  const { data: chara } = useCharacterMetadata(charId);
-  const { characterList } = useCharacterList();
+  const { data: chara } = useQuery(characterMetadataQ(charId));
+  const { data: characterList } = useQuery({
+    ...characterMetadatasQ(),
+    initialData: { list: [] },
+  });
   const [open, setOpen] = useState(false);
   const { filter } = useCharacterFilter();
 
@@ -68,7 +74,7 @@ export const CharacterEditorTab = forwardRef<
           </DialogContent>
         </Dialog>
 
-        {Boolean(chara) && (
+        {chara ? (
           <CharacterCard
             avatar_base_type={chara.avatar_base_type}
             avatar_name={chara.avatar_name}
@@ -77,7 +83,7 @@ export const CharacterEditorTab = forwardRef<
             imgUrl={url(chara.avatar_id)}
             rarity={chara.rarity}
           />
-        )}
+        ) : null}
 
         {chara?.avatar_name}
       </div>
@@ -88,7 +94,7 @@ export const CharacterEditorTab = forwardRef<
         </Suspense>
       ) : null}
 
-      {Boolean(chara) && <TraceTableUpdater path={chara.avatar_base_type} />}
+      {chara ? <TraceTableUpdater path={chara.avatar_base_type} /> : null}
     </div>
   );
 });

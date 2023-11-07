@@ -71,7 +71,7 @@ export function RelicEditor({ atom }: { atom: PrimitiveAtom<RelicInput> }) {
     );
   }
 
-  function warnProperty(prop: Property | undefined) {
+  function _warnProperty(prop: Property | undefined) {
     if (!prop) {
       toast({
         variant: "destructive",

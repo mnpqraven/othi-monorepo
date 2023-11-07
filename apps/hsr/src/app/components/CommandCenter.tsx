@@ -15,16 +15,17 @@ import type { ComponentPropsWithoutRef, ElementRef } from "react";
 import { forwardRef, useEffect, useState } from "react";
 import type { Command as CommandPrimitive } from "cmdk";
 import { useRouter } from "next/navigation";
-import { useLightConeList } from "@hsr/hooks/queries/useLightConeList";
-import { useCharacterList } from "@hsr/hooks/queries/useCharacterList";
 import Fuse from "fuse.js";
 import Image from "next/image";
 import { cva } from "class-variance-authority";
 import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
 import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
 import { range } from "lib";
-import { ElementIcon } from "../character-db/ElementIcon";
+import { useQuery } from "@tanstack/react-query";
+import { characterMetadatasQ } from "@hsr/hooks/queries/character";
+import { lightConesQ } from "@hsr/hooks/queries/lightcone";
 import { PathIcon } from "../character-db/PathIcon";
+import { ElementIcon } from "../character-db/ElementIcon";
 
 const kbdVariants = cva(
   "bg-muted text-muted-foreground pointer-events-none hidden h-5 select-none items-center gap-1 rounded border px-1.5 font-mono font-medium opacity-100 sm:inline-block",
@@ -56,8 +57,8 @@ function CommandCenter({ routes }: Prop) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const { data: lightConeList } = useLightConeList();
-  const { characterList } = useCharacterList();
+  const { data: lightConeList } = useQuery(lightConesQ());
+  const { data: characterList } = useQuery(characterMetadatasQ());
   const [filteredLc, setFilteredLc] = useState<EquipmentConfig[]>([]);
   const [filteredChar, setFilteredChar] = useState<AvatarConfig[]>([]);
 

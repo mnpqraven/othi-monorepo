@@ -5,7 +5,6 @@ import { img } from "@hsr/lib/utils";
 import { Badge } from "ui/primitive";
 import { PathIcon } from "@hsr/app/character-db/PathIcon";
 import { ElementIcon } from "@hsr/app/character-db/ElementIcon";
-import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
 import { useAtomValue } from "jotai";
 import {
   charEidAtom,
@@ -16,6 +15,8 @@ import {
 import { cn } from "lib/utils";
 import type { Element, Path } from "@hsr/bindings/AvatarConfig";
 import { selectAtom } from "jotai/utils";
+import { useQuery } from "@tanstack/react-query";
+import { characterMetadataQ } from "@hsr/hooks/queries/character";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
@@ -23,24 +24,14 @@ interface Prop extends HTMLAttributes<HTMLDivElement> {
 
 export const CharacterInfo = forwardRef<HTMLDivElement, Prop>(
   ({ className, characterId, ...props }: Prop, ref) => {
-    const { data } = useCharacterMetadata(characterId);
+    const { data } = useQuery(characterMetadataQ(characterId));
     const level = useAtomValue(charLevelAtom);
     const ascension = useAtomValue(charPromotionAtom);
     const eidolon = useAtomValue(charEidAtom);
 
     if (!data) return null;
 
-    // const { name, level, rarity, rank, path, element } = characterData;
     const maxLevel = ascension * 10 + 20;
-
-    // const onImageDrag: DragEventHandler<HTMLDivElement> = (event) => {
-    //   event.stopPropagation();
-    // };
-    // const onImageDragEnd: DragEventHandler<HTMLDivElement> = (event) => {
-    //   const clientRect = event.currentTarget.getBoundingClientRect();
-    //   // clientRect.left - event.clientX - refX
-    //   // clientRect.top - event.clientY - refY
-    // };
 
     return (
       <div
@@ -51,13 +42,6 @@ export const CharacterInfo = forwardRef<HTMLDivElement, Prop>(
         <div
           className="absolute top-11 -z-10 flex h-[512px] w-[374px] items-center"
           id="left-avatar"
-          // TODO: apply to drag
-          // onClick={(event) => {
-          //   // stop event to bubble to parent element
-          //   event.stopPropagation();
-          //   console.log("child event");
-          // }}
-          // onDragOver={onImageDrag}
           style={{
             backgroundImage: `url(${img(
               `image/character_preview/${characterId}.png`
@@ -114,7 +98,6 @@ function UserPlateLeft({ path }: { path: Path }) {
     return (
       <div className="flex flex-col">
         <span className="font-bold">{name}</span>
-        {/* <span>{config.uid}</span> */}
       </div>
     );
   return (

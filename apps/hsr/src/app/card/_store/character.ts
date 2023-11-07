@@ -1,4 +1,4 @@
-import { optionCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
+import { characterMetadataQ } from "@hsr/hooks/queries/useCharacterMetadata";
 import { atom } from "jotai";
 import { atomWithImmer } from "jotai-immer";
 import { atomsWithQuery } from "jotai-tanstack-query";
@@ -60,5 +60,5 @@ export const charStructAtom = atom(
 );
 
 export const [, charMetadataAtom] = atomsWithQuery((get) =>
-  optionCharacterMetadata(get(charIdAtom))
+  characterMetadataQ(get(charIdAtom))
 );

@@ -1,4 +1,10 @@
 module.exports = {
   extends: ["custom/next"],
-  ignorePatterns: ["**/bindings/*"],
+  ignorePatterns: [
+    "**/bindings/*",
+    // "**/lib/*",
+    // "**/app/card/*",
+    // "**/app/components/*",
+    // "**/app/jade-estimate/*",
+  ],
 };

@@ -1,5 +1,4 @@
 import { useAtom, useAtomValue } from "jotai";
-import { useSuspendedCharacterSkill } from "@hsr/hooks/queries/useCharacterSkill";
 import type {
   AvatarSkillConfig,
   SkillType,
@@ -10,6 +9,8 @@ import type { HTMLAttributes } from "react";
 import { forwardRef, useEffect, useMemo } from "react";
 import { Badge, Input, Label } from "ui/primitive";
 import { cn } from "lib";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { characterSkillQ } from "@hsr/hooks/queries/character";
 import { getSkillMaxLevel } from "../../[uid]/_components/skill_block/SkillInfo";
 import {
   charEidAtom,
@@ -30,7 +31,7 @@ const skillTypeMap = [
 
 export function CharacterUpdater() {
   const charId = useAtomValue(charIdAtom);
-  const { data: skills } = useSuspendedCharacterSkill(charId);
+  const { data: skills } = useSuspenseQuery(characterSkillQ(charId));
   const maxLevel = useAtomValue(charMaxLevelAtom);
 
   const sortedSkills = skills
@@ -188,7 +189,7 @@ function SkillSection({
 
   return (
     <div className="h-20">
-      {Boolean(data[0]) && (
+      {data[0] ? (
         <div className="flex gap-2">
           <Image
             alt={`${data[0].skill_id}`}
@@ -202,7 +203,7 @@ function SkillSection({
             <SkillInput id={data[0].skill_id} maxLv={maxLv} />
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

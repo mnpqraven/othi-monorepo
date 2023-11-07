@@ -58,7 +58,7 @@ export function GachaForm({
               <FormItem>
                 <FormLabel>Banner</FormLabel>
                 <Select
-                  defaultValue={String(BannerType.SSR)}
+                  defaultValue={`${field.value}`}
                   onValueChange={(bannerType) => {
                     const parsed = BannerType[parseInt(bannerType)] as
                       | "SSR"
@@ -74,9 +74,9 @@ export function GachaForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent position="popper">
-                    {bannerList.map(({ bannerName, bannerType }, index) => (
+                    {bannerList.map(({ bannerName, bannerType }) => (
                       <SelectItem
-                        key={index}
+                        key={bannerName}
                         value={String(BannerType[bannerType])}
                       >
                         {bannerName}
@@ -137,10 +137,10 @@ export function GachaForm({
               <FormItem>
                 <FormLabel>Current {selectedBanner.constPrefix}</FormLabel>
                 <Select
+                  defaultValue={`${field.value}`}
                   onValueChange={(e) => {
                     field.onChange(parseInt(e));
                   }}
-                  value={String(field.value)}
                 >
                   <FormControl>
                     <SelectTrigger>

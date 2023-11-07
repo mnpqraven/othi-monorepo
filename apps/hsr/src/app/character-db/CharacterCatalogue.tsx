@@ -3,20 +3,19 @@
 import Fuse from "fuse.js";
 import { useRouter } from "next/navigation";
 import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
-import { useCharacterList } from "@hsr/hooks/queries/useCharacterList";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { characterMetadatasQ } from "@hsr/hooks/queries/character";
 import useCharacterFilter from "../components/Db/useCharacterFilter";
 import { DbFilter } from "../components/Db/DbFilter";
 import { CharacterCatalogueItem } from "./CharacterCatalogueItem";
 
-const keys: (keyof AvatarConfig)[] = [
-  "avatar_name",
-  "avatar_id",
-  "avatar_votag",
-];
-
 function search(data: AvatarConfig[], query: string | undefined) {
   const fz = new Fuse(data, {
-    keys,
+    keys: [
+      "avatar_name",
+      "avatar_id",
+      "avatar_votag",
+    ] satisfies (keyof AvatarConfig)[],
     threshold: 0.4,
   });
 
@@ -28,7 +27,7 @@ function CharacterCatalogue() {
   const router = useRouter();
   const { filter, query, updateQuery } = useCharacterFilter();
 
-  const { characterList: data } = useCharacterList();
+  const { data } = useSuspenseQuery(characterMetadatasQ());
 
   const processedData = search(data, query)
     .filter(filter.byRarity)
@@ -36,8 +35,8 @@ function CharacterCatalogue() {
     .filter(filter.byElement);
 
   function onEnter(_query: string) {
-    if (processedData.length > 0)
-      router.push(`/character-db/${processedData[0]?.avatar_id}`);
+    if (processedData.length)
+      router.push(`/character-db/${processedData.at(0)?.avatar_id}`);
   }
 
   return (

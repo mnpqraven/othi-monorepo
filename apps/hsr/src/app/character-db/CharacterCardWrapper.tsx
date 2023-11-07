@@ -99,8 +99,8 @@ export const RarityIcon = forwardRef<HTMLDivElement, RarityIconProps>(
       {...props}
       ref={ref}
     >
-      {Array.from(range(1, rarity, 1)).map((_, index) => (
-        <div className="aspect-square" key={index}>
+      {Array.from(range(1, rarity, 1)).map((i) => (
+        <div className="aspect-square" key={i}>
           <Image
             alt={`${rarity} ✦`}
             className="pointer-events-none h-full"

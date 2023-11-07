@@ -7,32 +7,32 @@ import {
   DialogTrigger,
   Toggle,
 } from "ui/primitive";
-import { useLightConeList } from "@hsr/hooks/queries/useLightConeList";
 import { useAtom, useAtomValue } from "jotai";
-import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
 import Image from "next/image";
 import { IMAGE_URL } from "@hsr/lib/constants";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useState } from "react";
 import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
-import { useLightConeMetadata } from "@hsr/hooks/queries/useLightConeMetadata";
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { img } from "@hsr/lib/utils";
 import { cn } from "lib";
-import { LightConeUpdater } from "../_editor/LightConeUpdater";
+import { useQuery } from "@tanstack/react-query";
+import { characterMetadataQ } from "@hsr/hooks/queries/character";
+import { lightConeMetadataQ, lightConesQ } from "@hsr/hooks/queries/lightcone";
 import { charIdAtom, lcIdAtom } from "../../_store";
+import { LightConeUpdater } from "../_editor/LightConeUpdater";
 
 export const LightConeEditorTab = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { data: lightConeList } = useLightConeList();
+  const { data: lightConeList } = useQuery(lightConesQ());
   const charId = useAtomValue(charIdAtom);
   const [open, setOpen] = useState(false);
   const [lcId, setLcId] = useAtom(lcIdAtom);
 
-  const { data: charMeta } = useCharacterMetadata(charId);
-  const { lightCone } = useLightConeMetadata(lcId);
+  const { data: charMeta } = useQuery(characterMetadataQ(charId));
+  const { data: lightCone } = useQuery(lightConeMetadataQ(lcId));
   const path = charMeta?.avatar_base_type;
 
   function onSelectLightCone(lc: EquipmentConfig) {
@@ -78,17 +78,18 @@ export const LightConeEditorTab = forwardRef<
           </DialogContent>
         </Dialog>
 
-        {Boolean(lightCone) && (
-          <LightConeCard
-            className="w-48"
-            imgUrl={img(
-              `image/light_cone_preview/${lightCone.equipment_id}.png`
-            )}
-            name={lightCone.equipment_name}
-          />
-        )}
-
-        {lightCone?.equipment_name}
+        {lightCone ? (
+          <>
+            <LightConeCard
+              className="w-48"
+              imgUrl={img(
+                `image/light_cone_preview/${lightCone.equipment_id}.png`
+              )}
+              name={lightCone.equipment_name}
+            />
+            {lightCone.equipment_name}
+          </>
+        ) : null}
       </div>
 
       <LightConeUpdater />

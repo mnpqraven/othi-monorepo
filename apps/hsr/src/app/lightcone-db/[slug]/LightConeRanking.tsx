@@ -46,29 +46,29 @@ const textInactive = "#ADB5BD";
 function LightConeRanking({ id }: Prop) {
   const { data } = useQuery({
     queryKey: ["lightConeRanking"],
-    queryFn: async () => await API.lightConeRanking.get(),
+    queryFn: API.lightConeRanking.get,
   });
 
   const [dataKey, setDatakey] = useState<"atk" | "def" | "hp" | "all">("all");
 
   const accessor = useCallback(() => {
-    if (dataKey === "all") return undefined;
-    return (e: EquipmentRanking) => e[dataKey][DEFAULT_INDEX];
+    return (e: EquipmentRanking) => {
+      if (dataKey === "all") {
+        return (
+          (e.atk[DEFAULT_INDEX] ?? 0) +
+          (e.def[DEFAULT_INDEX] ?? 0) +
+          (e.hp[DEFAULT_INDEX] ?? 0)
+        );
+      }
+      return e[dataKey][DEFAULT_INDEX] ?? 0;
+    };
   }, [dataKey]);
 
   if (!data) return <>loading</>;
 
   const sortedList = data.list.sort((a, b) => {
-    const acc = accessor();
     const nameCmp = a.equipment_name.localeCompare(b.equipment_name);
-    if (acc) return acc(b) - acc(a) || nameCmp;
-    // no accessor fn passed aka All selected -> return sum
-    return (
-      b.atk[DEFAULT_INDEX] +
-      b.def[DEFAULT_INDEX] +
-      b.hp[DEFAULT_INDEX] -
-      (a.atk[DEFAULT_INDEX] + a.def[DEFAULT_INDEX] + a.hp[DEFAULT_INDEX])
-    );
+    return accessor()(b) - accessor()(a) || nameCmp;
   });
 
   return (
@@ -98,18 +98,17 @@ function LightConeRanking({ id }: Prop) {
         </Select>
         <div className="mt-4 h-[450px] overflow-auto rounded-md">
           <ParentSize debounceTime={10}>
-            {(parent) =>
-              accessor ? (
-                <RankingChart
-                  currentLcId={id}
-                  data={sortedList}
-                  dataAccessor={accessor()}
-                  {...parent}
-                  height={sortedList.length * 40}
-                  promotion={DEFAULT_INDEX}
-                />
-              ) : null
-            }
+            {(parent) => (
+              <RankingChart
+                currentLcId={id}
+                data={sortedList}
+                dataAccessor={accessor()}
+                mode={dataKey}
+                {...parent}
+                height={sortedList.length * 40}
+                promotion={DEFAULT_INDEX}
+              />
+            )}
           </ParentSize>
         </div>
       </CardContent>
@@ -130,7 +129,8 @@ interface TooltipData {
 interface ChartProps extends ParentSizeProvidedProps {
   data: EquipmentRanking[];
   currentLcId: number;
-  dataAccessor?: (e: EquipmentRanking) => number;
+  dataAccessor: (e: EquipmentRanking) => number;
+  mode: "atk" | "def" | "hp" | "all";
   promotion: number;
 }
 function RankingChart({
@@ -139,6 +139,7 @@ function RankingChart({
   dataAccessor,
   promotion,
   height,
+  mode,
   width,
 }: ChartProps) {
   const xMax = width;
@@ -160,10 +161,7 @@ function RankingChart({
   const xScale = useMemo(
     () =>
       scaleLinear<number>({
-        domain: [
-          0,
-          Math.max(...data.map(dataAccessor ?? ((e) => e.atk[promotion]))),
-        ],
+        domain: [0, Math.max(...data.map(dataAccessor))],
         range: [xMax, 0],
         round: true,
       }),
@@ -188,12 +186,12 @@ function RankingChart({
 
   if (width < 10) return null;
 
-  if (dataAccessor)
+  if (mode !== "all")
     return (
       <div className="relative">
         <svg height={height} ref={containerRef} width={width}>
           <Group>
-            {data.map((dataPoint, index) => {
+            {data.map((dataPoint) => {
               const barHeight = yScale.bandwidth();
               const barWidth = width - xScale(dataAccessor(dataPoint));
 
@@ -208,7 +206,7 @@ function RankingChart({
                       : "rgba(190, 190, 190, .5)"
                   }
                   height={barHeight}
-                  key={`bar-${index}`}
+                  key={`bar-${dataPoint.equipment_id}`}
                   onMouseLeave={() => {
                     tooltipTimeout = window.setTimeout(() => {
                       hideTooltip();
@@ -220,7 +218,7 @@ function RankingChart({
                     // localPoint returns coordinates relative to the nearest SVG, which
                     // is what containerRef is set to in this example.
                     const eventSvgCoords = localPoint(event);
-                    const left = (barWidth * 2) / 3;
+                    const _left = (barWidth * 2) / 3;
                     showTooltip({
                       tooltipData: toTooltipData(dataPoint, DEFAULT_INDEX),
                       tooltipTop: eventSvgCoords?.y,
@@ -281,7 +279,7 @@ function RankingChart({
     };
   });
   const xScaleTotal = scaleLinear<number>({
-    domain: [0, Math.max(...omittedIndexData.map((e) => e.atk + e.def + e.hp))],
+    domain: [0, Math.max(...omittedIndexData.map((e) => e.atk! + e.def! + e.hp!))],
     range: [0, xMax],
     round: true,
   });
@@ -301,7 +299,7 @@ function RankingChart({
             {(barStacks) =>
               barStacks.map((barStack) =>
                 barStack.bars.map((bar) => {
-                  const isActive = bar.index == currentLcIndex;
+                  const isActive = bar.index === currentLcIndex;
                   const colors = isActive ? activeColors : inactiveColors;
 
                   return (
@@ -322,7 +320,7 @@ function RankingChart({
                         const eventSvgCoords = localPoint(event);
                         showTooltip({
                           tooltipData: toTooltipData(
-                            data[bar.index],
+                            data[bar.index]!,
                             DEFAULT_INDEX
                           ),
                           tooltipTop: eventSvgCoords?.y,
@@ -373,9 +371,9 @@ function toTooltipData(
 ): TooltipData {
   const { atk, def, hp, equipment_name } = point;
   return {
-    atk: atk[promotionIndex],
-    def: def[promotionIndex],
-    hp: hp[promotionIndex],
+    atk: atk[promotionIndex] ?? 0,
+    def: def[promotionIndex] ?? 0,
+    hp: hp[promotionIndex] ?? 0,
     name: equipment_name,
   };
 }

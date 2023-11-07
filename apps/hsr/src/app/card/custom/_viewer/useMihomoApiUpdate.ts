@@ -5,11 +5,15 @@ import { useEffect, useState } from "react";
 import { useRelics } from "@hsr/hooks/queries/useRelic";
 import type { RelicConfig, RelicType } from "@hsr/bindings/RelicConfig";
 import { useQueryClient } from "@tanstack/react-query";
-import { optionCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
-import { optionCharacterPromotion } from "@hsr/hooks/queries/useCharacterPromotion";
-import { optionsCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
-import { optionLightConePromotion } from "@hsr/hooks/queries/useLightConePromotion";
-import { optionLightConeSkill } from "@hsr/hooks/queries/useLightConeSkill";
+import {
+  characterTraceQ,
+  characterMetadataQ,
+  characterPromotionQ,
+} from "@hsr/hooks/queries/character";
+import {
+  optionLightConePromotion,
+  optionLightConeSkill,
+} from "@hsr/hooks/queries/lightcone";
 import { mhyCharacterIds } from "../../_store/card";
 import {
   charStructAtom,
@@ -43,12 +47,12 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
       const charIds = query.data.characters.map((e) => e.id);
       const lcIds = query.data.characters
         .filter((e) => Boolean(e.light_cone))
-        .map((e) => e.light_cone?.id!);
+        .map((e) => e.light_cone?.id);
 
       charIds.forEach((id) => {
-        void client.prefetchQuery(optionsCharacterTrace(id));
-        void client.prefetchQuery(optionCharacterPromotion(id));
-        void client.prefetchQuery(optionCharacterMetadata(id));
+        void client.prefetchQuery(characterTraceQ(id));
+        void client.prefetchQuery(characterPromotionQ(id));
+        void client.prefetchQuery(characterMetadataQ(id));
       });
       lcIds.forEach((e) => {
         const id = Number(e);
@@ -70,7 +74,7 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
         .flat();
       updateSetIds(Array.from(new Set(tempSetIds)));
 
-      const chara = query.data.characters[charIndex];
+      const chara = query.data.characters[charIndex]!;
       const skillsPairs = chara.skills.map((skill) => [skill.id, skill.level]);
       const tracePairs = chara.skill_trees.map((trace) => [
         trace.id,
@@ -99,7 +103,7 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
 
   useEffect(() => {
     if (query.data && props.mode === "API" && relicsData) {
-      const relics = query.data.characters[charIndex].relics;
+      const relics = query.data.characters[charIndex]!.relics;
       setRelicStruct(
         relics.map(
           ({ id, level, rarity, set_id: setId, main_affix, sub_affix }) => {

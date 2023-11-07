@@ -3,34 +3,36 @@
 import { useEffect, useMemo } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
+import { useForm } from "react-hook-form";
+import equal from "fast-deep-equal/react";
+import type { PlainMessage } from "@bufbuild/protobuf";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { ProbabilityRatePayload } from "protocol/ts";
+import { BannerType, ProbabilityRateService } from "protocol/ts";
 import {
   defaultBanner,
   useBannerList,
 } from "@hsr/hooks/queries/useGachaBannerList";
-import { useLocalStorage } from "@hsr/hooks/useLocalStorage";
-import STORAGE from "@hsr/server/storage";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import equal from "fast-deep-equal/react";
-import type { PlainMessage } from "@bufbuild/protobuf";
 import { useCacheValidate } from "@hsr/hooks/useCacheValidate";
-import type { ProbabilityRatePayload } from "protocol/ts";
-import { BannerType, ProbabilityRateService } from "protocol/ts";
 import { rpc } from "protocol";
+import { useAtom } from "jotai";
 import { ReactECharts } from "../components/ReactEcharts";
 import { chartOptions } from "./chartOptions";
 import { schema } from "./schema";
-import { defaultGachaQuery } from "./types";
 import { GachaForm } from "./GachaForm";
+import { defaultGachaQuery } from "./types";
+import { gachaGraphFormAtom } from "./store";
 
 type FormSchema = PlainMessage<ProbabilityRatePayload>;
 
-export default function GachaGraph() {
+export default function Page() {
   const { theme } = useTheme();
+
+  const [storagedForm, setStoragedForm] = useAtom(gachaGraphFormAtom);
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(schema),
-    defaultValues: defaultGachaQuery,
+    defaultValues: storagedForm,
   });
   const eidolonSubscriber = form.watch("currentEidolon");
   const bannerSubscriber = form.watch("banner");
@@ -40,25 +42,15 @@ export default function GachaGraph() {
     bannerList.find((e) => e.bannerType === BannerType[bannerSubscriber]) ??
     defaultBanner;
 
-  const [storagedForm, setStoragedForm] = useLocalStorage<FormSchema>(
-    STORAGE.gachaForm,
-    defaultGachaQuery
-  );
-
   const { data } = useQuery({
     queryKey: ["probabilityRate", storagedForm],
     // safe cast
-    queryFn: () =>
-      storagedForm
-        ? rpc(ProbabilityRateService).post(storagedForm)
-        : Promise.reject(),
+    queryFn: () => rpc(ProbabilityRateService).post(storagedForm),
     placeholderData: keepPreviousData,
   });
 
   useEffect(() => {
-    if (storagedForm) {
-      form.reset(storagedForm);
-    }
+    form.reset(storagedForm);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storagedForm]);
 

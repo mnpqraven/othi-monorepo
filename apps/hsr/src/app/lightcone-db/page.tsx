@@ -1,6 +1,6 @@
 import getQueryClient from "@hsr/lib/queryClientHelper";
-import { optionsLightConeList } from "@hsr/hooks/queries/useLightConeList";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import { lightConesQ } from "@hsr/hooks/queries/lightcone";
 import LightConeCatalogue from "./LightConeCatalogue";
 
 export const metadata = {
@@ -10,14 +10,13 @@ export const metadata = {
 
 export default async function LightConeDb() {
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery(optionsLightConeList());
-  const dehydratedState = dehydrate(queryClient);
+  await queryClient.prefetchQuery(lightConesQ());
 
   return (
     <main className="px-2 py-4 md:container md:px-0">
-      {/* <HydrationBoundary state={dehydratedState}> */}
-      <LightConeCatalogue />
-      {/* </HydrationBoundary> */}
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <LightConeCatalogue />
+      </HydrationBoundary>
     </main>
   );
 }

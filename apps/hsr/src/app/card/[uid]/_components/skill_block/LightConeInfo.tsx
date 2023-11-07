@@ -2,10 +2,8 @@ import { img } from "@hsr/lib/utils";
 import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
 import Image from "next/image";
-import { useLightConeSkill } from "@hsr/hooks/queries/useLightConeSkill";
 import { Tooltip, TooltipContent, TooltipTrigger } from "ui/primitive";
 import { SkillDescription } from "@hsr/app/components/Db/SkillDescription";
-import { useLightConeMetadata } from "@hsr/hooks/queries/useLightConeMetadata";
 import { useAtomValue } from "jotai";
 import {
   lcIdAtom,
@@ -15,6 +13,11 @@ import {
 } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn } from "lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import {
+  lightConeMetadataQ,
+  optionLightConeSkill,
+} from "@hsr/hooks/queries/lightcone";
 import { ImpositionIcon } from "../ImpositionIcon";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
@@ -25,8 +28,8 @@ export const LightConeInfo = forwardRef<HTMLDivElement, Prop>(
     const ratio = 902 / 1260;
 
     const lightConeId = useAtomValue(lcIdAtom);
-    const { data: skill } = useLightConeSkill(lightConeId);
-    const { lightCone } = useLightConeMetadata(lightConeId);
+    const { data: skill } = useQuery(optionLightConeSkill(lightConeId));
+    const { data: lightCone } = useQuery(lightConeMetadataQ(lightConeId));
 
     const level = useAtomValue(lcLevelAtom);
     const ascension = useAtomValue(lcPromotionAtom);
@@ -77,7 +80,7 @@ export const LightConeInfo = forwardRef<HTMLDivElement, Prop>(
               width={350 * ratio}
             />
           </TooltipTrigger>
-          {hoverVerbosity !== "none" && Boolean(skill) && (
+          {hoverVerbosity !== "none" && skill ? (
             <TooltipContent className="w-96 text-base" side="left">
               <p className="text-accent-foreground mb-2 font-bold">
                 {skill.skill_name}
@@ -89,7 +92,7 @@ export const LightConeInfo = forwardRef<HTMLDivElement, Prop>(
                 slv={imposition - 1}
               />
             </TooltipContent>
-          )}
+          ) : null}
         </Tooltip>
       </div>
     );

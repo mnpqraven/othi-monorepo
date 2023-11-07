@@ -4,27 +4,31 @@ import Link from "next/link";
 import Fuse from "fuse.js";
 import { useRouter } from "next/navigation";
 import { IMAGE_URL } from "@hsr/lib/constants";
-import { useLightConeList } from "@hsr/hooks/queries/useLightConeList";
 import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { lightConesQ } from "@hsr/hooks/queries/lightcone";
 import useLightConeFilter from "../components/Db/useLightConeFilter";
 import { DbFilter } from "../components/Db/DbFilter";
 import { LightConeCard } from "./LightConeCard";
 
-const keys = ["metadata.equipment_name", "metadata.equipment_id", "max_sp"];
-
 function search(data: EquipmentConfig[], query: string | undefined) {
   const fz = new Fuse(data, {
-    keys,
+    keys: [
+      "equipment_name",
+      "equipment_id",
+    ] satisfies (keyof EquipmentConfig)[],
     threshold: 0.4,
   });
 
   if (query?.length) return fz.search(query).map((e) => e.item);
   return data;
 }
+
 function LightConeCatalogue() {
   const router = useRouter();
   const { filter, query, updateQuery } = useLightConeFilter();
-  const { data } = useLightConeList();
+  const { data } = useSuspenseQuery(lightConesQ());
+
   const processedData = search(data, query)
     .filter(filter.byRarity)
     .filter(filter.byPath);

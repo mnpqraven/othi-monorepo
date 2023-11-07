@@ -1,5 +1,4 @@
 import type { SignatureAtlas } from "@hsr/bindings/SignatureAtlas";
-import type { List } from "@hsr/lib/generics";
 import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
 import type { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
 import type { AvatarSkillConfig } from "@hsr/bindings/AvatarSkillConfig";
@@ -19,6 +18,7 @@ import type { RelicMainAffixConfig } from "@hsr/bindings/RelicMainAffixConfig";
 import type { RelicSetSkillConfig } from "@hsr/bindings/RelicSetSkillConfig";
 import type { RelicConfig, RelicType } from "@hsr/bindings/RelicConfig";
 import { z } from "zod";
+import type { List } from "lib/generics";
 import { serverFetch } from "./serverFetch";
 
 const CharId = z.object({

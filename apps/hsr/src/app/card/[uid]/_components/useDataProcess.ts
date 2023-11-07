@@ -1,12 +1,12 @@
 import type { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
 import type { EquipmentPromotionConfig } from "@hsr/bindings/EquipmentPromotionConfig";
-import { useCharacterPromotion } from "@hsr/hooks/queries/useCharacterPromotion";
-import { useLightConePromotion } from "@hsr/hooks/queries/useLightConePromotion";
-import type { Property, SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
-import { getNodeType } from "@hsr/app/components/Character/TraceTable";
+import type { Property } from "@hsr/bindings/SkillTreeConfig";
 import type { Element } from "@hsr/bindings/PatchBanner";
 import { asPercentage, rotate } from "lib";
-import type { MihomoCharacter, MihomoSkillTreeConfig } from "../../types";
+import { useQuery } from "@tanstack/react-query";
+import { characterPromotionQ } from "@hsr/hooks/queries/character";
+import { optionLightConePromotion } from "@hsr/hooks/queries/lightcone";
+import type { MihomoCharacter } from "../../types";
 import type { Field } from "./SpiderChartWrapper";
 
 const accumulator: { [k in Field]: Field[] } = {
@@ -56,9 +56,9 @@ export function useDataProcess({ character }: Prop): {
   // main stat's impact from relic on stats (flat + %)
   // sub stat's impact from relic on stats (flat + %)
   // normalize summed data
-  const { data: charPromo } = useCharacterPromotion(character?.id);
-  const { data: lcPromo } = useLightConePromotion(
-    Number(character?.light_cone?.id)
+  const { data: charPromo } = useQuery(characterPromotionQ(character?.id));
+  const { data: lcPromo } = useQuery(
+    optionLightConePromotion(Number(character?.light_cone?.id))
   );
 
   if (charPromo && character && lcPromo) {
@@ -213,16 +213,16 @@ export function charAfterPromotion({
       def: 0,
       hp: 0,
     };
-  const atk_base = promotionConfig.attack_base[ascension];
+  const atk_base = promotionConfig.attack_base[ascension]!;
   const atk_sum =
-    atk_base + (level - 1) * promotionConfig.attack_add[ascension];
+    atk_base + (level - 1) * promotionConfig.attack_add[ascension]!;
 
-  const def_base = promotionConfig.defence_base[ascension];
+  const def_base = promotionConfig.defence_base[ascension]!;
   const def_sum =
-    def_base + (level - 1) * promotionConfig.defence_add[ascension];
+    def_base + (level - 1) * promotionConfig.defence_add[ascension]!;
 
-  const hp_base = promotionConfig.hpbase[ascension];
-  const hp_sum = hp_base + (level - 1) * promotionConfig.hpadd[ascension];
+  const hp_base = promotionConfig.hpbase[ascension]!;
+  const hp_sum = hp_base + (level - 1) * promotionConfig.hpadd[ascension]!;
 
   return { atk: atk_sum, def: def_sum, hp: hp_sum };
 }
@@ -238,16 +238,16 @@ export function lcAfterPromotion({
       def: 0,
       hp: 0,
     };
-  const atk_base = promotionConfig.base_attack[ascension];
+  const atk_base = promotionConfig.base_attack[ascension]!;
   const atk_sum =
-    atk_base + (level - 1) * promotionConfig.base_attack_add[ascension];
+    atk_base + (level - 1) * promotionConfig.base_attack_add[ascension]!;
 
-  const def_base = promotionConfig.base_defence[ascension];
+  const def_base = promotionConfig.base_defence[ascension]!;
   const def_sum =
-    def_base + (level - 1) * promotionConfig.base_defence_add[ascension];
+    def_base + (level - 1) * promotionConfig.base_defence_add[ascension]!;
 
-  const hp_base = promotionConfig.base_hp[ascension];
-  const hp_sum = hp_base + (level - 1) * promotionConfig.base_hpadd[ascension];
+  const hp_base = promotionConfig.base_hp[ascension]!;
+  const hp_sum = hp_base + (level - 1) * promotionConfig.base_hpadd[ascension]!;
 
   return { atk: atk_sum, def: def_sum, hp: hp_sum };
 }

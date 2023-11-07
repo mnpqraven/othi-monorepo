@@ -3,10 +3,13 @@
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { Content } from "@hsr/app/lightcone-db/[slug]/Content";
 import { Portrait } from "@hsr/app/lightcone-db/[slug]/Portrait";
-import { useSuspendedLightConeMetadatas } from "@hsr/hooks/queries/useLightConeMetadatas";
-import { useSuspendedLightConeSkills } from "@hsr/hooks/queries/useLightConeSkills";
-import { useSuspendedFeaturedLc } from "@hsr/hooks/queries/useSignatureAtlas";
+import { characterSignatureQ } from "@hsr/hooks/queries/character";
+import {
+  lightConeMetadatasQ,
+  optionsLightConeSkills,
+} from "@hsr/hooks/queries/lightcone";
 import { IMAGE_URL } from "@hsr/lib/constants";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 interface Prop {
@@ -14,13 +17,13 @@ interface Prop {
 }
 
 function SignatureLightCone({ characterId }: Prop) {
-  const { data } = useSuspendedFeaturedLc(characterId);
+  const { data } = useSuspenseQuery(characterSignatureQ(characterId));
   const { lcIds } = data;
 
   const [selectedLcId, setSelectedLcId] = useState(lcIds.at(0));
 
-  const { data: lcSkills } = useSuspendedLightConeSkills(lcIds);
-  const { data: lcMetadatas } = useSuspendedLightConeMetadatas(lcIds);
+  const { data: lcSkills } = useSuspenseQuery(optionsLightConeSkills(lcIds));
+  const { data: lcMetadatas } = useSuspenseQuery(lightConeMetadatasQ(lcIds));
 
   const metadata = lcMetadatas.find((e) => e.equipment_id === selectedLcId);
   const skill = lcSkills.find((e) => e.skill_id === metadata?.skill_id);
@@ -38,19 +41,20 @@ function SignatureLightCone({ characterId }: Prop) {
 
         <div className="col-span-2 flex flex-col">
           <div className="grid grid-cols-4">
-            {sortedLcs.map((lc, index) => (
-              <div
-                className="relative p-2"
-                key={index}
+            {sortedLcs.map((lc) => (
+              <button
+                className="relative p-2 cursor-default"
+                key={lc.equipment_id}
                 onClick={() => {
                   setSelectedLcId(lc.equipment_id);
                 }}
+                type="button"
               >
                 <LightConeCard
                   imgUrl={url(lc.equipment_id)}
                   name={lc.equipment_name}
                 />
-              </div>
+              </button>
             ))}
           </div>
 

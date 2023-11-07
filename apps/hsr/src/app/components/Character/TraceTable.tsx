@@ -5,11 +5,8 @@ import { cva } from "class-variance-authority";
 import Xarrow, { Xwrapper, useXarrow } from "react-xarrows";
 import { useTheme } from "next-themes";
 import type { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
-import { useCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
-import { useCharacterSkill } from "@hsr/hooks/queries/useCharacterSkill";
 import { useImmer } from "use-immer";
 import { useEffect } from "react";
-import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
 import type { Path } from "@hsr/bindings/AvatarConfig";
 import { cn } from "lib";
 import {
@@ -18,6 +15,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "ui/primitive";
+import { useQuery } from "@tanstack/react-query";
+import {
+  characterSkillQ,
+  characterMetadataQ,
+  characterTraceQ,
+} from "@hsr/hooks/queries/character";
 import { TraceDescription } from "./TraceDescription";
 import { getLineTrips, traceVariants } from "./lineTrips";
 
@@ -34,7 +37,7 @@ function TraceTable({
   editMode = false,
   onChange,
 }: Prop) {
-  const { data } = useCharacterMetadata(characterId);
+  const { data } = useQuery(characterMetadataQ(characterId));
   const [editModeTable, setEditModeTable] = useImmer<Record<number, boolean>>(
     {}
   );
@@ -94,8 +97,8 @@ function TraceTableInner({
   const updateLines = useXarrow();
   const { theme } = useTheme();
 
-  const { data } = useCharacterTrace(characterId);
-  const { data: skills } = useCharacterSkill(characterId);
+  const { data } = useQuery(characterTraceQ(characterId));
+  const { data: skills } = useQuery(characterSkillQ(characterId));
 
   const iconWrapVariants = cva(
     "flex items-center justify-center rounded-full ring-offset-transparent transition duration-500 hover:ring-2 hover:ring-offset-2",

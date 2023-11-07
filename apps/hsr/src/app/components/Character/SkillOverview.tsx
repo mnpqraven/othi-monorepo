@@ -7,10 +7,13 @@ import type {
   AvatarSkillConfig,
   SkillType,
 } from "@hsr/bindings/AvatarSkillConfig";
-import { useCharacterSkill } from "@hsr/hooks/queries/useCharacterSkill";
-import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
 import { Loader2 } from "lucide-react";
 import { Separator, Skeleton, Toggle, Slider } from "ui/primitive";
+import { useQuery } from "@tanstack/react-query";
+import {
+  characterSkillQ,
+  characterMetadataQ,
+} from "@hsr/hooks/queries/character";
 import { SkillDescription } from "../Db/SkillDescription";
 
 interface Prop {
@@ -19,8 +22,8 @@ interface Prop {
 function SkillOverview({ characterId }: Prop) {
   const [selectedSlv, setSelectedSlv] = useState(0);
 
-  const { data: skills } = useCharacterSkill(characterId);
-  const { data: character } = useCharacterMetadata(characterId);
+  const { data: skills } = useQuery(characterSkillQ(characterId));
+  const { data: character } = useQuery(characterMetadataQ(characterId));
 
   const [selectedSkill, setSelectedSkill] = useState<
     AvatarSkillConfig | undefined
@@ -57,10 +60,10 @@ function SkillOverview({ characterId }: Prop) {
     <div className="flex flex-col">
       <div className="flex h-fit flex-col sm:flex-row">
         <div className="grid grid-cols-4">
-          {sortedSkills.map((skill, index) => (
+          {sortedSkills.map((skill) => (
             <Toggle
               className="flex h-fit flex-col items-center px-1 py-1.5"
-              key={index}
+              key={skill.skill_id}
               onPressedChange={() => {
                 setSelectedSkill(skill);
               }}
@@ -125,10 +128,10 @@ function SkillOverviewLoading() {
     <div className="flex flex-col">
       <div className="flex h-fit flex-col sm:flex-row">
         <div className="grid grid-cols-4">
-          {["Talent", "Skill", "Ultimate", "Technique"].map((name, index) => (
+          {["Talent", "Skill", "Ultimate", "Technique"].map((name) => (
             <Toggle
               className="flex h-fit flex-col items-center px-1 py-1.5"
-              key={index}
+              key={name}
               pressed={name === "Talent"}
             >
               <Skeleton className="h-16 w-16 invert dark:invert-0" />

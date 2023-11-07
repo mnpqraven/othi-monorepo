@@ -11,8 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "ui/primitive";
 import { Suspense } from "react";
 import getQueryClient from "@hsr/lib/queryClientHelper";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { optionsCharacterEidolon } from "@hsr/hooks/queries/useCharacterEidolon";
-import { optionsCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
+import { characterEidolonsQ } from "@hsr/hooks/queries/character";
+import { characterTraceQ } from "@hsr/hooks/queries/useCharacterTrace";
 import { optionsProperties } from "@hsr/hooks/queries/useProperties";
 import { SignatureLightCone } from "./SignatureLightCone";
 import { TraceSummaryWrapper } from "./TraceSummaryWrapper";
@@ -73,12 +73,11 @@ export default async function Character({ params }: Prop) {
 async function prefetchOptions(characterId: number) {
   const queryClient = getQueryClient();
   const options = [
-    optionsCharacterEidolon(characterId),
-    optionsCharacterTrace(characterId),
+    characterEidolonsQ(characterId),
+    characterTraceQ(characterId),
     optionsProperties(),
   ];
   await Promise.allSettled(
-    // @ts-expect-error mapping
     options.map((option) => queryClient.prefetchQuery(option))
   );
   return dehydrate(queryClient);

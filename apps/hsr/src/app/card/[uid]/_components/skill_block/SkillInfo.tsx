@@ -8,12 +8,13 @@ import { getImagePath } from "@hsr/lib/utils";
 import Image from "next/image";
 import { ChevronsUp } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "ui/primitive";
-import { useSuspendedCharacterSkill } from "@hsr/hooks/queries/useCharacterSkill";
 import { SkillDescription } from "@hsr/app/components/Db/SkillDescription";
 import { useAtomValue } from "jotai";
 import { charEidAtom, charSkillAtom } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn } from "lib/utils";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { characterSkillQ } from "@hsr/hooks/queries/character";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
@@ -24,7 +25,7 @@ export const SkillInfo = forwardRef<HTMLDivElement, Prop>(
     const skList = useAtomValue(charSkillAtom);
     const eidolon = useAtomValue(charEidAtom);
 
-    const { data } = useSuspendedCharacterSkill(characterId);
+    const { data } = useSuspenseQuery(characterSkillQ(characterId));
 
     return (
       <div
@@ -36,45 +37,46 @@ export const SkillInfo = forwardRef<HTMLDivElement, Prop>(
         {...props}
       >
         {Object.entries(splitGroupByType(data, { technique: false })).map(
-          ([type, [first, ...rest]]) => (
-            <div className="flex flex-col items-center" key={type}>
-              <span>{getLabel2(first.skill_type_desc)}</span>
-              <SkillIcon
-                skillInfo={first}
-                slv={skList[first.skill_id] ?? 1}
-                src={getImagePath(characterId, first)}
-              />
-              <span
-                className={cn(
-                  "w-full text-center font-bold",
-                  isImprovedByEidolon(first.attack_type, eidolon)
-                    ? "text-[#6cfff7]"
-                    : ""
-                )}
-              >
-                {skList[first.skill_id] ===
+          ([type, [first, ..._rest]]) =>
+            first ? (
+              <div className="flex flex-col items-center" key={type}>
+                <span>{getLabel2(first.skill_type_desc)}</span>
+                <SkillIcon
+                  skillInfo={first}
+                  slv={skList[first.skill_id] ?? 1}
+                  src={getImagePath(characterId, first)}
+                />
+                <span
+                  className={cn(
+                    "w-full text-center font-bold",
+                    isImprovedByEidolon(first.attack_type, eidolon)
+                      ? "text-[#6cfff7]"
+                      : ""
+                  )}
+                >
+                  {skList[first.skill_id] ===
                   getSkillMaxLevel(
                     first.attack_type,
                     first.skill_type_desc,
                     eidolon
                   ) ? (
-                  <span className="flex items-center justify-end">
-                    {skList[first.skill_id] ?? 1}
-                    <ChevronsUp className="h-4 w-4 text-green-600" />
-                  </span>
-                ) : (
-                  <span>
-                    {skList[first.skill_id] ?? 1} /{" "}
-                    {getSkillMaxLevel(
-                      first.attack_type,
-                      first.skill_type_desc,
-                      eidolon
-                    )}
-                  </span>
-                )}
-              </span>
-            </div>
-          )
+                    <span className="flex items-center justify-end">
+                      {skList[first.skill_id] ?? 1}
+                      <ChevronsUp className="h-4 w-4 text-green-600" />
+                    </span>
+                  ) : (
+                    <span>
+                      {skList[first.skill_id] ?? 1} /{" "}
+                      {getSkillMaxLevel(
+                        first.attack_type,
+                        first.skill_type_desc,
+                        eidolon
+                      )}
+                    </span>
+                  )}
+                </span>
+              </div>
+            ) : null
         )}
       </div>
     );

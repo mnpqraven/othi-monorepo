@@ -9,8 +9,6 @@ import {
   sortByProperty,
 } from "@hsr/lib/propertyHelper";
 import type { Property } from "@hsr/bindings/SkillTreeConfig";
-import { useCharacterPromotion } from "@hsr/hooks/queries/useCharacterPromotion";
-import { useLightConePromotion } from "@hsr/hooks/queries/useLightConePromotion";
 import { useStatParser } from "@hsr/hooks/useStatParser";
 import { useAtomValue } from "jotai";
 import { cn, rotate } from "lib/utils";
@@ -18,6 +16,9 @@ import { charIdAtom, lcIdAtom, statParseParam } from "../../_store";
 import { filterOtherElements } from "./stat_block/StatTable";
 import { getNormalizedBoundProperty } from "./useDataProcess";
 import { SpiderChart } from "./SpiderChart";
+import { useQuery } from "@tanstack/react-query";
+import { characterPromotionQ } from "@hsr/hooks/queries/character";
+import { optionLightConePromotion } from "@hsr/hooks/queries/lightcone";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
   element: Element;
@@ -28,8 +29,8 @@ export const SpiderChartWrapper = forwardRef<HTMLDivElement, Prop>(
     const lcId = useAtomValue(lcIdAtom);
     const parseParams = useAtomValue(statParseParam);
     const parsedStats = useStatParser(parseParams);
-    const { data: charPromo } = useCharacterPromotion(charId);
-    const { data: lcPromo } = useLightConePromotion(lcId);
+    const { data: charPromo } = useQuery(characterPromotionQ(charId));
+    const { data: lcPromo } = useQuery(optionLightConePromotion(lcId));
 
     if (!parsedStats || !charPromo || !lcPromo) return null;
 
@@ -68,10 +69,10 @@ export const SpiderChartWrapper = forwardRef<HTMLDivElement, Prop>(
       )
       .filter(({ property }) => filterOtherElements(property, element))
       .reverse() as {
-        property: Property;
-        value: number;
-        normalizedValue: number;
-      }[];
+      property: Property;
+      value: number;
+      normalizedValue: number;
+    }[];
 
     const data = rotate(binding.length / 2 + 2, binding);
 

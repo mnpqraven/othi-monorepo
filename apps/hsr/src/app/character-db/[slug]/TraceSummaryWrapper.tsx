@@ -7,14 +7,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "ui/primitive";
-import { useCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
 import { useProperties } from "@hsr/hooks/queries/useProperties";
+import { useQuery } from "@tanstack/react-query";
+import { characterTraceQ } from "@hsr/hooks/queries/character";
 
 interface Prop {
   characterId: number;
 }
 function TraceSummaryWrapper({ characterId }: Prop) {
-  const { data: traces } = useCharacterTrace(characterId);
+  const { data: traces } = useQuery(characterTraceQ(characterId));
   const { data: properties } = useProperties();
 
   if (!traces || !properties) return null;

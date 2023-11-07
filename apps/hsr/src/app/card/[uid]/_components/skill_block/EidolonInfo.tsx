@@ -2,20 +2,21 @@ import { img } from "@hsr/lib/utils";
 import type { HTMLAttributes } from "react";
 import { Fragment, forwardRef } from "react";
 import Image from "next/image";
-import { useCharacterEidolon } from "@hsr/hooks/queries/useCharacterEidolon";
+import { characterEidolonsQ } from "@hsr/hooks/queries/character";
 import type { AvatarRankConfig } from "@hsr/bindings/AvatarRankConfig";
 import { useAtomValue } from "jotai";
 import { charEidAtom } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn, range, sanitizeNewline } from "lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "ui/primitive";
+import { useQuery } from "@tanstack/react-query";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
 }
 export const EidolonInfo = forwardRef<HTMLDivElement, Prop>(
   ({ className, characterId, ...props }, ref) => {
-    const { data: eidolons } = useCharacterEidolon(characterId);
+    const { data: eidolons } = useQuery(characterEidolonsQ(characterId));
     const eidolon = useAtomValue(charEidAtom);
 
     return (

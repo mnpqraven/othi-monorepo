@@ -8,11 +8,13 @@ import {
 import type { RelicType } from "@hsr/bindings/RelicConfig";
 import { useAtomValue } from "jotai";
 import { mainstatSpreadAtom } from "@hsr/store/queries";
-import { useLightConeSkill } from "./queries/useLightConeSkill";
+import { useQuery } from "@tanstack/react-query";
 import { useRelicSetBonuses } from "./queries/useRelicSetBonus";
-import { useLightConePromotion } from "./queries/useLightConePromotion";
-import { useCharacterTrace } from "./queries/useCharacterTrace";
-import { useCharacterPromotion } from "./queries/useCharacterPromotion";
+import { characterPromotionQ, characterTraceQ } from "./queries/character";
+import {
+  optionLightConePromotion,
+  optionLightConeSkill,
+} from "./queries/lightcone";
 
 interface BasicMetadata {
   id: number;
@@ -59,24 +61,21 @@ export interface StatParserConstructor {
 }
 
 export function useStatParser(props?: StatParserConstructor) {
-  const { data: traceData } = useCharacterTrace(props?.character.id);
-  const { data: charPromotionData } = useCharacterPromotion(
-    props?.character.id
+  const { data: traceData } = useQuery(characterTraceQ(props?.character.id));
+  const { data: charPromotionData } = useQuery(
+    characterPromotionQ(props?.character.id)
   );
-  const { data: lcPromotionData } = useLightConePromotion(props?.lightCone?.id);
-  const { data: lcSkillData } = useLightConeSkill(props?.lightCone?.id);
+  const { data: lcPromotionData } = useQuery(
+    optionLightConePromotion(props?.lightCone?.id)
+  );
+  const { data: lcSkillData } = useQuery(
+    optionLightConeSkill(props?.lightCone?.id)
+  );
   const { data: relicBonuses } = useRelicSetBonuses();
-  // const { data: mainStatLevels } = useMainStatSpread();
 
   const mainStatLevels = useAtomValue(mainstatSpreadAtom);
 
-  if (
-    !traceData ||
-    !charPromotionData ||
-    !props ||
-    !relicBonuses ||
-    !mainStatLevels
-  ) {
+  if (!traceData || !charPromotionData || !props || !relicBonuses) {
     // console.log(
     //   "useStatParser() loading...",
     //   traceData,
@@ -146,7 +145,7 @@ export function useStatParser(props?: StatParserConstructor) {
   // Record<Property, number>
   const setBonusTotal: Partial<Record<Property, number>> = {};
   Object.entries(setTracker).forEach(([setId, possessingCount]) => {
-    const find = relicBonuses.find((e) => e.set_id == Number(setId));
+    const find = relicBonuses.find((e) => e.set_id === Number(setId));
     if (!find) return;
 
     find.property_list.forEach((props, index) => {
@@ -171,7 +170,7 @@ export function useStatParser(props?: StatParserConstructor) {
     value: number;
   }[][] = props.relic.map((relic) => {
     const find = mainStatLevels[relic.type].find(
-      (e) => e.property == relic.property
+      (e) => e.property === relic.property
     );
     if (!find) return [...subStatNoStep(relic)];
     const value = find.base_value + find.level_add * relic.level;
