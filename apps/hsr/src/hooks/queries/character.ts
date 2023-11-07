@@ -70,5 +70,8 @@ export const characterTraceQ = (characterId: number | undefined) =>
 export const characterSignatureQ = (charId: number | undefined) =>
   queryOptions<SignatureReturn, unknown, SignatureReturn>({
     queryKey: ["signature", charId],
-    queryFn: () => rpc(SignatureAtlasService).byCharId({ charId }),
+    queryFn: () =>
+      charId
+        ? rpc(SignatureAtlasService).byCharId({ charId })
+        : Promise.reject(),
   });

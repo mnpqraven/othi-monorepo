@@ -9,7 +9,7 @@ import type {
 } from "@hsr/bindings/AvatarSkillConfig";
 import { Loader2 } from "lucide-react";
 import { Separator, Skeleton, Toggle, Slider } from "ui/primitive";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   characterSkillQ,
   characterMetadataQ,
@@ -22,8 +22,8 @@ interface Prop {
 function SkillOverview({ characterId }: Prop) {
   const [selectedSlv, setSelectedSlv] = useState(0);
 
-  const { data: skills } = useQuery(characterSkillQ(characterId));
-  const { data: character } = useQuery(characterMetadataQ(characterId));
+  const { data: skills } = useSuspenseQuery(characterSkillQ(characterId));
+  const { data: character } = useSuspenseQuery(characterMetadataQ(characterId));
 
   const [selectedSkill, setSelectedSkill] = useState<
     AvatarSkillConfig | undefined
@@ -91,7 +91,7 @@ function SkillOverview({ characterId }: Prop) {
           <h3 className="text-lg font-semibold leading-none tracking-tight">
             <span>{selectedSkill.skill_name}</span>
             {selectedSkill.attack_type === "Ultra" &&
-              ` (${character?.spneed} Energy)`}
+              ` (${character.spneed} Energy)`}
           </h3>
           {selectedSkill.param_list.length > 1 && (
             <div className="flex items-center gap-4">

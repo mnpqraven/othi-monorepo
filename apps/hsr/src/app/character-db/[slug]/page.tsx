@@ -11,8 +11,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "ui/primitive";
 import { Suspense } from "react";
 import getQueryClient from "@hsr/lib/queryClientHelper";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { characterEidolonsQ } from "@hsr/hooks/queries/character";
-import { characterTraceQ } from "@hsr/hooks/queries/useCharacterTrace";
+import {
+  characterEidolonsQ,
+  characterMetadataQ,
+  characterSignatureQ,
+  characterSkillQ,
+  characterTraceQ,
+} from "@hsr/hooks/queries/character";
 import { optionsProperties } from "@hsr/hooks/queries/useProperties";
 import { SignatureLightCone } from "./SignatureLightCone";
 import { TraceSummaryWrapper } from "./TraceSummaryWrapper";
@@ -73,7 +78,10 @@ export default async function Character({ params }: Prop) {
 async function prefetchOptions(characterId: number) {
   const queryClient = getQueryClient();
   const options = [
+    characterSkillQ(characterId),
+    characterMetadataQ(characterId),
     characterEidolonsQ(characterId),
+    characterSignatureQ(characterId),
     characterTraceQ(characterId),
     optionsProperties(),
   ];

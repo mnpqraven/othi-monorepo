@@ -9,7 +9,7 @@ import {
   optionsLightConeSkills,
 } from "@hsr/hooks/queries/lightcone";
 import { IMAGE_URL } from "@hsr/lib/constants";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 interface Prop {
@@ -22,13 +22,13 @@ function SignatureLightCone({ characterId }: Prop) {
 
   const [selectedLcId, setSelectedLcId] = useState(lcIds.at(0));
 
-  const { data: lcSkills } = useSuspenseQuery(optionsLightConeSkills(lcIds));
   const { data: lcMetadatas } = useSuspenseQuery(lightConeMetadatasQ(lcIds));
+  const { data: lcSkills } = useQuery(optionsLightConeSkills(lcIds));
 
   const metadata = lcMetadatas.find((e) => e.equipment_id === selectedLcId);
-  const skill = lcSkills.find((e) => e.skill_id === metadata?.skill_id);
+  const skill = lcSkills?.find((e) => e.skill_id === metadata?.skill_id);
 
-  if (!metadata || !skill) return null;
+  if (!metadata) return null;
 
   const sortedLcs = lcMetadatas.sort((a, b) => b.rarity - a.rarity);
 

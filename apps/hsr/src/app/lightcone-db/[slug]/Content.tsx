@@ -17,7 +17,7 @@ import {
 
 interface Prop {
   data: EquipmentConfig;
-  skill: EquipmentSkillConfig;
+  skill: EquipmentSkillConfig | undefined;
   link?: boolean;
 }
 function Content({ data, skill, link = false }: Prop) {
@@ -41,7 +41,7 @@ function Content({ data, skill, link = false }: Prop) {
                 <span>{data.equipment_name}</span>
               )}
             </CardTitle>
-            <CardDescription>{skill.skill_name}</CardDescription>
+            <CardDescription>{skill?.skill_name}</CardDescription>
           </CardHeader>
 
           <CardHeader>
@@ -59,11 +59,13 @@ function Content({ data, skill, link = false }: Prop) {
           </CardHeader>
         </div>
         <CardContent>
-          <SkillDescription
-            paramList={skill.param_list}
-            skillDesc={skill.skill_desc}
-            slv={promotion}
-          />
+          {skill ? (
+            <SkillDescription
+              paramList={skill.param_list}
+              skillDesc={skill.skill_desc}
+              slv={promotion}
+            />
+          ) : null}
         </CardContent>
       </Card>
     </div>
