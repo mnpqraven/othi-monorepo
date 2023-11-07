@@ -3,21 +3,21 @@ import {
   traceIconUrl,
 } from "@hsr/app/components/Character/TraceTable";
 import { groupTrips } from "@hsr/app/components/Character/lineTrips";
-import { Path } from "@hsr/bindings/AvatarConfig";
-import { Anchor, SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
+import type { Path } from "@hsr/bindings/AvatarConfig";
+import type { Anchor, SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
 import { useCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
-import { asPercentage } from "@hsr/lib/utils";
 import { cva } from "class-variance-authority";
 import { useAtomValue, useSetAtom } from "jotai";
 import Image from "next/image";
-import { HTMLAttributes, forwardRef } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
+import { asPercentage, cn } from "lib";
+import { Skeleton, Toggle } from "ui/primitive";
 import {
   charIdAtom,
   charTraceAtom,
   updateManyCharTraceAtom,
 } from "../../_store";
-import { cn } from "lib";
-import { Skeleton, Toggle } from "ui/primitive";
 
 const iconWrapVariants = cva(
   "flex items-center justify-center rounded-full ring-offset-transparent transition duration-500 hover:ring-2 hover:ring-offset-2",
@@ -35,30 +35,28 @@ const iconWrapVariants = cva(
   }
 );
 
-interface Props {
+interface Prop {
   path: Path;
 }
 
-export function TraceTableUpdater({ path }: Props) {
+export function TraceTableUpdater({ path }: Prop) {
   const characterId = useAtomValue(charIdAtom);
   const { data: traces } = useCharacterTrace(characterId);
   if (!traces) return "loading...";
   const splittedTraces = groupTrips(path);
 
   return (
-    <>
-      <div className="flex flex-col gap-2">
-        {splittedTraces.map((trip, index) => (
-          <TripRow
-            key={index}
-            anchors={trip}
-            traceInfo={traces}
-            path={path}
-            ascension={(index + 1) * 2}
-          />
-        ))}
-      </div>
-    </>
+    <div className="flex flex-col gap-2">
+      {splittedTraces.map((trip, index) => (
+        <TripRow
+          anchors={trip}
+          ascension={(index + 1) * 2}
+          key={index}
+          path={path}
+          traceInfo={traces}
+        />
+      ))}
+    </div>
   );
 }
 
@@ -71,7 +69,7 @@ interface TripRowProps extends HTMLAttributes<HTMLDivElement> {
 const TripRow = forwardRef<HTMLDivElement, TripRowProps>(
   ({ anchors, traceInfo, path, ascension, className, ...props }, ref) => {
     const traces = anchors.map((anchor) =>
-      traceInfo.find((e) => e.anchor == anchor)
+      traceInfo.find((e) => e.anchor === anchor)
     );
     const traceDict = useAtomValue(charTraceAtom);
     const updateMany = useSetAtom(updateManyCharTraceAtom);
@@ -89,18 +87,18 @@ const TripRow = forwardRef<HTMLDivElement, TripRowProps>(
     return (
       <div className={cn(className, "flex gap-2")} {...props} ref={ref}>
         {traces.map((trace, index) =>
-          !!trace ? (
+          trace ? (
             <TraceItem
-              key={index}
-              index={index}
-              data={trace}
-              previousData={index > 0 ? traces.at(index - 1) : undefined}
-              atomData={traceDict}
-              onUpdateSlice={updateCheckMap}
               ascension={ascension}
+              atomData={traceDict}
+              data={trace}
+              index={index}
+              key={index}
+              onUpdateSlice={updateCheckMap}
+              previousData={index > 0 ? traces.at(index - 1) : undefined}
             />
           ) : (
-            <div key={index} className="flex flex-col items-center gap-1 p-1">
+            <div className="flex flex-col items-center gap-1 p-1" key={index}>
               <span>...</span>
               <Skeleton className="h-12 w-12 rounded-full" />
             </div>
@@ -139,14 +137,14 @@ function TraceItem({
           })}
         >
           <Image
+            alt=""
             className={cn(
               "rounded-full",
               getNodeType(data) !== "CORE" ? "invert" : ""
             )}
-            src={traceIconUrl(data)}
-            alt=""
-            width={48}
             height={48}
+            src={traceIconUrl(data)}
+            width={48}
           />
         </div>
       </div>
@@ -155,11 +153,11 @@ function TraceItem({
   return (
     <Toggle
       className="flex h-fit flex-col items-center gap-1 p-1"
-      pressed={atomData[data.point_id]}
+      disabled={disabled}
       onPressedChange={(checked) => {
         if (getNodeType(data) == "SMALL") onUpdateSlice(checked, index);
       }}
-      disabled={disabled}
+      pressed={atomData[data.point_id]}
     >
       {asPercentage(data.status_add_list.at(0)?.value.value)}
 
@@ -169,14 +167,14 @@ function TraceItem({
         })}
       >
         <Image
+          alt=""
           className={cn(
             "rounded-full",
             getNodeType(data) !== "CORE" ? "invert" : ""
           )}
-          src={traceIconUrl(data)}
-          alt=""
-          width={48}
           height={48}
+          src={traceIconUrl(data)}
+          width={48}
         />
       </div>
     </Toggle>

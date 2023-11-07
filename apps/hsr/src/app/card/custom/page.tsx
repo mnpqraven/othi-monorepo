@@ -1,13 +1,7 @@
-import { CharacterEditorTab } from "./_tabs/CharacterEditorTab";
-import { LightConeEditorTab } from "./_tabs/LightConeEditorTab";
-import { RelicEditorTab } from "./_tabs/RelicEditorTab";
-import { DisplayCard } from "./_viewer/DisplayCard";
-import { Exporter } from "../[uid]/_components/Exporter";
-import { ConfigController } from "../[uid]/ConfigControllerDialog";
 import Link from "next/link";
 import { AlertTriangle } from "lucide-react";
 import { StateProvider } from "@hsr/app/components/StateProvider";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import {
   Accordion,
   AccordionContent,
@@ -23,13 +17,19 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "ui/primitive";
+import { ConfigController } from "../[uid]/ConfigControllerDialog";
+import { Exporter } from "../[uid]/_components/Exporter";
+import { DisplayCard } from "./_viewer/DisplayCard";
+import { RelicEditorTab } from "./_tabs/RelicEditorTab";
+import { LightConeEditorTab } from "./_tabs/LightConeEditorTab";
+import { CharacterEditorTab } from "./_tabs/CharacterEditorTab";
 
 export const metadata: Metadata = {
   title: "Honkai Star Rail Card Maker",
   description: "Custom card maker for your Honkai Star Rail characters",
 };
 
-export default async function ProfileCard() {
+export default function ProfileCard() {
   return (
     <StateProvider devTools>
       <main className="flex flex-col items-center justify-center">
@@ -41,14 +41,14 @@ export default async function ProfileCard() {
           <ConfigController />
         </div>
         <Accordion
-          type="multiple"
           className="w-10/12"
           defaultValue={["config", "card"]}
+          type="multiple"
         >
           <AccordionItem value="config">
             <AccordionTrigger>Configuration</AccordionTrigger>
             <AccordionContent className="py-2">
-              <Tabs defaultValue="charlc" className="w-full">
+              <Tabs className="w-full" defaultValue="charlc">
                 <div className="flex">
                   <TabsList>
                     <TabsTrigger value="charlc">
@@ -72,12 +72,12 @@ export default async function ProfileCard() {
                 </div>
 
                 <TabsContent
-                  value="charlc"
                   className="flex justify-between gap-2"
+                  value="charlc"
                 >
                   <CharacterEditorTab className="flex-[2_2_0%]" />
 
-                  <Separator orientation="vertical" className="h-auto" />
+                  <Separator className="h-auto" orientation="vertical" />
 
                   <LightConeEditorTab className="flex-1" />
                 </TabsContent>

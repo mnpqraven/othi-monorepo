@@ -11,8 +11,8 @@ export function RelicEditorTab() {
     <div className="grid grid-cols-2 gap-2">
       {relicAtoms.map((relicAtom) => (
         <div
-          key={`${relicAtom}`}
           className="flex flex-col gap-2 rounded-md border p-2"
+          key={`${relicAtom}`}
         >
           <RelicSelector atom={relicAtom} />
           <RelicEditor atom={relicAtom} />

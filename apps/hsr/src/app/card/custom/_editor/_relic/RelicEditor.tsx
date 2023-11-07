@@ -1,18 +1,16 @@
-import { PrimitiveAtom, useAtom, useAtomValue } from "jotai";
+import type { PrimitiveAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { focusAtom } from "jotai-optics";
-import { Property } from "@hsr/bindings/SkillTreeConfig";
+import type { Property } from "@hsr/bindings/SkillTreeConfig";
 import { img } from "@hsr/lib/utils";
 import { useMemo } from "react";
 import Image from "next/image";
-import { SubstatSpreadConfig } from "./SubstatSpreadConfig";
 import { useSubStatSpread } from "@hsr/hooks/queries/useSubStatSpread";
 import { prettyProperty } from "@hsr/lib/propertyHelper";
 import { selectAtom, splitAtom } from "jotai/utils";
-import { SubStatSchema } from "@hsr/hooks/useStatParser";
-import { subStatOptions } from "./relicConfig";
-import { PropertySelect } from "../PropertySelect";
-import { RelicType } from "@hsr/bindings/RelicConfig";
-import { RelicInput } from "@hsr/app/card/_store/relic";
+import type { SubStatSchema } from "@hsr/hooks/useStatParser";
+import type { RelicType } from "@hsr/bindings/RelicConfig";
+import type { RelicInput } from "@hsr/app/card/_store/relic";
 import { AlignHorizontalDistributeCenter } from "lucide-react";
 import {
   Button,
@@ -21,6 +19,9 @@ import {
   PopoverTrigger,
   useToast,
 } from "ui/primitive";
+import { PropertySelect } from "../PropertySelect";
+import { subStatOptions } from "./relicConfig";
+import { SubstatSpreadConfig } from "./SubstatSpreadConfig";
 
 export function RelicEditor({ atom }: { atom: PrimitiveAtom<RelicInput> }) {
   const setIdAtom = useMemo(
@@ -47,14 +48,14 @@ export function RelicEditor({ atom }: { atom: PrimitiveAtom<RelicInput> }) {
 
   if (!setId || !spreadData) return null;
 
-  const occupiedProperties: Property[] = !!property
+  const occupiedProperties: Property[] = property
     ? [property, ...substats.filter(Boolean).map((e) => e!.property)]
     : substats.filter(Boolean).map((e) => e!.property);
 
   function onSubStatSelect(prop: Property, index: number) {
     let value = 0;
-    const spreadInfo = spreadData?.find((e) => e.property == prop);
-    if (!!spreadInfo) {
+    const spreadInfo = spreadData?.find((e) => e.property === prop);
+    if (spreadInfo) {
       const { base_value, step_num, step_value } = spreadInfo;
       value = base_value + (step_value * step_num) / 2;
     }
@@ -79,39 +80,41 @@ export function RelicEditor({ atom }: { atom: PrimitiveAtom<RelicInput> }) {
   return (
     <div className="flex gap-2">
       <Image
-        src={getRelicIcon(relic.type, setId)}
         alt=""
-        height={64}
-        width={64}
         className="h-24 w-24"
+        height={64}
+        src={getRelicIcon(relic.type, setId)}
+        width={64}
       />
 
       <div className="grid flex-1 grid-cols-2 gap-2">
         {splittedSubstatAtom.map((ssAtom, index) => (
-          <div key={index} className="flex items-center gap-2">
+          <div className="flex items-center gap-2" key={index}>
             <PropertySelect
               className="w-44"
-              options={subStatOptions.map((e) => e.option)}
               itemDisabled={(prop) => occupiedProperties.includes(prop)}
-              onValueChange={(prop) => onSubStatSelect(prop, index)}
+              onValueChange={(prop) => {
+                onSubStatSelect(prop, index);
+              }}
+              options={subStatOptions.map((e) => e.option)}
               value={substats.at(index)?.property}
             />
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  variant="outline"
                   className="px-2"
                   disabled={!substats.at(index)?.property}
+                  variant="outline"
                 >
                   <AlignHorizontalDistributeCenter />
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent side="top" asChild>
+              <PopoverContent asChild side="top">
                 <SubstatSpreadConfig
                   atom={ssAtom}
-                  spreadData={spreadData}
                   setId={setId}
+                  spreadData={spreadData}
                 />
               </PopoverContent>
             </Popover>

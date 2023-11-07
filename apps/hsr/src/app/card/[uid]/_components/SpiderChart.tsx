@@ -2,14 +2,15 @@ import { Group } from "@visx/group";
 import { scaleLinear } from "@visx/scale";
 import { Point } from "@visx/point";
 import { Line, LineRadial } from "@visx/shape";
-import { rotate } from "@hsr/lib/utils";
-import SVG from "react-inlinesvg";
+import Svg from "react-inlinesvg";
 import { TooltipWithBounds, useTooltip } from "@visx/tooltip";
-import { MouseEventHandler, ReactNode, useCallback, useMemo } from "react";
+import type { MouseEventHandler, ReactNode } from "react";
+import { useCallback, useMemo } from "react";
 import { localPoint } from "@visx/event";
 import { voronoi } from "@visx/voronoi";
+import { rotate } from "lib";
 
-export type RadarProps<T> = {
+export interface RadarProps<T> {
   width: number;
   height: number;
   margin?: { top: number; right: number; bottom: number; left: number };
@@ -18,7 +19,7 @@ export type RadarProps<T> = {
   valueAccessor: (data: T) => number;
   iconAccessor: (data: T) => string;
   tooltipRender?: (data: T) => ReactNode;
-};
+}
 
 const DEGREES = 360;
 
@@ -99,11 +100,7 @@ export function SpiderChart<T>({
   const points = genPoints(data.length, radius);
   const textAnchors = rotate(-1, genPoints(data.length, radius + 20));
 
-  const polygonPoints = genPolygonPoints(
-    data,
-    (d) => yScale(d) ?? 0,
-    valueAccessor
-  );
+  const polygonPoints = genPolygonPoints(data, (d) => yScale(d), valueAccessor);
   const zeroPoint = new Point({ x: 0, y: 0 });
 
   const {
@@ -116,17 +113,17 @@ export function SpiderChart<T>({
   } = useTooltip<{ index: number }>();
   const isTooltipVisible =
     tooltipOpen &&
-    !!tooltipData &&
-    !!tooltipRender &&
-    !!data.at(tooltipData.index);
+    Boolean(tooltipData) &&
+    Boolean(tooltipRender) &&
+    Boolean(data.at(tooltipData.index));
 
   const voronoiLayout = useMemo(
     () =>
       voronoi<{ x: number; y: number }>({
         x: (d) => d.x + width / 2,
         y: (d) => d.y + height / 2 - margin.top,
-        width: width,
-        height: height,
+        width,
+        height,
       })(polygonPoints.points),
     [width, height, margin, polygonPoints.points]
   );
@@ -134,7 +131,7 @@ export function SpiderChart<T>({
   const handleMouseMove: MouseEventHandler<SVGRectElement> = useCallback(
     (event) => {
       const coords = localPoint(event);
-      if (!!coords?.x && coords.y) {
+      if (Boolean(coords?.x) && coords.y) {
         const closest = voronoiLayout.find(coords.x, coords.y, width / 3);
 
         showTooltip({
@@ -149,77 +146,77 @@ export function SpiderChart<T>({
 
   return width < 10 ? null : (
     <>
-      <svg width={width} height={height}>
-        <Group top={height / 2 - margin.top} left={width / 2}>
+      <svg height={height} width={width}>
+        <Group left={width / 2} top={height / 2 - margin.top}>
           {[...new Array(levels)].map((_, i) => (
             <LineRadial
-              key={`web-${i}`}
-              data={webs}
               angle={(d) => radialScale(d.angle) ?? 0}
-              radius={((i + 1) * radius) / levels}
+              data={webs}
               fill="none"
+              key={`web-${i}`}
+              radius={((i + 1) * radius) / levels}
               stroke={silver}
-              strokeWidth={i % 2 == 0 ? 1 : 2}
-              strokeOpacity={0.6}
               strokeLinecap="round"
+              strokeOpacity={0.6}
+              strokeWidth={i % 2 == 0 ? 1 : 2}
             />
           ))}
           {[...new Array(data.length)].map((_, i) => (
             <Line
-              key={`radar-line-${i}`}
               from={zeroPoint}
-              to={points[i]}
+              key={`radar-line-${i}`}
               stroke={silver}
+              to={points[i]}
             />
           ))}
           {data.map((item, i) => (
             // TODO: dynamic x y coords according to index
-            <SVG
-              key={`annotate-${i}`}
+            <Svg
               fill="white"
+              height={24}
+              key={`annotate-${i}`}
+              src={iconAccessor(item)}
+              width={24}
               x={textAnchors[i].x - 10}
               y={textAnchors[i].y - 10}
-              width={24}
-              height={24}
-              src={iconAccessor(item)}
             />
           ))}
           <polygon
-            points={polygonPoints.pointString}
             fill={orange}
             fillOpacity={0.3}
+            points={polygonPoints.pointString}
             stroke={orange}
             strokeWidth={2}
           />
           {polygonPoints.points.map((point, i) => (
             <circle
-              key={`radar-point-${i}`}
               cx={point.x}
               cy={point.y}
-              r={2}
               fill={pumpkin}
+              key={`radar-point-${i}`}
+              r={2}
             />
           ))}
         </Group>
         <rect
           fill={background}
-          width={width}
           height={height}
-          rx={14}
-          onMouseMove={handleMouseMove}
           onMouseLeave={hideTooltip}
+          onMouseMove={handleMouseMove}
+          rx={14}
+          width={width}
         />
       </svg>
-      {isTooltipVisible && (
+      {isTooltipVisible ? (
         <TooltipWithBounds
           // set this to random so it correctly updates with parent bounds
           key={Math.random()}
-          top={tooltipTop}
           left={tooltipLeft}
+          top={tooltipTop}
         >
           {tooltipRender(data[tooltipData.index])}
         </TooltipWithBounds>
-      )}
+      ) : null}
     </>
   );
 }

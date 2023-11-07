@@ -1,13 +1,12 @@
 "use client";
 
 import { AlertCircle } from "lucide-react";
-import { placeholderTableData } from "./defaultTableData";
-import { PlainMessage } from "@bufbuild/protobuf";
+import type { PlainMessage } from "@bufbuild/protobuf";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
-import { estimateFormAtom } from "./_store/main";
 import { rpc } from "protocol/rpc";
-import { JadeEstimateResponse, JadeEstimateService } from "protocol/ts";
+import type { JadeEstimateResponse } from "protocol/ts";
+import { JadeEstimateService } from "protocol/ts";
 import {
   HoverCard,
   HoverCardContent,
@@ -20,12 +19,14 @@ import {
   TableHeader,
   TableRow,
 } from "ui/primitive";
+import { estimateFormAtom } from "./_store/main";
+import { placeholderTableData } from "./defaultTableData";
 
-const JadeRewardTable = () => {
+function JadeRewardTable() {
   const formPayload = useAtomValue(estimateFormAtom);
   const { data: rewardTable } = useQuery({
     queryKey: ["jadeEstimate", formPayload],
-    queryFn: async () => await rpc(JadeEstimateService).post(formPayload),
+    queryFn: () => rpc(JadeEstimateService).post(formPayload),
     placeholderData: keepPreviousData,
   });
   const data = rewardTable ?? placeholderTableData;
@@ -41,9 +42,9 @@ const JadeRewardTable = () => {
             Source
             <HoverCard openDelay={0}>
               <HoverCardTrigger>
-                <AlertCircle className="mx-1 scale-75 rounded-full align-text-bottom hover:bg-accent hover:text-accent-foreground" />
+                <AlertCircle className="hover:bg-accent hover:text-accent-foreground mx-1 scale-75 rounded-full align-text-bottom" />
               </HoverCardTrigger>
-              <HoverCardContent side="top" className="w-96 text-justify">
+              <HoverCardContent className="w-96 text-justify" side="top">
                 These are repeatable rewards that are guaranteed to you and does
                 not include one-off rewards like events or redemption
                 codes/promotions. You are bound to receive more than the table
@@ -67,7 +68,7 @@ const JadeRewardTable = () => {
                   {source.source}
                   <HoverCard openDelay={0}>
                     <HoverCardTrigger className="inline-flex">
-                      <AlertCircle className="mx-1 scale-75 rounded-full align-text-bottom hover:bg-accent hover:text-accent-foreground" />
+                      <AlertCircle className="hover:bg-accent hover:text-accent-foreground mx-1 scale-75 rounded-full align-text-bottom" />
                     </HoverCardTrigger>
                     <HoverCardContent side="top">
                       {source.description}
@@ -92,12 +93,12 @@ const JadeRewardTable = () => {
       </TableBody>
     </Table>
   );
-};
+}
 
 function parseDayCount(data: PlainMessage<JadeEstimateResponse> | undefined) {
   if (data) {
     if (data.days <= 1) return `(${data.days} day)`;
-    else return `(${data.days} days)`;
+    return `(${data.days} days)`;
   }
   return `(0 day)`;
 }

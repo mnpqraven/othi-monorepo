@@ -2,14 +2,11 @@
 
 import { Close } from "@radix-ui/react-dialog";
 import { SlidersHorizontal } from "lucide-react";
-import {
-  ComponentPropsWithoutRef,
-  ElementRef,
-  forwardRef,
-  useEffect,
-} from "react";
-import { CardConfig, initialConfig } from "./configReducer";
-import { UseFormReturn, useForm } from "react-hook-form";
+import type { ComponentPropsWithoutRef, ElementRef } from "react";
+import { forwardRef, useEffect } from "react";
+import type { UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import type { ButtonProps } from "ui/primitive";
 import {
   Sheet,
   SheetContent,
@@ -18,13 +15,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "ui/primitive";
-import { useAtomValue, useSetAtom } from "jotai";
-import { configAtom } from "../_store";
-import { cn } from "lib/utils";
-import {
   Button,
-  ButtonProps,
   Form,
   FormInput,
   FormSelect,
@@ -33,8 +24,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "ui/primitive";
+import { useAtomValue, useSetAtom } from "jotai";
+import { cn } from "lib/utils";
+import { configAtom } from "../_store";
+import { initialConfig } from "./configReducer";
+import type { CardConfig } from "./configReducer";
 
-export const ConfigController = () => {
+export function ConfigController() {
   const changeConfig = useSetAtom(configAtom);
   const form = useForm({
     defaultValues: initialConfig,
@@ -47,7 +43,7 @@ export const ConfigController = () => {
   return (
     <Sheet
       onOpenChange={(e) => {
-        if (!e) form.handleSubmit(onSubmit)();
+        if (!e) void form.handleSubmit(onSubmit)();
       }}
     >
       <Tooltip>
@@ -61,16 +57,16 @@ export const ConfigController = () => {
       </Tooltip>
 
       <ConfigControllerSheet
-        side="left"
         form={form}
         onFormSubmit={onSubmit}
         showSubmit={false}
+        side="left"
       />
     </Sheet>
   );
-};
+}
 
-interface ConfigIconProps extends ButtonProps {}
+type ConfigIconProps = ButtonProps;
 const ConfigIcon = forwardRef<HTMLButtonElement, ConfigIconProps>(
   ({ className, ...props }, ref) => {
     return (
@@ -103,8 +99,8 @@ export const ConfigControllerSheet = forwardRef<
   const { uid, name } = useAtomValue(configAtom);
 
   useEffect(() => {
-    if (!!uid) form.setValue("uid", uid);
-    if (!!name) form.setValue("name", name);
+    if (uid) form.setValue("uid", uid);
+    if (name) form.setValue("name", name);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid, name]);
 
@@ -118,44 +114,44 @@ export const ConfigControllerSheet = forwardRef<
       </SheetHeader>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onFormSubmit)}>
+        <form onSubmit={void form.handleSubmit(onFormSubmit)}>
           <div className="flex flex-col gap-4">
             <FormSwitch<CardConfig>
-              name="showPlayerInfo"
               label="Show player info"
+              name="showPlayerInfo"
             />
             <FormSwitch<CardConfig>
-              name="showBaseUrl"
               label="Show Website URL"
+              name="showBaseUrl"
             />
             <FormSelect<Options, CardConfig>
-              name="hoverVerbosity"
+              className="w-32"
               label="Hover info"
-              options={verbosityOptions}
-              valueAccessor={(item) => item.value}
               labelAccessor={(item) => item.label}
+              name="hoverVerbosity"
+              options={verbosityOptions}
               orientation="horizontal"
-              className="w-32"
+              valueAccessor={(item) => item.value}
             />
             <FormInput<CardConfig>
-              name="name"
+              className="w-32"
               label="Player Name"
-              className="w-32"
+              name="name"
             />
             <FormInput<CardConfig>
-              name="uid"
-              label="Player UID"
               className="w-32"
+              label="Player UID"
+              name="uid"
             />
           </div>
 
-          {showSubmit && (
+          {showSubmit ? (
             <SheetFooter className="mt-4">
               <Close asChild>
                 <Button type="submit">Save Changes</Button>
               </Close>
             </SheetFooter>
-          )}
+          ) : null}
         </form>
       </Form>
     </SheetContent>

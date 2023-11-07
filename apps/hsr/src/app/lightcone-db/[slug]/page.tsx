@@ -3,11 +3,11 @@ import { Portrait } from "./Portrait";
 import { Content } from "./Content";
 import { LightConeRanking } from "./LightConeRanking";
 
-interface Props {
+interface Prop {
   params: { slug: string };
 }
 
-export default async function LightConePage({ params }: Props) {
+export default async function LightConePage({ params }: Prop) {
   const lcId = parseInt(params.slug);
   const callLc = API.lightConeMetadata.get({ lcId });
   const callLcSkill = API.lightConeSkill.get({ lcId });

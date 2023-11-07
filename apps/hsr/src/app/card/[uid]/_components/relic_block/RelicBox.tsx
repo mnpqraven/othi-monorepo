@@ -1,21 +1,23 @@
-import { HTMLAttributes, forwardRef, useCallback } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef, useCallback } from "react";
 import SVG from "react-inlinesvg";
-import { img, range } from "@hsr/lib/utils";
+import { img } from "@hsr/lib/utils";
 import { prettyProperty, propertyIconUrl } from "@hsr/lib/propertyHelper";
 import { cva } from "class-variance-authority";
-import { RelicType } from "@hsr/bindings/RelicConfig";
-import { RelicInput } from "@hsr/app/card/_store/relic";
+import type { RelicType } from "@hsr/bindings/RelicConfig";
+import type { RelicInput } from "@hsr/app/card/_store/relic";
 import { CircleSlash, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { PrimitiveAtom, useAtomValue } from "jotai";
-import { MarkerIcon } from "./MarkerIcon";
+import type { PrimitiveAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { calculateSpread } from "@hsr/app/card/custom/_editor/_relic/SubstatSpreadConfig";
-import { SubStatSchema } from "@hsr/hooks/useStatParser";
+import type { SubStatSchema } from "@hsr/hooks/useStatParser";
 import { judgeRollValue } from "@hsr/app/card/custom/_editor/_relic/SpreadConfigBar";
-import { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
+import type { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
 import { mainstatSpreadAtom, substatSpreadAtom } from "@hsr/store/queries";
-import { cn } from "lib/utils";
+import { cn, range } from "lib/utils";
 import { Badge } from "ui/primitive";
+import { MarkerIcon } from "./MarkerIcon";
 
 interface RelicProps extends HTMLAttributes<HTMLDivElement> {
   atom: PrimitiveAtom<RelicInput>;
@@ -38,10 +40,10 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
     );
 
     function cal(sub: SubStatSchema | undefined) {
-      const spreadInfo = substatSpread?.find(
-        (e) => e.property == sub?.property
+      const spreadInfo = substatSpread.find(
+        (e) => e.property === sub?.property
       );
-      if (!!sub && !!spreadInfo) {
+      if (Boolean(sub) && Boolean(spreadInfo)) {
         return splitSubstatValue(sub, spreadInfo).rolls.map((roll) =>
           judge(roll, spreadInfo)
         );
@@ -50,7 +52,7 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
     }
 
     const promotionConfig = mainstatSpread[data.type].find(
-      (e) => e.property == data.property
+      (e) => e.property === data.property
     );
     const mainStatValue =
       (promotionConfig?.base_value ?? 0) +
@@ -65,14 +67,14 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
         ref={ref}
         {...props}
       >
-        <div id="main" className="relative flex w-24 items-end justify-center">
-          {!!data.setId ? (
+        <div className="relative flex w-24 items-end justify-center" id="main">
+          {data.setId ? (
             <Image
-              className="absolute top-0 z-0 h-24 w-24"
-              src={img(getUrl(data.setId, data.type))}
               alt=""
-              width={96}
+              className="absolute top-0 z-0 h-24 w-24"
               height={96}
+              src={img(getUrl(data.setId, data.type))}
+              width={96}
             />
           ) : (
             <CircleSlash className="absolute top-0 z-0 h-24 w-24 p-2" />
@@ -85,20 +87,20 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
             setId={data.setId}
           />
 
-          {data.property && (
+          {data.property ? (
             <div className="z-10 flex w-full gap-1 font-bold">
               <SVG src={propertyIconUrl(data.property)} />
 
               {prettyProperty(data.property, mainStatValue).prettyValue}
             </div>
-          )}
+          ) : null}
         </div>
 
-        <div id="sub" className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1" id="sub">
           {data.subStats.map((sub, index) => (
-            <div key={index} className="flex flex-col">
-              <div key={index} className="flex justify-between gap-1">
-                {!!sub ? (
+            <div className="flex flex-col" key={index}>
+              <div className="flex justify-between gap-1" key={index}>
+                {sub ? (
                   <>
                     <SVG src={propertyIconUrl(sub.property)} />
                     {prettyProperty(sub.property, sub.value).prettyValue}
@@ -108,16 +110,16 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
                 )}
               </div>
 
-              <div id="substat-counter" className="flex gap-1">
+              <div className="flex gap-1" id="substat-counter">
                 {Array.from(range(1, data.rarity + 1)).map((num, index) => (
                   <div
-                    key={num}
                     className={substatVariant({
                       currentCount: num,
                       substatCount: sub?.step ?? 0,
                       // rarity: data.rarity as 3 | 4 | 5,
                       type: cal(sub).at(index) ?? "ERROR",
                     })}
+                    key={num}
                   />
                 ))}
               </div>
@@ -131,7 +133,7 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
 RelicBox.displayName = "Relic";
 
 function getUrl(setId: number, type: RelicType | undefined) {
-  let suffix: string | undefined = undefined;
+  let suffix: string | undefined;
   switch (type) {
     case "HEAD":
       suffix = "_0";

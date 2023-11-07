@@ -1,28 +1,28 @@
-import { rotate } from "@hsr/lib/utils";
-import { HTMLAttributes, forwardRef } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
 import { ParentSize } from "@visx/responsive";
-import { SpiderChart } from "./SpiderChart";
 import * as z from "zod";
-import { getNormalizedBoundProperty } from "./useDataProcess";
-import { filterOtherElements } from "./stat_block/StatTable";
-import { Element } from "@hsr/bindings/AvatarConfig";
+import type { Element } from "@hsr/bindings/AvatarConfig";
 import {
   prettyProperty,
   propertyIconUrl,
   sortByProperty,
 } from "@hsr/lib/propertyHelper";
-import { Property } from "@hsr/bindings/SkillTreeConfig";
+import type { Property } from "@hsr/bindings/SkillTreeConfig";
 import { useCharacterPromotion } from "@hsr/hooks/queries/useCharacterPromotion";
 import { useLightConePromotion } from "@hsr/hooks/queries/useLightConePromotion";
 import { useStatParser } from "@hsr/hooks/useStatParser";
 import { useAtomValue } from "jotai";
+import { cn, rotate } from "lib/utils";
 import { charIdAtom, lcIdAtom, statParseParam } from "../../_store";
-import { cn } from "lib/utils";
+import { filterOtherElements } from "./stat_block/StatTable";
+import { getNormalizedBoundProperty } from "./useDataProcess";
+import { SpiderChart } from "./SpiderChart";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   element: Element;
 }
-export const SpiderChartWrapper = forwardRef<HTMLDivElement, Props>(
+export const SpiderChartWrapper = forwardRef<HTMLDivElement, Prop>(
   ({ className, element, ...props }, ref) => {
     const charId = useAtomValue(charIdAtom);
     const lcId = useAtomValue(lcIdAtom);
@@ -56,7 +56,7 @@ export const SpiderChartWrapper = forwardRef<HTMLDivElement, Props>(
           binding / getNormalizedBoundProperty(property as Property, speed);
 
         return {
-          property: property,
+          property,
           value,
           normalizedValue,
         };
@@ -66,10 +66,10 @@ export const SpiderChartWrapper = forwardRef<HTMLDivElement, Props>(
       )
       .filter(({ property }) => filterOtherElements(property, element))
       .reverse() as {
-      property: Property;
-      value: number;
-      normalizedValue: number;
-    }[];
+        property: Property;
+        value: number;
+        normalizedValue: number;
+      }[];
 
     const data = rotate(binding.length / 2 + 2, binding);
 
@@ -82,10 +82,8 @@ export const SpiderChartWrapper = forwardRef<HTMLDivElement, Props>(
         <ParentSize debounceTime={10}>
           {(parent) => (
             <SpiderChart
-              width={parent.width}
-              height={parent.height}
               data={data}
-              valueAccessor={(e: (typeof data)[number]) => e.normalizedValue}
+              height={parent.height}
               iconAccessor={(e: (typeof data)[number]) =>
                 propertyIconUrl(e.property)
               }
@@ -93,6 +91,8 @@ export const SpiderChartWrapper = forwardRef<HTMLDivElement, Props>(
                 const { label, prettyValue } = prettyProperty(property, value);
                 return `${label}: ${prettyValue}`;
               }}
+              valueAccessor={(e: (typeof data)[number]) => e.normalizedValue}
+              width={parent.width}
             />
           )}
         </ParentSize>

@@ -1,9 +1,7 @@
 "use client";
-import {
-  QueryClient,
-  QueryClientConfig,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+
+import type { QueryClientConfig } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "ui/primitive/tooltip";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -17,9 +15,9 @@ const TANSTACK_CONFIG: QueryClientConfig = {
   },
 };
 
-type RootProps = {
+interface RootProps {
   children: React.ReactNode;
-};
+}
 const queryClient = new QueryClient(TANSTACK_CONFIG);
 
 const HydrateAtoms = ({ children }: RootProps) => {

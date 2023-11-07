@@ -1,7 +1,7 @@
-import CharacterCatalogue from "./CharacterCatalogue";
 import getQueryClient from "@hsr/lib/queryClientHelper";
 import { optionsCharacterList } from "@hsr/hooks/queries/useCharacterList";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import CharacterCatalogue from "./CharacterCatalogue";
 
 export const metadata = {
   title: "Character Database",

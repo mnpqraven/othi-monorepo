@@ -1,4 +1,4 @@
-import { AvatarConfig } from "@hsr/bindings/AvatarConfig";
+import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
 import {
   Dialog,
   DialogContent,
@@ -9,30 +9,30 @@ import {
 } from "ui/primitive";
 import Image from "next/image";
 import { elementVariant } from "@hsr/lib/variants";
-import { CharacterTabWrapper } from "../components/Character/CharacterTabWrapper";
 import { cn } from "lib";
+import { CharacterTabWrapper } from "../components/Character/CharacterTabWrapper";
 
-interface Props {
+interface Prop {
   data: AvatarConfig;
 }
-function CharacterIcon({ data: avatar }: Props) {
+function CharacterIcon({ data: avatar }: Prop) {
   return (
-    <div key={avatar.avatar_id} className="flex flex-col">
-      <p className="whitespace-pre-wrap text-center"></p>
+    <div className="flex flex-col" key={avatar.avatar_id}>
+      <p className="whitespace-pre-wrap text-center" />
       <div className="flex gap-2.5">
         <Dialog>
           <Tooltip>
             <DialogTrigger asChild>
               <TooltipTrigger>
                 <Image
-                  src={`https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/${avatar.avatar_id}.png`}
                   alt=""
                   className={cn(
                     "h-12 w-12 rounded-full border",
                     elementVariant({ border: avatar.damage_type })
                   )}
-                  width={128}
                   height={128}
+                  src={`https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/${avatar.avatar_id}.png`}
+                  width={128}
                 />
               </TooltipTrigger>
             </DialogTrigger>
@@ -43,9 +43,9 @@ function CharacterIcon({ data: avatar }: Props) {
           </Tooltip>
 
           <DialogContent className="min-h-[16rem] sm:max-w-4xl">
-            {avatar.avatar_id && (
+            {avatar.avatar_id ? (
               <CharacterTabWrapper characterId={avatar.avatar_id} />
-            )}
+            ) : null}
           </DialogContent>
         </Dialog>
       </div>

@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { splitAtom } from "jotai/utils";
-import { Property } from "@hsr/bindings/SkillTreeConfig";
-import { RelicType } from "@hsr/bindings/RelicConfig";
+import type { Property } from "@hsr/bindings/SkillTreeConfig";
+import type { RelicType } from "@hsr/bindings/RelicConfig";
 
 export interface RelicInput {
   id?: number;

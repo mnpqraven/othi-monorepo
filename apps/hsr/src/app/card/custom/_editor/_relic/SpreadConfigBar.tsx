@@ -1,12 +1,14 @@
 import { Button, Tooltip, TooltipContent, TooltipTrigger } from "ui/primitive";
-import { PrimitiveAtom, useAtom } from "jotai";
-import { HTMLAttributes, forwardRef } from "react";
-import { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
+import type { PrimitiveAtom } from "jotai";
+import { useAtom } from "jotai";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
+import type { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
 import { cva } from "class-variance-authority";
-import { substatRollButtons } from "./relicConfig";
 import { cn } from "lib";
+import { substatRollButtons } from "./relicConfig";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   atom: PrimitiveAtom<number>;
   spreadInfo: RelicSubAffixConfig;
 }
@@ -24,7 +26,7 @@ const variant = cva("border-skewed mb-2 h-1.5 w-8", {
   defaultVariants: { status: "default" },
 });
 
-const SpreadConfigBar = forwardRef<HTMLDivElement, Props>(
+const SpreadConfigBar = forwardRef<HTMLDivElement, Prop>(
   ({ atom, spreadInfo, className, ...props }, ref) => {
     const [ssValue, setSsValue] = useAtom(atom);
 
@@ -34,8 +36,8 @@ const SpreadConfigBar = forwardRef<HTMLDivElement, Props>(
 
     return (
       <div
-        ref={ref}
         className={cn(className, "flex flex-col items-center")}
+        ref={ref}
         {...props}
       >
         <div
@@ -43,14 +45,16 @@ const SpreadConfigBar = forwardRef<HTMLDivElement, Props>(
             status:
               ssValue > 0 ? judgeRollValue(ssValue, spreadInfo) : "default",
           })}
-        ></div>
+        />
         {substatRollButtons.map(({ key, icon, label }) => (
-          <Tooltip key={key} disableHoverableContent>
+          <Tooltip disableHoverableContent key={key}>
             <TooltipTrigger asChild>
               <Button
-                variant="outline"
                 className="h-6 w-6 p-0"
-                onClick={() => roll(key)}
+                onClick={() => {
+                  roll(key);
+                }}
+                variant="outline"
               >
                 {icon}
               </Button>
@@ -82,8 +86,8 @@ export function judgeRollValue(
   const ratio = valueDiff / diffPool;
 
   if (ratio < 0) return "ERROR";
-  if (0 <= ratio && ratio < 0.33) return "LOW";
-  if (0.33 <= ratio && ratio < 0.66) return "MID";
+  if (ratio >= 0 && ratio < 0.33) return "LOW";
+  if (ratio >= 0.33 && ratio < 0.66) return "MID";
   return "HIGH";
 }
 

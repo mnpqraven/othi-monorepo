@@ -17,9 +17,9 @@ import {
 } from "ui/primitive";
 import { cn } from "lib";
 
-type Prop = {
+interface Prop {
   date: Date;
-};
+}
 
 function CalendarFooter({ date }: Prop) {
   const { futurePatchDateList } = useFuturePatchDateList();
@@ -32,7 +32,7 @@ function CalendarFooter({ date }: Prop) {
   );
 
   const banner = useMemo(
-    () => bannerList.find((e) => e.version == getVersion(date)),
+    () => bannerList.find((e) => e.version === getVersion(date)),
     [bannerList, getVersion, date]
   );
   const charas = banner?.chara ?? [null, null, null, null];
@@ -44,7 +44,7 @@ function CalendarFooter({ date }: Prop) {
       queryFn: async () => {
         if (chara && Boolean(chara.id))
           return API.character.get({ characterId: chara.id! });
-        else return Promise.reject();
+        return Promise.reject();
       },
       enabled: Boolean(banner) && Boolean(chara) && Boolean(chara?.id),
     })),
@@ -56,7 +56,7 @@ function CalendarFooter({ date }: Prop) {
       queryFn: async () => {
         if (lc && Boolean(lc.id))
           return API.lightConeMetadata.get({ lcId: lc.id! });
-        else return Promise.reject();
+        return Promise.reject();
       },
       enabled: Boolean(lc) && Boolean(lc?.id),
     })),
@@ -66,7 +66,7 @@ function CalendarFooter({ date }: Prop) {
 
   return (
     <div className="mt-2.5 flex w-full flex-col items-center justify-center gap-2.5">
-      <div id="patch-header" className="text-center">
+      <div className="text-center" id="patch-header">
         {start ? "Start of patch" : "Patch"} {getVersion(date)}
         {versionInfo ? <br /> : null}
         {versionInfo?.name}
@@ -77,19 +77,19 @@ function CalendarFooter({ date }: Prop) {
       <div className="flex gap-2.5">
         {avatarQueries.map((query, index) =>
           query.data ? (
-            <CharacterIcon key={index} data={query.data} />
+            <CharacterIcon data={query.data} key={index} />
           ) : (
             <Tooltip key={index}>
-              <TooltipTrigger disabled={!banner?.chara?.at(index)?.placeholder}>
+              <TooltipTrigger disabled={!banner?.chara.at(index)?.placeholder}>
                 <LoadingIcon
+                  href={banner?.chara.at(index)?.href}
                   key={index}
                   rounded
-                  href={banner?.chara.at(index)?.href}
                 />
               </TooltipTrigger>
-              {!!banner?.chara?.at(index)?.placeholder && (
+              {Boolean(banner?.chara.at(index)?.placeholder) && (
                 <TooltipContent>
-                  {banner?.chara[index]?.placeholder}
+                  {banner.chara[index]?.placeholder}
                 </TooltipContent>
               )}
             </Tooltip>
@@ -107,13 +107,11 @@ function CalendarFooter({ date }: Prop) {
             </Link>
           ) : (
             <Tooltip key={index}>
-              <TooltipTrigger disabled={!banner?.lc?.at(index)?.placeholder}>
-                <LoadingIcon key={index} href={banner?.lc.at(index)?.href} />
+              <TooltipTrigger disabled={!banner?.lc.at(index)?.placeholder}>
+                <LoadingIcon href={banner?.lc.at(index)?.href} key={index} />
               </TooltipTrigger>
-              {!!banner?.lc?.at(index)?.placeholder && (
-                <TooltipContent>
-                  {banner?.lc[index]?.placeholder}
-                </TooltipContent>
+              {Boolean(banner?.lc.at(index)?.placeholder) && (
+                <TooltipContent>{banner.lc[index]?.placeholder}</TooltipContent>
               )}
             </Tooltip>
           )
@@ -123,13 +121,13 @@ function CalendarFooter({ date }: Prop) {
   );
 }
 
-const LoadingIcon = ({
+function LoadingIcon({
   rounded = false,
   href,
 }: {
   rounded?: boolean;
   href?: string;
-}) => {
+}) {
   if (!href)
     return (
       <Skeleton
@@ -148,6 +146,6 @@ const LoadingIcon = ({
       </Skeleton>
     </a>
   );
-};
+}
 
 export { CalendarFooter };

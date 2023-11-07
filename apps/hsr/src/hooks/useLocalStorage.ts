@@ -12,7 +12,6 @@ export function useLocalStorage<T>(key: string, fallbackValue?: T) {
 
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(value));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, value]);
 
   return [value, setValue] as const;

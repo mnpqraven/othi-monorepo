@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { HTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 import {
   Github,
   LineChart,
@@ -11,16 +11,15 @@ import {
   BookCopy,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { CommandCenter } from "./CommandCenter";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  Button,
 } from "ui/primitive";
 import { cn } from "lib";
 import { ThemeToggle } from "ui/shared/ThemeToggle";
+import { CommandCenter } from "./CommandCenter";
 
 const menu = [
   {
@@ -54,7 +53,7 @@ const menu = [
     keybind: "c",
   },
 ];
-const Navbar = ({ className, ...props }: HTMLAttributes<HTMLElement>) => {
+function Navbar({ className, ...props }: HTMLAttributes<HTMLElement>) {
   const pathname = usePathname();
 
   const defaultLinkClass =
@@ -92,9 +91,10 @@ const Navbar = ({ className, ...props }: HTMLAttributes<HTMLElement>) => {
         <CommandCenter routes={menu} />
 
         <a
-          href="https://github.com/mnpqraven/gacha-planner"
-          target="_blank"
           className={cn(defaultLinkClass, "text-muted-foreground ml-auto")}
+          href="https://github.com/mnpqraven/gacha-planner"
+          rel="noopener"
+          target="_blank"
         >
           <Github />
         </a>
@@ -102,5 +102,5 @@ const Navbar = ({ className, ...props }: HTMLAttributes<HTMLElement>) => {
       </div>
     </div>
   );
-};
+}
 export default Navbar;

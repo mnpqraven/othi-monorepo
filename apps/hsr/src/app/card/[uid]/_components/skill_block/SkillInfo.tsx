@@ -1,5 +1,9 @@
-import { HTMLAttributes, forwardRef } from "react";
-import { AvatarSkillConfig, SkillType } from "@hsr/bindings/AvatarSkillConfig";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
+import type {
+  AvatarSkillConfig,
+  SkillType,
+} from "@hsr/bindings/AvatarSkillConfig";
 import { getImagePath } from "@hsr/lib/utils";
 import Image from "next/image";
 import { ChevronsUp } from "lucide-react";
@@ -11,11 +15,11 @@ import { charEidAtom, charSkillAtom } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn } from "lib/utils";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
 }
 
-export const SkillInfo = forwardRef<HTMLDivElement, Props>(
+export const SkillInfo = forwardRef<HTMLDivElement, Prop>(
   ({ className, characterId, ...props }, ref) => {
     const skList = useAtomValue(charSkillAtom);
     const eidolon = useAtomValue(charEidAtom);
@@ -33,12 +37,12 @@ export const SkillInfo = forwardRef<HTMLDivElement, Props>(
       >
         {Object.entries(splitGroupByType(data, { technique: false })).map(
           ([type, [first, ...rest]]) => (
-            <div key={type} className="flex flex-col items-center">
+            <div className="flex flex-col items-center" key={type}>
               <span>{getLabel2(first.skill_type_desc)}</span>
               <SkillIcon
-                src={getImagePath(characterId, first)}
                 skillInfo={first}
                 slv={skList[first.skill_id] ?? 1}
+                src={getImagePath(characterId, first)}
               />
               <span
                 className={cn(
@@ -48,12 +52,12 @@ export const SkillInfo = forwardRef<HTMLDivElement, Props>(
                     : ""
                 )}
               >
-                {skList[first.skill_id] ==
-                getSkillMaxLevel(
-                  first.attack_type,
-                  first.skill_type_desc,
-                  eidolon
-                ) ? (
+                {skList[first.skill_id] ===
+                  getSkillMaxLevel(
+                    first.attack_type,
+                    first.skill_type_desc,
+                    eidolon
+                  ) ? (
                   <span className="flex items-center justify-end">
                     {skList[first.skill_id] ?? 1}
                     <ChevronsUp className="h-4 w-4 text-green-600" />
@@ -99,27 +103,28 @@ function SkillIcon({
   return (
     <Tooltip delayDuration={0}>
       <TooltipTrigger disabled={hoverVerbosity === "none"}>
-        {src && (
+        {src ? (
           <Image
-            src={src}
             alt={skillInfo.skill_name}
-            width={width}
-            height={height}
             className={cn("invert dark:invert-0", className)}
+            height={height}
+            src={src}
+            width={width}
           />
-        )}
+        ) : null}
       </TooltipTrigger>
       {hoverVerbosity === "simple" ? (
         <TooltipContent>{skillInfo.skill_name}</TooltipContent>
-      ) : hoverVerbosity === "detailed" ? (
+      ) : null}
+      {hoverVerbosity === "detailed" ? (
         <TooltipContent className="w-96 py-2 text-justify text-base">
           <p className="text-accent-foreground mb-2 text-base font-bold">
             {skillInfo.skill_name}
           </p>
 
           <SkillDescription
-            skillDesc={skillInfo.skill_desc}
             paramList={skillInfo.param_list}
+            skillDesc={skillInfo.skill_desc}
             slv={slv}
           />
         </TooltipContent>
@@ -158,7 +163,7 @@ export function getSkillMaxLevel(
   skillTypeDesc: string,
   eidolon: number
 ): number {
-  if (skillTypeDesc == "Talent") return eidolon >= 5 ? 15 : 10;
+  if (skillTypeDesc === "Talent") return eidolon >= 5 ? 15 : 10;
   switch (skillType) {
     case "Normal":
       return eidolon >= 3 ? 10 : 6;
@@ -196,17 +201,17 @@ function splitGroupByType(data: AvatarSkillConfig[], cfg?: ReturnConfig) {
     technique: true,
     ...cfg,
   };
-  const basic = data.filter((e) => e.attack_type == "Normal");
-  const talent = data.filter((e) => e.skill_type_desc == "Talent");
-  const skill = data.filter((e) => e.skill_type_desc == "Skill");
-  const ult = data.filter((e) => e.skill_type_desc == "Ultimate");
-  const technique = data.filter((e) => e.skill_type_desc == "Technique");
+  const basic = data.filter((e) => e.attack_type === "Normal");
+  const talent = data.filter((e) => e.skill_type_desc === "Talent");
+  const skill = data.filter((e) => e.skill_type_desc === "Skill");
+  const ult = data.filter((e) => e.skill_type_desc === "Ultimate");
+  const technique = data.filter((e) => e.skill_type_desc === "Technique");
   let total: Return = {};
-  if (_config?.basic === true) total = { ...total, basic };
-  if (_config?.skill === true) total = { ...total, skill };
-  if (_config?.talent === true) total = { ...total, talent };
-  if (_config?.ult === true) total = { ...total, ult };
-  if (_config?.technique === true) total = { ...total, technique };
+  if (_config.basic) total = { ...total, basic };
+  if (_config.skill) total = { ...total, skill };
+  if (_config.talent) total = { ...total, talent };
+  if (_config.ult) total = { ...total, ult };
+  if (_config.technique) total = { ...total, technique };
 
   return total;
 }

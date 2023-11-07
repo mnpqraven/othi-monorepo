@@ -11,25 +11,20 @@ import {
   CommandShortcut,
   Button,
 } from "ui/primitive";
-import {
-  ComponentPropsWithoutRef,
-  ElementRef,
-  forwardRef,
-  useEffect,
-  useState,
-} from "react";
-import { Command as CommandPrimitive } from "cmdk";
+import type { ComponentPropsWithoutRef, ElementRef } from "react";
+import { forwardRef, useEffect, useState } from "react";
+import type { Command as CommandPrimitive } from "cmdk";
 import { useRouter } from "next/navigation";
 import { useLightConeList } from "@hsr/hooks/queries/useLightConeList";
 import { useCharacterList } from "@hsr/hooks/queries/useCharacterList";
 import Fuse from "fuse.js";
-import { range } from "@hsr/lib/utils";
 import Image from "next/image";
-import { PathIcon } from "../character-db/PathIcon";
-import { ElementIcon } from "../character-db/ElementIcon";
 import { cva } from "class-variance-authority";
-import { AvatarConfig } from "@hsr/bindings/AvatarConfig";
-import { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
+import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
+import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
+import { range } from "lib";
+import { ElementIcon } from "../character-db/ElementIcon";
+import { PathIcon } from "../character-db/PathIcon";
 
 const kbdVariants = cva(
   "bg-muted text-muted-foreground pointer-events-none hidden h-5 select-none items-center gap-1 rounded border px-1.5 font-mono font-medium opacity-100 sm:inline-block",
@@ -53,11 +48,11 @@ interface Route {
   keybind: string;
 }
 
-interface Props {
+interface Prop {
   routes: Route[];
 }
 
-const CommandCenter = ({ routes }: Props) => {
+function CommandCenter({ routes }: Prop) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -95,7 +90,9 @@ const CommandCenter = ({ routes }: Props) => {
     };
 
     document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
+    return () => {
+      document.removeEventListener("keydown", down);
+    };
   }, [router, routes]);
 
   function commandSelectRoute(path: string) {
@@ -104,7 +101,7 @@ const CommandCenter = ({ routes }: Props) => {
   }
 
   function onInputChange(to: string) {
-    if (to != "") {
+    if (to !== "") {
       setFilteredLc(fzLc.search(to).map(({ item }) => item));
       setFilteredChar(fzChar.search(to).map(({ item }) => item));
     } else {
@@ -123,10 +120,12 @@ const CommandCenter = ({ routes }: Props) => {
   return (
     <>
       <Button
-        variant="outline"
-        size="sm"
         className="text-muted-foreground w-fit"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setOpen(true);
+        }}
+        size="sm"
+        variant="outline"
       >
         <span className="mr-4 hidden md:inline-block">Command Center</span>
         <span className="m-0 sm:mr-4 md:hidden">Cmd</span>
@@ -135,10 +134,10 @@ const CommandCenter = ({ routes }: Props) => {
         </div>
       </Button>
 
-      <CommandDialog open={open} onOpenChange={setOpen} loop>
+      <CommandDialog loop onOpenChange={setOpen} open={open}>
         <CommandInput
-          placeholder="Click on a result or search (character, light cone)..."
           onValueChange={onInputChange}
+          placeholder="Click on a result or search (character, light cone)..."
         />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
@@ -146,13 +145,13 @@ const CommandCenter = ({ routes }: Props) => {
             <CommandGroup heading="Character">
               {filteredChar.map((chara) => (
                 <CommandItem
-                  key={chara.avatar_id}
-                  value={keysChar.map((key) => chara[key]).join("-")}
                   className="w-full justify-between"
+                  key={chara.avatar_id}
                   onSelect={() => {
                     router.push(`/character-db/${chara.avatar_id}`);
                     setOpen(false);
                   }}
+                  value={keysChar.map((key) => chara[key]).join("-")}
                 >
                   <div className="flex gap-2">
                     <PathIcon path={chara.avatar_base_type} size="auto" />
@@ -163,11 +162,11 @@ const CommandCenter = ({ routes }: Props) => {
                   <div className="flex">
                     {Array.from(range(1, chara.rarity, 1)).map((rarity) => (
                       <Image
-                        key={rarity}
-                        width={20}
-                        height={20}
-                        src="/Star.png"
                         alt={`${rarity} *`}
+                        height={20}
+                        key={rarity}
+                        src="/Star.png"
+                        width={20}
                       />
                     ))}
                   </div>
@@ -179,13 +178,13 @@ const CommandCenter = ({ routes }: Props) => {
             <CommandGroup heading="Light Cone">
               {filteredLc.map((lc) => (
                 <CommandItem
-                  key={lc.equipment_id}
-                  value={keysLc.map((key) => lc[key]).join("-")}
                   className="w-full justify-between"
+                  key={lc.equipment_id}
                   onSelect={() => {
                     router.push(`/lightcone-db/${lc.equipment_id}`);
                     setOpen(false);
                   }}
+                  value={keysLc.map((key) => lc[key]).join("-")}
                 >
                   <div className="flex gap-2">
                     <PathIcon path={lc.avatar_base_type} size="auto" />
@@ -194,11 +193,11 @@ const CommandCenter = ({ routes }: Props) => {
                   <div className="flex">
                     {Array.from(range(1, lc.rarity, 1)).map((rarity) => (
                       <Image
-                        key={rarity}
-                        width={20}
-                        height={20}
-                        src="/Star.png"
                         alt={`${rarity} *`}
+                        height={20}
+                        key={rarity}
+                        src="/Star.png"
+                        width={20}
                       />
                     ))}
                   </div>
@@ -210,8 +209,10 @@ const CommandCenter = ({ routes }: Props) => {
           <CommandGroup heading="Tools">
             {routes.map((route) => (
               <RouteItem
-                onSelect={() => commandSelectRoute(route.path)}
                 key={route.path}
+                onSelect={() => {
+                  commandSelectRoute(route.path);
+                }}
                 {...route}
               />
             ))}
@@ -220,12 +221,12 @@ const CommandCenter = ({ routes }: Props) => {
       </CommandDialog>
     </>
   );
-};
+}
 export { CommandCenter };
 
 interface RouteItemProps
   extends Route,
-  ComponentPropsWithoutRef<typeof CommandItem> { }
+    ComponentPropsWithoutRef<typeof CommandItem> {}
 
 const RouteItem = forwardRef<
   ElementRef<typeof CommandPrimitive.Item>,
@@ -235,13 +236,15 @@ const RouteItem = forwardRef<
     const down = (e: KeyboardEvent) => {
       if (e.key === keybind && (e.altKey || e.metaKey)) {
         e.preventDefault();
-        if (!!onSelect) {
+        if (onSelect) {
           onSelect(path);
         }
       }
     };
     document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
+    return () => {
+      document.removeEventListener("keydown", down);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -249,11 +252,11 @@ const RouteItem = forwardRef<
     <CommandItem onSelect={onSelect} {...props} ref={ref}>
       <span className="mr-2">{icon}</span>
       <span>{label}</span>
-      {keybind && (
+      {keybind ? (
         <CommandShortcut>
           <kbd className={kbdVariants()}>⌘/Alt + {keybind.toUpperCase()}</kbd>
         </CommandShortcut>
-      )}
+      ) : null}
     </CommandItem>
   );
 });

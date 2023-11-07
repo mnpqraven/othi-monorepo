@@ -7,7 +7,8 @@ import {
   TooltipTrigger,
   useToast,
 } from "ui/primitive";
-import { HTMLAttributes, forwardRef } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
 import { Share2 as ShareIcon } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { env } from "@hsr/env";
@@ -22,8 +23,8 @@ export const Share = forwardRef<
 
   function onShare() {
     const lang = search.get("lang");
-    let url = env.NEXT_PUBLIC_BASE_URL + pathname;
-    if (!!lang) {
+    let url = env.NEXT_PUBLIC_HOST_HSR + pathname;
+    if (lang) {
       url += `?lang=${lang}`;
     }
     navigator.clipboard
@@ -42,9 +43,9 @@ export const Share = forwardRef<
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          variant="outline"
           className="px-2"
           onClick={onShare}
+          variant="outline"
           {...props}
           ref={ref}
         >

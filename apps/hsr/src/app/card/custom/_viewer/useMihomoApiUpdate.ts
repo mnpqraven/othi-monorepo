@@ -3,8 +3,14 @@
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useRelics } from "@hsr/hooks/queries/useRelic";
-import { RelicConfig, RelicType } from "@hsr/bindings/RelicConfig";
-import { useMihomoInfo } from "../../[uid]/useMihomoInfo";
+import type { RelicConfig, RelicType } from "@hsr/bindings/RelicConfig";
+import { useQueryClient } from "@tanstack/react-query";
+import { optionCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
+import { optionCharacterPromotion } from "@hsr/hooks/queries/useCharacterPromotion";
+import { optionsCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
+import { optionLightConePromotion } from "@hsr/hooks/queries/useLightConePromotion";
+import { optionLightConeSkill } from "@hsr/hooks/queries/useLightConeSkill";
+import { mhyCharacterIds } from "../../_store/card";
 import {
   charStructAtom,
   configAtom,
@@ -12,19 +18,13 @@ import {
   relicsStructAtom,
   selectedCharacterIndexAtom,
 } from "../../_store";
-import { mhyCharacterIds } from "../../_store/card";
-import { useQueryClient } from "@tanstack/react-query";
-import { optionCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
-import { optionCharacterPromotion } from "@hsr/hooks/queries/useCharacterPromotion";
-import { optionsCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
-import { optionLightConePromotion } from "@hsr/hooks/queries/useLightConePromotion";
-import { optionLightConeSkill } from "@hsr/hooks/queries/useLightConeSkill";
-import { DisplayCardProps } from "./DisplayCard";
+import { useMihomoInfo } from "../../[uid]/useMihomoInfo";
+import type { DisplayCardProps } from "./DisplayCard";
 
 export function useMihomoApiUpdate(props: DisplayCardProps) {
   const { mode } = props;
   const { query } = useMihomoInfo(
-    mode == "API"
+    mode === "API"
       ? { uid: props.uid, lang: props.lang }
       : { uid: undefined, lang: undefined }
   );
@@ -39,10 +39,10 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
   const client = useQueryClient();
 
   useEffect(() => {
-    if (!!query.data) {
+    if (query.data) {
       const charIds = query.data.characters.map((e) => e.id);
       const lcIds = query.data.characters
-        .filter((e) => !!e.light_cone)
+        .filter((e) => Boolean(e.light_cone))
         .map((e) => e.light_cone?.id!);
 
       charIds.forEach((id) => {
@@ -59,7 +59,7 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
   }, [client, query.data]);
 
   useEffect(() => {
-    if (!!query.data && props.mode == "API") {
+    if (Boolean(query.data) && props.mode == "API") {
       const { nickname, uid } = query.data.player;
       updateConfig({ type: "changeUser", payload: { name: nickname, uid } });
 
@@ -85,7 +85,7 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
         skills: Object.fromEntries(skillsPairs),
         trace: Object.fromEntries(tracePairs),
       });
-      if (!!chara.light_cone) {
+      if (chara.light_cone) {
         setLcStruct({
           id: Number(chara.light_cone.id),
           level: chara.light_cone.level,
@@ -98,7 +98,7 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
   }, [props.mode, query.data, charIndex]);
 
   useEffect(() => {
-    if (!!query.data && props.mode == "API" && !!relicsData) {
+    if (Boolean(query.data) && props.mode == "API" && Boolean(relicsData)) {
       const relics = query.data.characters[charIndex].relics;
       setRelicStruct(
         relics.map(
@@ -136,7 +136,7 @@ function findRelicType({
   relicsData: RelicConfig[];
 }): RelicType {
   const find = relicsData.find(
-    (e) => e.id == Number(id) && e.set_id == Number(setId)
+    (e) => e.id === Number(id) && e.set_id == Number(setId)
   );
-  return !!find ? find.ttype : "HEAD";
+  return find ? find.ttype : "HEAD";
 }

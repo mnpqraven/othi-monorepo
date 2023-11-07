@@ -1,11 +1,11 @@
 import { atom } from "jotai";
 
-type LcSchema = {
+interface LcSchema {
   id: number | undefined;
   level: number;
   ascension: number;
   imposition: number;
-};
+}
 export const lcIdAtom = atom<number | undefined>(undefined);
 
 export const lcLevelAtom = atom(1);

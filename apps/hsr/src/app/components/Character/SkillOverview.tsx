@@ -3,17 +3,20 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getImagePath, parseSkillType } from "@hsr/lib/utils";
-import { SkillDescription } from "../Db/SkillDescription";
-import { AvatarSkillConfig, SkillType } from "@hsr/bindings/AvatarSkillConfig";
+import type {
+  AvatarSkillConfig,
+  SkillType,
+} from "@hsr/bindings/AvatarSkillConfig";
 import { useCharacterSkill } from "@hsr/hooks/queries/useCharacterSkill";
 import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
 import { Loader2 } from "lucide-react";
 import { Separator, Skeleton, Toggle, Slider } from "ui/primitive";
+import { SkillDescription } from "../Db/SkillDescription";
 
-type Props = {
+interface Prop {
   characterId: number;
-};
-const SkillOverview = ({ characterId }: Props) => {
+}
+function SkillOverview({ characterId }: Prop) {
   const [selectedSlv, setSelectedSlv] = useState(0);
 
   const { data: skills } = useCharacterSkill(characterId);
@@ -56,18 +59,20 @@ const SkillOverview = ({ characterId }: Props) => {
         <div className="grid grid-cols-4">
           {sortedSkills.map((skill, index) => (
             <Toggle
-              key={index}
               className="flex h-fit flex-col items-center px-1 py-1.5"
+              key={index}
+              onPressedChange={() => {
+                setSelectedSkill(skill);
+              }}
               pressed={skill.skill_id === selectedSkill.skill_id}
-              onPressedChange={() => setSelectedSkill(skill)}
             >
-              {!!getImagePath(characterId, skill) && (
+              {Boolean(getImagePath(characterId, skill)) && (
                 <Image
-                  src={`${getImagePath(characterId, skill)}`}
                   alt={skill.skill_name}
                   className="invert dark:invert-0"
-                  width={64}
                   height={64}
+                  src={`${getImagePath(characterId, skill)}`}
+                  width={64}
                 />
               )}
               <span className="self-center">
@@ -91,8 +96,8 @@ const SkillOverview = ({ characterId }: Props) => {
               <Slider
                 className="py-4"
                 defaultValue={[0]}
-                min={0}
                 max={selectedSkill.param_list.length - 1}
+                min={0}
                 onValueChange={(e) => {
                   if (e[0]) setSelectedSlv(e[0]);
                 }}
@@ -105,46 +110,48 @@ const SkillOverview = ({ characterId }: Props) => {
       <div className="flex flex-col gap-4">
         <div className="mt-2 min-h-[8rem] rounded-md border p-4">
           <SkillDescription
-            slv={selectedSlv}
-            skillDesc={selectedSkill.skill_desc}
             paramList={selectedSkill.param_list}
+            skillDesc={selectedSkill.skill_desc}
+            slv={selectedSlv}
           />
         </div>
       </div>
     </div>
   );
-};
+}
 
-const SkillOverviewLoading = () => (
-  <div className="flex flex-col">
-    <div className="flex h-fit flex-col sm:flex-row">
-      <div className="grid grid-cols-4">
-        {["Talent", "Skill", "Ultimate", "Technique"].map((name, index) => (
-          <Toggle
-            key={index}
-            className="flex h-fit flex-col items-center px-1 py-1.5"
-            pressed={name === "Talent"}
-          >
-            <Skeleton className="h-16 w-16 invert dark:invert-0" />
-            <span className="self-center">{name}</span>
-          </Toggle>
-        ))}
-      </div>
+function SkillOverviewLoading() {
+  return (
+    <div className="flex flex-col">
+      <div className="flex h-fit flex-col sm:flex-row">
+        <div className="grid grid-cols-4">
+          {["Talent", "Skill", "Ultimate", "Technique"].map((name, index) => (
+            <Toggle
+              className="flex h-fit flex-col items-center px-1 py-1.5"
+              key={index}
+              pressed={name === "Talent"}
+            >
+              <Skeleton className="h-16 w-16 invert dark:invert-0" />
+              <span className="self-center">{name}</span>
+            </Toggle>
+          ))}
+        </div>
 
-      <Separator className="my-3 sm:hidden" />
+        <Separator className="my-3 sm:hidden" />
 
-      <div className="flex w-full grow flex-col px-4 py-2 sm:w-auto">
-        <h3 className="flex items-center justify-start text-lg font-semibold leading-none tracking-tight">
-          <Loader2 className="mr-1 animate-spin" />
-          Loading...
-        </h3>
-        <div className="flex items-center gap-4">
-          <span className="whitespace-nowrap">Lv. 1</span>
-          <Slider className="py-4" defaultValue={[0]} min={0} max={15} />
+        <div className="flex w-full grow flex-col px-4 py-2 sm:w-auto">
+          <h3 className="flex items-center justify-start text-lg font-semibold leading-none tracking-tight">
+            <Loader2 className="mr-1 animate-spin" />
+            Loading...
+          </h3>
+          <div className="flex items-center gap-4">
+            <span className="whitespace-nowrap">Lv. 1</span>
+            <Slider className="py-4" defaultValue={[0]} max={15} min={0} />
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+}
 
 export { SkillOverview, SkillOverviewLoading };

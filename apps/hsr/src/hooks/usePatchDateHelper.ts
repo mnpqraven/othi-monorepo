@@ -38,7 +38,7 @@ export function usePatchDateHelper() {
 
   function currentPatch(abitraryDate?: Date): PatchDate {
     // init
-    let patch = base();
+    const patch = base();
 
     // incremental checks
     const d = abitraryDate ?? new Date();
@@ -65,7 +65,7 @@ export function usePatchDateHelper() {
 
     if (start <= dTime && dTime < mid) return { phase: 1, patch };
     else if (mid <= dTime && dTime < end) return { phase: 2, patch };
-    else if (dTime == end)
+    else if (dTime === end)
       // starts of next patch, so phase 1
       return { phase: 1, patch: setNextPatch(patch) };
 
@@ -77,7 +77,7 @@ export function usePatchDateHelper() {
   ): `${number}.${number}.${1 | 2}` | undefined {
     const { phase, patch } = getPhase(abitraryDate);
     if (!phase) return undefined;
-    else return `${patch.version.major}.${patch.version.minor}.${phase}`;
+    return `${patch.version.major}.${patch.version.minor}.${phase}`;
   }
   return { currentPatch, getPhase, getVersion };
 }

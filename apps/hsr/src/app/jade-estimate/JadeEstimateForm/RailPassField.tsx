@@ -1,5 +1,5 @@
-import { JadeEstimateCfg } from "protocol/ts";
-import { UseFormReturn } from "react-hook-form";
+import type { JadeEstimateCfg } from "protocol/ts";
+import type { UseFormReturn } from "react-hook-form";
 import {
   FormControl,
   FormDescription,
@@ -12,10 +12,10 @@ import {
   Switch,
 } from "ui/primitive";
 
-type Props = {
+interface Prop {
   form: UseFormReturn<JadeEstimateCfg>;
-};
-const RailPassField = ({ form }: Props) => {
+}
+function RailPassField({ form }: Prop) {
   const useRailPass = form.watch("railPass.useRailPass");
 
   return (
@@ -41,7 +41,7 @@ const RailPassField = ({ form }: Props) => {
           </FormItem>
         )}
       />
-      {useRailPass && (
+      {useRailPass ? (
         <>
           <Separator className="my-4" />
           <FormField
@@ -53,20 +53,21 @@ const RailPassField = ({ form }: Props) => {
                   <div className="flex-1">
                     <FormLabel>Days Left</FormLabel>
                     <FormDescription>
-                      You{"'"}ll receive 300 jades for renewing the subscription
+                      You&apos;ll receive 300 jades for renewing the
+                      subscription
                     </FormDescription>
                   </div>
                   <FormControl>
                     <Input
-                      type="number"
                       min={0}
+                      type="number"
                       {...field}
+                      className="w-20"
                       onChange={(e) => {
                         if (!Number.isNaN(e.currentTarget.value)) {
                           field.onChange(Number(e.currentTarget.value));
                         } else e.preventDefault();
                       }}
-                      className="w-20"
                     />
                   </FormControl>
                 </div>
@@ -74,8 +75,8 @@ const RailPassField = ({ form }: Props) => {
             )}
           />
         </>
-      )}
+      ) : null}
     </div>
   );
-};
+}
 export { RailPassField };

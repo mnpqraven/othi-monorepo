@@ -1,8 +1,8 @@
-import { Banner } from "@hsr/bindings/Banner";
+import type { Banner } from "@hsr/bindings/Banner";
 import { range } from "lib/utils";
-import { PlainMessage } from "@bufbuild/protobuf";
-import { EChartsOption, SeriesOption } from "echarts";
-import { ProbabilityRateResponse } from "protocol/ts";
+import type { PlainMessage } from "@bufbuild/protobuf";
+import type { EChartsOption, SeriesOption } from "echarts";
+import type { ProbabilityRateResponse } from "protocol/ts";
 
 type ChartData = PlainMessage<ProbabilityRateResponse>;
 
@@ -21,7 +21,7 @@ export function chartOptions({
     xAxis: {
       type: "category",
       boundaryGap: false,
-      data: data.data?.map((_, index) => index),
+      data: data.data.map((_, index) => index),
     },
     yAxis: {
       axisLabel: {
@@ -60,8 +60,8 @@ export function chartOptions({
         label: {
           backgroundColor: "#6a7985",
           formatter: ({ value, axisDimension }) => {
-            if (axisDimension == "x") return `Roll ${value}`;
-            else return `${Number(value).toFixed(2)} %`;
+            if (axisDimension === "x") return `Roll ${value}`;
+            return `${Number(value).toFixed(2)} %`;
           },
         },
       },
@@ -74,11 +74,11 @@ function createChartSeries(
   constShorthand: string,
   eidolon: number,
   queryData: ChartData,
-  padding: number = 0
+  padding = 0
 ): SeriesOption {
   const data = queryData.data.map((eidsInRoll) => {
     const currentEid =
-      eidsInRoll.index.find((e) => e.eidolon == eidolon)?.rate ?? 0;
+      eidsInRoll.index.find((e) => e.eidolon === eidolon)?.rate ?? 0;
     return Number(currentEid * 100).toFixed(2);
   });
   const opt: EChartsOption["series"] = {

@@ -1,8 +1,8 @@
-import { ParameterizedDescription } from "@hsr/bindings/SkillTreeConfig";
+import type { ParameterizedDescription } from "@hsr/bindings/SkillTreeConfig";
 import { sanitizeNewline } from "lib/utils";
 import { Fragment } from "react";
 
-type SkillDescriptionProps = {
+interface SkillDescriptionProps {
   skillDesc: ParameterizedDescription;
   paramList: string[][] | string[];
   /**
@@ -11,13 +11,13 @@ type SkillDescriptionProps = {
    * NOTE: this is 0-based, beware
    */
   slv: number;
-};
+}
 
-export const SkillDescription = ({
+export function SkillDescription({
   skillDesc,
   paramList,
   slv,
-}: SkillDescriptionProps) => {
+}: SkillDescriptionProps) {
   // for depth of 2, flatten once
   const currentParam = Array.isArray(paramList[0]) ? paramList[slv] : paramList;
 
@@ -28,11 +28,11 @@ export const SkillDescription = ({
           <span className="whitespace-pre-wrap">
             {sanitizeNewline(descPart)}
           </span>
-          <span className="font-semibold text-accent-foreground">
+          <span className="text-accent-foreground font-semibold">
             {currentParam ? currentParam[index] : null}
           </span>
         </Fragment>
       ))}
     </p>
   );
-};
+}

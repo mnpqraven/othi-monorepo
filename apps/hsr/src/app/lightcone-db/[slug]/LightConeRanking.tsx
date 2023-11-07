@@ -1,13 +1,13 @@
 "use client";
 
-import { EquipmentRanking } from "@hsr/bindings/EquipmentRanking";
+import type { EquipmentRanking } from "@hsr/bindings/EquipmentRanking";
 import API from "@hsr/server/typedEndpoints";
 import { useQuery } from "@tanstack/react-query";
 import { AxisRight } from "@visx/axis";
 import { localPoint } from "@visx/event";
 import { Group } from "@visx/group";
 import { ParentSize } from "@visx/responsive";
-import { ParentSizeProvidedProps } from "@visx/responsive/lib/components/ParentSize";
+import type { ParentSizeProvidedProps } from "@visx/responsive/lib/components/ParentSize";
 import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale";
 import { Bar, BarStackHorizontal } from "@visx/shape";
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
@@ -25,9 +25,9 @@ import {
   SelectValue,
 } from "ui/primitive";
 
-type Props = {
+interface Prop {
   id: number;
-};
+}
 
 // hp atk def
 const hpColor = "#10b981";
@@ -43,7 +43,7 @@ const inactiveColors = [inactiveHpColor, inactiveAtkColor, inactiveDefColor];
 const textActive = "#212529";
 const textInactive = "#ADB5BD";
 
-const LightConeRanking = ({ id }: Props) => {
+function LightConeRanking({ id }: Prop) {
   const { data } = useQuery({
     queryKey: ["lightConeRanking"],
     queryFn: async () => await API.lightConeRanking.get(),
@@ -81,10 +81,12 @@ const LightConeRanking = ({ id }: Props) => {
       </CardHeader>
       <CardContent>
         <Select
-          onValueChange={(e) => setDatakey(e as typeof dataKey)}
           defaultValue={dataKey}
+          onValueChange={(e) => {
+            setDatakey(e as typeof dataKey);
+          }}
         >
-          <SelectTrigger className="top-0 sticky bg-background">
+          <SelectTrigger className="bg-background sticky top-0">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -99,8 +101,8 @@ const LightConeRanking = ({ id }: Props) => {
             {(parent) =>
               accessor ? (
                 <RankingChart
-                  data={sortedList}
                   currentLcId={id}
+                  data={sortedList}
                   dataAccessor={accessor()}
                   {...parent}
                   height={sortedList.length * 40}
@@ -113,17 +115,17 @@ const LightConeRanking = ({ id }: Props) => {
       </CardContent>
     </Card>
   );
-};
+}
 
 const DEFAULT_INDEX = 6;
 
 let tooltipTimeout: number;
-type TooltipData = {
+interface TooltipData {
   name: string;
   atk: number;
   hp: number;
   def: number;
-};
+}
 
 interface ChartProps extends ParentSizeProvidedProps {
   data: EquipmentRanking[];
@@ -131,14 +133,14 @@ interface ChartProps extends ParentSizeProvidedProps {
   dataAccessor?: (e: EquipmentRanking) => number;
   promotion: number;
 }
-const RankingChart = ({
+function RankingChart({
   data,
   currentLcId,
   dataAccessor,
   promotion,
   height,
   width,
-}: ChartProps) => {
+}: ChartProps) {
   const xMax = width;
   const yMax = height;
   const {
@@ -189,7 +191,7 @@ const RankingChart = ({
   if (dataAccessor)
     return (
       <div className="relative">
-        <svg width={width} height={height} ref={containerRef}>
+        <svg height={height} ref={containerRef} width={width}>
           <Group>
             {data.map((dataPoint, index) => {
               const barHeight = yScale.bandwidth();
@@ -200,17 +202,13 @@ const RankingChart = ({
 
               return (
                 <Bar
-                  x={0}
-                  y={barY}
-                  width={barWidth}
-                  height={barHeight}
                   fill={
                     isCurrent
                       ? "rgba(23, 233, 217, .5)"
                       : "rgba(190, 190, 190, .5)"
                   }
+                  height={barHeight}
                   key={`bar-${index}`}
-                  rx={6}
                   onMouseLeave={() => {
                     tooltipTimeout = window.setTimeout(() => {
                       hideTooltip();
@@ -229,12 +227,19 @@ const RankingChart = ({
                       tooltipLeft: eventSvgCoords?.x,
                     });
                   }}
+                  rx={6}
+                  width={barWidth}
+                  x={0}
+                  y={barY}
                 />
               );
             })}
             <AxisRight
-              scale={yScale}
+              hideAxisLine
+              hideTicks
               numTicks={99}
+              scale={yScale}
+              tickFormat={(name, index) => `#${index + 1} ${name}`}
               tickLabelProps={(_name, index) => ({
                 fontSize: 14,
                 fontWeight: 600,
@@ -242,20 +247,17 @@ const RankingChart = ({
                 verticalAnchor: "middle",
                 fill: index === currentLcIndex ? textActive : textInactive,
               })}
-              hideAxisLine
-              tickFormat={(name, index) => `#${index + 1} ${name}`}
-              hideTicks
             />
           </Group>
         </svg>
-        {tooltipOpen && tooltipData && (
-          <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
+        {tooltipOpen && tooltipData ? (
+          <TooltipInPortal left={tooltipLeft} top={tooltipTop}>
             <div>{tooltipData.name}</div>
             <div>HP: {tooltipData.hp.toFixed(0)}</div>
             <div>ATK: {tooltipData.atk.toFixed(0)}</div>
             <div>DEF: {tooltipData.def.toFixed(0)}</div>
           </TooltipInPortal>
-        )}
+        ) : null}
       </div>
     );
 
@@ -286,15 +288,15 @@ const RankingChart = ({
 
   return (
     <div>
-      <svg width={width} height={height} ref={containerRef}>
+      <svg height={height} ref={containerRef} width={width}>
         <Group>
           <BarStackHorizontal<(typeof omittedIndexData)[number], MultiKeys>
+            color={colorScale}
             data={omittedIndexData}
             keys={keys}
-            y={(e) => e.equipment_name}
             xScale={xScaleTotal}
+            y={(e) => e.equipment_name}
             yScale={yScale}
-            color={colorScale}
           >
             {(barStacks) =>
               barStacks.map((barStack) =>
@@ -304,13 +306,9 @@ const RankingChart = ({
 
                   return (
                     <rect
-                      key={`barstack-horizontal-${barStack.index}-${bar.index}`}
-                      x={bar.x}
-                      y={bar.y}
-                      rx={6}
-                      width={bar.width}
-                      height={bar.height}
                       fill={colors[barStack.index]}
+                      height={bar.height}
+                      key={`barstack-horizontal-${barStack.index}-${bar.index}`}
                       onMouseLeave={() => {
                         tooltipTimeout = window.setTimeout(() => {
                           hideTooltip();
@@ -331,6 +329,10 @@ const RankingChart = ({
                           tooltipLeft: eventSvgCoords?.x,
                         });
                       }}
+                      rx={6}
+                      width={bar.width}
+                      x={bar.x}
+                      y={bar.y}
                     />
                   );
                 })
@@ -338,8 +340,11 @@ const RankingChart = ({
             }
           </BarStackHorizontal>
           <AxisRight
-            scale={yScale}
+            hideAxisLine
+            hideTicks
             numTicks={999}
+            scale={yScale}
+            tickFormat={(name, index) => `#${index + 1} ${name}`}
             tickLabelProps={(_name, index) => ({
               fontSize: 14,
               fontWeight: 600,
@@ -347,23 +352,20 @@ const RankingChart = ({
               verticalAnchor: "middle",
               fill: index === currentLcIndex ? textActive : textInactive,
             })}
-            tickFormat={(name, index) => `#${index + 1} ${name}`}
-            hideAxisLine
-            hideTicks
           />
         </Group>
       </svg>
-      {tooltipOpen && tooltipData && (
-        <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
+      {tooltipOpen && tooltipData ? (
+        <TooltipInPortal left={tooltipLeft} top={tooltipTop}>
           <div>{tooltipData.name}</div>
           <div>HP: {tooltipData.hp.toFixed(0)}</div>
           <div>ATK: {tooltipData.atk.toFixed(0)}</div>
           <div>DEF: {tooltipData.def.toFixed(0)}</div>
         </TooltipInPortal>
-      )}
+      ) : null}
     </div>
   );
-};
+}
 
 function toTooltipData(
   point: EquipmentRanking,

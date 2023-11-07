@@ -1,4 +1,4 @@
-import { RelicInput } from "@hsr/app/card/_store/relic";
+import type { RelicInput } from "@hsr/app/card/_store/relic";
 import {
   Select,
   SelectContent,
@@ -6,25 +6,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "ui/primitive";
-import { RelicType } from "@hsr/bindings/RelicConfig";
-import { RelicSetConfig } from "@hsr/bindings/RelicSetConfig";
+import type { RelicType } from "@hsr/bindings/RelicConfig";
+import type { RelicSetConfig } from "@hsr/bindings/RelicSetConfig";
 import { useRelicSets } from "@hsr/hooks/queries/useRelicSetList";
 import { img } from "@hsr/lib/utils";
-import { PrimitiveAtom, useAtom } from "jotai";
+import type { PrimitiveAtom } from "jotai";
+import { useAtom } from "jotai";
 import Image from "next/image";
 import { MainstatEditor } from "./MainstatEditor";
 import { RelicLevel } from "./RelicLevel";
 
-interface Props {
+interface Prop {
   atom: PrimitiveAtom<RelicInput>;
 }
-export function RelicSelector({ atom }: Props) {
+export function RelicSelector({ atom }: Prop) {
   const [relic, setRelic] = useAtom(atom);
   const { data: relicSets } = useRelicSets();
 
   function updateRelic(sId: string) {
     const setId = parseInt(sId);
-    setRelic((relic) => ({ ...relic, setId: setId }));
+    setRelic((relic) => ({ ...relic, setId }));
   }
 
   return (
@@ -44,9 +45,9 @@ export function RelicSelector({ atom }: Props) {
             <SelectItem key={set.set_id} value={String(set.set_id)}>
               <div className="flex items-center gap-2">
                 <Image
-                  src={img(`icon/relic/${set.set_id}.png`)}
                   alt=""
                   height={32}
+                  src={img(`icon/relic/${set.set_id}.png`)}
                   width={32}
                 />
 
@@ -67,7 +68,7 @@ function bySeparateType(type: RelicType) {
     case "BODY":
     case "FOOT":
       return (set: RelicSetConfig) =>
-        set.set_skill_list.some((num) => num == 4);
+        set.set_skill_list.some((num) => num === 4);
     case "OBJECT":
     case "NECK":
       return (set: RelicSetConfig) =>

@@ -1,7 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [ "**/.env.*local", "**/.env", "tsconfig.json" ],
-  "globalDotEnv": [ ".env" ],
+  "globalDependencies": [
+    "**/.env.*local",
+    "**/.env",
+    "tsconfig.json"
+  ],
+  "globalDotEnv": [
+    ".env"
+  ],
   "globalEnv": [
     "DB_URL",
     "DB_AUTH_TOKEN",
@@ -11,12 +17,18 @@
     "GITHUB_ID",
     "GITHUB_SECRET",
     "NEXT_PUBLIC_HOST_DB_CENTER",
-    "NEXT_PUBLIC_HOST_HSR"
+    "NEXT_PUBLIC_HOST_HSR",
+    "NEXT_PUBLIC_HOST_NAS_WS"
   ],
   "pipeline": {
     "build": {
-      "dependsOn": [ "^build" ],
-      "outputs": [ ".next/**", "!.next/cache/**" ],
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ],
       "dotEnv": [
         ".env.production.local",
         ".env.local",
@@ -43,6 +55,6 @@
         ".env"
       ]
     },
-    "lint": { }
+    "lint": {}
   }
 }

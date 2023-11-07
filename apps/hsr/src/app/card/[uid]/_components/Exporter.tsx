@@ -39,9 +39,11 @@ export function Exporter() {
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            onClick={() => onExportClick({ mode: "DOWNLOAD" })}
-            variant="outline"
             className="px-2"
+            onClick={() => {
+              onExportClick({ mode: "DOWNLOAD" });
+            }}
+            variant="outline"
           >
             <Download />
           </Button>
@@ -52,11 +54,11 @@ export function Exporter() {
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
+            className="px-2"
             onClick={() => {
               if (!isFirefox) onExportClick({ mode: "CLIPBOARD" });
             }}
             variant="outline"
-            className="px-2"
           >
             <Clipboard />
           </Button>
@@ -66,7 +68,7 @@ export function Exporter() {
             <span>
               Direct clipboard copying is not supported on Firefox.
               <br />
-              Please use the {"'"}Download Image{"'"} button on the left
+              Please use the &apos;Download Image&apos; button on the left
               instead.
             </span>
           ) : (
@@ -78,15 +80,15 @@ export function Exporter() {
   );
 }
 
-type Options = {
+interface Options {
   mode: "DOWNLOAD" | "CLIPBOARD" | "DISPLAY";
-};
+}
 
 export async function exportImage(
   element: HTMLDivElement | null | undefined,
   opt: Options = { mode: "DOWNLOAD" }
 ): Promise<void> {
-  if (!!element) {
+  if (element) {
     if (opt.mode === "DOWNLOAD") {
       return toPng(element)
         .then((dataUrl) => {
@@ -96,6 +98,7 @@ export async function exportImage(
           link.click();
         })
         .catch((err) => {
+          // eslint-disable-next-line no-console
           console.log(err);
         });
     }
@@ -104,12 +107,9 @@ export async function exportImage(
       return toBlob(element).then((blob) => {
         if (blob) {
           const data = [new ClipboardItem({ [blob.type]: blob })];
-          navigator.clipboard
-            .write(data)
-            .then(() => console.log("copied"))
-            .catch(console.error);
+          void navigator.clipboard.write(data);
         }
       });
     }
-  } else return Promise.reject("Empty image");
+  } else return Promise.reject(Error("Empty image"));
 }

@@ -1,34 +1,29 @@
-import { Property } from "@hsr/bindings/RelicMainAffixConfig";
+import type { Property } from "@hsr/bindings/RelicMainAffixConfig";
 import { isPropertyPercent, prettyProperty } from "@hsr/lib/propertyHelper";
-import { asPercentage, range } from "@hsr/lib/utils";
-import { PrimitiveAtom, atom, useAtom, useAtomValue } from "jotai";
+import type { PrimitiveAtom } from "jotai";
+import { atom, useAtom, useAtomValue } from "jotai";
 import { splitAtom } from "jotai/utils";
 import { Check, Pencil } from "lucide-react";
-import {
-  HTMLAttributes,
-  forwardRef,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { SpreadConfigBar } from "./SpreadConfigBar";
-import { SubStatSchema } from "@hsr/hooks/useStatParser";
-import { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
-import { cn } from "lib";
+import type { HTMLAttributes } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
+import type { SubStatSchema } from "@hsr/hooks/useStatParser";
+import type { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
+import { asPercentage, cn, range } from "lib";
 import { Button, Input, Toggle } from "ui/primitive";
+import { SpreadConfigBar } from "./SpreadConfigBar";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   atom: PrimitiveAtom<SubStatSchema | undefined>;
   setId: number | undefined;
   spreadData: RelicSubAffixConfig[];
 }
 
-const SubstatSpreadConfig = forwardRef<HTMLDivElement, Props>(
+const SubstatSpreadConfig = forwardRef<HTMLDivElement, Prop>(
   ({ atom: atomm, spreadData, setId, className, ...props }, ref) => {
     // should only set this in 2 spots, once on input checkbox, once on roll buttons
     const value = useAtomValue(atomm);
     const [message, setMessage] = useState<string | undefined>(undefined);
-    const spreadInfo = spreadData?.find((e) => e.property == value?.property);
+    const spreadInfo = spreadData.find((e) => e.property === value?.property);
     const defaultSpreadRolls = useMemo(
       () =>
         calculateSpread({
@@ -42,7 +37,7 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Props>(
         atom(defaultSpreadRolls, (get, set, next: number[]) => {
           set(spreadLocalAtom, next);
           const got = get(atomm);
-          if (!!got) {
+          if (got) {
             set(atomm, {
               property: got.property,
               step: next.filter((e) => e > 0).length,
@@ -67,7 +62,7 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Props>(
 
     // set initial data for the value input box
     useEffect(() => {
-      if (!!value && value.property) {
+      if (Boolean(value) && value.property) {
         console.log("firstrender");
         const percent = isPropertyPercent(value.property);
         setValueAsString({
@@ -75,8 +70,6 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Props>(
           percent,
         });
       }
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
     if (!spreadInfo || !value?.property || !setId || !value) return null;
@@ -114,11 +107,11 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Props>(
 
     return (
       <div
-        ref={ref}
         className={cn(className, "flex w-96 flex-col gap-2")}
+        ref={ref}
         {...props}
       >
-        <div id="table" className="flex gap-2 rounded-md border">
+        <div className="flex gap-2 rounded-md border" id="table">
           {spreadTable.map(({ label, value }) => (
             <div className="flex grow flex-col items-center p-1" key={label}>
               <span>{label}</span>
@@ -128,13 +121,15 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Props>(
         </div>
 
         {/* spread buttons */}
-        <div id="edit-row" className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2" id="edit-row">
           {!disabled ? (
             <Input
               className="w-20"
               disabled={disabled}
+              onChange={(e) => {
+                onUserInputChange(e.target.value);
+              }}
               value={valueAsString.text}
-              onChange={(e) => onUserInputChange(e.target.value)}
             />
           ) : (
             <div>
@@ -143,9 +138,11 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Props>(
           )}
           {isPropertyPercent(value.property) && "%"}
           <Toggle
-            pressed={!disabled}
             className="px-2"
-            onPressedChange={(e) => setDisabled(!e)}
+            onPressedChange={(e) => {
+              setDisabled(!e);
+            }}
+            pressed={!disabled}
           >
             <Pencil className="cursor-pointer" />
           </Toggle>
@@ -162,9 +159,9 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Props>(
 
         <div className="text-destructive text-center">{message}</div>
 
-        <div id="setters" className="flex justify-center">
+        <div className="flex justify-center" id="setters">
           {spreadAtoms.map((atom, index) => (
-            <SpreadConfigBar key={index} atom={atom} spreadInfo={spreadInfo} />
+            <SpreadConfigBar atom={atom} key={index} spreadInfo={spreadInfo} />
           ))}
         </div>
       </div>
@@ -214,7 +211,7 @@ export function calculateSpread({
 
   // calculates how many rolls would it take for @params value
   let approxRolls = 0;
-  let dummyVal = { min: 0, max: 0 };
+  const dummyVal = { min: 0, max: 0 };
   while (value > dummyVal.max) {
     approxRolls += 1;
     dummyVal.max += absMax;
@@ -227,12 +224,12 @@ export function calculateSpread({
       valid: false,
       rolls: Array.from(range(0, 5)).fill(0),
       message: `Please enter value between ${
-        prettyProperty(property, absMin * 1).prettyValue
+        prettyProperty(property, Number(absMin)).prettyValue
       } and ${prettyProperty(property, absMax * 6).prettyValue}`,
     };
 
   // INFO: top down strategy
-  let toUpdate: number[] = [];
+  const toUpdate: number[] = [];
   let tempVal = value;
   while (tempVal > 0) {
     const maxRoll = getSpreadValues(spread).maxRoll.value;
@@ -241,7 +238,7 @@ export function calculateSpread({
   }
 
   // see if top down strategy is valid
-  const isValid = !!toUpdate.at(-1) ? toUpdate.at(-1)! >= absMin : false;
+  const isValid = toUpdate.at(-1) ? toUpdate.at(-1)! >= absMin : false;
 
   if (isValid)
     return {

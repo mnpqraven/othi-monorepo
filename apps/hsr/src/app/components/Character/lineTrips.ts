@@ -1,5 +1,5 @@
-import { Path } from "@hsr/bindings/AvatarConfig";
-import { Anchor } from "@hsr/bindings/SkillTreeConfig";
+import type { Path } from "@hsr/bindings/AvatarConfig";
+import type { Anchor } from "@hsr/bindings/SkillTreeConfig";
 import { cva } from "class-variance-authority";
 
 export function getLineTrips(path: Path): Anchor[][] {

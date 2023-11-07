@@ -1,17 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { ElementIcon } from "../character-db/ElementIcon";
-import { PathIcon } from "../character-db/PathIcon";
-import { HTMLAttributes, forwardRef } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
 import { range } from "lib/utils";
 import styles from "@hsr/css/floating-card.module.css";
-import { Element } from "@hsr/bindings/PatchBanner";
+import type { Element } from "@hsr/bindings/PatchBanner";
 import useCardEffect from "@hsr/hooks/animation/useCardEffect";
-import { Path } from "@hsr/bindings/AvatarConfig";
+import type { Path } from "@hsr/bindings/AvatarConfig";
 import { cn } from "lib";
+import { PathIcon } from "../character-db/PathIcon";
+import { ElementIcon } from "../character-db/ElementIcon";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   rarity?: number;
   element?: Element;
   path?: Path;
@@ -19,53 +20,55 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   imgUrl: string;
 }
 
-const LightConeCard = forwardRef<HTMLDivElement, Props>(
+const LightConeCard = forwardRef<HTMLDivElement, Prop>(
   ({ rarity, element, path, name, imgUrl, className, ...props }, ref) => {
     const { flowRef, glowRef, removeListener, rotateToMouse } = useCardEffect();
     return (
       <div className={cn("relative", className)} ref={ref} {...props}>
         <div
-          ref={flowRef}
           className="relative h-full w-full transition-all ease-out"
           onMouseLeave={removeListener}
           onMouseMove={rotateToMouse}
+          ref={flowRef}
           style={{ perspective: "1500px" }}
         >
           <div
             className={cn(
               "absolute left-[18%] top-[14%] h-[76%] w-[65%] rotate-[13deg]",
-              styles["card"]
+              styles.card
             )}
           >
-            <div ref={glowRef} className={styles["glow"]} />
+            <div className={styles.glow} ref={glowRef} />
           </div>
           <Image
-            className="aspect-[256/300]"
-            src={imgUrl}
             alt={name}
-            width={256}
+            className="aspect-[256/300]"
             height={300}
             priority={rarity === 5}
+            src={imgUrl}
+            width={256}
           />
-          {element && (
+          {element ? (
             <ElementIcon
+              className="absolute left-1 top-0"
               element={element}
               size="15%"
-              className="absolute left-1 top-0"
             />
-          )}
+          ) : null}
         </div>
-        {path && (
+        {path ? (
           <PathIcon
-            path={path}
-            size="15%"
             className={cn(
               "absolute left-1 text-white",
               element ? "top-[15%]" : "top-0"
             )}
+            path={path}
+            size="15%"
           />
-        )}
-        {rarity && <RarityIcon rarity={rarity} className="-my-4 h-6 w-full" />}
+        ) : null}
+        {rarity ? (
+          <RarityIcon className="-my-4 h-6 w-full" rarity={rarity} />
+        ) : null}
       </div>
     );
   }
@@ -85,13 +88,13 @@ const RarityIcon = forwardRef<HTMLDivElement, RarityIconProps>(
       ref={ref}
     >
       {Array.from(range(1, rarity, 1)).map((_, index) => (
-        <div key={index} className="aspect-square">
+        <div className="aspect-square" key={index}>
           <Image
-            src="/Star.png"
-            height={128}
-            width={128}
-            alt={rarity + " ✦"}
+            alt={`${rarity} ✦`}
             className="pointer-events-none"
+            height={128}
+            src="/Star.png"
+            width={128}
           />
         </div>
       ))}

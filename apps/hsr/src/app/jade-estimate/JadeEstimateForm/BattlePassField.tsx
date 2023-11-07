@@ -24,17 +24,17 @@ function BattlePassField({ form }: Prop) {
                 <F.FormLabel>Nameless Honor</F.FormLabel>
                 <F.FormDescription className="text-justify">
                   If not selecting F2P, this assumes you&apos;ve received the
-                  current patch{"'"}s first time purchase rewards and those won
-                  {"'"}t be calculated.
+                  current patch&apos;s first time purchase rewards and those
+                  won&apos;t be calculated.
                 </F.FormDescription>
               </div>
               <S.Select
-                value={String(field.value)}
+                defaultValue={String(BattlePassType.None)}
                 onValueChange={(data) => {
                   const asInt = parseInt(data);
                   field.onChange(asInt);
                 }}
-                defaultValue={String(BattlePassType.None)}
+                value={String(field.value)}
               >
                 <F.FormControl>
                   <S.SelectTrigger className="max-w-fit">
@@ -71,19 +71,19 @@ function BattlePassField({ form }: Prop) {
                   <F.FormDescription className="text-justify">
                     This assumes you level up by 10 every Monday.
                     <br />
-                    If you select {"Nameless Medal"} then keep in mind you also
-                    get 10 levels for free, please update the level accordingly.
+                    If you select Nameless Medal then keep in mind you also get
+                    10 levels for free, please update the level accordingly.
                   </F.FormDescription>
                 </div>
                 <F.FormControl>
                   <Input
                     className="w-20 max-w-fit"
-                    type="number"
-                    min={0}
                     max={50}
+                    min={0}
                     onKeyDown={(e) => {
                       if (e.code === "Minus") e.preventDefault();
                     }}
+                    type="number"
                     {...field}
                     onChange={(e) => {
                       if (!Number.isNaN(e.currentTarget.value)) {

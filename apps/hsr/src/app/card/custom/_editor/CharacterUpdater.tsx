@@ -1,4 +1,16 @@
 import { useAtom, useAtomValue } from "jotai";
+import { useSuspendedCharacterSkill } from "@hsr/hooks/queries/useCharacterSkill";
+import type {
+  AvatarSkillConfig,
+  SkillType,
+} from "@hsr/bindings/AvatarSkillConfig";
+import { getImagePath } from "@hsr/lib/utils";
+import Image from "next/image";
+import type { HTMLAttributes } from "react";
+import { forwardRef, useEffect, useMemo } from "react";
+import { Badge, Input, Label } from "ui/primitive";
+import { cn } from "lib";
+import { getSkillMaxLevel } from "../../[uid]/_components/skill_block/SkillInfo";
 import {
   charEidAtom,
   charIdAtom,
@@ -8,14 +20,6 @@ import {
   charSkillAtom,
   maxLevelAtom,
 } from "../../_store/character";
-import { useSuspendedCharacterSkill } from "@hsr/hooks/queries/useCharacterSkill";
-import { AvatarSkillConfig, SkillType } from "@hsr/bindings/AvatarSkillConfig";
-import { getImagePath } from "@hsr/lib/utils";
-import Image from "next/image";
-import { getSkillMaxLevel } from "../../[uid]/_components/skill_block/SkillInfo";
-import { HTMLAttributes, forwardRef, useEffect, useMemo } from "react";
-import { Badge, Input, Label } from "ui/primitive";
-import { cn } from "lib";
 
 const skillTypeMap = [
   { skillTypeDesc: "Basic ATK", label: "Basic" },
@@ -73,11 +77,11 @@ export function CharacterUpdater() {
         {skillTypeMap.map(({ skillTypeDesc, label }) => (
           <SkillSection
             charId={charId}
+            data={sortedSkills.filter(
+              (e) => e.skill_type_desc === skillTypeDesc
+            )}
             key={skillTypeDesc}
             label={label}
-            data={sortedSkills.filter(
-              (e) => e.skill_type_desc == skillTypeDesc
-            )}
           />
         ))}
       </div>
@@ -94,17 +98,17 @@ const LevelInput = forwardRef<
 
   return (
     <Input
-      className={cn("w-12", className)}
-      type="number"
       autoComplete="off"
-      min={1}
+      className={cn("w-12", className)}
       max={maxLevel}
-      value={level}
+      min={1}
       onChange={(e) => {
         const val = Number(e.currentTarget.value);
         if (val >= 1 && val <= maxLevel) setLevel(val);
-        else if (val == 0) setLevel(1);
+        else if (val === 0) setLevel(1);
       }}
+      type="number"
+      value={level}
       {...props}
       ref={ref}
     />
@@ -119,16 +123,16 @@ const PromotionInput = forwardRef<
   const [ascension, setAscension] = useAtom(charPromotionAtom);
   return (
     <Input
-      className={cn("w-12", className)}
-      type="number"
       autoComplete="off"
-      min={0}
+      className={cn("w-12", className)}
       max={6}
-      value={ascension}
+      min={0}
       onChange={(e) => {
         const val = Number(e.currentTarget.value);
         if (val >= 0 && val <= 6) setAscension(val);
       }}
+      type="number"
+      value={ascension}
       {...props}
       ref={ref}
     />
@@ -143,16 +147,16 @@ const EidolonInput = forwardRef<
   const [eidolon, setEidolon] = useAtom(charEidAtom);
   return (
     <Input
-      className={cn("w-12", className)}
-      type="number"
       autoComplete="off"
-      min={0}
+      className={cn("w-12", className)}
       max={6}
-      value={eidolon}
+      min={0}
       onChange={(e) => {
         const val = Number(e.currentTarget.value);
         if (val >= 0 && val <= 6) setEidolon(val);
       }}
+      type="number"
+      value={eidolon}
       {...props}
       ref={ref}
     />
@@ -172,7 +176,7 @@ function SkillSection({
   const eidolon = useAtomValue(charEidAtom);
   const maxLv = useMemo(
     () =>
-      !!data[0]
+      data[0]
         ? getSkillMaxLevel(
             data[0].attack_type,
             data[0].skill_type_desc,
@@ -184,14 +188,14 @@ function SkillSection({
 
   return (
     <div className="h-20">
-      {!!data[0] && (
+      {Boolean(data[0]) && (
         <div className="flex gap-2">
           <Image
-            src={`${getImagePath(charId, data[0])}`}
             alt={`${data[0].skill_id}`}
-            width={64}
-            height={64}
             className="h-16 w-16 invert dark:invert-0"
+            height={64}
+            src={`${getImagePath(charId, data[0])}`}
+            width={64}
           />
           <div className="flex flex-col gap-2">
             <Badge className="w-fit">{label}</Badge>
@@ -213,7 +217,6 @@ function SkillInput({ id, maxLv }: { id: number; maxLv: number }) {
   function updateSkill(to: number) {
     setCharSkill((draft) => {
       draft[id] = to;
-      draft = draft;
     });
   }
 
@@ -221,15 +224,15 @@ function SkillInput({ id, maxLv }: { id: number; maxLv: number }) {
     <div className="flex items-center gap-2">
       <Input
         className="w-12"
-        type="number"
-        min={1}
         max={maxLv}
-        value={charSkill[id]}
+        min={1}
         onChange={(e) => {
           const val = Number(e.target.value);
           if (val > 0) updateSkill(val);
-          else if (val == 0) updateSkill(1);
+          else if (val === 0) updateSkill(1);
         }}
+        type="number"
+        value={charSkill[id]}
       />
       <span> / {maxLv}</span>
     </div>

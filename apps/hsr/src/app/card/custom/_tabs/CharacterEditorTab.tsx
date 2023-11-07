@@ -2,17 +2,15 @@
 
 import { DbFilter } from "@hsr/app/components/Db/DbFilter";
 import useCharacterFilter from "@hsr/app/components/Db/useCharacterFilter";
-import { AvatarConfig } from "@hsr/bindings/AvatarConfig";
+import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
 import { useCharacterList } from "@hsr/hooks/queries/useCharacterList";
 import { img } from "@hsr/lib/utils";
 import { useAtom, useSetAtom } from "jotai";
 import Image from "next/image";
-import { HTMLAttributes, Suspense, forwardRef, useState } from "react";
+import type { HTMLAttributes } from "react";
+import { Suspense, forwardRef, useState } from "react";
 import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
 import { CharacterCard } from "@hsr/app/character-db/CharacterCardWrapper";
-import { CharacterUpdater } from "../_editor/CharacterUpdater";
-import { TraceTableUpdater } from "../_editor/TraceTableUpdater";
-import { charIdAtom, lcIdAtom } from "../../_store";
 import { cn } from "lib";
 import {
   Button,
@@ -21,6 +19,9 @@ import {
   DialogTrigger,
   Toggle,
 } from "ui/primitive";
+import { CharacterUpdater } from "../_editor/CharacterUpdater";
+import { TraceTableUpdater } from "../_editor/TraceTableUpdater";
+import { charIdAtom, lcIdAtom } from "../../_store";
 
 export const CharacterEditorTab = forwardRef<
   HTMLDivElement,
@@ -47,7 +48,7 @@ export const CharacterEditorTab = forwardRef<
   return (
     <div className={cn("flex gap-4", className)} {...props} ref={ref}>
       <div className="flex flex-col items-center gap-6 p-4">
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog onOpenChange={setOpen} open={open}>
           <DialogTrigger asChild>
             <Button variant="outline">Select Character</Button>
           </DialogTrigger>
@@ -58,8 +59,8 @@ export const CharacterEditorTab = forwardRef<
             <div className="grid grid-cols-4">
               {sorted.map((chara) => (
                 <CharacterSelectItem
-                  key={chara.avatar_id}
                   chara={chara}
+                  key={chara.avatar_id}
                   onSelect={onCharacterSelect}
                 />
               ))}
@@ -67,27 +68,27 @@ export const CharacterEditorTab = forwardRef<
           </DialogContent>
         </Dialog>
 
-        {!!chara && (
+        {Boolean(chara) && (
           <CharacterCard
-            className="w-48 p-4"
-            imgUrl={url(chara.avatar_id)}
             avatar_base_type={chara.avatar_base_type}
             avatar_name={chara.avatar_name}
-            rarity={chara.rarity}
+            className="w-48 p-4"
             damage_type={chara.damage_type}
+            imgUrl={url(chara.avatar_id)}
+            rarity={chara.rarity}
           />
         )}
 
         {chara?.avatar_name}
       </div>
 
-      {charId && (
+      {charId ? (
         <Suspense fallback={<div>loading state..</div>}>
           <CharacterUpdater />
         </Suspense>
-      )}
+      ) : null}
 
-      {!!chara && <TraceTableUpdater path={chara.avatar_base_type} />}
+      {Boolean(chara) && <TraceTableUpdater path={chara.avatar_base_type} />}
     </div>
   );
 });
@@ -101,13 +102,15 @@ function CharacterSelectItem({ chara, onSelect }: ItemProps) {
   return (
     <Toggle
       className="flex h-auto items-start justify-start p-2"
-      onPressedChange={() => onSelect(chara)}
+      onPressedChange={() => {
+        onSelect(chara);
+      }}
     >
       <Image
-        src={avatarUrl(chara.avatar_id)}
         alt={chara.avatar_name}
-        width={64}
         height={64}
+        src={avatarUrl(chara.avatar_id)}
+        width={64}
       />
       <span className="grow justify-self-center">{chara.avatar_name}</span>
     </Toggle>

@@ -1,9 +1,9 @@
 import { cn } from "lib";
 
-interface Props {
+interface Prop {
   children: React.ReactNode;
 }
-export default function Layout({ children }: Props) {
+export default function Layout({ children }: Prop) {
   return (
     <main
       className={cn(

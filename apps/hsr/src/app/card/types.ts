@@ -1,7 +1,7 @@
-import { Element, Path } from "@hsr/bindings/AvatarConfig";
-import { AssetPath, SkillType } from "@hsr/bindings/AvatarSkillConfig";
-import { Anchor, Property } from "@hsr/bindings/SkillTreeConfig";
-import { Field } from "./[uid]/_components/SpiderChartWrapper";
+import type { Element, Path } from "@hsr/bindings/AvatarConfig";
+import type { AssetPath, SkillType } from "@hsr/bindings/AvatarSkillConfig";
+import type { Anchor, Property } from "@hsr/bindings/SkillTreeConfig";
+import type { Field } from "./[uid]/_components/SpiderChartWrapper";
 
 export interface MihomoResponse {
   player: MihomoPlayer;

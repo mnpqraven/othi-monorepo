@@ -30,10 +30,10 @@ export function configReducer(
       return { ...payload };
     case "changeUser": {
       const { name, uid } = payload;
-      if (!!uid && !!name) return { ...state, uid, name };
-      if (!!uid) return { ...state, uid };
-      else if (!!name) return { ...state, name };
-      else return state;
+      if (Boolean(uid) && Boolean(name)) return { ...state, uid, name };
+      if (uid) return { ...state, uid };
+      else if (name) return { ...state, name };
+      return state;
     }
     case "changeMode":
       return { ...state, mode: payload };
@@ -74,10 +74,10 @@ interface CardConfigActionSchema {
   changeMode: "API" | "CUSTOM";
 }
 
-type TypePayloadPair<K extends keyof CardConfigActionSchema> = {
+interface TypePayloadPair<K extends keyof CardConfigActionSchema> {
   type: K;
   payload: CardConfigActionSchema[K];
-};
+}
 
 type TypePayloadPairMap = {
   [K in keyof CardConfigActionSchema]: TypePayloadPair<K>;

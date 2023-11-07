@@ -1,19 +1,20 @@
-import { RelicInput } from "@hsr/app/card/_store/relic";
-import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from "jotai";
-import { PropertySelect } from "../PropertySelect";
-import { relicMainstatOptions } from "./relicConfig";
-import { Property } from "@hsr/bindings/RelicMainAffixConfig";
+import type { RelicInput } from "@hsr/app/card/_store/relic";
+import type { PrimitiveAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import type { Property } from "@hsr/bindings/RelicMainAffixConfig";
 import { propertyIconUrl, propertyName } from "@hsr/lib/propertyHelper";
-import SVG from "react-inlinesvg";
-import { RelicType } from "@hsr/bindings/RelicConfig";
+import Svg from "react-inlinesvg";
+import type { RelicType } from "@hsr/bindings/RelicConfig";
 import { useMemo } from "react";
 import { focusAtom } from "jotai-optics";
 import { selectAtom } from "jotai/utils";
+import { PropertySelect } from "../PropertySelect";
+import { relicMainstatOptions } from "./relicConfig";
 
-interface Props {
+interface Prop {
   atom: PrimitiveAtom<RelicInput>;
 }
-export function MainstatEditor({ atom }: Props) {
+export function MainstatEditor({ atom }: Prop) {
   const mainstatPropertyAtom = useMemo(
     () => focusAtom(atom, (o) => o.prop("property")),
     [atom]
@@ -29,13 +30,13 @@ export function MainstatEditor({ atom }: Props) {
   const type = useAtomValue(typeAtom);
 
   const mainStatOptions =
-    relicMainstatOptions.find((e) => e.type == type)?.options ?? [];
+    relicMainstatOptions.find((e) => e.type === type)?.options ?? [];
 
   function updateMainstat(prop: Property) {
     setMainstatProperty(prop);
     setSubstats((prev) =>
       prev.map((substat) => {
-        if (substat?.property == prop) return undefined;
+        if (substat?.property === prop) return undefined;
         return substat;
       })
     );
@@ -45,15 +46,15 @@ export function MainstatEditor({ atom }: Props) {
     return (
       <PropertySelect
         className="w-48"
-        options={mainStatOptions}
         onValueChange={updateMainstat}
+        options={mainStatOptions}
         value={property}
       />
     );
-  else if (!!property)
+  else if (property)
     return (
       <div className="flex h-full w-48 items-center gap-2 rounded-md border px-3 py-2">
-        <SVG src={propertyIconUrl(property)} width={24} height={24} />
+        <Svg height={24} src={propertyIconUrl(property)} width={24} />
         {propertyName(property)}
       </div>
     );

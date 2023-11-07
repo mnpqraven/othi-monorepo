@@ -1,7 +1,7 @@
 import { img } from "@hsr/lib/utils";
-import { HTMLAttributes, forwardRef } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
 import Image from "next/image";
-import { ImpositionIcon } from "../ImpositionIcon";
 import { useLightConeSkill } from "@hsr/hooks/queries/useLightConeSkill";
 import { Tooltip, TooltipContent, TooltipTrigger } from "ui/primitive";
 import { SkillDescription } from "@hsr/app/components/Db/SkillDescription";
@@ -15,11 +15,12 @@ import {
 } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn } from "lib/utils";
+import { ImpositionIcon } from "../ImpositionIcon";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   displayStat?: boolean;
 }
-export const LightConeInfo = forwardRef<HTMLDivElement, Props>(
+export const LightConeInfo = forwardRef<HTMLDivElement, Prop>(
   ({ displayStat = false, className, ...props }, ref) => {
     const ratio = 902 / 1260;
 
@@ -51,7 +52,7 @@ export const LightConeInfo = forwardRef<HTMLDivElement, Props>(
 
           <span className="flex">
             <span className="font-bold">Lv. {level}</span> / {maxLevel}
-            <ImpositionIcon imposition={imposition} className="ml-2.5" />
+            <ImpositionIcon className="ml-2.5" imposition={imposition} />
           </span>
 
           {/*displayStat && (
@@ -69,22 +70,22 @@ export const LightConeInfo = forwardRef<HTMLDivElement, Props>(
         <Tooltip>
           <TooltipTrigger disabled={hoverVerbosity === "none"}>
             <Image
-              src={img(`image/light_cone_portrait/${lightConeId}.png`)}
               alt=""
-              width={350 * ratio}
-              height={350}
               className="shadow-border justify-self-end shadow-xl"
+              height={350}
+              src={img(`image/light_cone_portrait/${lightConeId}.png`)}
+              width={350 * ratio}
             />
           </TooltipTrigger>
-          {hoverVerbosity !== "none" && !!skill && (
+          {hoverVerbosity !== "none" && Boolean(skill) && (
             <TooltipContent className="w-96 text-base" side="left">
               <p className="text-accent-foreground mb-2 font-bold">
                 {skill.skill_name}
               </p>
 
               <SkillDescription
-                skillDesc={skill.skill_desc}
                 paramList={skill.param_list}
+                skillDesc={skill.skill_desc}
                 slv={imposition - 1}
               />
             </TooltipContent>

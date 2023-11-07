@@ -1,25 +1,21 @@
 import { useEffect, useState } from "react";
 import { ToastAction, useToast } from "ui/primitive";
-import * as z from "zod";
+import type * as z from "zod";
 
-interface Props<T> {
+interface Prop<T> {
   schema: z.ZodSchema<T>;
   schemaData: T;
   onReload: () => void;
 }
 
-export function useCacheValidate<T>({
-  schema,
-  schemaData,
-  onReload,
-}: Props<T>) {
+export function useCacheValidate<T>({ schema, schemaData, onReload }: Prop<T>) {
   const { toast } = useToast();
   const [pressed, setPressed] = useState(false);
 
   useEffect(() => {
     const { success } = schema.safeParse(schemaData);
 
-    if (!pressed && !!schemaData && !success) {
+    if (!pressed && Boolean(schemaData) && !success) {
       toast({
         variant: "destructive",
         title: "Outdated Local Cache",

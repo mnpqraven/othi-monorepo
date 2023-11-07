@@ -9,7 +9,6 @@ import {
   updateManyCharTraceAtom,
 } from "./character";
 import { setIdsAtom, enkaRefAtom, selectedCharacterIndexAtom } from "./card";
-
 import {
   lcIdAtom,
   lcLevelAtom,
@@ -19,6 +18,7 @@ import {
 } from "./lightcone";
 import { armoryStructAtom, configAtom, statParseParam } from "./main";
 import { splitRelicAtom, relicsStructAtom } from "./relic";
+
 export {
   charIdAtom,
   charEidAtom,

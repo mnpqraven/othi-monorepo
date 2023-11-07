@@ -1,18 +1,16 @@
 "use client";
 
-import { UseFormReturn, useForm } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { LANG, LANGS } from "@hsr/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Loader2, Pin, PinOff } from "lucide-react";
-import { useMihomoInfo } from "./[uid]/useMihomoInfo";
 import { useEffect, useMemo, useState } from "react";
-import { PlayerCard } from "./PlayerCard";
 import { useRouter } from "next/navigation";
-import { MihomoPlayer } from "./types";
 import Link from "next/link";
-import { PrimitiveAtom, atom, useAtom, useAtomValue, useSetAtom } from "jotai";
-import { cachedProfileAtoms, cachedProfilesAtom } from "./_store/main";
+import type { PrimitiveAtom } from "jotai";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   Button,
   Form,
@@ -27,6 +25,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "ui/primitive";
+import { cachedProfileAtoms, cachedProfilesAtom } from "./_store/main";
+import type { MihomoPlayer } from "./types";
+import { PlayerCard } from "./PlayerCard";
+import { useMihomoInfo } from "./[uid]/useMihomoInfo";
 
 const schema = z.object({
   uid: z
@@ -61,8 +63,8 @@ export default function Profile() {
   const queryProfile = useAtomValue(queryProfileAtom);
 
   useEffect(() => {
-    if (!!query.data) {
-      const la = prof.lang == "en" ? "" : `?lang=${prof.lang}`;
+    if (query.data) {
+      const la = prof.lang === "en" ? "" : `?lang=${prof.lang}`;
       const url = `/card/${prof.uid}${la}`;
       router.prefetch(url);
       prefetch(prof.uid, prof.lang);
@@ -75,11 +77,11 @@ export default function Profile() {
       <div className="flex flex-col gap-2">
         <div className="flex items-end gap-4">
           <UidForm form={form} onSubmit={setProf} />
-          <Button type="submit" form="form" size="sm">
+          <Button form="form" size="sm" type="submit">
             Search
           </Button>
           <Link href="/card/custom">
-            <Button variant="outline" className="w-fit items-center" size="sm">
+            <Button className="w-fit items-center" size="sm" variant="outline">
               Custom card
             </Button>
           </Link>
@@ -88,8 +90,8 @@ export default function Profile() {
         <div className="text-destructive text-center">{uidError?.message}</div>
       </div>
 
-      {query.isLoading && <Loader2 className="mr-1 animate-spin" />}
-      {!!queryProfile && (
+      {query.isLoading ? <Loader2 className="mr-1 animate-spin" /> : null}
+      {Boolean(queryProfile) && (
         <div className="flex items-center gap-3">
           <PinProfileButton atom={queryProfileAtom} />
 
@@ -125,9 +127,9 @@ function PinProfileButton({ atom }: PinProps) {
 
   function updatePin() {
     // delete
-    if (!!pressed) setProfiles(profiles.filter((e) => e.uid !== current?.uid));
+    if (pressed) setProfiles(profiles.filter((e) => e.uid !== current?.uid));
     // append
-    else if (!!current) setProfiles([...profiles, current]);
+    else if (current) setProfiles([...profiles, current]);
   }
 
   return (
@@ -154,9 +156,9 @@ function UidForm({ form, onSubmit }: UidFormProps) {
   return (
     <Form {...form}>
       <form
+        className="mt-12 flex flex-col items-center justify-center gap-4 md:flex-row md:items-start"
         id="form"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-12 flex flex-col items-center justify-center gap-4 md:flex-row md:items-start"
       >
         <FormField
           name="uid"
@@ -165,8 +167,8 @@ function UidForm({ form, onSubmit }: UidFormProps) {
               <FormLabel>UID</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Enter your UID..."
                   className="w-56"
+                  placeholder="Enter your UID..."
                   {...field}
                 />
               </FormControl>
@@ -175,11 +177,11 @@ function UidForm({ form, onSubmit }: UidFormProps) {
         />
 
         <FormSelect<[string, string], FormSchema>
-          name="lang"
           label="Language"
+          labelAccessor={([_, label]) => label}
+          name="lang"
           options={Object.entries(LANG)}
           valueAccessor={([lang, _]) => lang}
-          labelAccessor={([_, label]) => label}
         />
       </form>
     </Form>
@@ -202,7 +204,7 @@ function UnpinButton({ atom }: UnpinProps) {
             });
           }}
         >
-          <PinOff className={"h-4 w-4"} />
+          <PinOff className="h-4 w-4" />
         </Toggle>
       </TooltipTrigger>
       <TooltipContent>Unsave</TooltipContent>

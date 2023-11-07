@@ -1,11 +1,12 @@
 "use client";
 
 import { useAtom, useAtomValue } from "jotai";
-import { lcImpositionAtom, lcLevelAtom, lcPromotionAtom } from "../../_store";
-import { HTMLAttributes, forwardRef } from "react";
-import { maxLevelAtom } from "../../_store/lightcone";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
 import { Input, Label } from "ui/primitive";
 import { cn } from "lib";
+import { maxLevelAtom } from "../../_store/lightcone";
+import { lcImpositionAtom, lcLevelAtom, lcPromotionAtom } from "../../_store";
 
 export function LightConeUpdater() {
   const maxLevel = useAtomValue(maxLevelAtom);
@@ -40,17 +41,17 @@ const LevelInput = forwardRef<
 
   return (
     <Input
-      className={cn("w-12", className)}
-      type="number"
       autoComplete="off"
-      min={1}
+      className={cn("w-12", className)}
       max={maxLevel}
-      value={level}
+      min={1}
       onChange={(e) => {
         const val = Number(e.target.value);
         if (val >= 1 && val <= maxLevel) setLevel(val);
-        else if (val == 0) setLevel(1);
+        else if (val === 0) setLevel(1);
       }}
+      type="number"
+      value={level}
       {...props}
       ref={ref}
     />
@@ -65,16 +66,16 @@ const PromotionInput = forwardRef<
   const [ascension, setAscension] = useAtom(lcPromotionAtom);
   return (
     <Input
-      className={cn("w-12", className)}
-      type="number"
       autoComplete="off"
-      min={0}
+      className={cn("w-12", className)}
       max={6}
-      value={ascension}
+      min={0}
       onChange={(e) => {
         const val = Number(e.currentTarget.value);
         if (val >= 0 && val <= 6) setAscension(val);
       }}
+      type="number"
+      value={ascension}
       {...props}
       ref={ref}
     />
@@ -89,16 +90,16 @@ const ImpositionInput = forwardRef<
   const [rank, setRank] = useAtom(lcImpositionAtom);
   return (
     <Input
-      className={cn("w-12", className)}
-      type="number"
       autoComplete="off"
-      min={1}
+      className={cn("w-12", className)}
       max={5}
-      value={rank}
+      min={1}
       onChange={(e) => {
         const val = Number(e.currentTarget.value);
         if (val >= 0 && val <= 6) setRank(val);
       }}
+      type="number"
+      value={rank}
       {...props}
       ref={ref}
     />

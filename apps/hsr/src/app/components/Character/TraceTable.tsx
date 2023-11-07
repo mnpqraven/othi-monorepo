@@ -4,15 +4,13 @@ import Image from "next/image";
 import { cva } from "class-variance-authority";
 import Xarrow, { Xwrapper, useXarrow } from "react-xarrows";
 import { useTheme } from "next-themes";
-import { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
-import { getLineTrips, traceVariants } from "./lineTrips";
-import { TraceDescription } from "./TraceDescription";
+import type { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
 import { useCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
 import { useCharacterSkill } from "@hsr/hooks/queries/useCharacterSkill";
 import { useImmer } from "use-immer";
 import { useEffect } from "react";
 import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
-import { Path } from "@hsr/bindings/AvatarConfig";
+import type { Path } from "@hsr/bindings/AvatarConfig";
 import { cn } from "lib";
 import {
   Checkbox,
@@ -20,29 +18,29 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "ui/primitive";
+import { TraceDescription } from "./TraceDescription";
+import { getLineTrips, traceVariants } from "./lineTrips";
 
-const DEBUG = false;
-
-type Props = {
+interface Prop {
   characterId: number;
   wrapperSize?: number;
   editMode?: boolean;
   onChange?: (data: Record<number, boolean>) => void;
-};
+}
 
-const TraceTable = ({
+function TraceTable({
   characterId,
   wrapperSize = 480,
   editMode = false,
   onChange,
-}: Props) => {
+}: Prop) {
   const { data } = useCharacterMetadata(characterId);
   const [editModeTable, setEditModeTable] = useImmer<Record<number, boolean>>(
     {}
   );
 
   useEffect(() => {
-    if (!!onChange) onChange(editModeTable);
+    if (onChange) onChange(editModeTable);
   }, [editModeTable, onChange]);
 
   function onCheckedChange(checked: boolean, pointId: number) {
@@ -57,42 +55,42 @@ const TraceTable = ({
 
   return (
     <div
-      id="trace-wrapper"
       className="relative -mx-8 h-[30rem] w-screen overflow-hidden p-2 sm:mx-0 sm:w-[30rem]"
+      id="trace-wrapper"
     >
       <Image
-        className="absolute bottom-0 left-0 right-0 top-0 -z-50 m-auto opacity-10 invert-0 dark:invert-0"
-        src={pathUrl(path)}
         alt={path}
-        quality={100}
-        width={384}
+        className="absolute bottom-0 left-0 right-0 top-0 -z-50 m-auto opacity-10 invert-0 dark:invert-0"
         height={384}
+        quality={100}
+        src={pathUrl(path)}
+        width={384}
       />
 
       <TraceTableInner
         characterId={characterId}
+        editMode={editMode}
+        maxEnergy={maxEnergy}
+        onCheckedChange={onCheckedChange}
         path={path}
         wrapperSize={wrapperSize}
-        maxEnergy={maxEnergy}
-        editMode={editMode}
-        onCheckedChange={onCheckedChange}
       />
     </div>
   );
-};
+}
 
-const TraceTableInner = ({
+function TraceTableInner({
   characterId,
   wrapperSize = 480,
   path,
   maxEnergy,
   editMode,
   onCheckedChange,
-}: Omit<Props, "onChange"> & {
+}: Omit<Prop, "onChange"> & {
   onCheckedChange: (checked: boolean, pointId: number) => void;
   path: Path;
   maxEnergy: number;
-}) => {
+}) {
   const updateLines = useXarrow();
   const { theme } = useTheme();
 
@@ -116,98 +114,96 @@ const TraceTableInner = ({
   );
 
   return (
-    <div id="parent-wrapper" className="relative h-full w-full">
+    <div className="relative h-full w-full" id="parent-wrapper">
       <Xwrapper>
-        {data &&
-          data.map((traceNode) => (
-            <div
-              id={traceNode.anchor}
-              key={traceNode.point_id}
-              className={cn(
-                traceVariants(path)({ anchor: traceNode.anchor }),
-                ""
-              )}
-              style={{
-                marginLeft: `${wrapperSize / -16}px`,
-              }}
-            >
-              {editMode && getNodeType(traceNode) == "SMALL" && (
-                <Checkbox
-                  className="absolute -top-2.5 left-3"
-                  id={traceNode.point_id.toString()}
-                  onCheckedChange={(checked) =>
-                    onCheckedChange(
-                      checked == "indeterminate" ? false : checked,
-                      traceNode.point_id
-                    )
-                  }
+        {data?.map((traceNode) => (
+          <div
+            className={cn(
+              traceVariants(path)({ anchor: traceNode.anchor }),
+              ""
+            )}
+            id={traceNode.anchor}
+            key={traceNode.point_id}
+            style={{
+              marginLeft: `${wrapperSize / -16}px`,
+            }}
+          >
+            {editMode && getNodeType(traceNode) === "SMALL" ? (
+              <Checkbox
+                className="absolute -top-2.5 left-3"
+                id={traceNode.point_id.toString()}
+                onCheckedChange={(checked) => {
+                  onCheckedChange(
+                    checked === "indeterminate" ? false : checked,
+                    traceNode.point_id
+                  );
+                }}
+              />
+            ) : null}
+            <Popover>
+              <PopoverTrigger
+                className={iconWrapVariants({
+                  variant: getNodeType(traceNode),
+                })}
+              >
+                <Image
+                  alt={`${traceNode.point_id}`}
+                  className={cn(
+                    "rounded-full",
+                    getNodeType(traceNode) !== "CORE" ? "scale-90 invert" : ""
+                  )}
+                  height={wrapperSize / 8}
+                  onLoadingComplete={updateLines}
+                  src={traceIconUrl(traceNode)}
+                  style={{
+                    // disable icons at the edge getting squished
+                    minWidth: `${wrapperSize / 8}px`,
+                    minHeight: `${wrapperSize / 8}px`,
+                  }}
+                  width={wrapperSize / 8}
                 />
-              )}
-              <Popover>
-                <PopoverTrigger
-                  className={iconWrapVariants({
-                    variant: getNodeType(traceNode),
-                  })}
-                >
-                  <Image
-                    className={cn(
-                      "rounded-full",
-                      getNodeType(traceNode) !== "CORE" ? "scale-90 invert" : ""
-                    )}
-                    src={traceIconUrl(traceNode)}
-                    alt={`${traceNode.point_id}`}
-                    width={wrapperSize / 8}
-                    height={wrapperSize / 8}
-                    style={{
-                      // disable icons at the edge getting squished
-                      minWidth: `${wrapperSize / 8}px`,
-                      minHeight: `${wrapperSize / 8}px`,
-                    }}
-                    onLoadingComplete={updateLines}
-                  />
-                </PopoverTrigger>
-                <PopoverContent
-                  className="w-screen sm:w-full"
-                  style={{ maxWidth: `${wrapperSize}px` }}
-                >
-                  {DEBUG && traceNode.anchor}
-                  <TraceDescription
-                    traceType={getNodeType(traceNode)}
-                    trace={traceNode}
-                    skill={skills.find(
-                      (e) => e.skill_id == traceNode.level_up_skill_id[0]
-                    )}
-                    maxEnergy={maxEnergy}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-          ))}
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-screen sm:w-full"
+                style={{ maxWidth: `${wrapperSize}px` }}
+              >
+                <TraceDescription
+                  maxEnergy={maxEnergy}
+                  skill={skills.find(
+                    (e) => e.skill_id === traceNode.level_up_skill_id[0]
+                  )}
+                  trace={traceNode}
+                  traceType={getNodeType(traceNode)}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        ))}
 
         {data
           ? getLineTrips(path).map(([a, b], index) => (
               <Xarrow
-                key={index}
-                start={a!}
-                end={b!}
                 color={theme !== "dark" ? "black" : "white"}
-                zIndex={-1}
-                showHead={false}
                 curveness={0}
-                startAnchor={"middle"}
-                endAnchor={"middle"}
+                end={b!}
+                endAnchor="middle"
+                key={index}
+                showHead={false}
+                start={a!}
+                startAnchor="middle"
                 strokeWidth={2}
+                zIndex={-1}
               />
             ))
           : null}
       </Xwrapper>
     </div>
   );
-};
+}
 
 /**
  * get the type of each node
- * @param node
+ * @param node -
  * @returns CORE denotes the 4 center nodes (basic, skill, ult, technique)
  * SMALL denotes small nodes in the left
  * BIG denotes unique character traces

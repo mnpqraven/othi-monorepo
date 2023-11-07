@@ -1,7 +1,7 @@
-import LightConeCatalogue from "./LightConeCatalogue";
 import getQueryClient from "@hsr/lib/queryClientHelper";
 import { optionsLightConeList } from "@hsr/hooks/queries/useLightConeList";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import LightConeCatalogue from "./LightConeCatalogue";
 
 export const metadata = {
   title: "Light Cone Database",

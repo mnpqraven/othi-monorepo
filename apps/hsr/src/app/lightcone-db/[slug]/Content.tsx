@@ -1,8 +1,8 @@
 "use client";
 
 import { SkillDescription } from "@hsr/app/components/Db/SkillDescription";
-import { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
-import { EquipmentSkillConfig } from "@hsr/bindings/EquipmentSkillConfig";
+import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
+import type { EquipmentSkillConfig } from "@hsr/bindings/EquipmentSkillConfig";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -15,12 +15,12 @@ import {
   Slider,
 } from "ui/primitive";
 
-type Props = {
+interface Prop {
   data: EquipmentConfig;
   skill: EquipmentSkillConfig;
   link?: boolean;
-};
-function Content({ data, skill, link = false }: Props) {
+}
+function Content({ data, skill, link = false }: Prop) {
   const [promotion, setPromotion] = useState(0);
 
   return (
@@ -31,8 +31,8 @@ function Content({ data, skill, link = false }: Props) {
             <CardTitle>
               {link ? (
                 <Link
-                  href={`/lightcone-db/${data.equipment_id}`}
                   className="flex items-center hover:underline"
+                  href={`/lightcone-db/${data.equipment_id}`}
                 >
                   {data.equipment_name}
                   <ExternalLink className="ml-1 h-4 w-4" />
@@ -49,8 +49,8 @@ function Content({ data, skill, link = false }: Props) {
             <CardDescription>
               <Slider
                 className="my-1.5"
-                min={0}
                 max={4}
+                min={0}
                 onValueChange={(e) => {
                   if (e[0]) setPromotion(e[0]);
                 }}
@@ -60,8 +60,8 @@ function Content({ data, skill, link = false }: Props) {
         </div>
         <CardContent>
           <SkillDescription
-            skillDesc={skill.skill_desc}
             paramList={skill.param_list}
+            skillDesc={skill.skill_desc}
             slv={promotion}
           />
         </CardContent>

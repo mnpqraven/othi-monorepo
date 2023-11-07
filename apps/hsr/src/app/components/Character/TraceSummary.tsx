@@ -1,29 +1,30 @@
 "use client";
 
-import { HTMLAttributes, forwardRef } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
 import Image from "next/image";
 import { asPercentage } from "lib/utils";
-import { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
-import { AvatarPropertyConfig } from "@hsr/bindings/AvatarPropertyConfig";
+import type { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
+import type { AvatarPropertyConfig } from "@hsr/bindings/AvatarPropertyConfig";
 import { IMAGE_URL } from "@hsr/lib/constants";
 
 type Haystack = {
   [key in string]?: { value: number; icon: string; label: string };
 };
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
   skills: SkillTreeConfig[];
   properties: AvatarPropertyConfig[];
 }
 
-const TraceSummary = forwardRef<HTMLDivElement, Props>(
+const TraceSummary = forwardRef<HTMLDivElement, Prop>(
   ({ characterId, skills, properties, ...props }, ref) => {
-    let hay: Haystack = {};
+    const hay: Haystack = {};
     skills.forEach((traceNode) => {
-      let property = traceNode.status_add_list[0];
+      const property = traceNode.status_add_list[0];
 
-      if (property && property.property_type) {
+      if (property?.property_type) {
         const {
           property_type: key,
           value: { value },
@@ -50,19 +51,19 @@ const TraceSummary = forwardRef<HTMLDivElement, Props>(
         {Object.keys(hay)
           .sort((a, b) => a.localeCompare(b))
           .map((key, index) => (
-            <div key={index} className="flex items-center justify-between">
+            <div className="flex items-center justify-between" key={index}>
               <div className="flex items-center">
                 <Image
-                  src={propertyUrl(hay[key as keyof typeof hay]?.icon)}
                   alt={key}
-                  width={128}
-                  height={128}
                   className="aspect-square h-8 w-8"
+                  height={128}
+                  src={propertyUrl(hay[key]?.icon)}
+                  width={128}
                 />
-                {properties.find((e) => e.property_type == key)?.property_name}
+                {properties.find((e) => e.property_type === key)?.property_name}
               </div>
 
-              <div>{asPercentage(hay[key as keyof typeof hay]?.value)}</div>
+              <div>{asPercentage(hay[key]?.value)}</div>
             </div>
           ))}
       </div>

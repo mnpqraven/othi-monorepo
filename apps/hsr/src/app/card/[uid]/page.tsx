@@ -1,13 +1,13 @@
+import type { LANGS } from "@hsr/lib/constants";
+import { StateProvider } from "@hsr/app/components/StateProvider";
+import type { Metadata } from "next";
+import { DisplayCard } from "../custom/_viewer/DisplayCard";
 import { ConfigController } from "./ConfigControllerDialog";
 import { Exporter } from "./_components/Exporter";
 import { LineupSelector } from "./_components/LineupSelector";
 import { Share } from "./_components/Share";
-import { LANGS } from "@hsr/lib/constants";
-import { DisplayCard } from "../custom/_viewer/DisplayCard";
-import { StateProvider } from "@hsr/app/components/StateProvider";
-import { Metadata } from "next";
 
-interface Props {
+interface Prop {
   params: { uid: string };
   searchParams: { lang: (typeof LANGS)[number] | undefined };
 }
@@ -17,10 +17,10 @@ export const metadata: Metadata = {
   description: "Honkai Star Rail Character Card",
 };
 
-export default async function ProfileCard({
+export default function ProfileCard({
   params: { uid },
   searchParams: { lang },
-}: Props) {
+}: Prop) {
   return (
     <StateProvider devTools>
       <main className="flex flex-col items-center justify-center">
@@ -31,7 +31,7 @@ export default async function ProfileCard({
           <ConfigController />
         </div>
 
-        <DisplayCard uid={uid} lang={lang} mode="API" />
+        <DisplayCard lang={lang} mode="API" uid={uid} />
       </main>
     </StateProvider>
   );

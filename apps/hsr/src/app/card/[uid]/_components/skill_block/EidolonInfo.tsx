@@ -1,18 +1,19 @@
-import { img, range, sanitizeNewline } from "@hsr/lib/utils";
-import { Fragment, HTMLAttributes, forwardRef } from "react";
+import { img } from "@hsr/lib/utils";
+import type { HTMLAttributes } from "react";
+import { Fragment, forwardRef } from "react";
 import Image from "next/image";
 import { useCharacterEidolon } from "@hsr/hooks/queries/useCharacterEidolon";
-import { AvatarRankConfig } from "@hsr/bindings/AvatarRankConfig";
+import type { AvatarRankConfig } from "@hsr/bindings/AvatarRankConfig";
 import { useAtomValue } from "jotai";
 import { charEidAtom } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
-import { cn } from "lib/utils";
+import { cn, range, sanitizeNewline } from "lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "ui/primitive";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
 }
-export const EidolonInfo = forwardRef<HTMLDivElement, Props>(
+export const EidolonInfo = forwardRef<HTMLDivElement, Prop>(
   ({ className, characterId, ...props }, ref) => {
     const { data: eidolons } = useCharacterEidolon(characterId);
     const eidolon = useAtomValue(charEidAtom);
@@ -28,11 +29,11 @@ export const EidolonInfo = forwardRef<HTMLDivElement, Props>(
       >
         {Array.from(range(1, 6)).map((eid) => (
           <EidolonIcon
+            currentEidolon={eid}
+            eidolon={eidolon}
+            eidolonInfo={eidolons?.at(eid - 1)}
             key={eid}
             src={img(getUrl(eid, characterId))}
-            currentEidolon={eid}
-            eidolonInfo={eidolons?.at(eid - 1)}
-            eidolon={eidolon}
           />
         ))}
       </div>
@@ -70,20 +71,21 @@ const EidolonIcon = forwardRef<HTMLDivElement, IconProps>(
         <TooltipTrigger disabled={hoverVerbosity === "none"}>
           <div className={cn("", className)} ref={ref} {...props}>
             <Image
-              src={src}
               alt={String(currentEidolon)}
-              width={width}
-              height={height}
               className={cn(
                 "invert dark:invert-0",
                 currentEidolon <= eidolon ? "opacity-100" : "opacity-25"
               )}
+              height={height}
+              src={src}
+              width={width}
             />
           </div>
         </TooltipTrigger>
         {hoverVerbosity === "simple" ? (
           <TooltipContent side="left">{eidolonInfo?.name}</TooltipContent>
-        ) : hoverVerbosity === "detailed" ? (
+        ) : null}
+        {hoverVerbosity === "detailed" ? (
           <TooltipContent
             className="w-96 py-2 text-justify text-base"
             side="left"

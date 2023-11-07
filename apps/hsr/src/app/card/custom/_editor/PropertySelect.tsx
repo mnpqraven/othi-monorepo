@@ -5,12 +5,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "ui/primitive";
-import { Property } from "@hsr/bindings/RelicSubAffixConfig";
+import type { Property } from "@hsr/bindings/RelicSubAffixConfig";
 import { propertyIconUrl, propertyName } from "@hsr/lib/propertyHelper";
-import { ComponentPropsWithoutRef, forwardRef } from "react";
-import SVG from "react-inlinesvg";
+import type { ComponentPropsWithoutRef } from "react";
+import { forwardRef } from "react";
+import Svg from "react-inlinesvg";
 
-interface Props extends ComponentPropsWithoutRef<typeof SelectContent> {
+interface Prop extends ComponentPropsWithoutRef<typeof SelectContent> {
   options: Property[];
   onValueChange: (value: Property) => void;
   itemDisabled?: (prop: Property) => boolean;
@@ -18,7 +19,7 @@ interface Props extends ComponentPropsWithoutRef<typeof SelectContent> {
   value?: string;
 }
 
-export const PropertySelect = forwardRef<HTMLDivElement, Props>(
+export const PropertySelect = forwardRef<HTMLDivElement, Prop>(
   (
     {
       onValueChange,
@@ -34,8 +35,10 @@ export const PropertySelect = forwardRef<HTMLDivElement, Props>(
   ) => {
     return (
       <Select
-        onValueChange={(e) => onValueChange(e as Property)}
         defaultValue={defaultValue}
+        onValueChange={(e) => {
+          onValueChange(e as Property);
+        }}
         value={value ?? ""}
       >
         <SelectTrigger className={className} id={id}>
@@ -45,12 +48,12 @@ export const PropertySelect = forwardRef<HTMLDivElement, Props>(
         <SelectContent {...props} ref={ref}>
           {options.map((option) => (
             <SelectItem
+              disabled={!itemDisabled ? false : itemDisabled(option)}
               key={option}
               value={option}
-              disabled={!itemDisabled ? false : itemDisabled(option)}
             >
               <div className="flex items-center gap-2">
-                <SVG src={propertyIconUrl(option)} width={24} height={24} />
+                <Svg height={24} src={propertyIconUrl(option)} width={24} />
 
                 <span>{propertyName(option)}</span>
               </div>

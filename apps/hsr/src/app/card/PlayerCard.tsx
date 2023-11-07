@@ -1,38 +1,40 @@
-import { ButtonHTMLAttributes, forwardRef } from "react";
-import { MihomoPlayer } from "./types";
+import type { ButtonHTMLAttributes } from "react";
+import { forwardRef } from "react";
 import Image from "next/image";
 import { img } from "@hsr/lib/utils";
 import Link from "next/link";
-import { LANGS } from "@hsr/lib/constants";
-import { PrimitiveAtom, useAtomValue } from "jotai";
+import type { LANGS } from "@hsr/lib/constants";
+import type { PrimitiveAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { Button, Separator } from "ui/primitive";
 import { cn } from "lib";
+import type { MihomoPlayer } from "./types";
 
 type Lang = (typeof LANGS)[number];
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface Prop extends ButtonHTMLAttributes<HTMLButtonElement> {
   atom: PrimitiveAtom<MihomoPlayer | undefined> | PrimitiveAtom<MihomoPlayer>;
   lang?: Lang;
 }
-export const PlayerCard = forwardRef<HTMLButtonElement, Props>(
+export const PlayerCard = forwardRef<HTMLButtonElement, Prop>(
   ({ atom, lang = "en", className, ...props }, ref) => {
     const player = useAtomValue(atom);
-    const la = lang == "en" ? "" : `?lang=${lang}`;
+    const la = lang === "en" ? "" : `?lang=${lang}`;
 
     if (!player) return null;
 
     return (
       <Button
         className={cn("flex h-fit items-center gap-2.5", className)}
-        variant="outline"
         ref={ref}
+        variant="outline"
         {...props}
         asChild
       >
         <Link href={`card/${player.uid}${la}`}>
           <Image
-            src={img(player.avatar.icon)}
             alt={player.avatar.name}
             height={84}
+            src={img(player.avatar.icon)}
             width={84}
           />
 

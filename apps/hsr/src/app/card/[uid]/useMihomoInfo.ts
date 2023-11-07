@@ -1,18 +1,20 @@
 "use client";
 
-import {
+import type {
   UseQueryOptions,
   UseSuspenseQueryOptions,
+} from "@tanstack/react-query";
+import {
   queryOptions,
   useQuery,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { MihomoResponse } from "../types";
 import { env } from "@hsr/env";
-import { LANGS } from "@hsr/lib/constants";
+import type { LANGS } from "@hsr/lib/constants";
 import { useToast } from "ui/primitive";
+import type { MihomoResponse } from "../types";
 
 interface ProfileParam {
   uid: string;
@@ -26,13 +28,15 @@ export const optionsMihomoInfo = (
 ) =>
   queryOptions<MihomoResponse, Error, MihomoResponse>({
     queryKey: ["mihoyoInfo", uid, lang, isServer],
-    queryFn: async () =>
-      await getMihomoInfo(
-        uid!,
-        lang,
-        isServer ? env.NEXT_PUBLIC_BASE_URL : undefined
-      ),
-    enabled: !!uid,
+    queryFn: () =>
+      uid
+        ? getMihomoInfo(
+            uid,
+            lang,
+            isServer ? env.NEXT_PUBLIC_HOST_HSR : undefined
+          )
+        : Promise.reject(),
+    enabled: Boolean(uid),
   });
 
 export function useMihomoInfo(
@@ -45,16 +49,16 @@ export function useMihomoInfo(
 
   const query = useQuery({
     ...optionsMihomoInfo(uid, lang),
-    enabled: !!uid && uid !== "",
+    enabled: Boolean(uid) && uid !== "",
     ...opt,
   });
 
   function prefetch(uid: string, lang: Lang = "en") {
-    queryClient.prefetchQuery(optionsMihomoInfo(uid, lang));
+    void queryClient.prefetchQuery(optionsMihomoInfo(uid, lang));
   }
 
   useEffect(() => {
-    if (!!query.error && displayToast) {
+    if (Boolean(query.error) && displayToast) {
       toast({
         variant: "destructive",
         title: "Error encountered",
@@ -82,11 +86,11 @@ export function useSuspendedMihomoInfo(
   });
 
   function prefetch(uid: string, lang: Lang = "en") {
-    queryClient.prefetchQuery(optionsMihomoInfo(uid, lang, true));
+    void queryClient.prefetchQuery(optionsMihomoInfo(uid, lang, true));
   }
 
   useEffect(() => {
-    if (!!query.error && displayToast) {
+    if (Boolean(query.error) && displayToast) {
       toast({
         variant: "destructive",
         title: "Error encountered",
@@ -101,11 +105,11 @@ export function useSuspendedMihomoInfo(
 
 export async function getMihomoInfo(
   uid: string,
-  lang: string = "en",
+  lang = "en",
   host?: string
 ): Promise<MihomoResponse> {
   let url = `/api/profile/${uid}?lang=${lang}`;
-  if (!!host) url = host + url;
+  if (host) url = host + url;
   const response = await fetch(url);
   if (!response.ok) {
     return response.json().then(({ error }: { error: string }) => {

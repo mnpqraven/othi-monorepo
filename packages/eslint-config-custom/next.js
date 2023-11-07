@@ -27,7 +27,7 @@ module.exports = {
     ]),
   parserOptions: {
     project: true,
-    tsconfigRootDir: process.cwd()
+    tsconfigRootDir: process.cwd(),
   },
   globals: {
     React: true,
@@ -52,6 +52,7 @@ module.exports = {
     "@typescript-eslint/require-await": "warn",
     "@typescript-eslint/no-unsafe-return": "warn",
     "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-shadow": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",

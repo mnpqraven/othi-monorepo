@@ -1,18 +1,18 @@
 "use client";
 
 import { Provider } from "jotai";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { DevTools } from "jotai-devtools";
 
-interface Props {
+interface Prop {
   devTools?: boolean;
   children: ReactNode;
 }
-export function StateProvider({ children, devTools = false }: Props) {
+export function StateProvider({ children, devTools = false }: Prop) {
   return (
     <Provider>
       {children}
-      {devTools && <DevTools />}
+      {devTools ? <DevTools /> : null}
     </Provider>
   );
 }

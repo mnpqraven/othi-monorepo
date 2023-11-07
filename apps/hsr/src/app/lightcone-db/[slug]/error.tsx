@@ -13,6 +13,7 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
+    // eslint-disable-next-line no-console
     console.error(error);
   }, [error]);
 
@@ -22,7 +23,13 @@ export default function Error({
     <div>
       <h2>Something went wrong!</h2>
       <Button onClick={reset}>Try again</Button>
-      <Button onClick={router.back}> go back</Button>
+      <Button
+        onClick={() => {
+          router.back();
+        }}
+      >
+        go back
+      </Button>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { EquipmentConfig, Path } from "@hsr/bindings/EquipmentConfig";
+import type { EquipmentConfig, Path } from "@hsr/bindings/EquipmentConfig";
 import { useState } from "react";
 
 export default function useLightConeFilter() {

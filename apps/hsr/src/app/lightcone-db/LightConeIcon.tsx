@@ -1,4 +1,4 @@
-import { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
+import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
 import Image from "next/image";
 import {
   Dialog,
@@ -9,25 +9,25 @@ import {
   TooltipTrigger,
 } from "ui/primitive";
 
-interface Props {
+interface Prop {
   data: EquipmentConfig;
 }
 
-function LightConeIcon({ data: lc }: Props) {
+function LightConeIcon({ data: lc }: Prop) {
   return (
-    <div key={lc.equipment_id} className="flex flex-col">
-      <p className="whitespace-pre-wrap text-center"></p>
+    <div className="flex flex-col" key={lc.equipment_id}>
+      <p className="whitespace-pre-wrap text-center" />
       <div className="flex gap-2.5">
         <Dialog>
           <Tooltip>
             <DialogTrigger asChild>
               <TooltipTrigger>
                 <Image
-                  src={`https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/light_cone/${lc.equipment_id}.png`}
                   alt=""
                   className="h-12 w-12"
-                  width={48}
                   height={48}
+                  src={`https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/light_cone/${lc.equipment_id}.png`}
+                  width={48}
                 />
               </TooltipTrigger>
             </DialogTrigger>

@@ -1,12 +1,13 @@
 "use client";
 
-import { HTMLAttributes, forwardRef, useEffect, useState } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { cva } from "class-variance-authority";
-import { Element } from "@hsr/bindings/AvatarConfig";
-import SVG from "react-inlinesvg";
+import type { Element } from "@hsr/bindings/AvatarConfig";
+import Svg from "react-inlinesvg";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   element: Element;
   /**
    * this is getting passed into `style` props of the wrapping div
@@ -15,7 +16,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   ignoreTheme?: boolean;
 }
 
-const ElementIcon = forwardRef<HTMLDivElement, Props>(
+const ElementIcon = forwardRef<HTMLDivElement, Prop>(
   ({ element, size, ignoreTheme = false, ...props }, ref) => {
     const { theme } = useTheme();
     const filterDark = { filter: "drop-shadow(1px 1px 1px rgb(0 0 0 / 1))" };
@@ -46,14 +47,14 @@ const ElementIcon = forwardRef<HTMLDivElement, Props>(
     });
 
     return (
-      <div style={{ width: size, height: size }} ref={ref} {...props}>
-        <SVG
-          src={`/element/${element}.svg`}
+      <div ref={ref} style={{ width: size, height: size }} {...props}>
+        <Svg
           className={cl({ element })}
-          style={filter}
-          width="100%"
           height="100%"
+          src={`/element/${element}.svg`}
+          style={filter}
           viewBox="0 0 14 14"
+          width="100%"
         />
       </div>
     );

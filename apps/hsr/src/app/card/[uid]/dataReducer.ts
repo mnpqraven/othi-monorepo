@@ -1,4 +1,4 @@
-import { RelicType } from "@hsr/bindings/RelicConfig";
+import type { RelicType } from "@hsr/bindings/RelicConfig";
 
 export const initialCardData: CardData = {
   characterId: undefined,
@@ -61,10 +61,10 @@ interface CardDataActionSchema {
   updateWholeConfig: CardData;
 }
 
-type TypePayloadPair<K extends keyof CardDataActionSchema> = {
+interface TypePayloadPair<K extends keyof CardDataActionSchema> {
   type: K;
   payload: CardDataActionSchema[K];
-};
+}
 
 type TypePayloadPairMap = {
   [K in keyof CardDataActionSchema]: TypePayloadPair<K>;

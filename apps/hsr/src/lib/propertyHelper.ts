@@ -1,5 +1,5 @@
-import { Property } from "@/bindings/SkillTreeConfig";
-import { asPercentage } from "./utils";
+import type { Property } from "@hsr/bindings/SkillTreeConfig";
+import { asPercentage } from "lib";
 
 export function isPropertyPercent(property: Property) {
   switch (property) {

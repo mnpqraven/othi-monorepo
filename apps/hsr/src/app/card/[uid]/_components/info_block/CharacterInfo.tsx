@@ -1,4 +1,5 @@
-import { HTMLAttributes, forwardRef, useMemo } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef, useMemo } from "react";
 import { RarityIcon } from "@hsr/app/character-db/CharacterCardWrapper";
 import { img } from "@hsr/lib/utils";
 import { Badge } from "ui/primitive";
@@ -13,15 +14,15 @@ import {
   configAtom,
 } from "@hsr/app/card/_store";
 import { cn } from "lib/utils";
-import { Element, Path } from "@hsr/bindings/AvatarConfig";
+import type { Element, Path } from "@hsr/bindings/AvatarConfig";
 import { selectAtom } from "jotai/utils";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
 }
 
-export const CharacterInfo = forwardRef<HTMLDivElement, Props>(
-  ({ className, characterId, ...props }: Props, ref) => {
+export const CharacterInfo = forwardRef<HTMLDivElement, Prop>(
+  ({ className, characterId, ...props }: Prop, ref) => {
     const { data } = useCharacterMetadata(characterId);
     const level = useAtomValue(charLevelAtom);
     const ascension = useAtomValue(charPromotionAtom);
@@ -48,8 +49,8 @@ export const CharacterInfo = forwardRef<HTMLDivElement, Props>(
         {...props}
       >
         <div
-          id="left-avatar"
           className="absolute top-11 -z-10 flex h-[512px] w-[374px] items-center"
+          id="left-avatar"
           // TODO: apply to drag
           // onClick={(event) => {
           //   // stop event to bubble to parent element
@@ -61,8 +62,6 @@ export const CharacterInfo = forwardRef<HTMLDivElement, Props>(
             backgroundImage: `url(${img(
               `image/character_preview/${characterId}.png`
             )})`,
-            // backgroundPositionX: "right 100px",
-            // backgroundPositionY: "bottom 100px",
             backgroundRepeat: "no-repeat",
             boxShadow: "0 0 10px 10px hsl(var(--background)) inset",
           }}
@@ -83,15 +82,15 @@ export const CharacterInfo = forwardRef<HTMLDivElement, Props>(
           </div>
 
           <UserPlateRight
-            path={data.avatar_base_type}
             element={data.damage_type}
+            path={data.avatar_base_type}
           />
         </div>
 
         <RarityIcon
+          className="static h-12 w-full"
           id="rarity"
           rarity={data.rarity}
-          className="static h-12 w-full"
         />
       </div>
     );
@@ -120,7 +119,7 @@ function UserPlateLeft({ path }: { path: Path }) {
     );
   return (
     <div className="flex flex-col items-center justify-end">
-      <PathIcon path={path} size="30px" className="flex-1" />
+      <PathIcon className="flex-1" path={path} size="30px" />
       <Badge>{path}</Badge>
     </div>
   );
@@ -134,14 +133,14 @@ function UserPlateRight({ path, element }: { path: Path; element: Element }) {
   if (showPlayerInfo)
     return (
       <div className="relative flex justify-evenly">
-        <div className="absolute bottom-0 h-full w-[1px] rotate-45 border"></div>
+        <div className="absolute bottom-0 h-full w-[1px] rotate-45 border" />
         <PathIcon path={path} size="30px" />
-        <ElementIcon element={element} size="30px" className="self-end" />
+        <ElementIcon className="self-end" element={element} size="30px" />
       </div>
     );
   return (
     <div className="flex flex-col items-center justify-end">
-      <ElementIcon element={element} size="30px" className="flex-1" />
+      <ElementIcon className="flex-1" element={element} size="30px" />
       <Badge>{element}</Badge>
     </div>
   );

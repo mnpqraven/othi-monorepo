@@ -1,5 +1,6 @@
-import { PlainMessage } from "@bufbuild/protobuf";
-import { JadeEstimateResponse, RewardFrequency } from "protocol/ts";
+import type { PlainMessage } from "@bufbuild/protobuf";
+import type { JadeEstimateResponse } from "protocol/ts";
+import { RewardFrequency } from "protocol/ts";
 
 export const placeholderTableData: PlainMessage<JadeEstimateResponse> = {
   days: 0,

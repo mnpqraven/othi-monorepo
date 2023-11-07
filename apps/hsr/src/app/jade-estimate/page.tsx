@@ -2,7 +2,7 @@ import { StateProvider } from "../components/StateProvider";
 import JadeEstimateForm from "./JadeEstimateForm";
 import JadeRewardTable from "./JadeRewardTable";
 
-export default async function Home() {
+export default function Home() {
   return (
     <main className="mt-4 flex w-screen flex-col items-center gap-4 md:flex-row md:items-start md:justify-evenly">
       <StateProvider devTools>

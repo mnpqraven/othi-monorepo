@@ -1,7 +1,8 @@
-import { MouseEventHandler, useRef } from "react";
+import type { MouseEventHandler } from "react";
+import { useRef } from "react";
 
 export default function useCardEffect() {
-  let bounds: DOMRect | undefined = undefined;
+  let bounds: DOMRect | undefined;
   const flowRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 

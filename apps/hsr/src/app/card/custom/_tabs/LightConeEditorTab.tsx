@@ -12,14 +12,15 @@ import { useAtom, useAtomValue } from "jotai";
 import { useCharacterMetadata } from "@hsr/hooks/queries/useCharacterMetadata";
 import Image from "next/image";
 import { IMAGE_URL } from "@hsr/lib/constants";
-import { HTMLAttributes, forwardRef, useState } from "react";
-import { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
+import type { HTMLAttributes } from "react";
+import { forwardRef, useState } from "react";
+import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
 import { useLightConeMetadata } from "@hsr/hooks/queries/useLightConeMetadata";
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { img } from "@hsr/lib/utils";
+import { cn } from "lib";
 import { LightConeUpdater } from "../_editor/LightConeUpdater";
 import { charIdAtom, lcIdAtom } from "../../_store";
-import { cn } from "lib";
 
 export const LightConeEditorTab = forwardRef<
   HTMLDivElement,
@@ -42,7 +43,7 @@ export const LightConeEditorTab = forwardRef<
   return (
     <div className={cn("flex gap-4", className)} {...props} ref={ref}>
       <div className="flex flex-col items-center gap-6 p-4">
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog onOpenChange={setOpen} open={open}>
           <DialogTrigger asChild>
             <Button variant="outline">Select Light Cone</Button>
           </DialogTrigger>
@@ -57,16 +58,18 @@ export const LightConeEditorTab = forwardRef<
                 .filter((e) => e.avatar_base_type === path)
                 .map((lc) => (
                   <Toggle
-                    key={lc.equipment_id}
                     className="flex h-fit justify-between py-2"
-                    onPressedChange={() => onSelectLightCone(lc)}
+                    key={lc.equipment_id}
+                    onPressedChange={() => {
+                      onSelectLightCone(lc);
+                    }}
                   >
                     <Image
-                      src={`${IMAGE_URL}image/light_cone_preview/${lc.equipment_id}.png`}
                       alt={lc.equipment_name}
-                      width={256}
-                      height={300}
                       className="aspect-[256/300] w-16"
+                      height={300}
+                      src={`${IMAGE_URL}image/light_cone_preview/${lc.equipment_id}.png`}
+                      width={256}
                     />
                     <span>{lc.equipment_name}</span>
                   </Toggle>
@@ -75,13 +78,13 @@ export const LightConeEditorTab = forwardRef<
           </DialogContent>
         </Dialog>
 
-        {!!lightCone && (
+        {Boolean(lightCone) && (
           <LightConeCard
             className="w-48"
-            name={lightCone.equipment_name}
             imgUrl={img(
               `image/light_cone_preview/${lightCone.equipment_id}.png`
             )}
+            name={lightCone.equipment_name}
           />
         )}
 

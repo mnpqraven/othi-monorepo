@@ -1,20 +1,5 @@
 import { atom } from "jotai";
-import {
-  lcIdAtom,
-  lcImpositionAtom,
-  lcLevelAtom,
-  lcPromotionAtom,
-  lcStructAtom,
-} from "./lightcone";
-import { relicsStructAtom } from "./relic";
-import {
-  charIdAtom,
-  charLevelAtom,
-  charPromotionAtom,
-  charStructAtom,
-  charTraceAtom,
-} from "./character";
-import {
+import type {
   ParsedRelicSchema,
   StatParserConstructor,
 } from "@hsr/hooks/useStatParser";
@@ -24,13 +9,29 @@ import {
   selectAtom,
   splitAtom,
 } from "jotai/utils";
-import {
+import type {
   CardConfig,
-  CardConfigAction,
+  CardConfigAction} from "../[uid]/configReducer";
+import {
   configReducer,
   initialConfig,
 } from "../[uid]/configReducer";
-import { MihomoPlayer } from "../types";
+import type { MihomoPlayer } from "../types";
+import {
+  charIdAtom,
+  charLevelAtom,
+  charPromotionAtom,
+  charStructAtom,
+  charTraceAtom,
+} from "./character";
+import { relicsStructAtom } from "./relic";
+import {
+  lcIdAtom,
+  lcImpositionAtom,
+  lcLevelAtom,
+  lcPromotionAtom,
+  lcStructAtom,
+} from "./lightcone";
 
 export const configAtom = atomWithReducer<CardConfig, CardConfigAction>(
   initialConfig,
@@ -51,7 +52,7 @@ export const armoryStructAtom = atom((get) => ({
 export const statParseParam = atom<StatParserConstructor | undefined>((get) => {
   const charId = get(charIdAtom);
   const lcId = get(lcIdAtom);
-  const relic = get(relicsStructAtom).filter((e) => !!e.property && e.setId);
+  const relic = get(relicsStructAtom).filter((e) => Boolean(e.property) && e.setId);
   if (!charId || !lcId) return undefined;
   return {
     character: {

@@ -1,11 +1,12 @@
 import { cn } from "lib/utils";
-import { HTMLAttributes, forwardRef } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   imposition: number;
 }
 
-const ImpositionIcon = forwardRef<HTMLDivElement, Props>(
+const ImpositionIcon = forwardRef<HTMLDivElement, Prop>(
   ({ imposition, className, ...props }, ref) => (
     <div
       className={cn(

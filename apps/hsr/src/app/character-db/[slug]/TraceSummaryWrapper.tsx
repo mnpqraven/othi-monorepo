@@ -10,10 +10,10 @@ import {
 import { useCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
 import { useProperties } from "@hsr/hooks/queries/useProperties";
 
-type Props = {
+interface Prop {
   characterId: number;
-};
-const TraceSummaryWrapper = ({ characterId }: Props) => {
+}
+function TraceSummaryWrapper({ characterId }: Prop) {
   const { data: traces } = useCharacterTrace(characterId);
   const { data: properties } = useProperties();
 
@@ -21,23 +21,23 @@ const TraceSummaryWrapper = ({ characterId }: Props) => {
 
   return (
     <Accordion
-      type="single"
-      collapsible
       className="w-full rounded-md border p-4"
+      collapsible
+      type="single"
     >
-      <AccordionItem value="item-1" className="border-none">
+      <AccordionItem className="border-none" value="item-1">
         <AccordionTrigger className="py-0">
           Total gain from traces
         </AccordionTrigger>
         <AccordionContent asChild>
           <TraceSummary
             characterId={characterId}
-            skills={traces}
             properties={properties}
+            skills={traces}
           />
         </AccordionContent>
       </AccordionItem>
     </Accordion>
   );
-};
+}
 export { TraceSummaryWrapper };

@@ -1,33 +1,33 @@
 "use client";
 
-import { AvatarConfig } from "@hsr/bindings/AvatarConfig";
-import { CharacterCard } from "./CharacterCardWrapper";
+import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
 import Link from "next/link";
 import { IMAGE_URL } from "@hsr/lib/constants";
+import { CharacterCard } from "./CharacterCardWrapper";
 
-interface Props {
+interface Prop {
   chara: AvatarConfig;
 }
-export function CharacterCatalogueItem({ chara }: Props) {
+export function CharacterCatalogueItem({ chara }: Prop) {
   return (
     <div
+      className="flex flex-col gap-2"
       id="character-card"
       key={chara.avatar_id}
-      className="flex flex-col gap-2"
     >
       <Link href={`/character-db/${chara.avatar_id}`}>
         <CharacterCard
-          imgUrl={url(chara.avatar_id)}
           avatar_base_type={chara.avatar_base_type}
           avatar_name={chara.avatar_name}
-          rarity={chara.rarity}
           damage_type={chara.damage_type}
+          imgUrl={url(chara.avatar_id)}
+          rarity={chara.rarity}
         />
       </Link>
 
       <Link
-        href={`/character-db/${chara.avatar_id}`}
         className="flex grow items-center justify-center text-center"
+        href={`/character-db/${chara.avatar_id}`}
       >
         {chara.avatar_name}
       </Link>
@@ -36,5 +36,5 @@ export function CharacterCatalogueItem({ chara }: Props) {
 }
 
 function url(id: string | number): string {
-  return IMAGE_URL + `image/character_preview/${id}.png`;
+  return `${IMAGE_URL}image/character_preview/${id}.png`;
 }

@@ -1,13 +1,13 @@
-import { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
-import { EquipmentPromotionConfig } from "@hsr/bindings/EquipmentPromotionConfig";
+import type { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
+import type { EquipmentPromotionConfig } from "@hsr/bindings/EquipmentPromotionConfig";
 import { useCharacterPromotion } from "@hsr/hooks/queries/useCharacterPromotion";
 import { useLightConePromotion } from "@hsr/hooks/queries/useLightConePromotion";
-import { MihomoCharacter, MihomoSkillTreeConfig } from "../../types";
-import { Property, SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
+import type { Property, SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
 import { getNodeType } from "@hsr/app/components/Character/TraceTable";
-import { Field } from "./SpiderChartWrapper";
-import { Element } from "@hsr/bindings/PatchBanner";
-import { asPercentage, rotate } from "@hsr/lib/utils";
+import type { Element } from "@hsr/bindings/PatchBanner";
+import { asPercentage, rotate } from "lib";
+import type { MihomoCharacter, MihomoSkillTreeConfig } from "../../types";
+import type { Field } from "./SpiderChartWrapper";
 
 const accumulator: { [k in Field]: Field[] } = {
   hp: ["hp"],
@@ -31,9 +31,8 @@ const accumulator: { [k in Field]: Field[] } = {
   ice_dmg: ["ice_dmg", "all_dmg"],
 };
 
-interface Props {
+interface Prop {
   character: MihomoCharacter | undefined;
-  // options: {}
 }
 
 export interface StatRadarData {
@@ -48,7 +47,7 @@ export interface StatRadarData {
  * - get the current character and light cone's stat at the current levels
  * - normalize sum data across the board for radar chart
  * */
-export function useDataProcess({ character }: Props): {
+export function useDataProcess({ character }: Prop): {
   data: StatRadarData[];
 } {
   // INFO: calc order + formula
@@ -62,7 +61,7 @@ export function useDataProcess({ character }: Props): {
     Number(character?.light_cone?.id)
   );
 
-  if (!!charPromo && !!character && !!lcPromo) {
+  if (Boolean(charPromo) && Boolean(character) && Boolean(lcPromo)) {
     const currentGreyChar = charAfterPromotion({
       promotionConfig: charPromo,
       ascension: character.promotion,
@@ -77,7 +76,7 @@ export function useDataProcess({ character }: Props): {
     const maxedGreyLc = lcAfterPromotion({ promotionConfig: lcPromo });
 
     const { additions, attributes } = character;
-    let data: StatRadarData[] = [];
+    const data: StatRadarData[] = [];
     Object.entries(accumulator).forEach((entry) => {
       const [key, list] = entry as [Field, Field[]];
       const addition = additions.filter((e) => list.includes(e.field));
@@ -327,7 +326,7 @@ function filterFieldsByRole<T extends { field: Field }>(
     "sp_rate",
     "spd",
   ];
-  let eleField: Field | undefined = undefined;
+  let eleField: Field | undefined;
   switch (element) {
     case "Fire":
       eleField = "fire_dmg";
@@ -458,7 +457,7 @@ function sumAfterTrace(
   // filter to only stat nodes
   const statNodes = dbSkillTree.filter((e) => getNodeType(e) === "SMALL");
   // level 0 = locked, level 1 = unlocked
-  let nodeMap: Partial<Record<Property, number>> = {};
+  const nodeMap: Partial<Record<Property, number>> = {};
 
   // TODO: test upsert algo
   statNodes.forEach(({ point_id, status_add_list }) => {

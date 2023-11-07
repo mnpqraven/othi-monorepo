@@ -7,24 +7,21 @@ import {
   defaultBanner,
   useBannerList,
 } from "@hsr/hooks/queries/useGachaBannerList";
-import { ReactECharts } from "../components/ReactEcharts";
-import { GachaForm } from "./GachaForm";
-import { defaultGachaQuery } from "./types";
 import { useLocalStorage } from "@hsr/hooks/useLocalStorage";
 import STORAGE from "@hsr/server/storage";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import equal from "fast-deep-equal/react";
-import { PlainMessage } from "@bufbuild/protobuf";
-import { schema } from "./schema";
-import { chartOptions } from "./chartOptions";
+import type { PlainMessage } from "@bufbuild/protobuf";
 import { useCacheValidate } from "@hsr/hooks/useCacheValidate";
-import {
-  BannerType,
-  ProbabilityRatePayload,
-  ProbabilityRateService,
-} from "protocol/ts";
+import type { ProbabilityRatePayload } from "protocol/ts";
+import { BannerType, ProbabilityRateService } from "protocol/ts";
 import { rpc } from "protocol";
+import { ReactECharts } from "../components/ReactEcharts";
+import { chartOptions } from "./chartOptions";
+import { schema } from "./schema";
+import { defaultGachaQuery } from "./types";
+import { GachaForm } from "./GachaForm";
 
 type FormSchema = PlainMessage<ProbabilityRatePayload>;
 
@@ -40,7 +37,7 @@ export default function GachaGraph() {
 
   const { data: bannerList } = useBannerList();
   const selectedBanner =
-    bannerList.find((e) => e.bannerType == BannerType[bannerSubscriber]) ??
+    bannerList.find((e) => e.bannerType === BannerType[bannerSubscriber]) ??
     defaultBanner;
 
   const [storagedForm, setStoragedForm] = useLocalStorage<FormSchema>(
@@ -51,8 +48,10 @@ export default function GachaGraph() {
   const { data } = useQuery({
     queryKey: ["probabilityRate", storagedForm],
     // safe cast
-    queryFn: async () =>
-      await rpc(ProbabilityRateService).post(storagedForm as FormSchema),
+    queryFn: () =>
+      storagedForm
+        ? rpc(ProbabilityRateService).post(storagedForm)
+        : Promise.reject(),
     placeholderData: keepPreviousData,
   });
 
@@ -95,18 +94,18 @@ export default function GachaGraph() {
     <>
       <div className="py-4">
         <GachaForm
-          updateQuery={updateQuery}
-          selectedBanner={selectedBanner}
           form={form}
+          selectedBanner={selectedBanner}
+          updateQuery={updateQuery}
         />
       </div>
-      {!!data && data.rollBudget > 0 && (
+      {data && data.rollBudget > 0 ? (
         <ReactECharts
           option={chartOption}
-          style={{ height: "700px" }}
           settings={{ replaceMerge: "series", notMerge: true }}
+          style={{ height: "700px" }}
         />
-      )}
+      ) : null}
     </>
   );
 }

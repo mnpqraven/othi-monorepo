@@ -1,17 +1,17 @@
-import { AvatarSkillConfig } from "@hsr/bindings/AvatarSkillConfig";
-import { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
+import type { AvatarSkillConfig } from "@hsr/bindings/AvatarSkillConfig";
+import type { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
 import { asPercentage } from "lib/utils";
 import { useState } from "react";
-import { SkillDescription } from "../Db/SkillDescription";
 import { Slider } from "ui/primitive";
+import { SkillDescription } from "../Db/SkillDescription";
 
-type Props = {
+interface Prop {
   traceType: "CORE" | "SMALL" | "BIG";
   trace: SkillTreeConfig;
   maxEnergy: number;
   skill: AvatarSkillConfig | undefined;
-};
-const TraceDescription = ({ trace, traceType, maxEnergy, skill }: Props) => {
+}
+function TraceDescription({ trace, traceType, maxEnergy, skill }: Prop) {
   if (traceType === "SMALL")
     return (
       <span>
@@ -25,8 +25,8 @@ const TraceDescription = ({ trace, traceType, maxEnergy, skill }: Props) => {
       <div className="flex flex-col">
         <div>{trace.point_name}</div>
         <SkillDescription
-          skillDesc={trace.point_desc}
           paramList={trace.param_list}
+          skillDesc={trace.point_desc}
           slv={0}
         />
       </div>
@@ -35,20 +35,20 @@ const TraceDescription = ({ trace, traceType, maxEnergy, skill }: Props) => {
   if (skill)
     return (
       <div className="flex flex-col">
-        <SkillDescriptionWrapper skill={skill} maxEnergy={maxEnergy} />
+        <SkillDescriptionWrapper maxEnergy={maxEnergy} skill={skill} />
       </div>
     );
 
   return null;
-};
+}
 
-const SkillDescriptionWrapper = ({
+function SkillDescriptionWrapper({
   skill,
   maxEnergy,
 }: {
   skill: AvatarSkillConfig;
   maxEnergy: number;
-}) => {
+}) {
   const [selectedSlv, setSelectedSlv] = useState(0);
 
   return (
@@ -63,21 +63,21 @@ const SkillDescriptionWrapper = ({
           <Slider
             className="py-4"
             defaultValue={[0]}
-            min={0}
             max={skill.param_list.length - 1}
+            min={0}
             onValueChange={(sl) => {
-              if (!!sl[0]) setSelectedSlv(sl[0]);
+              if (sl[0]) setSelectedSlv(sl[0]);
             }}
           />
         </div>
       )}
       <SkillDescription
-        skillDesc={skill.skill_desc}
         paramList={skill.param_list}
+        skillDesc={skill.skill_desc}
         slv={selectedSlv}
       />
     </div>
   );
-};
+}
 
 export { TraceDescription };

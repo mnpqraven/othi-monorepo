@@ -8,21 +8,21 @@ import {
 } from "@hsr/app/components/Character/SkillOverview";
 import { TraceTable } from "@hsr/app/components/Character/TraceTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "ui/primitive";
-import { TraceSummaryWrapper } from "./TraceSummaryWrapper";
-import { SignatureLightCone } from "./SignatureLightCone";
 import { Suspense } from "react";
 import getQueryClient from "@hsr/lib/queryClientHelper";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { optionsCharacterEidolon } from "@hsr/hooks/queries/useCharacterEidolon";
 import { optionsCharacterTrace } from "@hsr/hooks/queries/useCharacterTrace";
 import { optionsProperties } from "@hsr/hooks/queries/useProperties";
+import { SignatureLightCone } from "./SignatureLightCone";
+import { TraceSummaryWrapper } from "./TraceSummaryWrapper";
 import Loading from "./loading";
 
-interface Props {
+interface Prop {
   params: { slug: string };
 }
 
-export default async function Character({ params }: Props) {
+export default async function Character({ params }: Prop) {
   const characterId = parseInt(params.slug);
   const dehydratedState = await prefetchOptions(characterId);
 
@@ -78,7 +78,8 @@ async function prefetchOptions(characterId: number) {
     optionsProperties(),
   ];
   await Promise.allSettled(
-    options.map((option) => queryClient.prefetchQuery(option as any))
+    // @ts-expect-error mapping
+    options.map((option) => queryClient.prefetchQuery(option))
   );
   return dehydrate(queryClient);
 }

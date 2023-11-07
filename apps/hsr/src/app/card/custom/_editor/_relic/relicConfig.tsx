@@ -1,7 +1,7 @@
-import { RelicType } from "@hsr/bindings/RelicConfig";
-import { Property } from "@hsr/bindings/RelicSetSkillConfig";
+import type { RelicType } from "@hsr/bindings/RelicConfig";
+import type { Property } from "@hsr/bindings/RelicSetSkillConfig";
 import { ChevronDown, ChevronUp, Minus, X } from "lucide-react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 const basicProps: Property[] = [
   "HPAddedRatio",

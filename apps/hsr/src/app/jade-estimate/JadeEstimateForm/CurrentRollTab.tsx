@@ -1,6 +1,6 @@
-import { UseFormReturn } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 import { cva } from "class-variance-authority";
-import { JadeEstimateCfg } from "protocol/ts";
+import type { JadeEstimateCfg } from "protocol/ts";
 import {
   FormControl,
   FormDescription,
@@ -15,32 +15,32 @@ import {
   TabsTrigger,
 } from "ui/primitive";
 
-type Props = {
+interface Props {
   form: UseFormReturn<JadeEstimateCfg>;
-};
+}
 
-const CurrentRollTab = ({ form }: Props) => {
+function CurrentRollTab({ form }: Props) {
   const { errors } = form.formState;
 
   return (
     <div className="flex items-center space-x-4 rounded-md border p-4">
-      <Tabs defaultValue="currentRolls" className="w-full">
+      <Tabs className="w-full" defaultValue="currentRolls">
         <TabsList className="w-full">
           <TabsTrigger
-            value="currentRolls"
             className={triggerVariant("currentRolls", errors)}
+            value="currentRolls"
           >
             Sp. Passes
           </TabsTrigger>
           <TabsTrigger
-            value="currentJades"
             className={triggerVariant("currentJades", errors)}
+            value="currentJades"
           >
             Jades
           </TabsTrigger>
           <TabsTrigger
-            value="dailyRefills"
             className={triggerVariant("dailyRefills", errors)}
+            value="dailyRefills"
           >
             Daily Refills
           </TabsTrigger>
@@ -62,8 +62,8 @@ const CurrentRollTab = ({ form }: Props) => {
                   <FormControl>
                     <Input
                       className="w-20"
-                      type="number"
                       min={0}
+                      type="number"
                       {...field}
                       onChange={(e) => {
                         if (!Number.isNaN(e.currentTarget.value)) {
@@ -95,8 +95,8 @@ const CurrentRollTab = ({ form }: Props) => {
                   <FormControl>
                     <Input
                       className="w-20"
-                      type="number"
                       min={0}
+                      type="number"
                       {...field}
                       onChange={(e) => {
                         if (!Number.isNaN(e.currentTarget.value)) {
@@ -128,9 +128,9 @@ const CurrentRollTab = ({ form }: Props) => {
                   <FormControl>
                     <Input
                       className="w-20"
-                      type="number"
-                      min={0}
                       max={8}
+                      min={0}
+                      type="number"
                       {...field}
                       onChange={(e) => {
                         if (!Number.isNaN(e.currentTarget.value)) {
@@ -148,7 +148,7 @@ const CurrentRollTab = ({ form }: Props) => {
       </Tabs>
     </div>
   );
-};
+}
 
 export { CurrentRollTab };
 

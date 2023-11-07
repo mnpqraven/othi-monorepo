@@ -1,11 +1,12 @@
 "use client";
 
-import { Path } from "@hsr/bindings/AvatarConfig";
+import type { Path } from "@hsr/bindings/AvatarConfig";
 import { useTheme } from "next-themes";
-import { HTMLAttributes, forwardRef, useEffect, useState } from "react";
-import SVG from "react-inlinesvg";
+import type { HTMLAttributes } from "react";
+import { forwardRef, useEffect, useState } from "react";
+import Svg from "react-inlinesvg";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   path: Path;
   /**
    * this is getting passed into `style` props of the wrapping div
@@ -15,7 +16,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   ignoreTheme?: boolean;
 }
 
-const PathIcon = forwardRef<HTMLDivElement, Props>(
+const PathIcon = forwardRef<HTMLDivElement, Prop>(
   (
     { path, size, iconClass: className, ignoreTheme = false, ...props },
     ref
@@ -35,14 +36,14 @@ const PathIcon = forwardRef<HTMLDivElement, Props>(
     }, [theme]);
 
     return (
-      <div style={{ width: size, height: size }} ref={ref} {...props}>
-        <SVG
-          src={`/path/${path}.svg`}
+      <div ref={ref} style={{ width: size, height: size }} {...props}>
+        <Svg
           className={className}
-          style={filter}
-          width="100%"
           height="100%"
+          src={`/path/${path}.svg`}
+          style={filter}
           viewBox="0 0 14 14"
+          width="100%"
         />
       </div>
     );

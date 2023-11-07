@@ -1,8 +1,9 @@
-import { Element } from "@hsr/bindings/AvatarConfig";
-import { HTMLAttributes, forwardRef } from "react";
-import SVG from "react-inlinesvg";
+import type { Element } from "@hsr/bindings/AvatarConfig";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
+import Svg from "react-inlinesvg";
 import { Tooltip, TooltipContent, TooltipTrigger } from "ui/primitive";
-import { Property } from "@hsr/bindings/SkillTreeConfig";
+import type { Property } from "@hsr/bindings/SkillTreeConfig";
 import {
   prettyProperty,
   propertyIconUrl,
@@ -14,11 +15,11 @@ import { useStatParser } from "@hsr/hooks/useStatParser";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn } from "lib/utils";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Prop extends HTMLAttributes<HTMLDivElement> {
   element: Element;
 }
 
-export const StatTable = forwardRef<HTMLDivElement, Props>(
+export const StatTable = forwardRef<HTMLDivElement, Prop>(
   ({ element, className, ...props }, ref) => {
     const hoverVerbosity = useAtomValue(hoverVerbosityAtom);
     const parsedStats = useStatParser(useAtomValue(statParseParam));
@@ -34,9 +35,9 @@ export const StatTable = forwardRef<HTMLDivElement, Props>(
       .sort((a, b) =>
         sortByProperty(a.property as Property, b.property as Property)
       ) as {
-      property: Property;
-      value: number;
-    }[];
+        property: Property;
+        value: number;
+      }[];
 
     return (
       <div
@@ -50,15 +51,15 @@ export const StatTable = forwardRef<HTMLDivElement, Props>(
         {asObject.map(({ property, value }, index) => (
           <Tooltip key={property}>
             <TooltipTrigger
-              disabled={hoverVerbosity === "none"}
               className={cn(
                 "flex items-center gap-2 py-1",
                 index % 2 === 0 ? "border-r" : ""
               )}
+              disabled={hoverVerbosity === "none"}
             >
-              <SVG
-                src={propertyIconUrl(property)}
+              <Svg
                 className="text-black dark:text-white"
+                src={propertyIconUrl(property)}
               />
               <div>{prettyProperty(property, value).prettyValue}</div>
             </TooltipTrigger>
@@ -89,8 +90,8 @@ export function filterOtherElements(
     "Imaginary",
   ];
 
-  if (property.includes("Thunder")) return element == "Lightning";
+  if (property.includes("Thunder")) return element === "Lightning";
   else if (exceptLightning.some((ele) => property.includes(ele)))
     return property.includes(element);
-  else return true;
+  return true;
 }
