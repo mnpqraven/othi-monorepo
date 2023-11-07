@@ -1,6 +1,7 @@
-import { PatchBanner } from "@hsr/app/api/patch_banners/route";
-import { List } from "@hsr/lib/generics";
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+import type { PatchBanner } from "@hsr/app/api/patch_banners/route";
+import type { UseQueryOptions } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import type { List } from "lib/generics";
 
 type Options = Omit<
   UseQueryOptions<List<PatchBanner>, unknown, PatchBanner[]>,
@@ -13,10 +14,10 @@ export function useBannerList(opt: Options = {}) {
       const res = await fetch("/api/patch_banners");
       if (res.ok) {
         return res.json() as Promise<List<PatchBanner>>;
-      } else {
-        console.error("api fetch failed, code:", res.status);
-        return Promise.reject(`unknown error ${res.text()}`);
       }
+      // eslint-disable-next-line no-console
+      console.error("api fetch failed, code:", res.status);
+      return Promise.reject(Error(`unknown error ${await res.text()}`));
     },
     select: (data) => data.list,
     initialData: { list: [] },

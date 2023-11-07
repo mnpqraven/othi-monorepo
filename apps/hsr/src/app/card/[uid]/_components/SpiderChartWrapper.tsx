@@ -51,6 +51,8 @@ export const SpiderChartWrapper = forwardRef<HTMLDivElement, Prop>(
           case "Speed":
             binding = value - speed;
             break;
+          default:
+            break;
         }
         const normalizedValue =
           binding / getNormalizedBoundProperty(property as Property, speed);
