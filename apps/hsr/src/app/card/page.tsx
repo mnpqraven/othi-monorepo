@@ -103,6 +103,7 @@ export default function Profile() {
           <h1>Saved Profile</h1>
           <div className="flex flex-col gap-4">
             {playerProfileAtoms.map((profileAtom, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <div className="flex items-center gap-3" key={index}>
                 <UnpinButton atom={profileAtom} />
 
@@ -123,7 +124,7 @@ function PinProfileButton({ atom }: PinProps) {
   const [profiles, setProfiles] = useAtom(cachedProfilesAtom);
   // safe define
   const current = useAtomValue(atom);
-  const pressed = profiles.find((e) => e.uid == current?.uid);
+  const pressed = profiles.find((e) => e.uid === current?.uid);
 
   function updatePin() {
     // delete
@@ -158,7 +159,7 @@ function UidForm({ form, onSubmit }: UidFormProps) {
       <form
         className="mt-12 flex flex-col items-center justify-center gap-4 md:flex-row md:items-start"
         id="form"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={void form.handleSubmit(onSubmit)}
       >
         <FormField
           name="uid"

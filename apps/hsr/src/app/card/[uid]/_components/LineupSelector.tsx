@@ -4,7 +4,7 @@ import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
 import Image from "next/image";
 import { img } from "@hsr/lib/utils";
-import { Toggle, Skeleton } from "ui/primitive";
+import { Toggle } from "ui/primitive";
 import { useAtom, useAtomValue } from "jotai";
 import { cn } from "lib/utils";
 import { mhyCharacterIds, selectedCharacterIndexAtom } from "../../_store/card";
@@ -22,30 +22,24 @@ export const LineupSelector = forwardRef<HTMLDivElement, Props>(
         ref={ref}
         {...props}
       >
-        {charIds.map((id, index) =>
-          id ? (
-            <Toggle
-              className="h-16 w-16 rounded-full p-0"
-              key={index}
-              pressed={index === selectIndex}
-            >
-              <Image
-                alt=""
-                className="cursor-pointer rounded-full border"
-                height={64}
-                onClick={() => {
-                  setSelectIndex(index);
-                }}
-                src={img(`icon/avatar/${id}.png`)}
-                width={64}
-              />
-            </Toggle>
-          ) : (
-            <Toggle className="h-16 w-16 rounded-full p-0" key={index}>
-              <Skeleton className="h-16 w-16 rounded-full" />
-            </Toggle>
-          )
-        )}
+        {charIds.map((id, index) => (
+          <Toggle
+            className="h-16 w-16 rounded-full p-0"
+            key={id}
+            pressed={index === selectIndex}
+          >
+            <Image
+              alt=""
+              className="cursor-pointer rounded-full border"
+              height={64}
+              onClick={() => {
+                setSelectIndex(index);
+              }}
+              src={img(`icon/avatar/${id}.png`)}
+              width={64}
+            />
+          </Toggle>
+        ))}
       </div>
     );
   }

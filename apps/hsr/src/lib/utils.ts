@@ -68,6 +68,8 @@ export function getImagePath(
       case "Maze":
         ttype = "technique";
         break;
+      default:
+        return undefined;
     }
   } else {
     switch (skill.skill_type_desc) {

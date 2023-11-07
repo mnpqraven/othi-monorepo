@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback } from "react";
-import SVG from "react-inlinesvg";
+import Svg from "react-inlinesvg";
 import { img } from "@hsr/lib/utils";
 import { prettyProperty, propertyIconUrl } from "@hsr/lib/propertyHelper";
 import { cva } from "class-variance-authority";
@@ -43,7 +43,7 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
       const spreadInfo = substatSpread.find(
         (e) => e.property === sub?.property
       );
-      if (Boolean(sub) && Boolean(spreadInfo)) {
+      if (sub && spreadInfo) {
         return splitSubstatValue(sub, spreadInfo).rolls.map((roll) =>
           judge(roll, spreadInfo)
         );
@@ -89,7 +89,7 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
 
           {data.property ? (
             <div className="z-10 flex w-full gap-1 font-bold">
-              <SVG src={propertyIconUrl(data.property)} />
+              <Svg src={propertyIconUrl(data.property)} />
 
               {prettyProperty(data.property, mainStatValue).prettyValue}
             </div>
@@ -98,11 +98,12 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
 
         <div className="flex flex-col gap-1" id="sub">
           {data.subStats.map((sub, index) => (
+            // eslint-disable-next-line react/no-array-index-key
             <div className="flex flex-col" key={index}>
-              <div className="flex justify-between gap-1" key={index}>
+              <div className="flex justify-between gap-1">
                 {sub ? (
                   <>
-                    <SVG src={propertyIconUrl(sub.property)} />
+                    <Svg src={propertyIconUrl(sub.property)} />
                     {prettyProperty(sub.property, sub.value).prettyValue}
                   </>
                 ) : (
@@ -116,7 +117,6 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
                     className={substatVariant({
                       currentCount: num,
                       substatCount: sub?.step ?? 0,
-                      // rarity: data.rarity as 3 | 4 | 5,
                       type: cal(sub).at(index) ?? "ERROR",
                     })}
                     key={num}
@@ -193,7 +193,7 @@ function substatVariant({
     defaultVariants: { placement: "first", type: "NONE" },
   });
   return variant({
-    placement: currentCount == 1 ? "first" : "notFirst",
+    placement: currentCount === 1 ? "first" : "notFirst",
     type: substatCount >= currentCount ? type : "NONE",
   });
 }

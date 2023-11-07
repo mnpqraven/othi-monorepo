@@ -49,8 +49,11 @@ export function RelicEditor({ atom }: { atom: PrimitiveAtom<RelicInput> }) {
   if (!setId || !spreadData) return null;
 
   const occupiedProperties: Property[] = property
-    ? [property, ...substats.filter(Boolean).map((e) => e!.property)]
-    : substats.filter(Boolean).map((e) => e!.property);
+    ? [
+        property,
+        ...substats.filter(Boolean).map((e: SubStatSchema) => e.property),
+      ]
+    : substats.filter(Boolean).map((e: SubStatSchema) => e.property);
 
   function onSubStatSelect(prop: Property, index: number) {
     let value = 0;
@@ -89,6 +92,7 @@ export function RelicEditor({ atom }: { atom: PrimitiveAtom<RelicInput> }) {
 
       <div className="grid flex-1 grid-cols-2 gap-2">
         {splittedSubstatAtom.map((ssAtom, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <div className="flex items-center gap-2" key={index}>
             <PropertySelect
               className="w-44"

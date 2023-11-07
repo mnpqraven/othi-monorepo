@@ -56,8 +56,8 @@ export const SetInfo = forwardRef<
           ref={ref}
           {...props}
         >
-          {setSummary.sort(bySetId).map(({ name, num }, index) => (
-            <div className="flex items-center gap-2" key={index}>
+          {setSummary.sort(bySetId).map(({ name, num }) => (
+            <div className="flex items-center gap-2" key={`${name}-${num}`}>
               <RelicSetMarker className="inline-block align-middle" />
 
               <span className="font-semibold text-green-600">{num}pc</span>
@@ -72,20 +72,20 @@ export const SetInfo = forwardRef<
             side="top"
             sideOffset={25}
           >
-            {activeSets.sort(bySetId).map((set, index) =>
+            {activeSets.sort(bySetId).map((set) =>
               canShow(set.set_id, relics) ? (
-                <div className="flex flex-col" key={index}>
+                <div className="flex flex-col" key={set.set_id}>
                   <p className="text-accent-foreground text-base font-bold">
                     {relicSets.find((e) => e.set_id === set.set_id)?.set_name}
                   </p>
 
                   {set.require_num.map((pc, index) =>
                     canShow(set.set_id, relics, pc) ? (
-                      <div key={index}>
+                      <div key={set.set_id}>
                         <span className="text-green-600">{pc}pc</span>:
                         <SkillDescription
                           paramList={set.ability_param_list}
-                          skillDesc={set.skill_desc[index]}
+                          skillDesc={set.skill_desc[index] ?? []}
                           slv={0}
                         />
                       </div>

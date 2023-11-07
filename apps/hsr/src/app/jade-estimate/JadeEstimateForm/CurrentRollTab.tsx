@@ -15,11 +15,11 @@ import {
   TabsTrigger,
 } from "ui/primitive";
 
-interface Props {
+interface Prop {
   form: UseFormReturn<JadeEstimateCfg>;
 }
 
-function CurrentRollTab({ form }: Props) {
+function CurrentRollTab({ form }: Prop) {
   const { errors } = form.formState;
 
   return (

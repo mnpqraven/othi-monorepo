@@ -30,7 +30,7 @@ export default function useCharacterFilter() {
       setRarity(next);
     } else {
       // add
-      const next = [...rarity, value].sort();
+      const next = [...rarity, value].sort((a, b) => a - b);
       setRarity(next);
     }
   }

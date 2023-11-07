@@ -9,10 +9,11 @@ export function RelicEditorTab() {
   const [relicAtoms] = useAtom(splitRelicAtom);
   return (
     <div className="grid grid-cols-2 gap-2">
-      {relicAtoms.map((relicAtom) => (
+      {relicAtoms.map((relicAtom, index) => (
         <div
           className="flex flex-col gap-2 rounded-md border p-2"
-          key={`${relicAtom}`}
+          // eslint-disable-next-line react/no-array-index-key
+          key={index}
         >
           <RelicSelector atom={relicAtom} />
           <RelicEditor atom={relicAtom} />

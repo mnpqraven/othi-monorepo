@@ -58,7 +58,7 @@ export function useMihomoInfo(
   }
 
   useEffect(() => {
-    if (Boolean(query.error) && displayToast) {
+    if (query.error && displayToast) {
       toast({
         variant: "destructive",
         title: "Error encountered",
@@ -116,7 +116,7 @@ export async function getMihomoInfo(
       return Promise.reject(error);
     });
   }
-  return response.json();
+  return response.json() as Promise<MihomoResponse>;
 }
 
 type Lang = (typeof LANGS)[number];

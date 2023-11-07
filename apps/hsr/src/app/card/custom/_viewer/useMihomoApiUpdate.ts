@@ -46,20 +46,20 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
         .map((e) => e.light_cone?.id!);
 
       charIds.forEach((id) => {
-        client.prefetchQuery(optionsCharacterTrace(id));
-        client.prefetchQuery(optionCharacterPromotion(id));
-        client.prefetchQuery(optionCharacterMetadata(id));
+        void client.prefetchQuery(optionsCharacterTrace(id));
+        void client.prefetchQuery(optionCharacterPromotion(id));
+        void client.prefetchQuery(optionCharacterMetadata(id));
       });
       lcIds.forEach((e) => {
         const id = Number(e);
-        client.prefetchQuery(optionLightConePromotion(id));
-        client.prefetchQuery(optionLightConeSkill(id));
+        void client.prefetchQuery(optionLightConePromotion(id));
+        void client.prefetchQuery(optionLightConeSkill(id));
       });
     }
   }, [client, query.data]);
 
   useEffect(() => {
-    if (Boolean(query.data) && props.mode == "API") {
+    if (query.data && props.mode === "API") {
       const { nickname, uid } = query.data.player;
       updateConfig({ type: "changeUser", payload: { name: nickname, uid } });
 
@@ -98,7 +98,7 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
   }, [props.mode, query.data, charIndex]);
 
   useEffect(() => {
-    if (Boolean(query.data) && props.mode == "API" && Boolean(relicsData)) {
+    if (query.data && props.mode === "API" && relicsData) {
       const relics = query.data.characters[charIndex].relics;
       setRelicStruct(
         relics.map(
@@ -136,7 +136,7 @@ function findRelicType({
   relicsData: RelicConfig[];
 }): RelicType {
   const find = relicsData.find(
-    (e) => e.id === Number(id) && e.set_id == Number(setId)
+    (e) => e.id === Number(id) && e.set_id === Number(setId)
   );
   return find ? find.ttype : "HEAD";
 }

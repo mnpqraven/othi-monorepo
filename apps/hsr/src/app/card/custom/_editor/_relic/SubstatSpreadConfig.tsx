@@ -62,8 +62,7 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Prop>(
 
     // set initial data for the value input box
     useEffect(() => {
-      if (Boolean(value) && value.property) {
-        console.log("firstrender");
+      if (value?.property) {
         const percent = isPropertyPercent(value.property);
         setValueAsString({
           text: (value.value * (percent ? 100 : 1)).toFixed(2),
@@ -72,7 +71,7 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Prop>(
       }
     }, [value]);
 
-    if (!spreadInfo || !value?.property || !setId || !value) return null;
+    if (!spreadInfo || !value?.property || !setId) return null;
 
     const { minRoll, midRoll, maxRoll } = getSpreadValues(spreadInfo);
 
@@ -161,6 +160,7 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Prop>(
 
         <div className="flex justify-center" id="setters">
           {spreadAtoms.map((atom, index) => (
+            // eslint-disable-next-line react/no-array-index-key
             <SpreadConfigBar atom={atom} key={index} spreadInfo={spreadInfo} />
           ))}
         </div>

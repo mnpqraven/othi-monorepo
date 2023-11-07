@@ -60,12 +60,12 @@ export function chartOptions({
         label: {
           backgroundColor: "#6a7985",
           formatter: ({ value, axisDimension }) => {
-            if (axisDimension === "x") return `Roll ${value}`;
+            if (axisDimension === "x") return `Roll ${value.toString()}`;
             return `${Number(value).toFixed(2)} %`;
           },
         },
       },
-      valueFormatter: (value) => `${value} %`,
+      valueFormatter: (value) => `${value.toString()} %`,
     },
   };
 }

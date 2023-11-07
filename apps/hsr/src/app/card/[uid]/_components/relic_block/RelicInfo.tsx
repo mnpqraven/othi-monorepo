@@ -31,6 +31,7 @@ export const RelicInfo = forwardRef<
 
       <div className={cn("grid grid-cols-2 gap-2 place-self-center")}>
         {splittedRelics.map((atom, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <RelicBox atom={atom} key={index} />
         ))}
       </div>

@@ -61,7 +61,7 @@ export function useDataProcess({ character }: Prop): {
     Number(character?.light_cone?.id)
   );
 
-  if (Boolean(charPromo) && Boolean(character) && Boolean(lcPromo)) {
+  if (charPromo && character && lcPromo) {
     const currentGreyChar = charAfterPromotion({
       promotionConfig: charPromo,
       ascension: character.promotion,
@@ -158,17 +158,20 @@ export function useDataProcess({ character }: Prop): {
   ): number {
     switch (key) {
       case "hp":
-        const maxedHp = maxedGreyChar.hp + maxedGreyLc.hp;
-        const currentGreyHp = currentGreyChar.hp + currentGreyLc.hp;
-        return (additionSum + currentGreyHp) / maxedHp;
+        return (
+          (additionSum + currentGreyChar.hp + currentGreyLc.hp) /
+          (maxedGreyChar.hp + maxedGreyLc.hp)
+        );
       case "atk":
-        const maxedAtk = maxedGreyChar.atk + maxedGreyLc.atk;
-        const currentGreyAtk = currentGreyChar.atk + currentGreyLc.atk;
-        return (additionSum + currentGreyAtk) / maxedAtk;
+        return (
+          (additionSum + currentGreyChar.atk + currentGreyLc.atk) /
+          (maxedGreyChar.atk + maxedGreyLc.atk)
+        );
       case "def":
-        const maxedDef = maxedGreyChar.def + maxedGreyLc.def;
-        const currentGreyDef = currentGreyChar.def + currentGreyLc.def;
-        return (additionSum + currentGreyDef) / maxedDef;
+        return (
+          (additionSum + currentGreyChar.def + currentGreyLc.def) /
+          (maxedGreyChar.def + maxedGreyLc.def)
+        );
       case "spd":
         return additionSum;
       case "crit_rate":
@@ -179,7 +182,6 @@ export function useDataProcess({ character }: Prop): {
       case "effect_hit":
       case "effect_res":
       case "all_dmg":
-
       case "lightning_dmg":
       case "wind_dmg":
       case "fire_dmg":
@@ -441,33 +443,4 @@ function getFieldLabel(field: Field): string {
     case "all_dmg":
       return "All DMG";
   }
-}
-
-/**
- * upsert algorithm of trace to compute into a single object with total sum
- * of each property present
- * @param skillTree - [TODO:description]
- * @param dbSkillTree - [TODO:description]
- * @returns [TODO:return]
- */
-function sumAfterTrace(
-  skillTree: MihomoSkillTreeConfig[],
-  dbSkillTree: SkillTreeConfig[]
-) {
-  // filter to only stat nodes
-  const statNodes = dbSkillTree.filter((e) => getNodeType(e) === "SMALL");
-  // level 0 = locked, level 1 = unlocked
-  const nodeMap: Partial<Record<Property, number>> = {};
-
-  // TODO: test upsert algo
-  statNodes.forEach(({ point_id, status_add_list }) => {
-    const find = skillTree.find((e) => Number(e.id) == point_id);
-    if (find && find.level > 0) {
-      const property = status_add_list[0].property_type;
-      const value = status_add_list[0].value.value;
-      if (nodeMap[property] === undefined) nodeMap[property] = value;
-      else nodeMap[property]! += value;
-    }
-  });
-  return nodeMap;
 }

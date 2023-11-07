@@ -41,8 +41,8 @@ interface Prop {
 
 export function TraceTableUpdater({ path }: Prop) {
   const characterId = useAtomValue(charIdAtom);
-  const { data: traces } = useCharacterTrace(characterId);
-  if (!traces) return "loading...";
+  const { data: traces, isFetching } = useCharacterTrace(characterId);
+  if (isFetching) return "loading...";
   const splittedTraces = groupTrips(path);
 
   return (
@@ -51,8 +51,7 @@ export function TraceTableUpdater({ path }: Prop) {
         <TripRow
           anchors={trip}
           ascension={(index + 1) * 2}
-          key={index}
-          path={path}
+          key={trip[0]}
           traceInfo={traces}
         />
       ))}
@@ -63,11 +62,10 @@ export function TraceTableUpdater({ path }: Prop) {
 interface TripRowProps extends HTMLAttributes<HTMLDivElement> {
   anchors: Anchor[];
   traceInfo: SkillTreeConfig[];
-  path: Path;
   ascension: number;
 }
 const TripRow = forwardRef<HTMLDivElement, TripRowProps>(
-  ({ anchors, traceInfo, path, ascension, className, ...props }, ref) => {
+  ({ anchors, traceInfo, ascension, className, ...props }, ref) => {
     const traces = anchors.map((anchor) =>
       traceInfo.find((e) => e.anchor === anchor)
     );
@@ -76,10 +74,10 @@ const TripRow = forwardRef<HTMLDivElement, TripRowProps>(
 
     function updateCheckMap(checked: boolean, index: number) {
       const rightSideMap = traces
-        .filter((e, i) => i >= index && e !== undefined)
-        .map((trace, i) => ({
-          id: trace?.point_id!,
-          checked: i == 0 ? checked : false,
+        .filter((e, i) => e && i >= index)
+        .map((trace: SkillTreeConfig, i) => ({
+          id: trace.point_id,
+          checked: i === 0 ? checked : false,
         }));
       updateMany(rightSideMap);
     }
@@ -93,11 +91,12 @@ const TripRow = forwardRef<HTMLDivElement, TripRowProps>(
               atomData={traceDict}
               data={trace}
               index={index}
-              key={index}
+              key={trace.point_id}
               onUpdateSlice={updateCheckMap}
               previousData={index > 0 ? traces.at(index - 1) : undefined}
             />
           ) : (
+            // eslint-disable-next-line react/no-array-index-key
             <div className="flex flex-col items-center gap-1 p-1" key={index}>
               <span>...</span>
               <Skeleton className="h-12 w-12 rounded-full" />
@@ -155,7 +154,7 @@ function TraceItem({
       className="flex h-fit flex-col items-center gap-1 p-1"
       disabled={disabled}
       onPressedChange={(checked) => {
-        if (getNodeType(data) == "SMALL") onUpdateSlice(checked, index);
+        if (getNodeType(data) === "SMALL") onUpdateSlice(checked, index);
       }}
       pressed={atomData[data.point_id]}
     >

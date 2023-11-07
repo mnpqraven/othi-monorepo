@@ -55,7 +55,7 @@ function genPolygonPoints<Datum>(
   });
   const pointString: string = new Array(dataArray.length + 1)
     .fill("")
-    .reduce((res, _, i) => {
+    .reduce((res: string, _, i) => {
       if (i > dataArray.length) return res;
       const xVal = scale(getValue(dataArray[i - 1])) * Math.sin(i * step);
       const yVal = scale(getValue(dataArray[i - 1])) * Math.cos(i * step);
@@ -112,10 +112,7 @@ export function SpiderChart<T>({
     hideTooltip,
   } = useTooltip<{ index: number }>();
   const isTooltipVisible =
-    tooltipOpen &&
-    Boolean(tooltipData) &&
-    Boolean(tooltipRender) &&
-    Boolean(data.at(tooltipData.index));
+    tooltipOpen && tooltipData && tooltipRender && data.at(tooltipData.index);
 
   const voronoiLayout = useMemo(
     () =>
@@ -131,7 +128,7 @@ export function SpiderChart<T>({
   const handleMouseMove: MouseEventHandler<SVGRectElement> = useCallback(
     (event) => {
       const coords = localPoint(event);
-      if (Boolean(coords?.x) && coords.y) {
+      if (coords?.x && coords.y) {
         const closest = voronoiLayout.find(coords.x, coords.y, width / 3);
 
         showTooltip({
@@ -158,7 +155,7 @@ export function SpiderChart<T>({
               stroke={silver}
               strokeLinecap="round"
               strokeOpacity={0.6}
-              strokeWidth={i % 2 == 0 ? 1 : 2}
+              strokeWidth={i % 2 === 0 ? 1 : 2}
             />
           ))}
           {[...new Array(data.length)].map((_, i) => (
