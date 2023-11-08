@@ -1,4 +1,4 @@
-import { characterMetadataQ } from "@hsr/hooks/queries/useCharacterMetadata";
+import { characterMetadataQ } from "@hsr/hooks/queries/character";
 import { atom } from "jotai";
 import { atomWithImmer } from "jotai-immer";
 import { atomsWithQuery } from "jotai-tanstack-query";

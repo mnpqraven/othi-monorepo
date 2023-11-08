@@ -24,7 +24,7 @@ interface Prop extends HTMLAttributes<HTMLDivElement> {
   displayStat?: boolean;
 }
 export const LightConeInfo = forwardRef<HTMLDivElement, Prop>(
-  ({ displayStat = false, className, ...props }, ref) => {
+  ({ className, ...props }, ref) => {
     const ratio = 902 / 1260;
 
     const lightConeId = useAtomValue(lcIdAtom);
@@ -57,17 +57,6 @@ export const LightConeInfo = forwardRef<HTMLDivElement, Prop>(
             <span className="font-bold">Lv. {level}</span> / {maxLevel}
             <ImpositionIcon className="ml-2.5" imposition={imposition} />
           </span>
-
-          {/*displayStat && (
-            <div className="flex">
-              {attributes.map((attr) => (
-                <div key={attr.field} className="flex items-center">
-                  <Image src={img(attr.icon)} alt="" width={32} height={32} />
-                  {attr.display}
-                </div>
-              ))}
-            </div>
-          )*/}
         </div>
 
         <Tooltip>

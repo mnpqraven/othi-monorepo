@@ -145,20 +145,6 @@ function getLabel2(typeDesc: string): string {
       return typeDesc;
   }
 }
-function getLabel(skillType: SkillType | null | undefined): string {
-  switch (skillType) {
-    case "Normal":
-      return "Basic";
-    case "BPSkill":
-      return "Skill";
-    case "Ultra":
-      return "Ult";
-    case "Talent":
-      return "Talent";
-    default:
-      return "";
-  }
-}
 
 export function getSkillMaxLevel(
   skillType: SkillType | null | undefined,

@@ -56,12 +56,13 @@ function genPolygonPoints<Datum>(
   const pointString: string = new Array(dataArray.length + 1)
     .fill("")
     .reduce((res: string, _, i) => {
-      if (i > dataArray.length) return res;
-      const xVal = scale(getValue(dataArray[i - 1])) * Math.sin(i * step);
-      const yVal = scale(getValue(dataArray[i - 1])) * Math.cos(i * step);
+      let next = res;
+      if (i > dataArray.length) return next;
+      const xVal = scale(getValue(dataArray[i - 1]!)) * Math.sin(i * step);
+      const yVal = scale(getValue(dataArray[i - 1]!)) * Math.cos(i * step);
       points[i - 1] = { x: xVal, y: yVal };
-      res += `${xVal},${yVal} `;
-      return res;
+      next += `${xVal},${yVal} `;
+      return next;
     });
 
   return { points, pointString };
@@ -147,7 +148,7 @@ export function SpiderChart<T>({
         <Group left={width / 2} top={height / 2 - margin.top}>
           {[...new Array(levels)].map((_, i) => (
             <LineRadial
-              angle={(d) => radialScale(d.angle) ?? 0}
+              angle={(d) => radialScale(d.angle)}
               data={webs}
               fill="none"
               key={`web-${i}`}
@@ -171,11 +172,12 @@ export function SpiderChart<T>({
             <Svg
               fill="white"
               height={24}
+              // eslint-disable-next-line react/no-array-index-key
               key={`annotate-${i}`}
               src={iconAccessor(item)}
               width={24}
-              x={textAnchors[i].x - 10}
-              y={textAnchors[i].y - 10}
+              x={textAnchors[i]!.x - 10}
+              y={textAnchors[i]!.y - 10}
             />
           ))}
           <polygon
@@ -211,7 +213,7 @@ export function SpiderChart<T>({
           left={tooltipLeft}
           top={tooltipTop}
         >
-          {tooltipRender(data[tooltipData.index])}
+          {tooltipRender(data[tooltipData.index]!)}
         </TooltipWithBounds>
       ) : null}
     </>
