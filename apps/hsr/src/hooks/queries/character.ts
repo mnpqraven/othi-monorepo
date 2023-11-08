@@ -6,9 +6,6 @@ import type { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
 import API from "@hsr/server/typedEndpoints";
 import { queryOptions } from "@tanstack/react-query";
 import type { List } from "lib/generics";
-import { rpc } from "protocol";
-import type { SignatureReturn } from "protocol/ts";
-import { SignatureAtlasService } from "protocol/ts";
 
 export const characterEidolonsQ = (characterId: number | undefined) =>
   queryOptions<List<AvatarRankConfig>, unknown, AvatarRankConfig[]>({
@@ -65,13 +62,4 @@ export const characterTraceQ = (characterId: number | undefined) =>
     queryFn: () =>
       characterId ? API.trace.get({ characterId }) : Promise.reject(),
     select: (data) => data.list,
-  });
-
-export const characterSignatureQ = (charId: number | undefined) =>
-  queryOptions<SignatureReturn, unknown, SignatureReturn>({
-    queryKey: ["signature", charId],
-    queryFn: () =>
-      charId
-        ? rpc(SignatureAtlasService).byCharId({ charId })
-        : Promise.reject(),
   });

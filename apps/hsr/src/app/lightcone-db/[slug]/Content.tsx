@@ -45,8 +45,7 @@ function Content({ data, skill, link = false }: Prop) {
           </CardHeader>
 
           <CardHeader>
-            <CardTitle className="w-32">Superimpose {promotion + 1}</CardTitle>
-            <CardDescription>
+            <CardTitle className="w-32">
               <Slider
                 className="my-1.5"
                 max={4}
@@ -55,7 +54,8 @@ function Content({ data, skill, link = false }: Prop) {
                   if (e[0]) setPromotion(e[0]);
                 }}
               />
-            </CardDescription>
+            </CardTitle>
+            <CardDescription>Superimpose {promotion + 1}</CardDescription>
           </CardHeader>
         </div>
         <CardContent>

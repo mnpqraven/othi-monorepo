@@ -48,7 +48,7 @@ import {
   selectedCalendarDateAtom,
   selectedMonthAtom,
 } from "../_store/main";
-import { objToDate } from "../../components/schemas";
+import { dateToISO, objToDate } from "../../components/schemas";
 import { schema } from "./schema";
 import { BattlePassField } from "./BattlePassField";
 import { RailPassField } from "./RailPassField";
@@ -81,7 +81,6 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
   });
 
   const debounceOnChange = useDebounce(form.handleSubmit(onSubmit), 300);
-  const untilDateSubscription = form.watch("untilDate");
 
   const server = form.watch("server"); // 0 asia 1 america
   const { futurePatchDateList: binding } = useFuturePatchDateList();
@@ -100,12 +99,7 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
   });
 
   useEffect(() => {
-    debounceOnChange(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [untilDateSubscription]);
-
-  useEffect(() => {
-    if (beforeFirstRender) {
+    if (beforeFirstRender && !equal(storagedForm, defaultValues)) {
       form.reset(storagedForm);
       setBeforeFirstRender(false);
     }
@@ -119,16 +113,10 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
     }
   }
 
-  function onSelectDatePreset(date: string) {
-    // today
-    if (date === "0") {
-      const nextDate = new Date();
-      setSelectedCalendarDate(nextDate);
-      setMonthController(nextDate);
-    } else {
-      setSelectedCalendarDate(new Date(date));
-      setMonthController(new Date(date));
-    }
+  function onSelectDatePreset(date: string | number) {
+    const d = new Date(date);
+    setSelectedCalendarDate(d);
+    setMonthController(d);
     setOpen(false);
   }
 
@@ -147,11 +135,7 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
 
   return (
     <Form {...form}>
-      <form
-        className="space-y-4"
-        onChange={debounceOnChange}
-        onSubmit={void form.handleSubmit(onSubmit)}
-      >
+      <form className="space-y-4" onChange={debounceOnChange}>
         <FormField
           control={form.control}
           name="untilDate"
@@ -170,11 +154,11 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
                     render={({ field: serverField }) => (
                       <FormItem>
                         <Select
-                          defaultValue="0"
                           onValueChange={(data) => {
                             const asInt = parseInt(data);
                             serverField.onChange(asInt);
                           }}
+                          value={String(serverField.value)}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -235,7 +219,7 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
                           <CommandGroup>
                             <CommandItem
                               onSelect={() => {
-                                onSelectDatePreset("0");
+                                onSelectDatePreset(Date.now());
                               }}
                             >
                               Today
@@ -289,7 +273,7 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
                         onSelect={(e) => {
                           if (e) {
                             setSelectedCalendarDate(e);
-                            // dateField.onChange(dateToISO.parse(e));
+                            dateField.onChange(dateToISO.parse(e));
                           }
                         }}
                         selected={selectedCalendarDate}
@@ -316,12 +300,11 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
                   </FormDescription>
                 </div>
                 <Select
-                  defaultValue="0"
                   onValueChange={(data) => {
                     const asInt = parseInt(data);
                     field.onChange(asInt);
                   }}
-                  value={String(form.watch("eq"))}
+                  value={String(field.value)}
                 >
                   <FormControl>
                     <SelectTrigger className="w-fit">

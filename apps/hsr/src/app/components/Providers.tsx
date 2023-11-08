@@ -8,6 +8,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useHydrateAtoms } from "jotai/utils";
 import { queryClientAtom } from "jotai-tanstack-query";
 import { Provider } from "jotai";
+import { TransportProvider } from "@connectrpc/connect-query";
+import { createTransport } from "protocol/rpc";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
   defaultOptions: {
@@ -26,16 +28,19 @@ const HydrateAtoms = ({ children }: RootProps) => {
 };
 
 export default function RQProvider({ children }: RootProps) {
-  // const [queryClient] = useState(() => new QueryClient(TANSTACK_CONFIG));
+  const transport = createTransport();
+
   return (
     <ThemeProvider attribute="class">
       <TooltipProvider delayDuration={300}>
-        <QueryClientProvider client={queryClient}>
-          <Provider>
-            <HydrateAtoms>{children}</HydrateAtoms>
-          </Provider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        <TransportProvider transport={transport}>
+          <QueryClientProvider client={queryClient}>
+            <Provider>
+              <HydrateAtoms>{children}</HydrateAtoms>
+            </Provider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </TransportProvider>
       </TooltipProvider>
     </ThemeProvider>
   );

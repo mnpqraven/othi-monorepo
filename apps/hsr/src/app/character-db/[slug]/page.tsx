@@ -14,7 +14,6 @@ import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import {
   characterEidolonsQ,
   characterMetadataQ,
-  characterSignatureQ,
   characterSkillQ,
   characterTraceQ,
 } from "@hsr/hooks/queries/character";
@@ -36,7 +35,7 @@ export default async function Character({ params }: Prop) {
       <TabsList className="h-fit [&>*]:whitespace-pre-wrap">
         <TabsTrigger value="skill">Skills</TabsTrigger>
         <TabsTrigger value="eidolon">Eidolons</TabsTrigger>
-        <TabsTrigger value="sig-lc">Featured Light Cone</TabsTrigger>
+        <TabsTrigger value="sig">Featured Light Cone</TabsTrigger>
         <TabsTrigger value="trace">Traces</TabsTrigger>
       </TabsList>
 
@@ -53,7 +52,7 @@ export default async function Character({ params }: Prop) {
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="sig-lc">
+        <TabsContent value="sig">
           <Suspense fallback={<Loading />}>
             <SignatureLightCone characterId={characterId} />
           </Suspense>
@@ -81,7 +80,6 @@ async function prefetchOptions(characterId: number) {
     characterSkillQ(characterId),
     characterMetadataQ(characterId),
     characterEidolonsQ(characterId),
-    characterSignatureQ(characterId),
     characterTraceQ(characterId),
     optionsProperties(),
   ];

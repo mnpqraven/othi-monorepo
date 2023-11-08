@@ -4,9 +4,7 @@ import { AlertCircle } from "lucide-react";
 import type { PlainMessage } from "@bufbuild/protobuf";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
-import { rpc } from "protocol/rpc";
 import type { JadeEstimateResponse } from "protocol/ts";
-import { JadeEstimateService } from "protocol/ts";
 import {
   HoverCard,
   HoverCardContent,
@@ -19,14 +17,14 @@ import {
   TableHeader,
   TableRow,
 } from "ui/primitive";
+import { post } from "protocol/ts/jadeestimate-JadeEstimateService_connectquery";
 import { estimateFormAtom } from "./_store/main";
 import { placeholderTableData } from "./defaultTableData";
 
 function JadeRewardTable() {
   const formPayload = useAtomValue(estimateFormAtom);
   const { data: rewardTable } = useQuery({
-    queryKey: ["jadeEstimate", formPayload],
-    queryFn: () => rpc(JadeEstimateService).post(formPayload),
+    ...post.useQuery(formPayload),
     placeholderData: keepPreviousData,
   });
   const data = rewardTable ?? placeholderTableData;

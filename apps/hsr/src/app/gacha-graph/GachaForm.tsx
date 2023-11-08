@@ -1,6 +1,5 @@
 import { useBannerList } from "@hsr/hooks/queries/useGachaBannerList";
-import { range } from "lib/utils";
-import type { UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useDebounce } from "@hsr/hooks/useDebounce";
 import type { PlainMessage } from "@bufbuild/protobuf";
 import type { Banner } from "@hsr/bindings/Banner";
@@ -21,24 +20,54 @@ import {
   SelectValue,
   Switch,
 } from "ui/primitive";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAtom } from "jotai";
+import { isEmpty, range } from "lib";
+import { useEffect, useState } from "react";
+import equal from "fast-deep-equal/react";
+import { useCacheValidate } from "@hsr/hooks/useCacheValidate";
+import { RESET } from "jotai/utils";
+import { gachaGraphFormAtom } from "./store";
+import { schema } from "./schema";
+import { defaultGachaQuery } from "./types";
 
 type FormSchema = PlainMessage<ProbabilityRatePayload>;
 
 interface Prop {
-  updateQuery: (payload: FormSchema) => void;
-  bannerOnChange?: (value: "SSR" | "SR" | "LC") => void;
   selectedBanner: Banner;
-  form: UseFormReturn<FormSchema>;
 }
 
-export function GachaForm({
-  updateQuery,
-  selectedBanner,
-  bannerOnChange,
-  form,
-}: Prop) {
+export function GachaForm({ selectedBanner }: Prop) {
   const { data: bannerList } = useBannerList();
-  const debounceOnChange = useDebounce(form.handleSubmit(updateQuery), 300);
+
+  const [storagedForm, setStoragedForm] = useAtom(gachaGraphFormAtom);
+
+  const form = useForm<FormSchema>({
+    resolver: zodResolver(schema),
+    defaultValues: storagedForm,
+  });
+  const onDebouncedSubmit = useDebounce(form.handleSubmit(onSubmit), 300);
+  const [storageRetrieved, setStorageRetrieved] = useState(false);
+
+  useCacheValidate({
+    schema,
+    schemaData: storagedForm,
+    onReload: () => {
+      setStoragedForm(RESET);
+      form.reset(defaultGachaQuery);
+    },
+  });
+  useEffect(() => {
+    if (!storageRetrieved && !equal(storagedForm, defaultGachaQuery)) {
+      form.reset(storagedForm);
+      setStorageRetrieved(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storagedForm]);
+
+  function onSubmit(values: FormSchema) {
+    setStoragedForm(values);
+  }
 
   function preventMinus(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.code === "Minus") e.preventDefault();
@@ -46,10 +75,7 @@ export function GachaForm({
 
   return (
     <Form {...form}>
-      <form
-        onChange={debounceOnChange}
-        onSubmit={void form.handleSubmit(updateQuery)}
-      >
+      <form onChange={onDebouncedSubmit}>
         <div className="flex flex-col flex-wrap justify-evenly gap-y-4 rounded-md border p-4 md:flex-row md:space-x-4">
           <FormField
             control={form.control}
@@ -58,15 +84,11 @@ export function GachaForm({
               <FormItem>
                 <FormLabel>Banner</FormLabel>
                 <Select
-                  defaultValue={`${field.value}`}
-                  onValueChange={(bannerType) => {
-                    const parsed = BannerType[parseInt(bannerType)] as
-                      | "SSR"
-                      | "SR"
-                      | "LC";
-                    if (bannerOnChange) bannerOnChange(parsed);
-                    field.onChange(parseInt(bannerType));
+                  onValueChange={(numericValue) => {
+                    if (!isEmpty(numericValue))
+                      field.onChange(Number(numericValue));
                   }}
+                  value={String(field.value)}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -76,7 +98,7 @@ export function GachaForm({
                   <SelectContent position="popper">
                     {bannerList.map(({ bannerName, bannerType }) => (
                       <SelectItem
-                        key={bannerName}
+                        key={BannerType[bannerType]}
                         value={String(BannerType[bannerType])}
                       >
                         {bannerName}
@@ -84,9 +106,11 @@ export function GachaForm({
                     ))}
                   </SelectContent>
                 </Select>
+                <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="pulls"
@@ -137,10 +161,10 @@ export function GachaForm({
               <FormItem>
                 <FormLabel>Current {selectedBanner.constPrefix}</FormLabel>
                 <Select
-                  defaultValue={`${field.value}`}
                   onValueChange={(e) => {
                     field.onChange(parseInt(e));
                   }}
+                  value={String(field.value)}
                 >
                   <FormControl>
                     <SelectTrigger>

@@ -3,13 +3,13 @@
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { Content } from "@hsr/app/lightcone-db/[slug]/Content";
 import { Portrait } from "@hsr/app/lightcone-db/[slug]/Portrait";
-import { characterSignatureQ } from "@hsr/hooks/queries/character";
 import {
   lightConeMetadatasQ,
   optionsLightConeSkills,
 } from "@hsr/hooks/queries/lightcone";
 import { IMAGE_URL } from "@hsr/lib/constants";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { byCharId } from "protocol/ts/atlas-SignatureAtlasService_connectquery";
 import { useState } from "react";
 
 interface Prop {
@@ -17,7 +17,7 @@ interface Prop {
 }
 
 function SignatureLightCone({ characterId }: Prop) {
-  const { data } = useSuspenseQuery(characterSignatureQ(characterId));
+  const { data } = useSuspenseQuery(byCharId.useQuery({ charId: characterId }));
   const { lcIds } = data;
 
   const [selectedLcId, setSelectedLcId] = useState(lcIds.at(0));
