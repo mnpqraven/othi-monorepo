@@ -61,7 +61,7 @@ export default function LoginForm() {
       <Form {...form}>
         <form
           className="flex flex-col items-center gap-6"
-          onSubmit={void form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField
             control={form.control}

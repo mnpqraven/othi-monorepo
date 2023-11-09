@@ -75,17 +75,7 @@ export default function Profile() {
   return (
     <main className="flex flex-col items-center gap-12">
       <div className="flex flex-col gap-2">
-        <div className="flex items-end gap-4">
-          <UidForm form={form} onSubmit={setProf} />
-          <Button form="form" size="sm" type="submit">
-            Search
-          </Button>
-          <Link href="/card/custom">
-            <Button className="w-fit items-center" size="sm" variant="outline">
-              Custom card
-            </Button>
-          </Link>
-        </div>
+        <UidForm form={form} onSubmit={setProf} />
 
         <div className="text-destructive text-center">{uidError?.message}</div>
       </div>
@@ -159,7 +149,7 @@ function UidForm({ form, onSubmit }: UidFormProps) {
       <form
         className="mt-12 flex flex-col items-center justify-center gap-4 md:flex-row md:items-start"
         id="form"
-        onSubmit={void form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
           name="uid"
@@ -184,6 +174,21 @@ function UidForm({ form, onSubmit }: UidFormProps) {
           options={Object.entries(LANG)}
           valueAccessor={([lang, _]) => lang}
         />
+
+        <Button className="self-end" form="form" size="sm" type="submit">
+          Search
+        </Button>
+
+        <Link className="self-end" href="/card/custom">
+          <Button
+            className="w-fit items-center"
+            size="sm"
+            type="button"
+            variant="outline"
+          >
+            Custom card
+          </Button>
+        </Link>
       </form>
     </Form>
   );

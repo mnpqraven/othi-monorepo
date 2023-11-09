@@ -59,6 +59,7 @@ module.exports = {
     "@typescript-eslint/no-unsafe-assignment": "off",
     "react/hook-use-state": "off",
     "@tanstack/query/exhaustive-deps": "warn",
+    "@typescript-eslint/no-misused-promises": "off",
     camelcase: "off",
   },
 };
