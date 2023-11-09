@@ -14,6 +14,7 @@ import {
   DataTableToggleColumn,
 } from "ui/shared/table";
 import { trpc } from "@db-center/app/_trpc/client";
+import { keepPreviousData } from "@tanstack/react-query";
 import { TABLE_DICT } from "./_data/dataset";
 import type { Categories } from "./types";
 
@@ -32,9 +33,9 @@ export default function Page({ params }: Params) {
 
   const dict = TABLE_DICT[tableName];
 
-  const { data, isInitialLoading } = trpc.table.list.useQuery(
+  const { data, isLoading } = trpc.table.list.useQuery(
     { tableName, pagination },
-    { keepPreviousData: true }
+    { placeholderData: keepPreviousData }
   );
 
   const chunkData = useMemo(
@@ -72,7 +73,7 @@ export default function Page({ params }: Params) {
       </div>
 
       <ScrollArea>
-        <DataTable isLoading={isInitialLoading} spacing="sm" table={tableDef} />
+        <DataTable isLoading={isLoading} spacing="sm" table={tableDef} />
       </ScrollArea>
 
       <DataTablePagination sizes={[10, 20, 25, 50, 100]} table={tableDef} />

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client/web";
