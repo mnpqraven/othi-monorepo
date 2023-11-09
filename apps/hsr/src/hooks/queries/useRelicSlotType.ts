@@ -1,11 +1,12 @@
-import { RelicType } from "@hsr/bindings/RelicConfig";
+import type { RelicType } from "@hsr/bindings/RelicConfig";
 import API from "@hsr/server/typedEndpoints";
-import { UseQueryOptions, queryOptions, useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 
 export const optionsRelicSlotType = (setIds: number[] | undefined) =>
   queryOptions<Record<number, RelicType>, unknown, Record<number, RelicType>>({
     queryKey: ["relic_slot_type", setIds],
-    queryFn: async () => await API.relicSlotType.post({ list: setIds ?? [] }),
+    queryFn: () => API.relicSlotType.post({ list: setIds ?? [] }),
   });
 
 export function useRelicSlotType(

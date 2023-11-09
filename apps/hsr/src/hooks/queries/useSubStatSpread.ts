@@ -1,12 +1,13 @@
-import { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
-import { List } from "@hsr/lib/generics";
+import type { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
 import API from "@hsr/server/typedEndpoints";
-import { UseQueryOptions, queryOptions, useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import type { List } from "lib/generics";
 
 export const optionsSubStatSpread = () =>
   queryOptions<List<RelicSubAffixConfig>, unknown, RelicSubAffixConfig[]>({
     queryKey: ["statspread_sub"],
-    queryFn: async () => await API.substatSpread.get(),
+    queryFn: API.substatSpread.get,
     select: (data) => data.list,
   });
 

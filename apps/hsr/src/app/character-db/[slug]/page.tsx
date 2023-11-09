@@ -84,6 +84,7 @@ async function prefetchOptions(characterId: number) {
     optionsProperties(),
   ];
   await Promise.allSettled(
+    // @ts-expect-error mapping type override
     options.map((option) => queryClient.prefetchQuery(option))
   );
   return dehydrate(queryClient);

@@ -1,18 +1,20 @@
-import { RelicSetConfig } from "@hsr/bindings/RelicSetConfig";
-import { List } from "@hsr/lib/generics";
+import type { RelicSetConfig } from "@hsr/bindings/RelicSetConfig";
 import API from "@hsr/server/typedEndpoints";
-import {
+import type {
   UseQueryOptions,
   UseSuspenseQueryOptions,
+} from "@tanstack/react-query";
+import {
   queryOptions,
   useQuery,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import type { List } from "lib/generics";
 
 export const optionsRelicSet = () =>
   queryOptions<List<RelicSetConfig>, unknown, RelicSetConfig[]>({
     queryKey: ["relic_sets"],
-    queryFn: async () => await API.relicSets.get(),
+    queryFn: API.relicSets.get,
     select: (data) => data.list.sort((a, b) => a.set_id - b.set_id),
   });
 
@@ -47,9 +49,9 @@ type SuspendedOptions = Omit<
 export const optionRelicSet = (setId: number | undefined) =>
   queryOptions<List<RelicSetConfig>, unknown, RelicSetConfig[]>({
     queryKey: ["relic_set", setId],
-    queryFn: async () => await API.relicSet.get({ relicSetId: setId! }),
+    queryFn: () => API.relicSet.get({ relicSetId: setId! }),
     select: (data) => data.list.sort((a, b) => a.set_id - b.set_id),
-    enabled: !!setId,
+    enabled: Boolean(setId),
   });
 
 export function useRelicSet(setId: number | undefined, opt: Option = {}) {

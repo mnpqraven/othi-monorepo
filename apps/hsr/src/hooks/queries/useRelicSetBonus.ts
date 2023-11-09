@@ -1,18 +1,20 @@
-import { RelicSetSkillConfig } from "@hsr/bindings/RelicSetSkillConfig";
-import { List } from "@hsr/lib/generics";
+import type { RelicSetSkillConfig } from "@hsr/bindings/RelicSetSkillConfig";
 import API from "@hsr/server/typedEndpoints";
-import {
+import type {
   UseQueryOptions,
   UseSuspenseQueryOptions,
+} from "@tanstack/react-query";
+import {
   queryOptions,
   useQuery,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import type { List } from "lib/generics";
 
 export const optionsRelicSetBonuses = () =>
   queryOptions<List<RelicSetSkillConfig>, unknown, RelicSetSkillConfig[]>({
     queryKey: ["relic_bonus"],
-    queryFn: async () => await API.relicSetBonuses.get(),
+    queryFn: API.relicSetBonuses.get,
     select: (data) => data.list,
   });
 

@@ -1,7 +1,8 @@
-import { RelicType } from "@hsr/bindings/RelicConfig";
-import { RelicMainAffixConfig } from "@hsr/bindings/RelicMainAffixConfig";
+import type { RelicType } from "@hsr/bindings/RelicConfig";
+import type { RelicMainAffixConfig } from "@hsr/bindings/RelicMainAffixConfig";
 import API from "@hsr/server/typedEndpoints";
-import { UseQueryOptions, queryOptions, useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 
 export const optionsMainStatSpread = () =>
   queryOptions<
@@ -10,7 +11,7 @@ export const optionsMainStatSpread = () =>
     Record<RelicType, RelicMainAffixConfig[]>
   >({
     queryKey: ["statspread_main"],
-    queryFn: async () => await API.mainstatSpread.get(),
+    queryFn: API.mainstatSpread.get,
   });
 
 export function useMainStatSpread(opt: Options = {}) {

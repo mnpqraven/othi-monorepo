@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import { sameDate } from "lib/utils";
 import { useBannerList } from "@hsr/hooks/queries/useBannerList";
 import { useMemo } from "react";
@@ -89,7 +90,7 @@ function CalendarFooter({ date }: Prop) {
               </TooltipTrigger>
               {Boolean(banner?.chara.at(index)?.placeholder) && (
                 <TooltipContent>
-                  {banner.chara[index]?.placeholder}
+                  {banner?.chara[index]?.placeholder}
                 </TooltipContent>
               )}
             </Tooltip>
@@ -111,7 +112,9 @@ function CalendarFooter({ date }: Prop) {
                 <LoadingIcon href={banner?.lc.at(index)?.href} key={index} />
               </TooltipTrigger>
               {Boolean(banner?.lc.at(index)?.placeholder) && (
-                <TooltipContent>{banner.lc[index]?.placeholder}</TooltipContent>
+                <TooltipContent>
+                  {banner?.lc[index]?.placeholder}
+                </TooltipContent>
               )}
             </Tooltip>
           )

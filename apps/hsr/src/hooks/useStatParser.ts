@@ -124,8 +124,8 @@ export function useStatParser(props?: StatParserConstructor) {
     )
     .filter((trace) => Boolean(trace.status_add_list.length))
     .map((trace) => ({
-      property: trace.status_add_list.at(0)?.property_type,
-      value: trace.status_add_list.at(0)?.value.value,
+      property: trace.status_add_list[0]!.property_type,
+      value: trace.status_add_list[0]!.value.value,
     }));
 
   const traceTotal: Partial<Record<Property, number>> = {};
@@ -150,7 +150,7 @@ export function useStatParser(props?: StatParserConstructor) {
 
     find.property_list.forEach((props, index) => {
       // not reaching pc req. for bonus activation
-      if (find.require_num[index] > possessingCount) return;
+      if (find.require_num[index]! > possessingCount) return;
       props.forEach(({ property, value }) => {
         if (!setBonusTotal[property]) setBonusTotal[property] = value;
         else setBonusTotal[property]! += value;
@@ -163,7 +163,9 @@ export function useStatParser(props?: StatParserConstructor) {
   const subStatNoStep = (relic: ParsedRelicSchema) =>
     relic.subStats
       .filter(Boolean)
-      .map((ss) => ({ property: ss?.property, value: ss?.value! }));
+      // TODO: CHECK ASSERTION
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+      .map((ss) => ({ property: ss?.property!, value: ss?.value ?? 0 }));
 
   const relicPropList: {
     property: Property;
@@ -243,9 +245,9 @@ function baseChar(
   const { attack_add, attack_base, hpadd, hpbase, defence_add, defence_base } =
     promoteData;
   return {
-    atk: attack_base[ascension] + (level - 1) * attack_add[ascension],
-    hp: hpbase[ascension] + (level - 1) * hpadd[ascension],
-    def: defence_base[ascension] + (level - 1) * defence_add[ascension],
+    atk: attack_base[ascension]! + (level - 1) * attack_add[ascension]!,
+    hp: hpbase[ascension]! + (level - 1) * hpadd[ascension]!,
+    def: defence_base[ascension]! + (level - 1) * defence_add[ascension]!,
   };
 }
 function baseLc(
@@ -263,9 +265,10 @@ function baseLc(
       base_hpadd,
     } = promoteData;
     return {
-      atk: base_attack[ascension] + (level - 1) * base_attack_add[ascension],
-      hp: base_hp[ascension] + (level - 1) * base_hpadd[ascension],
-      def: base_defence[ascension] + (level - 1) * base_defence_add[ascension],
+      atk: base_attack[ascension]! + (level - 1) * base_attack_add[ascension]!,
+      hp: base_hp[ascension]! + (level - 1) * base_hpadd[ascension]!,
+      def:
+        base_defence[ascension]! + (level - 1) * base_defence_add[ascension]!,
     };
   }
   return { atk: 0, hp: 0, def: 0 };

@@ -1,14 +1,15 @@
-import { RelicConfig } from "@hsr/bindings/RelicConfig";
-import { List } from "@hsr/lib/generics";
+import type { RelicConfig } from "@hsr/bindings/RelicConfig";
 import API from "@hsr/server/typedEndpoints";
-import { UseQueryOptions, queryOptions, useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import type { List } from "lib/generics";
 
 export const optionsRelic = (setIds: number[] | undefined) =>
   queryOptions<List<RelicConfig>, unknown, RelicConfig[]>({
     queryKey: ["relics", setIds],
-    queryFn: async () => await API.relics.post({ list: setIds! }),
+    queryFn: () => API.relics.post({ list: setIds! }),
     select: (data) => data.list.sort((a, b) => a.set_id - b.set_id),
-    enabled: !!setIds,
+    enabled: Boolean(setIds),
   });
 
 export function useRelics(setIds: number[] | undefined, opt: Options = {}) {

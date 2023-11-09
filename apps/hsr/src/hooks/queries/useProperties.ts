@@ -1,18 +1,20 @@
-import { AvatarPropertyConfig } from "@hsr/bindings/AvatarPropertyConfig";
-import { List } from "@hsr/lib/generics";
+import type { AvatarPropertyConfig } from "@hsr/bindings/AvatarPropertyConfig";
 import API from "@hsr/server/typedEndpoints";
-import {
+import type {
   UseQueryOptions,
   UseSuspenseQueryOptions,
+} from "@tanstack/react-query";
+import {
   queryOptions,
   useQuery,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import type { List } from "lib/generics";
 
 export const optionsProperties = () =>
   queryOptions<List<AvatarPropertyConfig>, unknown, AvatarPropertyConfig[]>({
     queryKey: ["properties"],
-    queryFn: async () => await API.properties.get(),
+    queryFn: API.properties.get,
     select: (data) => data.list,
   });
 

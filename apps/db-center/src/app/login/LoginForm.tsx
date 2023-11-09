@@ -14,7 +14,6 @@ import {
   Input,
   FormMessage,
 } from "ui/primitive";
-import { env } from "@db-center/env";
 
 export default function LoginForm() {
   const form = useForm<{ username: string; password: string }>({
@@ -42,9 +41,7 @@ export default function LoginForm() {
         description: "Login failed",
       });
     } else {
-      router.push(
-        callbackUrl?.startsWith(env.NEXT_PUBLIC_BASE_URL) ? callbackUrl : "/",
-      );
+      router.push(callbackUrl ?? "/");
     }
   }
 
