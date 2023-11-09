@@ -1,14 +1,11 @@
 "use client";
 
+import { trpc } from "@hsr/app/_trpc/client";
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { Content } from "@hsr/app/lightcone-db/[slug]/Content";
 import { Portrait } from "@hsr/app/lightcone-db/[slug]/Portrait";
-import {
-  lightConeMetadatasQ,
-  optionsLightConeSkills,
-} from "@hsr/hooks/queries/lightcone";
 import { IMAGE_URL } from "@hsr/lib/constants";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { byCharId } from "protocol/ts/atlas-SignatureAtlasService_connectquery";
 import { useState } from "react";
 
@@ -17,26 +14,26 @@ interface Prop {
 }
 
 function SignatureLightCone({ characterId }: Prop) {
+  const [_dev] = trpc.honkai.avatar.signatures.useSuspenseQuery({
+    charId: characterId,
+  });
+
   const { data } = useSuspenseQuery(byCharId.useQuery({ charId: characterId }));
   const { lcIds } = data;
 
   const [selectedLcId, setSelectedLcId] = useState(lcIds.at(0));
 
-  const { data: lcMetadatas } = useSuspenseQuery(lightConeMetadatasQ(lcIds));
-  const { data: lcSkills } = useQuery(optionsLightConeSkills(lcIds));
+  const selectedLc = _dev.find((e) => e.id === selectedLcId);
 
-  const metadata = lcMetadatas.find((e) => e.equipment_id === selectedLcId);
-  const skill = lcSkills?.find((e) => e.skill_id === metadata?.skill_id);
+  if (!selectedLc) return null;
 
-  if (!metadata) return null;
-
-  const sortedLcs = lcMetadatas.sort((a, b) => b.rarity - a.rarity);
+  const sortedLcs = _dev.sort((a, b) => (b.rarity ?? 0) - (a.rarity ?? 0));
 
   return (
     <div className="block">
       <div className="flex flex-col gap-4 sm:grid sm:grid-cols-3">
         <div className="col-span-1 flex flex-col p-6">
-          <Portrait data={metadata} />
+          <Portrait lightconeId={selectedLc.id} name={selectedLc.name ?? ""} />
         </div>
 
         <div className="col-span-2 flex flex-col">
@@ -44,21 +41,27 @@ function SignatureLightCone({ characterId }: Prop) {
             {sortedLcs.map((lc) => (
               <button
                 className="relative p-2 cursor-default"
-                key={lc.equipment_id}
+                key={lc.id}
                 onClick={() => {
-                  setSelectedLcId(lc.equipment_id);
+                  setSelectedLcId(lc.id);
                 }}
                 type="button"
               >
-                <LightConeCard
-                  imgUrl={url(lc.equipment_id)}
-                  name={lc.equipment_name}
-                />
+                <LightConeCard imgUrl={url(lc.id)} name={lc.name ?? ""} />
               </button>
             ))}
           </div>
 
-          <Content data={metadata} link skill={skill} />
+          <Content
+            lcId={selectedLc.id}
+            link
+            name={selectedLc.name ?? ""}
+            skill={{
+              name: selectedLc.skill?.name ?? "",
+              paramList: selectedLc.skill?.paramList ?? [],
+              skillDesc: selectedLc.skill?.desc ?? [],
+            }}
+          />
         </div>
       </div>
     </div>

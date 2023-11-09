@@ -17,7 +17,7 @@ export default async function LightConePage({ params }: Prop) {
   return (
     <>
       <div className="h-fit p-12 md:max-w-[50%]">
-        <Portrait data={lc} />
+        <Portrait lightconeId={lc.equipment_id} name={lc.equipment_name} />
       </div>
       <div className="flex flex-col gap-4 md:max-w-[50%]">
         <Content data={lc} skill={lcSkill} />
