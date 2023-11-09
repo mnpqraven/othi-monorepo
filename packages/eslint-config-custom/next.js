@@ -19,9 +19,15 @@ module.exports = {
     "@vercel/style-guide/eslint/react",
     "@vercel/style-guide/eslint/next",
     "eslint-config-turbo",
-  ].map(require.resolve),
+  ]
+    .map(require.resolve)
+    .concat([
+      "plugin:@tanstack/eslint-plugin-query/recommended",
+      "plugin:storybook/recommended",
+    ]),
   parserOptions: {
-    project,
+    project: true,
+    tsconfigRootDir: process.cwd(),
   },
   globals: {
     React: true,
@@ -44,11 +50,15 @@ module.exports = {
     "@typescript-eslint/no-misused-promises": "warn",
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/require-await": "warn",
+    "@typescript-eslint/no-non-null-assertion": "warn",
     "@typescript-eslint/no-unsafe-return": "warn",
     "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-shadow": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
     "react/hook-use-state": "off",
+    "@tanstack/query/exhaustive-deps": "warn",
+    camelcase: "off",
   },
 };

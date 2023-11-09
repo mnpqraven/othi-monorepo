@@ -74,7 +74,7 @@ const FormItem = React.forwardRef<
     </FormItemContext.Provider>
   );
 });
-// @ts-expect-error override
+// @ts-ignore override
 FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<
@@ -92,7 +92,7 @@ const FormLabel = React.forwardRef<
     />
   );
 });
-// @ts-expect-error override
+// @ts-ignore override
 FormLabel.displayName = "FormLabel";
 
 const FormControl = React.forwardRef<
@@ -116,7 +116,7 @@ const FormControl = React.forwardRef<
     />
   );
 });
-// @ts-expect-error override
+// @ts-ignore override
 FormControl.displayName = "FormControl";
 
 const FormDescription = React.forwardRef<
@@ -134,7 +134,7 @@ const FormDescription = React.forwardRef<
     />
   );
 });
-// @ts-expect-error override
+// @ts-ignore override
 FormDescription.displayName = "FormDescription";
 
 const FormMessage = React.forwardRef<
@@ -159,7 +159,7 @@ const FormMessage = React.forwardRef<
     </p>
   );
 });
-// @ts-expect-error override
+// @ts-ignore override
 FormMessage.displayName = "FormMessage";
 
 export {

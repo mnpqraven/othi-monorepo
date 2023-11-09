@@ -50,7 +50,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
-// @ts-expect-error type override
+// @ts-ignore type override
 Button.displayName = "Button";
 
 export { Button, buttonVariants };

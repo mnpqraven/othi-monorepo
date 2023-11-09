@@ -18,7 +18,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
-// @ts-expect-error override
+// @ts-ignore override
 Input.displayName = "Input";
 
 export { Input };
