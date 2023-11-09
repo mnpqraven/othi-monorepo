@@ -114,7 +114,7 @@ export const ConfigControllerSheet = forwardRef<
       </SheetHeader>
 
       <Form {...form}>
-        <form onSubmit={void form.handleSubmit(onFormSubmit)}>
+        <form onSubmit={form.handleSubmit(onFormSubmit)}>
           <div className="flex flex-col gap-4">
             <FormSwitch<CardConfig>
               label="Show player info"
