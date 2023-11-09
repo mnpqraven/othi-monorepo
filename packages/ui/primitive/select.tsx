@@ -29,7 +29,7 @@ const SelectTrigger = React.forwardRef<
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
-// @ts-expect-error override
+// @ts-ignore override
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 const SelectContent = React.forwardRef<
@@ -60,7 +60,7 @@ const SelectContent = React.forwardRef<
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ));
-// @ts-expect-error override
+// @ts-ignore override
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
 const SelectLabel = React.forwardRef<
@@ -73,7 +73,7 @@ const SelectLabel = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
 const SelectItem = React.forwardRef<
@@ -97,7 +97,7 @@ const SelectItem = React.forwardRef<
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
   </SelectPrimitive.Item>
 ));
-// @ts-expect-error override
+// @ts-ignore override
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
 const SelectSeparator = React.forwardRef<
@@ -110,7 +110,7 @@ const SelectSeparator = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
 export {

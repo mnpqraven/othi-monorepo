@@ -19,7 +19,7 @@ const ToastViewport = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
 const toastVariants = cva(
@@ -51,7 +51,7 @@ const Toast = React.forwardRef<
     />
   );
 });
-// @ts-expect-error override
+// @ts-ignore override
 Toast.displayName = ToastPrimitives.Root.displayName;
 
 const ToastAction = React.forwardRef<
@@ -67,7 +67,7 @@ const ToastAction = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 ToastAction.displayName = ToastPrimitives.Action.displayName;
 
 const ToastClose = React.forwardRef<
@@ -86,7 +86,7 @@ const ToastClose = React.forwardRef<
     <X className="h-4 w-4" />
   </ToastPrimitives.Close>
 ));
-// @ts-expect-error override
+// @ts-ignore override
 ToastClose.displayName = ToastPrimitives.Close.displayName;
 
 const ToastTitle = React.forwardRef<
@@ -99,7 +99,7 @@ const ToastTitle = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 ToastTitle.displayName = ToastPrimitives.Title.displayName;
 
 const ToastDescription = React.forwardRef<
@@ -112,7 +112,7 @@ const ToastDescription = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 ToastDescription.displayName = ToastPrimitives.Description.displayName;
 
 type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;

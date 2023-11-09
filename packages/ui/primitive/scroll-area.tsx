@@ -27,7 +27,7 @@ const ScrollArea = React.forwardRef<
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>
 ));
-// @ts-expect-error override
+// @ts-ignore override
 ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
 
 const ScrollBar = React.forwardRef<
@@ -55,7 +55,7 @@ const ScrollBar = React.forwardRef<
     />
   </ScrollAreaPrimitive.ScrollAreaScrollbar>
 ));
-// @ts-expect-error override
+// @ts-ignore override
 ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
 
 export { ScrollArea, ScrollBar };

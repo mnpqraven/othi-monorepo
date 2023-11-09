@@ -27,7 +27,7 @@ const SheetOverlay = React.forwardRef<
     ref={ref}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
 const sheetVariants = cva(
@@ -72,7 +72,7 @@ const SheetContent = React.forwardRef<
     </SheetPrimitive.Content>
   </SheetPortal>
 ));
-// @ts-expect-error override
+// @ts-ignore override
 SheetContent.displayName = SheetPrimitive.Content.displayName;
 
 function SheetHeader({
@@ -117,7 +117,7 @@ const SheetTitle = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 SheetTitle.displayName = SheetPrimitive.Title.displayName;
 
 const SheetDescription = React.forwardRef<
@@ -130,7 +130,7 @@ const SheetDescription = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
 export {

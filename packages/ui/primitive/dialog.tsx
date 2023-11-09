@@ -24,7 +24,7 @@ const DialogOverlay = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
@@ -49,7 +49,7 @@ const DialogContent = React.forwardRef<
     </DialogPrimitive.Content>
   </DialogPortal>
 ));
-// @ts-expect-error override
+// @ts-ignore override
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 function DialogHeader({
@@ -97,7 +97,7 @@ const DialogTitle = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 DialogTitle.displayName = DialogPrimitive.Title.displayName;
 
 const DialogDescription = React.forwardRef<
@@ -110,7 +110,7 @@ const DialogDescription = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 export {

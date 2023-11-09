@@ -24,7 +24,7 @@ const TooltipContent = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };

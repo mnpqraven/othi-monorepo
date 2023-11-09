@@ -23,7 +23,7 @@ const Switch = React.forwardRef<
     />
   </SwitchPrimitives.Root>
 ));
-// @ts-expect-error override
+// @ts-ignore override
 Switch.displayName = SwitchPrimitives.Root.displayName;
 
 export { Switch };

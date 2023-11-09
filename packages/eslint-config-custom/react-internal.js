@@ -51,5 +51,7 @@ module.exports = {
     "react/hook-use-state": "off",
     "@typescript-eslint/no-empty-interface": "warn",
     "react/no-unstable-nested-components": ["warn", { allowAsProps: true }],
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/prefer-ts-expect-error": "warn",
   },
 };

@@ -14,7 +14,7 @@ const Card = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error type override
+// @ts-ignore type override
 Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<
@@ -27,7 +27,7 @@ const CardHeader = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error type override
+// @ts-ignore type override
 CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<
@@ -43,7 +43,7 @@ const CardTitle = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error type override
+// @ts-ignore type override
 CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<
@@ -56,7 +56,7 @@ const CardDescription = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error type override
+// @ts-ignore type override
 CardDescription.displayName = "CardDescription";
 
 const CardContent = React.forwardRef<
@@ -65,7 +65,7 @@ const CardContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div className={cn("p-6 pt-0", className)} ref={ref} {...props} />
 ));
-// @ts-expect-error type override
+// @ts-ignore type override
 CardContent.displayName = "CardContent";
 
 const CardFooter = React.forwardRef<
@@ -78,7 +78,7 @@ const CardFooter = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error type override
+// @ts-ignore type override
 CardFooter.displayName = "CardFooter";
 
 export {

@@ -39,7 +39,7 @@ const Toggle = React.forwardRef<
   />
 ));
 
-// @ts-expect-error override
+// @ts-ignore override
 Toggle.displayName = TogglePrimitive.Root.displayName;
 
 export { Toggle, toggleVariants };

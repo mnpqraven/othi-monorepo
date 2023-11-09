@@ -21,7 +21,7 @@ const Command = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 Command.displayName = CommandPrimitive.displayName;
 
 type CommandDialogProps = DialogProps & {
@@ -64,7 +64,7 @@ const CommandInput = React.forwardRef<
   </div>
 ));
 
-// @ts-expect-error override
+// @ts-ignore override
 CommandInput.displayName = CommandPrimitive.Input.displayName;
 
 const CommandList = React.forwardRef<
@@ -78,7 +78,7 @@ const CommandList = React.forwardRef<
   />
 ));
 
-// @ts-expect-error override
+// @ts-ignore override
 CommandList.displayName = CommandPrimitive.List.displayName;
 
 const CommandEmpty = React.forwardRef<
@@ -92,7 +92,7 @@ const CommandEmpty = React.forwardRef<
   />
 ));
 
-// @ts-expect-error override
+// @ts-ignore override
 CommandEmpty.displayName = CommandPrimitive.Empty.displayName;
 
 const CommandGroup = React.forwardRef<
@@ -109,7 +109,7 @@ const CommandGroup = React.forwardRef<
   />
 ));
 
-// @ts-expect-error override
+// @ts-ignore override
 CommandGroup.displayName = CommandPrimitive.Group.displayName;
 
 const CommandSeparator = React.forwardRef<
@@ -122,7 +122,7 @@ const CommandSeparator = React.forwardRef<
     {...props}
   />
 ));
-// @ts-expect-error override
+// @ts-ignore override
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
 
 const CommandItem = React.forwardRef<
@@ -139,7 +139,7 @@ const CommandItem = React.forwardRef<
   />
 ));
 
-// @ts-expect-error override
+// @ts-ignore override
 CommandItem.displayName = CommandPrimitive.Item.displayName;
 
 function CommandShortcut({

@@ -25,7 +25,7 @@ const Separator = React.forwardRef<
     />
   ),
 );
-// @ts-expect-error override
+// @ts-ignore override
 Separator.displayName = SeparatorPrimitive.Root.displayName;
 
 export { Separator };

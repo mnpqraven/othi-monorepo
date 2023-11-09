@@ -24,7 +24,7 @@ const Checkbox = React.forwardRef<
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ));
-// @ts-expect-error override
+// @ts-ignore override
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 
 export { Checkbox };
