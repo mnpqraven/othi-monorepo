@@ -31,7 +31,7 @@ export default async function Character({ params }: Prop) {
   const dehydratedState = await prefetchOptions(characterId);
 
   return (
-    <Tabs defaultValue="sig">
+    <Tabs defaultValue="skill">
       <TabsList className="h-fit [&>*]:whitespace-pre-wrap">
         <TabsTrigger value="skill">Skills</TabsTrigger>
         <TabsTrigger value="eidolon">Eidolons</TabsTrigger>

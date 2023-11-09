@@ -14,7 +14,7 @@ interface Prop {
 }
 
 function SignatureLightCone({ characterId }: Prop) {
-  const [_dev] = trpc.honkai.avatar.signatures.useSuspenseQuery({
+  const [signatures] = trpc.honkai.avatar.signatures.useSuspenseQuery({
     charId: characterId,
   });
 
@@ -23,11 +23,11 @@ function SignatureLightCone({ characterId }: Prop) {
 
   const [selectedLcId, setSelectedLcId] = useState(lcIds.at(0));
 
-  const selectedLc = _dev.find((e) => e.id === selectedLcId);
+  const selectedLc = signatures.find((e) => e.id === selectedLcId);
 
   if (!selectedLc) return null;
 
-  const sortedLcs = _dev.sort((a, b) => (b.rarity ?? 0) - (a.rarity ?? 0));
+  const sortedLcs = signatures.sort((a, b) => (b.rarity ?? 0) - (a.rarity ?? 0));
 
   return (
     <div className="block">
