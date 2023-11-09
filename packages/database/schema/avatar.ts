@@ -5,6 +5,7 @@ import { elements } from "./element";
 import { avatarToSkills } from "./avatarToSkill";
 import { paths } from "./path";
 import { traces } from "./trace";
+import { signatures } from "./avatarToSignature";
 
 export const avatars = sqliteTable("honkai_avatar", {
   id: int("id").primaryKey(),
@@ -24,6 +25,7 @@ export type AvatarSchema = InferSelectModel<typeof avatars>;
 
 export const avatarRelations = relations(avatars, ({ many }) => ({
   avatarToSkills: many(avatarToSkills),
+  signature: many(signatures),
 }));
 
 export const avatarTraces = sqliteTable(

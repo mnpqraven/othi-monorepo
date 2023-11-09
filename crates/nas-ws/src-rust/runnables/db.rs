@@ -4,6 +4,7 @@ use crate::{
     builder::traits::DbAction,
     handler::error::WorkerError,
     routes::honkai::dm_api::{
+        atlas::SignatureAtlas,
         character::{eidolon::*, types::*},
         character_skill::types::*,
         equipment::{equipment_config::*, equipment_skill_config::*},
@@ -38,6 +39,7 @@ pub async fn seed_table() -> Result<(), WorkerError> {
 
     EquipmentSkillConfig::seed().await?;
     EquipmentConfig::seed().await?;
+    SignatureAtlas::seed().await?;
 
     info!("main tables seeded!");
     Ok(())

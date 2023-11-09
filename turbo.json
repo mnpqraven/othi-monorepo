@@ -18,7 +18,8 @@
     "GITHUB_SECRET",
     "NEXT_PUBLIC_HOST_DB_CENTER",
     "NEXT_PUBLIC_HOST_HSR",
-    "NEXT_PUBLIC_HOST_NAS_WS"
+    "NEXT_PUBLIC_HOST_NAS_WS",
+    "NODE_ENV"
   ],
   "pipeline": {
     "build": {

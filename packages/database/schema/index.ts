@@ -1,5 +1,6 @@
 export * from "./avatar";
 export * from "./avatarToSkill";
+export * from "./avatarToSignature";
 export * from "./blog";
 export * from "./element";
 export * from "./framework";

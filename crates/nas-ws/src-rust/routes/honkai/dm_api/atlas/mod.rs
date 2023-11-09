@@ -1,12 +1,15 @@
 use crate::{
+    builder::{get_db_client, traits::DbAction},
     handler::error::WorkerError,
     routes::{
         endpoint_types::List,
         honkai::{dm_api::atlas::avatar_atlas::UpstreamAvatarAtlas, traits::DbData},
     },
 };
+use async_trait::async_trait;
 use axum::Json;
 use chrono::{DateTime, Datelike, NaiveDateTime, TimeZone, Timelike, Utc};
+use libsql_client::{args, Statement};
 use schemars::JsonSchema;
 use serde::{
     de::{self, Visitor},
@@ -30,22 +33,7 @@ pub struct SignatureAtlas {
     pub lc_ids: Vec<u32>,
 }
 
-pub async fn atlas_list() -> Result<Json<List<SignatureAtlas>>, WorkerError> {
-    let now = Instant::now();
-
-    let char_map = UpstreamAvatarAtlas::read().await?;
-    let char_map: HashMap<u32, UpstreamAvatarAtlas> = char_map
-        .into_iter()
-        // .filter(|(_, v)| v.gacha_schedule.is_some())
-        .collect();
-
-    let char_map_arced = Arc::new(char_map);
-
-    let banner_feature_pair: Arc<[(u32, Vec<u32>)]> = char_map_arced
-        .iter()
-        .map(|(char_id, _)| (*char_id, vec![]))
-        .collect();
-
+fn pair_bucket() -> Arc<[(u32, Vec<u32>)]> {
     let base_feature_pair: Arc<[(u32, Vec<u32>)]> = Arc::new([
         (1001, vec![21002]),        // march
         (1002, vec![21003]),        // dan heng
@@ -79,9 +67,28 @@ pub async fn atlas_list() -> Result<Json<List<SignatureAtlas>>, WorkerError> {
         (1212, vec![23014]),        // jingliu
         (1112, vec![23016]),        // topaz
     ]);
+    base_feature_pair
+}
+
+pub async fn atlas_list() -> Result<Json<List<SignatureAtlas>>, WorkerError> {
+    let now = Instant::now();
+
+    let char_map = UpstreamAvatarAtlas::read().await?;
+    let char_map: HashMap<u32, UpstreamAvatarAtlas> = char_map
+        .into_iter()
+        // .filter(|(_, v)| v.gacha_schedule.is_some())
+        .collect();
+
+    let char_map_arced = Arc::new(char_map);
+
+    let banner_feature_pair: Arc<[(u32, Vec<u32>)]> = char_map_arced
+        .iter()
+        .map(|(char_id, _)| (*char_id, vec![]))
+        .collect();
+
     let mut base_feature_map: HashMap<u32, Vec<u32>> = HashMap::new();
     // populate
-    base_feature_pair.iter().for_each(|(k, v)| {
+    pair_bucket().iter().for_each(|(k, v)| {
         base_feature_map.insert(*k, v.to_vec());
     });
 
@@ -103,6 +110,38 @@ pub async fn atlas_list() -> Result<Json<List<SignatureAtlas>>, WorkerError> {
 
     info!("/signature_atlas: {:?}", now.elapsed());
     Ok(Json(List::new(vec)))
+}
+
+#[async_trait]
+impl DbAction for SignatureAtlas {
+    async fn seed() -> Result<(), WorkerError> {
+        let client = get_db_client().await?;
+
+        let statements: Vec<Statement> = pair_bucket()
+            .iter()
+            .flat_map(|(avatar_id, lc_ids)| {
+                lc_ids
+                    .iter()
+                    .map(|lc_id| {
+                        Statement::with_args(
+                            "INSERT OR REPLACE INTO honkai_signature (
+                                avatar_id, lightcone_id
+                            ) VALUES (?,?)",
+                            args!(*avatar_id, *lc_id),
+                        )
+                    })
+                    .collect::<Vec<Statement>>()
+            })
+            .collect();
+
+        client.batch(statements).await?;
+        Ok(())
+    }
+    async fn teardown() -> Result<(), WorkerError> {
+        let client = get_db_client().await?;
+        client.execute("DELETE FROM honkai_signature").await?;
+        Ok(())
+    }
 }
 
 pub fn _serialize_date_string<'de, D>(deserializer: D) -> Result<Option<DateTime<Utc>>, D::Error>
