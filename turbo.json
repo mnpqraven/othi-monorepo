@@ -39,7 +39,7 @@
         ".env.production"
       ]
     },
-    "prepare": {},
+    "browtf": {},
     "lint": {}
   }
 }
