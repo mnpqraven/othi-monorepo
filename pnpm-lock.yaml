@@ -499,6 +499,8 @@ importers:
 
   crates/nas-ws: {}
 
+  crates/toml-to-env: {}
+
   packages/database:
     dependencies:
       '@libsql/client':

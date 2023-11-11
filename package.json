@@ -5,6 +5,7 @@
     "build": "dotenv -c -- turbo run build",
     "dev": "dotenv -c -- turbo run dev --parallel",
     "db:push": "dotenv -c -- turbo run db:push",
+    "codegen": "turbo run codegen",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },

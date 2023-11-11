@@ -39,6 +39,7 @@
         ".env.production"
       ]
     },
+    "codegen": {},
     "lint": {}
   }
 }
