@@ -11,6 +11,8 @@ import { Provider } from "jotai";
 import { createTransport, TransportProvider } from "protocol/rpc";
 import { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
+import superjson from "superjson";
+import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { trpc } from "../_trpc/client";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
@@ -33,7 +35,19 @@ export default function RQProvider({ children }: RootProps) {
   const transport = createTransport();
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      links: [httpBatchLink({ url: "/api" })],
+      transformer: superjson,
+      links: [
+        httpBatchLink({
+          url: "/api",
+          headers() {
+            // cache request for 1 day + revalidate once every 30 seconds
+            const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
+            return {
+              "cache-control": `s-maxage=30, stale-while-revalidate=${ONE_DAY_IN_SECONDS}`,
+            };
+          },
+        }),
+      ],
     })
   );
 
@@ -43,9 +57,11 @@ export default function RQProvider({ children }: RootProps) {
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <TransportProvider transport={transport}>
             <QueryClientProvider client={queryClient}>
-              <Provider>
-                <HydrateAtoms>{children}</HydrateAtoms>
-              </Provider>
+              <ReactQueryStreamedHydration transformer={superjson}>
+                <Provider>
+                  <HydrateAtoms>{children}</HydrateAtoms>
+                </Provider>
+              </ReactQueryStreamedHydration>
               <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
           </TransportProvider>
