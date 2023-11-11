@@ -1,10 +1,13 @@
 import { initTRPC } from "@trpc/server";
 import { ZodError } from "zod";
+import superjson from "superjson";
+
 /**
  * Initialization of tRPC backend
  * Should be done only once per backend!
  */
 const t = initTRPC.create({
+  transformer: superjson,
   errorFormatter(opts) {
     const { shape, error } = opts;
     // eslint-disable-next-line no-console
