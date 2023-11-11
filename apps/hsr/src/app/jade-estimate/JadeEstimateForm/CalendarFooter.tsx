@@ -42,23 +42,19 @@ function CalendarFooter({ date }: Prop) {
   const avatarQueries = useQueries({
     queries: charas.map((chara) => ({
       queryKey: ["character", chara?.id],
-      queryFn: async () => {
-        if (chara && Boolean(chara.id))
-          return API.character.get({ characterId: chara.id! });
-        return Promise.reject();
-      },
-      enabled: Boolean(banner) && Boolean(chara) && Boolean(chara?.id),
+      queryFn: async () =>
+        chara?.id
+          ? API.character.get({ characterId: chara.id })
+          : Promise.reject(),
+      enabled: Boolean(banner) && Boolean(chara?.id),
     })),
   });
 
   const lcQueries = useQueries({
     queries: lcs.map((lc) => ({
       queryKey: ["lightConeMetadata", lc?.id],
-      queryFn: async () => {
-        if (lc && Boolean(lc.id))
-          return API.lightConeMetadata.get({ lcId: lc.id! });
-        return Promise.reject();
-      },
+      queryFn: async () =>
+        lc?.id ? API.lightConeMetadata.get({ lcId: lc.id }) : Promise.reject(),
       enabled: Boolean(lc) && Boolean(lc?.id),
     })),
   });

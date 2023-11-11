@@ -31,11 +31,7 @@ function TraceSummaryWrapper({ characterId }: Prop) {
           Total gain from traces
         </AccordionTrigger>
         <AccordionContent asChild>
-          <TraceSummary
-            characterId={characterId}
-            properties={properties}
-            skills={traces}
-          />
+          <TraceSummary properties={properties} skills={traces} />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

@@ -1,5 +1,6 @@
 {
     "rust-analyzer.linkedProjects": [
-        "crates/nas-ws/Cargo.toml"
+        "crates/nas-ws/Cargo.toml",
+        "crates/toml-to-env/Cargo.toml"
     ],
 }

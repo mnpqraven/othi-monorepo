@@ -6,11 +6,11 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
-    "dev": "docker kill $(docker ps -qf expose=8080) 2> /dev/null || echo 'No container running on port 8080' && docker run -p 8080:8080 -d ghcr.io/libsql/sqld:latest",
+    "dev": "docker kill $(docker ps -qf expose=4010) 2> /dev/null || echo 'No container running on port 4010' && docker run -p 4010:8080 -d -v sqld-data:/var/lib/sqld ghcr.io/libsql/sqld:latest",
     "db:migrate": "drizzle-kit generate:sqlite && npx tsx ./migrate.ts",
     "db:push": "drizzle-kit push:sqlite",
     "db:drop": "drizzle-kit drop",
-    "db:studio": "drizzle-kit studio --port 5174 --host 127.0.0.1 --verbose"
+    "db:studio": "drizzle-kit studio --port 4009 --host 127.0.0.1 --verbose"
   },
   "dependencies": {
     "@libsql/client": "^0.3.5",
@@ -23,10 +23,10 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "eslint-config-custom": "workspace:*",
     "@types/node": "^20",
     "drizzle-kit": "^0.19.13",
     "eslint": "^8",
+    "eslint-config-custom": "workspace:*",
     "eslint-config-next": "14.0.0",
     "typescript": "^5"
   }

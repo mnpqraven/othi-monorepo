@@ -24,8 +24,9 @@ const nextConfig = {
       ["@swc-jotai/react-refresh", {}],
       ["@swc-jotai/debug-label", {}],
     ],
+    serverComponentsExternalPackages: ["@libsql/client"],
   },
-  transpilePackages: ["lib", "ui"],
+  transpilePackages: ["libsql", "lib", "ui", "database", "protocol"],
 };
 
 export default nextConfig;

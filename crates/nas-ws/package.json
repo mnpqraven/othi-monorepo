@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cargo watch -- cargo run --bin nas-ws",
+    "seed": "cargo run --bin seed",
     "dockerize": "docker build ."
   },
   "dependencies": {}

@@ -24,6 +24,7 @@ export function SkillDescription({
   return (
     <p className="text-justify">
       {skillDesc.map((descPart, index) => (
+        // eslint-disable-next-line react/no-array-index-key
         <Fragment key={index}>
           <span className="whitespace-pre-wrap">
             {sanitizeNewline(descPart)}

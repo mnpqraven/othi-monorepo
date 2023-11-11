@@ -272,14 +272,14 @@ function RankingChart({
     return {
       equipment_id: e.equipment_id,
       equipment_name: e.equipment_name,
-      level: e.level[promotion],
-      atk: e.atk[promotion],
-      def: e.def[promotion],
-      hp: e.hp[promotion],
+      level: e.level[promotion] ?? 0,
+      atk: e.atk[promotion] ?? 0,
+      def: e.def[promotion] ?? 0,
+      hp: e.hp[promotion] ?? 0,
     };
   });
   const xScaleTotal = scaleLinear<number>({
-    domain: [0, Math.max(...omittedIndexData.map((e) => e.atk! + e.def! + e.hp!))],
+    domain: [0, Math.max(...omittedIndexData.map((e) => e.atk + e.def + e.hp))],
     range: [0, xMax],
     round: true,
   });
@@ -320,6 +320,7 @@ function RankingChart({
                         const eventSvgCoords = localPoint(event);
                         showTooltip({
                           tooltipData: toTooltipData(
+                            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                             data[bar.index]!,
                             DEFAULT_INDEX
                           ),

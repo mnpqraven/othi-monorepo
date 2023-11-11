@@ -2,7 +2,7 @@ import type { Config } from "drizzle-kit";
 import { config } from "dotenv";
 import { z } from "zod";
 
-config();
+config({ path: "../../.env" });
 
 export default {
   schema: "schema/*",

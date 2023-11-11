@@ -1,8 +1,6 @@
 "use client";
 
 import { SkillDescription } from "@hsr/app/components/Db/SkillDescription";
-import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
-import type { EquipmentSkillConfig } from "@hsr/bindings/EquipmentSkillConfig";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -16,11 +14,18 @@ import {
 } from "ui/primitive";
 
 interface Prop {
-  data: EquipmentConfig;
-  skill: EquipmentSkillConfig | undefined;
+  lcId: string | number;
+  name: string;
+  skill:
+    | {
+        name: string;
+        paramList: string[][];
+        skillDesc: string[];
+      }
+    | undefined;
   link?: boolean;
 }
-function Content({ data, skill, link = false }: Prop) {
+function Content({ lcId, name, skill, link = false }: Prop) {
   const [promotion, setPromotion] = useState(0);
 
   return (
@@ -31,17 +36,17 @@ function Content({ data, skill, link = false }: Prop) {
             <CardTitle>
               {link ? (
                 <Link
-                  className="flex items-center hover:underline"
-                  href={`/lightcone-db/${data.equipment_id}`}
+                  className="hover:underline"
+                  href={`/lightcone-db/${lcId}`}
                 >
-                  {data.equipment_name}
-                  <ExternalLink className="ml-1 h-4 w-4" />
+                  {name}
+                  <ExternalLink className="inline ml-1 h-4 w-4" />
                 </Link>
               ) : (
-                <span>{data.equipment_name}</span>
+                <span>{name}</span>
               )}
             </CardTitle>
-            <CardDescription>{skill?.skill_name}</CardDescription>
+            <CardDescription>{skill?.name}</CardDescription>
           </CardHeader>
 
           <CardHeader>
@@ -61,8 +66,8 @@ function Content({ data, skill, link = false }: Prop) {
         <CardContent>
           {skill ? (
             <SkillDescription
-              paramList={skill.param_list}
-              skillDesc={skill.skill_desc}
+              paramList={skill.paramList}
+              skillDesc={skill.skillDesc}
               slv={promotion}
             />
           ) : null}

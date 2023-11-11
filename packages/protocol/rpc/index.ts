@@ -19,3 +19,5 @@ export function rpc<T extends ServiceType>(service: T): PromiseClient<T> {
   );
   return client;
 }
+
+export * from "@connectrpc/connect-query";

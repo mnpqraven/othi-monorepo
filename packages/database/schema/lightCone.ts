@@ -3,6 +3,7 @@ import { relations } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { lightConeToSkills } from "./lightConeToSkill";
 import { paths } from "./path";
+import { signatures } from "./avatarToSignature";
 
 export const lightCones = sqliteTable("honkai_lightCone", {
   id: int("id").primaryKey(),
@@ -24,8 +25,12 @@ export const lightCones = sqliteTable("honkai_lightCone", {
 export type LightConeSchema = InferSelectModel<typeof lightCones>;
 
 export const lightConeRelations = relations(lightCones, ({ one }) => ({
-  lightConeToSkill: one(lightConeToSkills, {
+  skill: one(lightConeToSkills, {
     fields: [lightCones.skillId],
     references: [lightConeToSkills.id],
+  }),
+  signature: one(signatures, {
+    fields: [lightCones.id],
+    references: [signatures.lightConeId],
   }),
 }));

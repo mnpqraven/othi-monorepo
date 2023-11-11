@@ -1,0 +1,1229 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "id": "8b62d543-28a1-4b80-bf56-2a90ba852d6c",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "honkai_avatarTrace": {
+      "name": "honkai_avatarTrace",
+      "columns": {
+        "avatar_id": {
+          "name": "avatar_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "point_id": {
+          "name": "point_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "honkai_avatarTrace_avatar_id_honkai_avatar_id_fk": {
+          "name": "honkai_avatarTrace_avatar_id_honkai_avatar_id_fk",
+          "tableFrom": "honkai_avatarTrace",
+          "tableTo": "honkai_avatar",
+          "columnsFrom": [
+            "avatar_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "honkai_avatarTrace_point_id_honkai_trace_id_fk": {
+          "name": "honkai_avatarTrace_point_id_honkai_trace_id_fk",
+          "tableFrom": "honkai_avatarTrace",
+          "tableTo": "honkai_trace",
+          "columnsFrom": [
+            "point_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "honkai_avatarTrace_avatar_id_point_id_pk": {
+          "columns": [
+            "avatar_id",
+            "point_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "honkai_avatar": {
+      "name": "honkai_avatar",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rarity": {
+          "name": "rarity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "votag": {
+          "name": "votag",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "damage_type": {
+          "name": "damage_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "path": {
+          "name": "path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spneed": {
+          "name": "spneed",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "honkai_avatar_damage_type_honkai_element_name_fk": {
+          "name": "honkai_avatar_damage_type_honkai_element_name_fk",
+          "tableFrom": "honkai_avatar",
+          "tableTo": "honkai_element",
+          "columnsFrom": [
+            "damage_type"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "honkai_avatar_path_honkai_path_name_fk": {
+          "name": "honkai_avatar_path_honkai_path_name_fk",
+          "tableFrom": "honkai_avatar",
+          "tableTo": "honkai_path",
+          "columnsFrom": [
+            "path"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_avatarEidolon": {
+      "name": "honkai_avatarEidolon",
+      "columns": {
+        "avatar_id": {
+          "name": "avatar_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "eidolon_id": {
+          "name": "eidolon_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_eidolon_avatar_id": {
+          "name": "idx_eidolon_avatar_id",
+          "columns": [
+            "avatar_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "honkai_avatarEidolon_avatar_id_honkai_avatar_id_fk": {
+          "name": "honkai_avatarEidolon_avatar_id_honkai_avatar_id_fk",
+          "tableFrom": "honkai_avatarEidolon",
+          "tableTo": "honkai_avatar",
+          "columnsFrom": [
+            "avatar_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "honkai_avatarEidolon_eidolon_id_honkai_eidolon_id_fk": {
+          "name": "honkai_avatarEidolon_eidolon_id_honkai_eidolon_id_fk",
+          "tableFrom": "honkai_avatarEidolon",
+          "tableTo": "honkai_eidolon",
+          "columnsFrom": [
+            "eidolon_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_eidolon": {
+      "name": "honkai_eidolon",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rank": {
+          "name": "rank",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "desc": {
+          "name": "desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "unlock_cost": {
+          "name": "unlock_cost",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "param": {
+          "name": "param",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_avatarPromotion": {
+      "name": "honkai_avatarPromotion",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_signature": {
+      "name": "honkai_signature",
+      "columns": {
+        "avatar_id": {
+          "name": "avatar_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lightcone_id": {
+          "name": "lightcone_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_signature_avatar_id": {
+          "name": "idx_signature_avatar_id",
+          "columns": [
+            "avatar_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "honkai_signature_avatar_id_honkai_avatar_id_fk": {
+          "name": "honkai_signature_avatar_id_honkai_avatar_id_fk",
+          "tableFrom": "honkai_signature",
+          "tableTo": "honkai_avatar",
+          "columnsFrom": [
+            "avatar_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "honkai_signature_lightcone_id_honkai_lightCone_id_fk": {
+          "name": "honkai_signature_lightcone_id_honkai_lightCone_id_fk",
+          "tableFrom": "honkai_signature",
+          "tableTo": "honkai_lightCone",
+          "columnsFrom": [
+            "lightcone_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "honkai_signature_avatar_id_lightcone_id_pk": {
+          "columns": [
+            "avatar_id",
+            "lightcone_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "honkai_avatarSkill": {
+      "name": "honkai_avatarSkill",
+      "columns": {
+        "avatar_id": {
+          "name": "avatar_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "skill_id": {
+          "name": "skill_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_avatarSkill_avatar_id": {
+          "name": "idx_avatarSkill_avatar_id",
+          "columns": [
+            "avatar_id"
+          ],
+          "isUnique": false
+        },
+        "idx_avatarSkill_skill_id": {
+          "name": "idx_avatarSkill_skill_id",
+          "columns": [
+            "skill_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "honkai_avatarSkill_avatar_id_honkai_avatar_id_fk": {
+          "name": "honkai_avatarSkill_avatar_id_honkai_avatar_id_fk",
+          "tableFrom": "honkai_avatarSkill",
+          "tableTo": "honkai_avatar",
+          "columnsFrom": [
+            "avatar_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "honkai_avatarSkill_skill_id_honkai_skill_id_fk": {
+          "name": "honkai_avatarSkill_skill_id_honkai_skill_id_fk",
+          "tableFrom": "honkai_avatarSkill",
+          "tableTo": "honkai_skill",
+          "columnsFrom": [
+            "skill_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_skill": {
+      "name": "honkai_skill",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tag": {
+          "name": "tag",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "type_desc": {
+          "name": "type_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "max_level": {
+          "name": "max_level",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spbase": {
+          "name": "spbase",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spneed": {
+          "name": "spneed",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "attack_type": {
+          "name": "attack_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "skill_desc": {
+          "name": "skill_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "param_list": {
+          "name": "param_list",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "honkai_skill_attack_type_honkai_skillType_name_fk": {
+          "name": "honkai_skill_attack_type_honkai_skillType_name_fk",
+          "tableFrom": "honkai_skill",
+          "tableTo": "honkai_skillType",
+          "columnsFrom": [
+            "attack_type"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "blogs": {
+      "name": "blogs",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text(256)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_element": {
+      "name": "honkai_element",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "frameworks": {
+      "name": "frameworks",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "language": {
+          "name": "language",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "stars": {
+          "name": "stars",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_frameworks_name": {
+          "name": "idx_frameworks_name",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        },
+        "idx_frameworks_url": {
+          "name": "idx_frameworks_url",
+          "columns": [
+            "url"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_itemRarity": {
+      "name": "honkai_itemRarity",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_itemSubType": {
+      "name": "honkai_itemSubType",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_itemType": {
+      "name": "honkai_itemType",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_item": {
+      "name": "honkai_item",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rarity": {
+          "name": "rarity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "main_type": {
+          "name": "main_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sub_type": {
+          "name": "sub_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "inventory_display_tag": {
+          "name": "inventory_display_tag",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "purpose_type": {
+          "name": "purpose_type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "desc": {
+          "name": "desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bgdesc": {
+          "name": "bgdesc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "pile_limit": {
+          "name": "pile_limit",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "honkai_item_rarity_honkai_itemRarity_name_fk": {
+          "name": "honkai_item_rarity_honkai_itemRarity_name_fk",
+          "tableFrom": "honkai_item",
+          "tableTo": "honkai_itemRarity",
+          "columnsFrom": [
+            "rarity"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "honkai_item_main_type_honkai_itemType_name_fk": {
+          "name": "honkai_item_main_type_honkai_itemType_name_fk",
+          "tableFrom": "honkai_item",
+          "tableTo": "honkai_itemType",
+          "columnsFrom": [
+            "main_type"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "honkai_item_sub_type_honkai_itemSubType_name_fk": {
+          "name": "honkai_item_sub_type_honkai_itemSubType_name_fk",
+          "tableFrom": "honkai_item",
+          "tableTo": "honkai_itemSubType",
+          "columnsFrom": [
+            "sub_type"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_path": {
+      "name": "honkai_path",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_lightCone": {
+      "name": "honkai_lightCone",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "release": {
+          "name": "release",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rarity": {
+          "name": "rarity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "path": {
+          "name": "path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "max_promotion": {
+          "name": "max_promotion",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "max_rank": {
+          "name": "max_rank",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "skill_id": {
+          "name": "skill_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "honkai_lightCone_path_honkai_path_name_fk": {
+          "name": "honkai_lightCone_path_honkai_path_name_fk",
+          "tableFrom": "honkai_lightCone",
+          "tableTo": "honkai_path",
+          "columnsFrom": [
+            "path"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "honkai_lightCone_skill_id_honkai_lightConeSkill_id_fk": {
+          "name": "honkai_lightCone_skill_id_honkai_lightConeSkill_id_fk",
+          "tableFrom": "honkai_lightCone",
+          "tableTo": "honkai_lightConeSkill",
+          "columnsFrom": [
+            "skill_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_lightConeSkill": {
+      "name": "honkai_lightConeSkill",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "desc": {
+          "name": "desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "param_list": {
+          "name": "param_list",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ability_property": {
+          "name": "ability_property",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_skillType": {
+      "name": "honkai_skillType",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_traceMaterial": {
+      "name": "honkai_traceMaterial",
+      "columns": {
+        "request_id": {
+          "name": "request_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "point_id": {
+          "name": "point_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "level": {
+          "name": "level",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "item_num": {
+          "name": "item_num",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "honkai_traceMaterial_item_id_honkai_item_id_fk": {
+          "name": "honkai_traceMaterial_item_id_honkai_item_id_fk",
+          "tableFrom": "honkai_traceMaterial",
+          "tableTo": "honkai_item",
+          "columnsFrom": [
+            "item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "honkai_traceMaterial_point_id_honkai_trace_id_fk": {
+          "name": "honkai_traceMaterial_point_id_honkai_trace_id_fk",
+          "tableFrom": "honkai_traceMaterial",
+          "tableTo": "honkai_trace",
+          "columnsFrom": [
+            "point_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_trace": {
+      "name": "honkai_trace",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "max_level": {
+          "name": "max_level",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "point_type": {
+          "name": "point_type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "anchor": {
+          "name": "anchor",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "default_unlock": {
+          "name": "default_unlock",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "avatar_promotion_limit": {
+          "name": "avatar_promotion_limit",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "pre_point": {
+          "name": "pre_point",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "point_desc": {
+          "name": "point_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "param_list": {
+          "name": "param_list",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "honkai_property": {
+      "name": "honkai_property",
+      "columns": {
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "skill_tree_desc": {
+          "name": "skill_tree_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "relic_desc": {
+          "name": "relic_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "filter_desc": {
+          "name": "filter_desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "main_relic_filter": {
+          "name": "main_relic_filter",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sub_relic_filter": {
+          "name": "sub_relic_filter",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "property_classify": {
+          "name": "property_classify",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_display": {
+          "name": "is_display",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_battle_display": {
+          "name": "is_battle_display",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
