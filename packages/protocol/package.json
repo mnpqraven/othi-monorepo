@@ -6,7 +6,6 @@
   "license": "MIT",
   "scripts": {
     "prepare": "npx buf generate",
-    "dev": "pnpm dlx ts-node -T index.ts",
     "lint": "eslint ."
   },
   "dependencies": {

@@ -4,6 +4,7 @@ import { renderTrpcPanel } from "trpc-panel";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 async function handler() {
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
   if (process.env.NODE_ENV === "production")
     return new Response(undefined, { status: 404 });
 

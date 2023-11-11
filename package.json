@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "build": "dotenv -- turbo run build",
-    "dev": "dotenv -- turbo run dev --parallel",
-    "db:push": "dotenv -- turbo run db:push",
+    "build": "dotenv -c -- turbo run build",
+    "dev": "dotenv -c -- turbo run dev --parallel",
+    "db:push": "dotenv -c -- turbo run db:push",
     "prepare": "turbo run prepare",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""

@@ -19,8 +19,7 @@
     "GITHUB_SECRET",
     "NEXT_PUBLIC_HOST_DB_CENTER",
     "NEXT_PUBLIC_HOST_HSR",
-    "NEXT_PUBLIC_HOST_NAS_WS",
-    "NODE_ENV"
+    "NEXT_PUBLIC_HOST_NAS_WS"
   ],
   "pipeline": {
     "build": {
@@ -31,15 +30,6 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "dotEnv": [
-        ".env.development.local",
-        ".env.development",
-        ".env.local",
-        ".env"
-      ]
-    },
-    "db:push": {
-      "cache": false,
       "dotEnv": [
         ".env.development.local",
         ".env.development",

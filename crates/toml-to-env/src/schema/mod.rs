@@ -29,7 +29,7 @@ pub struct EnvConfig {
     pub next_public_host_nas_ws: String,
 
     // [other]
-    pub next_config: String,
+    pub edge_config: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]
@@ -50,7 +50,7 @@ impl From<ConfigToml> for EnvConfig {
         let [next_public_host_db_center, next_public_host_hsr, next_public_host_nas_ws] =
             val.origins.map(|e| e.parse()).unwrap_or_default();
 
-        let [next_config] = val.other.map(|e| e.parse()).unwrap_or_default();
+        let [edge_config] = val.other.map(|e| e.parse()).unwrap_or_default();
 
         EnvConfig {
             db_url,
@@ -63,7 +63,7 @@ impl From<ConfigToml> for EnvConfig {
             next_public_host_db_center,
             next_public_host_hsr,
             next_public_host_nas_ws,
-            next_config,
+            edge_config,
         }
     }
 }
