@@ -13,13 +13,12 @@ type Haystack = {
 };
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
-  characterId: number;
   skills: SkillTreeConfig[];
   properties: AvatarPropertyConfig[];
 }
 
 const TraceSummary = forwardRef<HTMLDivElement, Prop>(
-  ({ characterId, skills, properties, ...props }, ref) => {
+  ({ skills, properties, ...props }, ref) => {
     const hay: Haystack = {};
     skills.forEach((traceNode) => {
       const property = traceNode.status_add_list[0];
@@ -39,6 +38,7 @@ const TraceSummary = forwardRef<HTMLDivElement, Prop>(
           };
         else
           hay[key] = {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             value: hay[key]!.value + value,
             icon: traceNode.icon_path,
             label: traceNode.point_name,
@@ -50,8 +50,8 @@ const TraceSummary = forwardRef<HTMLDivElement, Prop>(
       <div ref={ref} {...props}>
         {Object.keys(hay)
           .sort((a, b) => a.localeCompare(b))
-          .map((key, index) => (
-            <div className="flex items-center justify-between" key={index}>
+          .map((key) => (
+            <div className="flex items-center justify-between" key={key}>
               <div className="flex items-center">
                 <Image
                   alt={key}

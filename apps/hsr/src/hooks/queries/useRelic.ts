@@ -7,7 +7,8 @@ import type { List } from "lib/generics";
 export const optionsRelic = (setIds: number[] | undefined) =>
   queryOptions<List<RelicConfig>, unknown, RelicConfig[]>({
     queryKey: ["relics", setIds],
-    queryFn: () => API.relics.post({ list: setIds! }),
+    queryFn: () =>
+      setIds ? API.relics.post({ list: setIds }) : Promise.reject(),
     select: (data) => data.list.sort((a, b) => a.set_id - b.set_id),
     enabled: Boolean(setIds),
   });

@@ -74,22 +74,28 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
         .flat();
       updateSetIds(Array.from(new Set(tempSetIds)));
 
-      const chara = query.data.characters[charIndex]!;
-      const skillsPairs = chara.skills.map((skill) => [skill.id, skill.level]);
-      const tracePairs = chara.skill_trees.map((trace) => [
-        trace.id,
-        trace.level > 0,
-      ]);
+      const chara = query.data.characters.at(charIndex);
+      if (chara) {
+        const skillsPairs = chara.skills.map((skill) => [
+          skill.id,
+          skill.level,
+        ]);
+        const tracePairs = chara.skill_trees.map((trace) => [
+          trace.id,
+          trace.level > 0,
+        ]);
 
-      setCharStruct({
-        id: chara.id,
-        level: chara.level,
-        ascension: chara.promotion,
-        eidolon: chara.rank,
-        skills: Object.fromEntries(skillsPairs),
-        trace: Object.fromEntries(tracePairs),
-      });
-      if (chara.light_cone) {
+        setCharStruct({
+          id: chara.id,
+          level: chara.level,
+          ascension: chara.promotion,
+          eidolon: chara.rank,
+          skills: Object.fromEntries(skillsPairs),
+          trace: Object.fromEntries(tracePairs),
+        });
+      }
+
+      if (chara?.light_cone) {
         setLcStruct({
           id: Number(chara.light_cone.id),
           level: chara.light_cone.level,
@@ -103,28 +109,30 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
 
   useEffect(() => {
     if (query.data && props.mode === "API" && relicsData) {
-      const relics = query.data.characters[charIndex]!.relics;
-      setRelicStruct(
-        relics.map(
-          ({ id, level, rarity, set_id: setId, main_affix, sub_affix }) => {
-            return {
-              id: Number(id),
-              rarity,
-              setId: Number(setId),
-              type: findRelicType({ id, setId, relicsData }),
-              level,
-              property: main_affix.type,
-              subStats: sub_affix.map(
-                ({ type: property, value, count: step }) => ({
-                  property,
-                  value,
-                  step,
-                })
-              ),
-            };
-          }
-        )
-      );
+      const relics = query.data.characters[charIndex]?.relics;
+      if (relics) {
+        setRelicStruct(
+          relics.map(
+            ({ id, level, rarity, set_id: setId, main_affix, sub_affix }) => {
+              return {
+                id: Number(id),
+                rarity,
+                setId: Number(setId),
+                type: findRelicType({ id, setId, relicsData }),
+                level,
+                property: main_affix.type,
+                subStats: sub_affix.map(
+                  ({ type: property, value, count: step }) => ({
+                    property,
+                    value,
+                    step,
+                  })
+                ),
+              };
+            }
+          )
+        );
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query.data, props.mode, relicsData, charIndex]);

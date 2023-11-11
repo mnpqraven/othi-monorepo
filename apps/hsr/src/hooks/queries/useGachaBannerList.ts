@@ -1,4 +1,4 @@
-import { Banner } from "@hsr/bindings/Banner";
+import type { Banner } from "@hsr/bindings/Banner";
 import API from "@hsr/server/typedEndpoints";
 import { useQuery } from "@tanstack/react-query";
 
