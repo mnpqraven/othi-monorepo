@@ -12,24 +12,24 @@ export const avatarRouter = router({
   ),
   signatures: publicProcedure
     .input(CharId.extend({ skill: z.boolean().default(true) }))
-    .query(async ({ input }) =>
-      db.query.avatars
-        .findFirst({
-          where: (avatar, { eq }) => eq(avatar.id, input.charId),
-          columns: {},
-          with: {
-            signature: {
-              columns: {},
-              with: {
-                lightCone: {
-                  with: {
-                    skill: input.skill || undefined,
-                  },
+    .query(async ({ input }) => {
+      const query = await db.query.avatars.findFirst({
+        where: (avatar, { eq }) => eq(avatar.id, input.charId),
+        columns: {},
+        with: {
+          signature: {
+            columns: {},
+            with: {
+              lightCone: {
+                with: {
+                  skill: input.skill || undefined,
                 },
               },
             },
           },
-        })
-        .then((data) => data?.signature.flatMap((e) => e.lightCone) ?? [])
-    ),
+        },
+      });
+
+      return query?.signature.flatMap((e) => e.lightCone) ?? [];
+    }),
 });
