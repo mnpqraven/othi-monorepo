@@ -1,0 +1,9 @@
+{
+  "name": "toml-to-env",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "prepare": "cargo run"
+  },
+  "dependencies": {}
+}
