@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "prepare": "echo should not see on build",
+    "wtf": "echo should not see on build",
     "build": "dotenv -c -- turbo run build",
     "dev": "dotenv -c -- turbo run dev --parallel",
     "db:push": "dotenv -c -- turbo run db:push",
