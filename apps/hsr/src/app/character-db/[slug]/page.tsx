@@ -18,6 +18,7 @@ import {
   characterTraceQ,
 } from "@hsr/hooks/queries/character";
 import { optionsProperties } from "@hsr/hooks/queries/useProperties";
+import { server } from "@hsr/app/_trpc/serverClient";
 import { SignatureLightCone } from "./SignatureLightCone";
 import { TraceSummaryWrapper } from "./TraceSummaryWrapper";
 import Loading from "./loading";
@@ -29,6 +30,10 @@ interface Prop {
 export default async function Character({ params }: Prop) {
   const characterId = parseInt(params.slug);
   const dehydratedState = await prefetchOptions(characterId);
+
+  const signatures = await server.honkai.avatar.signatures({
+    charId: characterId,
+  });
 
   return (
     <Tabs defaultValue="skill">
@@ -54,7 +59,10 @@ export default async function Character({ params }: Prop) {
 
         <TabsContent value="sig">
           <Suspense fallback={<Loading />}>
-            <SignatureLightCone characterId={characterId} />
+            <SignatureLightCone
+              characterId={characterId}
+              signatures={signatures}
+            />
           </Suspense>
         </TabsContent>
 

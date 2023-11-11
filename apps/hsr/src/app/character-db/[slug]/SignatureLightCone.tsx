@@ -1,23 +1,21 @@
 "use client";
 
-import { trpc } from "@hsr/app/_trpc/client";
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { Content } from "@hsr/app/lightcone-db/[slug]/Content";
 import { Portrait } from "@hsr/app/lightcone-db/[slug]/Portrait";
 import { IMAGE_URL } from "@hsr/lib/constants";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "protocol/trpc";
 import { byCharId } from "protocol/ts/atlas-SignatureAtlasService_connectquery";
 import { useState } from "react";
 
 interface Prop {
   characterId: number;
+  signatures: inferRouterOutputs<AppRouter>["honkai"]["avatar"]["signatures"];
 }
 
-function SignatureLightCone({ characterId }: Prop) {
-  const [signatures] = trpc.honkai.avatar.signatures.useSuspenseQuery({
-    charId: characterId,
-  });
-
+function SignatureLightCone({ characterId, signatures }: Prop) {
   const { data } = useSuspenseQuery(byCharId.useQuery({ charId: characterId }));
   const { lcIds } = data;
 
@@ -27,7 +25,9 @@ function SignatureLightCone({ characterId }: Prop) {
 
   if (!selectedLc) return null;
 
-  const sortedLcs = signatures.sort((a, b) => (b.rarity ?? 0) - (a.rarity ?? 0));
+  const sortedLcs = signatures.sort(
+    (a, b) => (b.rarity ?? 0) - (a.rarity ?? 0)
+  );
 
   return (
     <div className="block">
