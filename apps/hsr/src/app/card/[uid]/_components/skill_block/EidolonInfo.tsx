@@ -95,7 +95,7 @@ const EidolonIcon = forwardRef<HTMLDivElement, IconProps>(
             <p className="text-accent-foreground mb-2 text-base font-bold">
               {eidolonInfo?.name}
             </p>
-            {eidolonInfo?.desc?.map((descPart, index) => (
+            {eidolonInfo?.desc.map((descPart, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <Fragment key={index}>
                 <span className="whitespace-pre-wrap">

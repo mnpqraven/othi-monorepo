@@ -35,7 +35,7 @@ export async function EidolonTable({ characterId, searchParams }: Prop) {
       />
 
       <div className="my-2 min-h-[8rem] whitespace-pre-wrap rounded-md border p-4">
-        {currentEidolon?.desc?.map((descPart, index) => (
+        {currentEidolon?.desc.map((descPart, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <Fragment key={index}>
             <span className="whitespace-pre-wrap">
