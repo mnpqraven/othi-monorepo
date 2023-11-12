@@ -46,7 +46,7 @@ export function keepPreviousData<T>(data: T | undefined): T | undefined {
 export function getImagePath(
   characterId: number | null | undefined,
   attackType: SkillType | null | undefined,
-  typeDesc: string
+  typeDesc: string | undefined | null = ""
 ): string | undefined {
   let ttype = "";
   if (attackType) {
@@ -69,7 +69,7 @@ export function getImagePath(
       default:
         return undefined;
     }
-  } else {
+  } else if (typeDesc) {
     switch (typeDesc) {
       case "Basic ATK":
         ttype = "basic_atk";

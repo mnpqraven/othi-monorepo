@@ -17,10 +17,10 @@ import {
 } from "ui/primitive";
 import { useQuery } from "@tanstack/react-query";
 import {
-  characterSkillQ,
   characterMetadataQ,
   characterTraceQ,
 } from "@hsr/hooks/queries/character";
+import { trpc } from "@hsr/app/_trpc/client";
 import { TraceDescription } from "./TraceDescription";
 import { getLineTrips, traceVariants } from "./lineTrips";
 
@@ -98,7 +98,9 @@ function TraceTableInner({
   const { theme } = useTheme();
 
   const { data } = useQuery(characterTraceQ(characterId));
-  const { data: skills } = useQuery(characterSkillQ(characterId));
+  const { data: skills } = trpc.honkai.skill.by.useQuery({
+    charId: characterId,
+  });
 
   const iconWrapVariants = cva(
     "flex items-center justify-center rounded-full ring-offset-transparent transition duration-500 hover:ring-2 hover:ring-offset-2",
@@ -172,8 +174,8 @@ function TraceTableInner({
               >
                 <TraceDescription
                   maxEnergy={maxEnergy}
-                  skill={skills.find(
-                    (e) => e.skill_id === traceNode.level_up_skill_id[0]
+                  skill={skills?.find(
+                    (e) => e.id === traceNode.level_up_skill_id[0]
                   )}
                   trace={traceNode}
                   traceType={getNodeType(traceNode)}
@@ -188,11 +190,13 @@ function TraceTableInner({
               <Xarrow
                 color={theme !== "dark" ? "black" : "white"}
                 curveness={0}
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 end={b!}
                 endAnchor="middle"
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
                 showHead={false}
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 start={a!}
                 startAnchor="middle"
                 strokeWidth={2}

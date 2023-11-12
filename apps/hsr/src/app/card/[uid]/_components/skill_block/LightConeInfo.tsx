@@ -37,12 +37,7 @@ export const LightConeInfo = forwardRef<HTMLDivElement, Prop>(
 
     const hoverVerbosity = useAtomValue(hoverVerbosityAtom);
 
-    if (!lightCone) return null;
-
-    const { equipment_name: name } = lightCone;
     const maxLevel = ascension * 10 + 20;
-
-    if (!lightConeId) return null;
 
     return (
       <div
@@ -51,7 +46,7 @@ export const LightConeInfo = forwardRef<HTMLDivElement, Prop>(
         {...props}
       >
         <div className="flex h-[72px] flex-col items-center">
-          <span className="font-bold">{name}</span>
+          <span className="font-bold">{lightCone?.equipment_name}</span>
 
           <span className="flex">
             <span className="font-bold">Lv. {level}</span> / {maxLevel}

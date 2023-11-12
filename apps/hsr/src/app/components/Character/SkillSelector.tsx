@@ -35,11 +35,7 @@ export const SkillSelector = forwardRef<HTMLDivElement, Prop>(
                 query: { tab: "skill", id: skill.id, chara: characterId },
               }}
             >
-              {getImagePath(
-                characterId,
-                skill.attackType,
-                skill.typeDesc ?? ""
-              ) && (
+              {getImagePath(characterId, skill.attackType, skill.typeDesc) && (
                 <Image
                   alt={skill.name}
                   className="invert dark:invert-0"
@@ -47,7 +43,7 @@ export const SkillSelector = forwardRef<HTMLDivElement, Prop>(
                   src={`${getImagePath(
                     characterId,
                     skill.attackType,
-                    skill.typeDesc ?? ""
+                    skill.typeDesc
                   )}`}
                   width={64}
                 />

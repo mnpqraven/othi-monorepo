@@ -4,7 +4,11 @@ import {
 } from "@hsr/app/components/Character/TraceTable";
 import { groupTrips } from "@hsr/app/components/Character/lineTrips";
 import type { Path } from "@hsr/bindings/AvatarConfig";
-import type { Anchor, SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
+import type {
+  Anchor,
+  Property,
+  SkillTreeConfig,
+} from "@hsr/bindings/SkillTreeConfig";
 import { cva } from "class-variance-authority";
 import { useAtomValue, useSetAtom } from "jotai";
 import Image from "next/image";
@@ -160,7 +164,9 @@ function TraceItem({
       }}
       pressed={atomData[data.point_id]}
     >
-      {asPercentage(data.status_add_list.at(0)?.value.value)}
+      {isPercentTrace(data.status_add_list.at(0)?.property_type)
+        ? asPercentage(data.status_add_list.at(0)?.value.value)
+        : data.status_add_list.at(0)?.value.value}
 
       <div
         className={iconWrapVariants({
@@ -193,4 +199,15 @@ function isPreviousChecked(
   if (getNodeType(previousTrace) !== "SMALL") return true;
 
   return dict[previousTrace.point_id];
+}
+function isPercentTrace(property: Property | undefined): boolean {
+  if (property) {
+    switch (property) {
+      case "SpeedDelta":
+        return false;
+      default:
+        return true;
+    }
+  }
+  return true;
 }
