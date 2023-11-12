@@ -74,7 +74,9 @@ function CalendarFooter({ date }: Prop) {
       <div className="flex gap-2.5">
         {avatarQueries.map((query, index) =>
           query.data ? (
-            <CharacterIcon data={query.data} key={index} />
+            <Link href={`character-db/${query.data.avatar_id}`} key={index}>
+              <CharacterIcon data={query.data} />
+            </Link>
           ) : (
             <Tooltip key={index}>
               <TooltipTrigger disabled={!banner?.chara.at(index)?.placeholder}>
@@ -134,7 +136,7 @@ function LoadingIcon({
       />
     );
   return (
-    <a href={href}>
+    <a href={href} rel="noopener" target="_blank">
       <Skeleton
         className={cn(
           "flex h-12 w-12 items-center justify-center",

@@ -15,14 +15,12 @@ import {
 
 interface Prop {
   lcId: string | number;
-  name: string;
-  skill:
-    | {
-        name: string;
-        paramList: string[][];
-        skillDesc: string[];
-      }
-    | undefined;
+  name: string | null;
+  skill?: {
+    name: string | null;
+    paramList: string[][] | null;
+    desc: string[] | null;
+  };
   link?: boolean;
 }
 function Content({ lcId, name, skill, link = false }: Prop) {
@@ -66,8 +64,8 @@ function Content({ lcId, name, skill, link = false }: Prop) {
         <CardContent>
           {skill ? (
             <SkillDescription
-              paramList={skill.paramList}
-              skillDesc={skill.skillDesc}
+              paramList={skill.paramList ?? []}
+              skillDesc={skill.desc ?? []}
               slv={promotion}
             />
           ) : null}

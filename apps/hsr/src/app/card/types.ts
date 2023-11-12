@@ -35,7 +35,7 @@ export interface MihomoPlayer {
 }
 
 export interface MihomoCharacter {
-  id: number;
+  id: string;
   name: string;
   rarity: number;
   rank: number;

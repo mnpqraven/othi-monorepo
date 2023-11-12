@@ -2,17 +2,22 @@
 
 import { useAtomValue, useSetAtom } from "jotai";
 import type { LANGS } from "@hsr/lib/constants";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { characterMetadataQ } from "@hsr/hooks/queries/character";
 import { CharacterInfo } from "../../[uid]/_components/info_block/CharacterInfo";
 import { EidolonInfo } from "../../[uid]/_components/skill_block/EidolonInfo";
 import { LightConeInfo } from "../../[uid]/_components/skill_block/LightConeInfo";
-import { SkillInfo } from "../../[uid]/_components/skill_block/SkillInfo";
+import {
+  SkillInfo,
+  SkillInfoLoading,
+} from "../../[uid]/_components/skill_block/SkillInfo";
 import { StatTable } from "../../[uid]/_components/stat_block/StatTable";
 import { SpiderChartWrapper } from "../../[uid]/_components/SpiderChartWrapper";
 import { RelicInfo } from "../../[uid]/_components/relic_block/RelicInfo";
 import { configAtom } from "../../_store/main";
 import { enkaRefAtom } from "../../_store";
-import { charMetadataAtom } from "../../_store/character";
+import { charIdAtom } from "../../_store/character";
 import { useMihomoApiUpdate } from "./useMihomoApiUpdate";
 
 type Lang = (typeof LANGS)[number];
@@ -25,9 +30,11 @@ export type DisplayCardProps =
   | { mode: "CUSTOM" };
 
 export function DisplayCard(props: DisplayCardProps) {
+  const charId = useAtomValue(charIdAtom);
+  const { data: charMetadata } = useQuery(characterMetadataQ(charId));
+
   const updateConfig = useSetAtom(configAtom);
   const { enkaRef } = useEnkaRef();
-  const { data: charMetadata } = useAtomValue(charMetadataAtom);
 
   useEffect(() => {
     updateConfig({ type: "changeMode", payload: props.mode });
@@ -58,7 +65,9 @@ export function DisplayCard(props: DisplayCardProps) {
           <div className="flex flex-col pb-2">
             <LightConeInfo className="grow" id="lightcone-2.1" />
 
-            <SkillInfo characterId={charMetadata.avatar_id} id="skill-2.2" />
+            <Suspense fallback={<SkillInfoLoading />}>
+              <SkillInfo characterId={charMetadata.avatar_id} id="skill-2.2" />
+            </Suspense>
           </div>
         </div>
 

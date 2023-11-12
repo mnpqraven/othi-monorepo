@@ -11,6 +11,7 @@ import { useState } from "react";
 import { TooltipProvider } from "ui/primitive/tooltip";
 import { httpBatchLink } from "@trpc/client";
 import { trpc } from "@db-center/app/_trpc/client";
+import superjson from "superjson";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
   defaultOptions: {
@@ -22,8 +23,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient(TANSTACK_CONFIG));
   const [trpcClient] = useState(() =>
     trpc.createClient({
+      transformer: superjson,
       links: [httpBatchLink({ url: "/api" })],
-    }),
+    })
   );
 
   return (

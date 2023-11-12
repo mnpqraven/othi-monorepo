@@ -12,14 +12,17 @@ import { avatars } from ".";
 export type EidolonSchema = InferSelectModel<typeof eidolons>;
 export const eidolons = sqliteTable("honkai_eidolon", {
   id: int("id").primaryKey(),
-  rank: int("rank"),
-  name: text("name"),
+  rank: int("rank").notNull(),
+  name: text("name").notNull(),
   desc: text("desc", { mode: "json" }).$type<string[]>(),
   unlockCost: text("unlock_cost", { mode: "json" }).$type<{
     item_id: number;
     item_num: number;
   }>(),
-  param: text("param", { mode: "json" }).$type<string[]>(),
+  param: text("param", { mode: "json" })
+    .$type<string[]>()
+    .notNull()
+    .default([]),
 });
 
 export const eidolonRelations = relations(eidolons, ({ one }) => ({
@@ -49,7 +52,7 @@ export const avatarToEidolonRelations = relations(
       fields: [avatarToEidolons.avatarId],
       references: [avatars.id],
     }),
-    skill: one(eidolons, {
+    eidolon: one(eidolons, {
       fields: [avatarToEidolons.eidolonId],
       references: [eidolons.id],
     }),

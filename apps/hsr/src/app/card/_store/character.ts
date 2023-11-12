@@ -4,6 +4,7 @@ import { atomWithImmer } from "jotai-immer";
 import { atomsWithQuery } from "jotai-tanstack-query";
 
 interface CharacterSchema {
+  // TODO: wrong type, this is string
   id: number | undefined;
   level: number;
   ascension: number;
@@ -50,7 +51,7 @@ export const charStructAtom = atom(
     skills: get(charSkillAtom),
   }),
   (_get, set, next: CharacterSchema) => {
-    set(charIdAtom, next.id);
+    set(charIdAtom, Number(next.id));
     set(charLevelAtom, next.level);
     set(charPromotionAtom, next.ascension);
     set(charEidAtom, next.eidolon);

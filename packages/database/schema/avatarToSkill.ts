@@ -39,13 +39,15 @@ export const avatarToSkillRelations = relations(avatarToSkills, ({ one }) => ({
 
 export const skills = sqliteTable("honkai_skill", {
   id: int("id").primaryKey(),
-  name: text("name"),
+  name: text("name").notNull(),
   tag: text("tag"),
   typeDesc: text("type_desc"),
   maxLevel: int("max_level"),
   spGain: int("spbase"),
   spNeed: int("spneed"),
-  attackType: text("attack_type").references(() => skillTypes.name, {
+  attackType: text("attack_type", {
+    enum: ["Normal", "BPSkill", "Ultra", "Talent", "MazeNormal", "Maze"],
+  }).references(() => skillTypes.name, {
     onDelete: "set null",
   }),
   skillDesc: text("skill_desc", { mode: "json" }).$type<string[]>(),

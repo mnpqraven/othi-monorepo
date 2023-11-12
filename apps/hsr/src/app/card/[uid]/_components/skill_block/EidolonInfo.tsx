@@ -2,21 +2,22 @@ import { img } from "@hsr/lib/utils";
 import type { HTMLAttributes } from "react";
 import { Fragment, forwardRef } from "react";
 import Image from "next/image";
-import { characterEidolonsQ } from "@hsr/hooks/queries/character";
-import type { AvatarRankConfig } from "@hsr/bindings/AvatarRankConfig";
 import { useAtomValue } from "jotai";
 import { charEidAtom } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn, range, sanitizeNewline } from "lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "ui/primitive";
-import { useQuery } from "@tanstack/react-query";
+import { trpc } from "@hsr/app/_trpc/client";
+import type { EidolonSchema } from "database/schema";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
 }
 export const EidolonInfo = forwardRef<HTMLDivElement, Prop>(
   ({ className, characterId, ...props }, ref) => {
-    const { data: eidolons } = useQuery(characterEidolonsQ(characterId));
+    const { data: eidolons } = trpc.honkai.avatar.eidolons.useQuery({
+      charId: characterId,
+    });
     const eidolon = useAtomValue(charEidAtom);
 
     return (
@@ -49,7 +50,7 @@ interface IconProps extends HTMLAttributes<HTMLDivElement> {
   eidolon: number;
   width?: number;
   height?: number;
-  eidolonInfo: AvatarRankConfig | undefined;
+  eidolonInfo: EidolonSchema | undefined;
 }
 const EidolonIcon = forwardRef<HTMLDivElement, IconProps>(
   (
@@ -94,7 +95,7 @@ const EidolonIcon = forwardRef<HTMLDivElement, IconProps>(
             <p className="text-accent-foreground mb-2 text-base font-bold">
               {eidolonInfo?.name}
             </p>
-            {eidolonInfo?.desc.map((descPart, index) => (
+            {eidolonInfo?.desc?.map((descPart, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <Fragment key={index}>
                 <span className="whitespace-pre-wrap">

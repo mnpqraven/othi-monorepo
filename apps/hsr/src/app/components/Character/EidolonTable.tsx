@@ -1,20 +1,20 @@
-"use client";
-
 import Image from "next/image";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { sanitizeNewline } from "lib/utils";
-import type { AvatarRankConfig } from "@hsr/bindings/AvatarRankConfig";
-import { Badge, Skeleton, Toggle } from "ui/primitive";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { characterEidolonsQ } from "@hsr/hooks/queries/character";
+import { Badge, Toggle } from "ui/primitive";
+import { server } from "@hsr/app/_trpc/serverClient";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "protocol/trpc";
+import Link from "next/link";
 
 interface Prop {
   characterId: number;
+  searchParams: Record<string, string | undefined>;
 }
 
-export function EidolonTable({ characterId }: Prop) {
-  const [selectedEidolon, setSelectedEidolon] = useState(1);
-  const { data: eidolons } = useSuspenseQuery(characterEidolonsQ(characterId));
+export async function EidolonTable({ characterId, searchParams }: Prop) {
+  const selectedEidolon = Number(searchParams.i ?? 1);
+  const eidolons = await server.honkai.avatar.eidolons({ charId: characterId });
 
   const top = eidolons
     .filter((e) => e.rank <= 3)
@@ -30,12 +30,12 @@ export function EidolonTable({ characterId }: Prop) {
       <EidolonRow
         characterId={characterId}
         data={top}
+        searchParams={searchParams}
         selectedEidolon={selectedEidolon}
-        setSelectedEidolon={setSelectedEidolon}
       />
 
       <div className="my-2 min-h-[8rem] whitespace-pre-wrap rounded-md border p-4">
-        {currentEidolon?.desc.map((descPart, index) => (
+        {currentEidolon?.desc?.map((descPart, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <Fragment key={index}>
             <span className="whitespace-pre-wrap">
@@ -51,80 +51,48 @@ export function EidolonTable({ characterId }: Prop) {
       <EidolonRow
         characterId={characterId}
         data={bottom.reverse()}
+        searchParams={searchParams}
         selectedEidolon={selectedEidolon}
-        setSelectedEidolon={setSelectedEidolon}
       />
     </>
   );
 }
 
 interface EidolonRowProps {
-  data: AvatarRankConfig[];
+  data: inferRouterOutputs<AppRouter>["honkai"]["avatar"]["eidolons"];
   selectedEidolon: number;
-  setSelectedEidolon: (value: number) => void;
   characterId: number;
+  searchParams: Record<string, string | undefined>;
 }
 function EidolonRow({
   data,
   selectedEidolon,
-  setSelectedEidolon,
   characterId,
+  searchParams,
 }: EidolonRowProps) {
   return (
     <div className="grid grid-cols-3 gap-2">
       {data.map((eidolon) => (
         <Toggle
+          asChild
           className="flex h-full flex-1 flex-col justify-start gap-2 py-2 sm:flex-row"
-          key={eidolon.rank_id}
-          onPressedChange={() => {
-            setSelectedEidolon(eidolon.rank);
-          }}
+          key={eidolon.rank}
           pressed={selectedEidolon === eidolon.rank}
         >
-          <div className="flex flex-col items-center gap-1">
-            <Image
-              alt={eidolon.name}
-              className="aspect-square min-w-[64px] invert dark:invert-0"
-              height={64}
-              onClick={() => {
-                setSelectedEidolon(eidolon.rank);
-              }}
-              src={url(characterId, eidolon.rank)}
-              width={64}
-            />
-            <Badge className="w-fit sm:inline">E{eidolon.rank}</Badge>
-          </div>
+          <Link href={{ query: { ...searchParams, i: eidolon.rank } }}>
+            <div className="flex flex-col items-center gap-1">
+              <Image
+                alt={eidolon.name}
+                className="aspect-square min-w-[64px] invert dark:invert-0"
+                height={64}
+                src={url(characterId, eidolon.rank)}
+                width={64}
+              />
+              <Badge className="w-fit sm:inline">E{eidolon.rank}</Badge>
+            </div>
 
-          <span className="md:text-lg">{eidolon.name}</span>
-        </Toggle>
-      ))}
-    </div>
-  );
-}
-
-export function LoadingEidolonTable() {
-  return (
-    <>
-      <Row keys={[1, 2, 3]} />
-      <div className="my-2 min-h-[8rem] whitespace-pre-wrap rounded-md border p-4" />
-      <Row keys={[6, 5, 4]} />
-    </>
-  );
-}
-function Row({ keys }: { keys: number[] }) {
-  return (
-    <div className="grid grid-cols-3 gap-2">
-      {keys.map((key) => (
-        <Toggle
-          className="flex h-full flex-1 flex-col justify-start gap-2 py-2 sm:flex-row"
-          key={key}
-          pressed={key === 1}
-        >
-          <div className="flex flex-col items-center gap-1">
-            <Skeleton className="h-16 w-16 rounded-full" />
-            <Badge className="w-fit sm:inline">E{key}</Badge>
-          </div>
-          <span className="md:text-lg"> </span>
+            <span className="md:text-lg">{eidolon.name}</span>
+          </Link>
         </Toggle>
       ))}
     </div>

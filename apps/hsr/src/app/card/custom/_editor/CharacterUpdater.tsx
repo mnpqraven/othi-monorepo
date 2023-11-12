@@ -1,16 +1,14 @@
 import { useAtom, useAtomValue } from "jotai";
-import type {
-  AvatarSkillConfig,
-  SkillType,
-} from "@hsr/bindings/AvatarSkillConfig";
+import type { SkillType } from "@hsr/bindings/AvatarSkillConfig";
 import { getImagePath } from "@hsr/lib/utils";
 import Image from "next/image";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useEffect, useMemo } from "react";
 import { Badge, Input, Label } from "ui/primitive";
 import { cn } from "lib";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { characterSkillQ } from "@hsr/hooks/queries/character";
+import { trpc } from "@hsr/app/_trpc/client";
+import type { SkillSchema } from "database/schema";
+import { z } from "zod";
 import { getSkillMaxLevel } from "../../[uid]/_components/skill_block/SkillInfo";
 import {
   charEidAtom,
@@ -31,27 +29,31 @@ const skillTypeMap = [
 
 export function CharacterUpdater() {
   const charId = useAtomValue(charIdAtom);
-  const { data: skills } = useSuspenseQuery(characterSkillQ(charId));
+  const { data: skills } = trpc.honkai.skill.by.useQuery(
+    { charId: z.number().parse(charId) },
+    { enabled: Boolean(charId) }
+  );
   const maxLevel = useAtomValue(charMaxLevelAtom);
+
+  if (!skills) return null;
 
   const sortedSkills = skills
     .filter(
-      ({ attack_type }) =>
-        attack_type !== "MazeNormal" && attack_type !== "Maze"
+      ({ attackType }) => attackType !== "MazeNormal" && attackType !== "Maze"
     )
-    .filter(({ skill_tag }) => skill_tag !== "Cancel")
+    .filter(({ tag }) => tag !== "Cancel")
     .sort((a, b) => {
-      const toInt = (ttype: SkillType | null | undefined, typeDesc: string) => {
+      const toInt = (
+        ttype: SkillType | null | undefined,
+        typeDesc: string | null
+      ) => {
         if (ttype === "Maze") return 4;
         if (ttype === "Ultra") return 3;
         if (ttype === "BPSkill") return 2;
         if (ttype === "Talent" || typeDesc === "Talent") return 1;
         return 0;
       };
-      return (
-        toInt(a.attack_type, a.skill_type_desc) -
-        toInt(b.attack_type, b.skill_type_desc)
-      );
+      return toInt(a.attackType, a.typeDesc) - toInt(b.attackType, b.typeDesc);
     });
 
   return (
@@ -78,9 +80,7 @@ export function CharacterUpdater() {
         {skillTypeMap.map(({ skillTypeDesc, label }) => (
           <SkillSection
             charId={charId}
-            data={sortedSkills.filter(
-              (e) => e.skill_type_desc === skillTypeDesc
-            )}
+            data={sortedSkills.filter((e) => e.typeDesc === skillTypeDesc)}
             key={skillTypeDesc}
             label={label}
           />
@@ -171,18 +171,14 @@ function SkillSection({
   label,
 }: {
   charId: number | undefined;
-  data: AvatarSkillConfig[];
+  data: SkillSchema[];
   label: string;
 }) {
   const eidolon = useAtomValue(charEidAtom);
   const maxLv = useMemo(
     () =>
       data[0]
-        ? getSkillMaxLevel(
-            data[0].attack_type,
-            data[0].skill_type_desc,
-            eidolon
-          )
+        ? getSkillMaxLevel(data[0].attackType, data[0].typeDesc ?? "", eidolon)
         : 10,
     [data, eidolon]
   );
@@ -192,15 +188,19 @@ function SkillSection({
       {data[0] ? (
         <div className="flex gap-2">
           <Image
-            alt={`${data[0].skill_id}`}
+            alt={`${data[0].id}`}
             className="h-16 w-16 invert dark:invert-0"
             height={64}
-            src={`${getImagePath(charId, data[0])}`}
+            src={`${getImagePath(
+              charId,
+              data[0].attackType,
+              data[0].typeDesc
+            )}`}
             width={64}
           />
           <div className="flex flex-col gap-2">
             <Badge className="w-fit">{label}</Badge>
-            <SkillInput id={data[0].skill_id} maxLv={maxLv} />
+            <SkillInput id={data[0].id} maxLv={maxLv} />
           </div>
         </div>
       ) : null}

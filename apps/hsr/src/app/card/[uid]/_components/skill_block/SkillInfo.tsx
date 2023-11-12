@@ -1,20 +1,22 @@
 import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
-import type {
-  AvatarSkillConfig,
-  SkillType,
-} from "@hsr/bindings/AvatarSkillConfig";
+import type { SkillType } from "@hsr/bindings/AvatarSkillConfig";
 import { getImagePath } from "@hsr/lib/utils";
 import Image from "next/image";
-import { ChevronsUp } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "ui/primitive";
+import { ChevronsUp, Loader2 } from "lucide-react";
+import {
+  Skeleton,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "ui/primitive";
 import { SkillDescription } from "@hsr/app/components/Db/SkillDescription";
 import { useAtomValue } from "jotai";
 import { charEidAtom, charSkillAtom } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn } from "lib/utils";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { characterSkillQ } from "@hsr/hooks/queries/character";
+import type { SkillSchema } from "database/schema";
+import { trpc } from "@hsr/app/_trpc/client";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
@@ -25,7 +27,9 @@ export const SkillInfo = forwardRef<HTMLDivElement, Prop>(
     const skList = useAtomValue(charSkillAtom);
     const eidolon = useAtomValue(charEidAtom);
 
-    const { data } = useSuspenseQuery(characterSkillQ(characterId));
+    const [data] = trpc.honkai.skill.by.useSuspenseQuery({
+      charId: characterId,
+    });
 
     return (
       <div
@@ -40,36 +44,40 @@ export const SkillInfo = forwardRef<HTMLDivElement, Prop>(
           ([type, [first, ..._rest]]) =>
             first ? (
               <div className="flex flex-col items-center" key={type}>
-                <span>{getLabel2(first.skill_type_desc)}</span>
+                <span>{getLabel2(first.typeDesc ?? "")}</span>
                 <SkillIcon
                   skillInfo={first}
-                  slv={skList[first.skill_id] ?? 1}
-                  src={getImagePath(characterId, first)}
+                  slv={skList[first.id] ?? 1}
+                  src={getImagePath(
+                    characterId,
+                    first.attackType,
+                    first.typeDesc
+                  )}
                 />
                 <span
                   className={cn(
                     "w-full text-center font-bold",
-                    isImprovedByEidolon(first.attack_type, eidolon)
+                    isImprovedByEidolon(first.attackType, eidolon)
                       ? "text-[#6cfff7]"
                       : ""
                   )}
                 >
-                  {skList[first.skill_id] ===
+                  {skList[first.id] ===
                   getSkillMaxLevel(
-                    first.attack_type,
-                    first.skill_type_desc,
+                    first.attackType,
+                    first.typeDesc ?? "",
                     eidolon
                   ) ? (
                     <span className="flex items-center justify-end">
-                      {skList[first.skill_id] ?? 1}
+                      {skList[first.id] ?? 1}
                       <ChevronsUp className="h-4 w-4 text-green-600" />
                     </span>
                   ) : (
                     <span>
-                      {skList[first.skill_id] ?? 1} /{" "}
+                      {skList[first.id] ?? 1} /{" "}
                       {getSkillMaxLevel(
-                        first.attack_type,
-                        first.skill_type_desc,
+                        first.attackType,
+                        first.typeDesc ?? "",
                         eidolon
                       )}
                     </span>
@@ -86,7 +94,7 @@ SkillInfo.displayName = "SkillInfo";
 
 interface IconProps {
   src: string | undefined;
-  skillInfo: AvatarSkillConfig;
+  skillInfo: SkillSchema;
   slv: number;
   width?: number;
   height?: number;
@@ -107,7 +115,7 @@ function SkillIcon({
       <TooltipTrigger disabled={hoverVerbosity === "none"}>
         {src ? (
           <Image
-            alt={skillInfo.skill_name}
+            alt={skillInfo.name}
             className={cn("invert dark:invert-0", className)}
             height={height}
             src={src}
@@ -116,17 +124,17 @@ function SkillIcon({
         ) : null}
       </TooltipTrigger>
       {hoverVerbosity === "simple" ? (
-        <TooltipContent>{skillInfo.skill_name}</TooltipContent>
+        <TooltipContent>{skillInfo.name}</TooltipContent>
       ) : null}
       {hoverVerbosity === "detailed" ? (
         <TooltipContent className="w-96 py-2 text-justify text-base">
           <p className="text-accent-foreground mb-2 text-base font-bold">
-            {skillInfo.skill_name}
+            {skillInfo.name}
           </p>
 
           <SkillDescription
-            paramList={skillInfo.param_list}
-            skillDesc={skillInfo.skill_desc}
+            paramList={skillInfo.paramList ?? []}
+            skillDesc={skillInfo.skillDesc ?? []}
             slv={slv}
           />
         </TooltipContent>
@@ -178,9 +186,9 @@ function isImprovedByEidolon(
 type Keys = "basic" | "talent" | "skill" | "ult" | "technique";
 type ReturnConfig = Partial<Record<Keys, boolean>>;
 type Return = {
-  [Key in Keys]?: AvatarSkillConfig[];
+  [Key in Keys]?: SkillSchema[];
 };
-function splitGroupByType(data: AvatarSkillConfig[], cfg?: ReturnConfig) {
+function splitGroupByType(data: SkillSchema[], cfg?: ReturnConfig) {
   const _config = {
     basic: true,
     talent: true,
@@ -189,11 +197,11 @@ function splitGroupByType(data: AvatarSkillConfig[], cfg?: ReturnConfig) {
     technique: true,
     ...cfg,
   };
-  const basic = data.filter((e) => e.attack_type === "Normal");
-  const talent = data.filter((e) => e.skill_type_desc === "Talent");
-  const skill = data.filter((e) => e.skill_type_desc === "Skill");
-  const ult = data.filter((e) => e.skill_type_desc === "Ultimate");
-  const technique = data.filter((e) => e.skill_type_desc === "Technique");
+  const basic = data.filter((e) => e.attackType === "Normal");
+  const talent = data.filter((e) => e.typeDesc === "Talent");
+  const skill = data.filter((e) => e.typeDesc === "Skill");
+  const ult = data.filter((e) => e.typeDesc === "Ultimate");
+  const technique = data.filter((e) => e.typeDesc === "Technique");
   let total: Return = {};
   if (_config.basic) total = { ...total, basic };
   if (_config.skill) total = { ...total, skill };
@@ -202,4 +210,21 @@ function splitGroupByType(data: AvatarSkillConfig[], cfg?: ReturnConfig) {
   if (_config.technique) total = { ...total, technique };
 
   return total;
+}
+
+export function SkillInfoLoading() {
+  const labels = ["Basic", "Skill", "Talent", "Ult"];
+  return (
+    <div className="shadow-border flex items-center justify-evenly rounded-md border py-2 shadow-md">
+      {labels.map((label) => (
+        <div className="flex flex-col items-center" key={label}>
+          <span>{label}</span>
+
+          <Skeleton className="w-12 h-12 rounded-md" />
+
+          <Loader2 className="animate-spin" />
+        </div>
+      ))}
+    </div>
+  );
 }
