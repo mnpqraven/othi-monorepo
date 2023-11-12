@@ -14,15 +14,12 @@ export const eidolons = sqliteTable("honkai_eidolon", {
   id: int("id").primaryKey(),
   rank: int("rank").notNull(),
   name: text("name").notNull(),
-  desc: text("desc", { mode: "json" }).$type<string[]>(),
+  desc: text("desc", { mode: "json" }).$type<string[]>().notNull(),
   unlockCost: text("unlock_cost", { mode: "json" }).$type<{
     item_id: number;
     item_num: number;
   }>(),
-  param: text("param", { mode: "json" })
-    .$type<string[]>()
-    .notNull()
-    .default([]),
+  param: text("param", { mode: "json" }).$type<string[]>().notNull(),
 });
 
 export const eidolonRelations = relations(eidolons, ({ one }) => ({

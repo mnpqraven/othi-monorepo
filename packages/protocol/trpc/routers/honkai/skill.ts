@@ -25,6 +25,7 @@ export const skillRouter = router({
           res.filter((skill) => skill.attackType !== "MazeNormal")
         );
       }
+      console.log(query);
 
       return query;
     }),
