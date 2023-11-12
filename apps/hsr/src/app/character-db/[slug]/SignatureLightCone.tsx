@@ -1,33 +1,28 @@
-"use client";
-
+import { server } from "@hsr/app/_trpc/serverClient";
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { Content } from "@hsr/app/lightcone-db/[slug]/Content";
 import { Portrait } from "@hsr/app/lightcone-db/[slug]/Portrait";
 import { IMAGE_URL } from "@hsr/lib/constants";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import type { inferRouterOutputs } from "@trpc/server";
-import type { AppRouter } from "protocol/trpc";
-import { byCharId } from "protocol/ts/atlas-SignatureAtlasService_connectquery";
-import { useState } from "react";
+import Link from "next/link";
 
 interface Prop {
   characterId: number;
-  signatures: inferRouterOutputs<AppRouter>["honkai"]["avatar"]["signatures"];
+  searchParams: Record<string, string | undefined>;
 }
 
-function SignatureLightCone({ characterId, signatures }: Prop) {
-  const { data } = useSuspenseQuery(byCharId.useQuery({ charId: characterId }));
-  const { lcIds } = data;
+export async function SignatureLightCone({ characterId, searchParams }: Prop) {
+  const signatures = (
+    await server.honkai.avatar.signatures({
+      charId: characterId,
+      skill: true,
+    })
+  ).sort((a, b) => (b.rarity ?? 0) - (a.rarity ?? 0));
 
-  const [selectedLcId, setSelectedLcId] = useState(lcIds.at(0));
-
-  const selectedLc = signatures.find((e) => e.id === selectedLcId);
+  const selectedLc = signatures[Number(searchParams.i ?? 0)];
 
   if (!selectedLc) return null;
 
-  const sortedLcs = signatures.sort(
-    (a, b) => (b.rarity ?? 0) - (a.rarity ?? 0)
-  );
+  const { skill } = selectedLc;
 
   return (
     <div className="block">
@@ -38,37 +33,32 @@ function SignatureLightCone({ characterId, signatures }: Prop) {
 
         <div className="col-span-2 flex flex-col">
           <div className="grid grid-cols-4">
-            {sortedLcs.map((lc) => (
-              <button
-                className="relative p-2 cursor-default"
-                key={lc.id}
-                onClick={() => {
-                  setSelectedLcId(lc.id);
-                }}
-                type="button"
-              >
-                <LightConeCard imgUrl={url(lc.id)} name={lc.name ?? ""} />
-              </button>
+            {signatures.map((lc, i) => (
+              <Link href={{ query: { ...searchParams, i } }} key={lc.id}>
+                <button
+                  className="relative p-2 cursor-default"
+                  key={lc.id}
+                  type="button"
+                >
+                  <LightConeCard imgUrl={url(lc.id)} name={lc.name ?? ""} />
+                </button>
+              </Link>
             ))}
           </div>
 
-          <Content
-            lcId={selectedLc.id}
-            link
-            name={selectedLc.name ?? ""}
-            skill={{
-              name: selectedLc.skill?.name ?? "",
-              paramList: selectedLc.skill?.paramList ?? [],
-              skillDesc: selectedLc.skill?.desc ?? [],
-            }}
-          />
+          {skill ? (
+            <Content
+              lcId={selectedLc.id}
+              link
+              name={selectedLc.name}
+              skill={{ ...skill }}
+            />
+          ) : null}
         </div>
       </div>
     </div>
   );
 }
-
-export { SignatureLightCone };
 
 function url(id: string | number): string {
   return `${IMAGE_URL}image/light_cone_preview/${id}.png`;

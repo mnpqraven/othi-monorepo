@@ -1,14 +1,18 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "ui/primitive";
 import { useQueryClient } from "@tanstack/react-query";
 import API from "@hsr/server/typedEndpoints";
+import type { ReactNode } from "react";
 import { SkillOverview } from "./SkillOverview";
 import { TraceTable } from "./TraceTable";
-import { EidolonTable } from "./EidolonTable";
 
 interface Prop {
   characterId: number;
+  eidolonTableChildren?: ReactNode;
 }
-function CharacterTabWrapper({ characterId }: Prop) {
+export function CharacterTabWrapper({
+  characterId,
+  eidolonTableChildren,
+}: Prop) {
   const client = useQueryClient();
   void client.prefetchQuery({
     queryKey: ["properties"],
@@ -27,9 +31,7 @@ function CharacterTabWrapper({ characterId }: Prop) {
         <SkillOverview characterId={characterId} />
       </TabsContent>
 
-      <TabsContent value="eidolons">
-        <EidolonTable characterId={characterId} />
-      </TabsContent>
+      <TabsContent value="eidolons">{eidolonTableChildren}</TabsContent>
 
       <TabsContent className="h-[30rem]" value="traces">
         <div className="flex justify-center">
@@ -39,5 +41,3 @@ function CharacterTabWrapper({ characterId }: Prop) {
     </Tabs>
   );
 }
-
-export { CharacterTabWrapper };

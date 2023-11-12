@@ -9,7 +9,6 @@ export const lightConeSkills = sqliteTable("honkai_lightConeSkill", {
   desc: text("desc", { mode: "json" }).$type<string[]>(),
   paramList: text("param_list", { mode: "json" }).$type<string[][]>(), // string[][]
   abilityProperty: text("ability_property", { mode: "json" }).$type<
-    // TODO: Property type
     { propertyType: string; value: { value: number } }[][]
   >(),
 });

@@ -1,7 +1,4 @@
-import {
-  EidolonTable,
-  LoadingEidolonTable,
-} from "@hsr/app/components/Character/EidolonTable";
+import { EidolonTable } from "@hsr/app/components/Character/EidolonTable";
 import {
   SkillOverview,
   SkillOverviewLoading,
@@ -18,30 +15,38 @@ import {
   characterTraceQ,
 } from "@hsr/hooks/queries/character";
 import { optionsProperties } from "@hsr/hooks/queries/useProperties";
-import { server } from "@hsr/app/_trpc/serverClient";
+import Link from "next/link";
+import { LoadingEidolonTable } from "@hsr/app/components/Character/LoadingEidolonTable";
 import { SignatureLightCone } from "./SignatureLightCone";
 import { TraceSummaryWrapper } from "./TraceSummaryWrapper";
 import Loading from "./loading";
 
 interface Prop {
   params: { slug: string };
+  searchParams: { tab?: string };
 }
 
-export default async function Character({ params }: Prop) {
+export default async function Character({ params, searchParams }: Prop) {
   const characterId = parseInt(params.slug);
   const dehydratedState = await prefetchOptions(characterId);
 
-  const signatures = await server.honkai.avatar.signatures({
-    charId: characterId,
-  });
-
   return (
-    <Tabs defaultValue="skill">
+    <Tabs defaultValue={searchParams.tab ?? "skill"}>
       <TabsList className="h-fit [&>*]:whitespace-pre-wrap">
-        <TabsTrigger value="skill">Skills</TabsTrigger>
-        <TabsTrigger value="eidolon">Eidolons</TabsTrigger>
-        <TabsTrigger value="sig">Featured Light Cone</TabsTrigger>
-        <TabsTrigger value="trace">Traces</TabsTrigger>
+        <TabsTrigger asChild value="skill">
+          <Link href={{ query: { tab: "skill" } }}>Skills</Link>
+        </TabsTrigger>
+        <TabsTrigger asChild value="eidolon">
+          <Link href={{ query: { tab: "eidolon" } }}>Eidolons</Link>
+        </TabsTrigger>
+        <TabsTrigger asChild value="signature">
+          <Link href={{ query: { tab: "signature" } }}>
+            Featured Light Cone
+          </Link>
+        </TabsTrigger>
+        <TabsTrigger asChild value="trace">
+          <Link href={{ query: { tab: "trace" } }}>Traces</Link>
+        </TabsTrigger>
       </TabsList>
 
       <HydrationBoundary state={dehydratedState}>
@@ -51,17 +56,11 @@ export default async function Character({ params }: Prop) {
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="eidolon">
-          <Suspense fallback={<LoadingEidolonTable />}>
-            <EidolonTable characterId={characterId} />
-          </Suspense>
-        </TabsContent>
-
-        <TabsContent value="sig">
+        <TabsContent value="signature">
           <Suspense fallback={<Loading />}>
             <SignatureLightCone
               characterId={characterId}
-              signatures={signatures}
+              searchParams={searchParams}
             />
           </Suspense>
         </TabsContent>
@@ -78,6 +77,12 @@ export default async function Character({ params }: Prop) {
           </div>
         </TabsContent>
       </HydrationBoundary>
+
+      <TabsContent value="eidolon">
+        <Suspense fallback={<LoadingEidolonTable />}>
+          <EidolonTable characterId={characterId} searchParams={searchParams} />
+        </Suspense>
+      </TabsContent>
     </Tabs>
   );
 }

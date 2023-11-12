@@ -10,26 +10,38 @@ export const avatarRouter = router({
     async () =>
       (await db.select().from(avatars).all()) satisfies Awaited<AvatarSchema[]>
   ),
+  eidolons: publicProcedure.input(CharId).query(async ({ input }) => {
+    const query = db.query.avatarToEidolons.findMany({
+      where: (map, { eq }) => eq(map.avatarId, input.charId),
+      with: {
+        eidolon: true,
+      },
+    });
+    const data = (await query)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      .map((e) => e.eidolon!)
+      .sort((a, b) => a.rank - b.rank);
+    return data;
+  }),
   signatures: publicProcedure
     .input(CharId.extend({ skill: z.boolean().default(true) }))
     .query(async ({ input }) => {
-      const query = await db.query.avatars.findFirst({
-        where: (avatar, { eq }) => eq(avatar.id, input.charId),
-        columns: {},
+      const query = db.query.signatures.findMany({
+        where: (signature, { eq }) => eq(signature.avatarId, input.charId),
         with: {
-          signature: {
-            columns: {},
+          lightCone: {
             with: {
-              lightCone: {
-                with: {
-                  skill: input.skill || undefined,
-                },
-              },
+              skill: input.skill || undefined,
             },
           },
         },
       });
 
-      return query?.signature.flatMap((e) => e.lightCone) ?? [];
+      const data = (await query)
+        .filter((e) => Boolean(e.lightCone))
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        .map((e) => e.lightCone!);
+
+      return data;
     }),
 });

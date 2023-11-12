@@ -5,6 +5,7 @@ import { range } from "lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useDebounce } from "@hsr/hooks/useDebounce";
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { useFuturePatchDateList } from "@hsr/hooks/queries/useFuturePatchDate";
 import equal from "fast-deep-equal/react";
@@ -57,11 +58,15 @@ import { CalendarFooter } from "./CalendarFooter";
 
 interface Prop {
   submitButton?: boolean;
+  eidolonTableChildren?: ReactNode;
 }
 
 type FormSchema = PartialMessage<JadeEstimateCfg>;
 
-export default function JadeEstimateForm({ submitButton = false }: Prop) {
+export default function JadeEstimateForm({
+  submitButton = false,
+  eidolonTableChildren,
+}: Prop) {
   const [open, setOpen] = useState(false);
   const [beforeFirstRender, setBeforeFirstRender] = useState(true);
   // INFO: month marker on calendar
@@ -242,7 +247,12 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
                       <Calendar
                         className="py-0"
                         disabled={beforeToday}
-                        footer={<CalendarFooter date={selectedCalendarDate} />}
+                        footer={
+                          <CalendarFooter
+                            date={selectedCalendarDate}
+                            eidolonTableChildren={eidolonTableChildren}
+                          />
+                        }
                         initialFocus
                         mode="single"
                         modifiers={{

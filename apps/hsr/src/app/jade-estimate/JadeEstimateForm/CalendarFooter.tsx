@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import { sameDate } from "lib/utils";
 import { useBannerList } from "@hsr/hooks/queries/useBannerList";
+import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { useQueries } from "@tanstack/react-query";
 import API from "@hsr/server/typedEndpoints";
@@ -20,9 +21,10 @@ import { cn } from "lib";
 
 interface Prop {
   date: Date;
+  eidolonTableChildren: ReactNode;
 }
 
-function CalendarFooter({ date }: Prop) {
+function CalendarFooter({ date, eidolonTableChildren }: Prop) {
   const { futurePatchDateList } = useFuturePatchDateList();
   const { bannerList } = useBannerList();
   const { getVersion, currentPatch } = usePatchDateHelper();
@@ -74,7 +76,12 @@ function CalendarFooter({ date }: Prop) {
       <div className="flex gap-2.5">
         {avatarQueries.map((query, index) =>
           query.data ? (
-            <CharacterIcon data={query.data} key={index} />
+            <Link href={{ query: { chara: query.data.avatar_id } }} key={index}>
+              <CharacterIcon
+                data={query.data}
+                eidolonTableChildren={eidolonTableChildren}
+              />
+            </Link>
           ) : (
             <Tooltip key={index}>
               <TooltipTrigger disabled={!banner?.chara.at(index)?.placeholder}>

@@ -26,7 +26,7 @@ export default async function LightConePage({ params }: Prop) {
           skill={{
             name: lcSkill.skill_name,
             paramList: lcSkill.param_list,
-            skillDesc: lcSkill.skill_desc,
+            desc: lcSkill.skill_desc,
           }}
         />
         <LightConeRanking id={lcId} />

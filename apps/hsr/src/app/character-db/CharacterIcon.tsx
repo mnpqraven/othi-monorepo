@@ -10,12 +10,14 @@ import {
 import Image from "next/image";
 import { elementVariant } from "@hsr/lib/variants";
 import { cn } from "lib";
+import type { ReactNode } from "react";
 import { CharacterTabWrapper } from "../components/Character/CharacterTabWrapper";
 
 interface Prop {
   data: AvatarConfig;
+  eidolonTableChildren?: ReactNode;
 }
-function CharacterIcon({ data: avatar }: Prop) {
+function CharacterIcon({ data: avatar, eidolonTableChildren }: Prop) {
   return (
     <div className="flex flex-col" key={avatar.avatar_id}>
       <p className="whitespace-pre-wrap text-center" />
@@ -44,7 +46,10 @@ function CharacterIcon({ data: avatar }: Prop) {
 
           <DialogContent className="min-h-[16rem] sm:max-w-4xl">
             {avatar.avatar_id ? (
-              <CharacterTabWrapper characterId={avatar.avatar_id} />
+              <CharacterTabWrapper
+                characterId={avatar.avatar_id}
+                eidolonTableChildren={eidolonTableChildren}
+              />
             ) : null}
           </DialogContent>
         </Dialog>

@@ -59,7 +59,7 @@ function SkillOverview({ characterId }: Prop) {
   return (
     <div className="flex flex-col">
       <div className="flex h-fit flex-col sm:flex-row">
-        <div className="grid grid-cols-4">
+        <div className="flex gap-2">
           {sortedSkills.map((skill) => (
             <Toggle
               className="flex h-fit flex-col items-center px-1 py-1.5"
