@@ -1,7 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import { sameDate } from "lib/utils";
 import { useBannerList } from "@hsr/hooks/queries/useBannerList";
-import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { useQueries } from "@tanstack/react-query";
 import API from "@hsr/server/typedEndpoints";
@@ -21,10 +20,9 @@ import { cn } from "lib";
 
 interface Prop {
   date: Date;
-  eidolonTableChildren: ReactNode;
 }
 
-function CalendarFooter({ date, eidolonTableChildren }: Prop) {
+function CalendarFooter({ date }: Prop) {
   const { futurePatchDateList } = useFuturePatchDateList();
   const { bannerList } = useBannerList();
   const { getVersion, currentPatch } = usePatchDateHelper();
@@ -76,11 +74,8 @@ function CalendarFooter({ date, eidolonTableChildren }: Prop) {
       <div className="flex gap-2.5">
         {avatarQueries.map((query, index) =>
           query.data ? (
-            <Link href={{ query: { chara: query.data.avatar_id } }} key={index}>
-              <CharacterIcon
-                data={query.data}
-                eidolonTableChildren={eidolonTableChildren}
-              />
+            <Link href={`character-db/${query.data.avatar_id}`} key={index}>
+              <CharacterIcon data={query.data} />
             </Link>
           ) : (
             <Tooltip key={index}>
@@ -141,7 +136,7 @@ function LoadingIcon({
       />
     );
   return (
-    <a href={href}>
+    <a href={href} rel="noopener" target="_blank">
       <Skeleton
         className={cn(
           "flex h-12 w-12 items-center justify-center",

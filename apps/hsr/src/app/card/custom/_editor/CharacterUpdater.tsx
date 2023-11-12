@@ -195,7 +195,11 @@ function SkillSection({
             alt={`${data[0].skill_id}`}
             className="h-16 w-16 invert dark:invert-0"
             height={64}
-            src={`${getImagePath(charId, data[0])}`}
+            src={`${getImagePath(
+              charId,
+              data[0].attack_type,
+              data[0].skill_type_desc
+            )}`}
             width={64}
           />
           <div className="flex flex-col gap-2">

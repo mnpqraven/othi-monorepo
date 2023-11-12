@@ -1,5 +1,4 @@
 import type { LANGS } from "@hsr/lib/constants";
-import { StateProvider } from "@hsr/app/components/StateProvider";
 import type { Metadata } from "next";
 import { DisplayCard } from "../custom/_viewer/DisplayCard";
 import { ConfigController } from "./ConfigControllerDialog";
@@ -22,17 +21,15 @@ export default function ProfileCard({
   searchParams: { lang },
 }: Prop) {
   return (
-    <StateProvider devTools>
-      <main className="flex flex-col items-center justify-center">
-        <div className="mt-2 flex items-center justify-center gap-2">
-          <LineupSelector />
-          <Exporter />
-          <Share />
-          <ConfigController />
-        </div>
+    <main className="flex flex-col items-center justify-center">
+      <div className="mt-2 flex items-center justify-center gap-2">
+        <LineupSelector />
+        <Exporter />
+        <Share />
+        <ConfigController />
+      </div>
 
-        <DisplayCard lang={lang} mode="API" uid={uid} />
-      </main>
-    </StateProvider>
+      <DisplayCard lang={lang} mode="API" uid={uid} />
+    </main>
   );
 }

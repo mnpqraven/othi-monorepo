@@ -1,8 +1,5 @@
 import { EidolonTable } from "@hsr/app/components/Character/EidolonTable";
-import {
-  SkillOverview,
-  SkillOverviewLoading,
-} from "@hsr/app/components/Character/SkillOverview";
+import { SkillOverview } from "@hsr/app/components/Character/SkillOverview";
 import { TraceTable } from "@hsr/app/components/Character/TraceTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "ui/primitive";
 import { Suspense } from "react";
@@ -17,18 +14,25 @@ import {
 import { optionsProperties } from "@hsr/hooks/queries/useProperties";
 import Link from "next/link";
 import { LoadingEidolonTable } from "@hsr/app/components/Character/LoadingEidolonTable";
+import { SkillOverviewLoading } from "@hsr/app/components/Character/SkillOverviewLoading";
+import { SkillSelector } from "@hsr/app/components/Character/SkillSelector";
+import { server } from "@hsr/app/_trpc/serverClient";
+import { sortSkillsByDesc } from "@hsr/lib/utils";
 import { SignatureLightCone } from "./SignatureLightCone";
 import { TraceSummaryWrapper } from "./TraceSummaryWrapper";
-import Loading from "./loading";
 
 interface Prop {
   params: { slug: string };
-  searchParams: { tab?: string };
+  searchParams: Record<string, string | undefined>;
 }
 
 export default async function Character({ params, searchParams }: Prop) {
   const characterId = parseInt(params.slug);
   const dehydratedState = await prefetchOptions(characterId);
+  const skills = await server.honkai.skill
+    .by({ charId: characterId })
+    .then((data) => data.sort(sortSkillsByDesc));
+  const selectedId = Number(searchParams.id ?? skills.at(0)?.id);
 
   return (
     <Tabs defaultValue={searchParams.tab ?? "skill"}>
@@ -52,17 +56,25 @@ export default async function Character({ params, searchParams }: Prop) {
       <HydrationBoundary state={dehydratedState}>
         <TabsContent value="skill">
           <Suspense fallback={<SkillOverviewLoading />}>
-            <SkillOverview characterId={characterId} />
+            <SkillOverview
+              characterId={characterId}
+              selectedId={selectedId}
+              skills={skills}
+            >
+              <SkillSelector
+                characterId={characterId}
+                selectedId={selectedId}
+                skills={skills}
+              />
+            </SkillOverview>
           </Suspense>
         </TabsContent>
 
         <TabsContent value="signature">
-          <Suspense fallback={<Loading />}>
-            <SignatureLightCone
-              characterId={characterId}
-              searchParams={searchParams}
-            />
-          </Suspense>
+          <SignatureLightCone
+            characterId={characterId}
+            searchParams={searchParams}
+          />
         </TabsContent>
 
         <TabsContent value="trace">

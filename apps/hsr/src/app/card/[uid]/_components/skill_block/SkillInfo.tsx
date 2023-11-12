@@ -44,7 +44,11 @@ export const SkillInfo = forwardRef<HTMLDivElement, Prop>(
                 <SkillIcon
                   skillInfo={first}
                   slv={skList[first.skill_id] ?? 1}
-                  src={getImagePath(characterId, first)}
+                  src={getImagePath(
+                    characterId,
+                    first.attack_type,
+                    first.skill_type_desc
+                  )}
                 />
                 <span
                   className={cn(

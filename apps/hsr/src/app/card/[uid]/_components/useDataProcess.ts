@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import type { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
 import type { EquipmentPromotionConfig } from "@hsr/bindings/EquipmentPromotionConfig";
 import type { Property } from "@hsr/bindings/SkillTreeConfig";
@@ -56,7 +58,9 @@ export function useDataProcess({ character }: Prop): {
   // main stat's impact from relic on stats (flat + %)
   // sub stat's impact from relic on stats (flat + %)
   // normalize summed data
-  const { data: charPromo } = useQuery(characterPromotionQ(character?.id));
+  const { data: charPromo } = useQuery(
+    characterPromotionQ(character?.id ? Number(character.id) : undefined)
+  );
   const { data: lcPromo } = useQuery(
     optionLightConePromotion(Number(character?.light_cone?.id))
   );

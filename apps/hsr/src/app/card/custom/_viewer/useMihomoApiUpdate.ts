@@ -49,7 +49,8 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
         .filter((e) => Boolean(e.light_cone))
         .map((e) => e.light_cone?.id);
 
-      charIds.forEach((id) => {
+      charIds.forEach((e) => {
+        const id = Number(e);
         void client.prefetchQuery(characterTraceQ(id));
         void client.prefetchQuery(characterPromotionQ(id));
         void client.prefetchQuery(characterMetadataQ(id));
@@ -67,7 +68,7 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
       const { nickname, uid } = query.data.player;
       updateConfig({ type: "changeUser", payload: { name: nickname, uid } });
 
-      setMhyCharIds(query.data.characters.map((e) => e.id));
+      setMhyCharIds(query.data.characters.map((e) => Number(e.id)));
 
       const tempSetIds = query.data.characters
         .map((e) => e.relics.map((a) => Number(a.set_id)))
@@ -86,7 +87,7 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
         ]);
 
         setCharStruct({
-          id: chara.id,
+          id: Number(chara.id),
           level: chara.level,
           ascension: chara.promotion,
           eidolon: chara.rank,
