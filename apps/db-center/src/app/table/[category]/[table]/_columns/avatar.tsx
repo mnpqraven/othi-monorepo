@@ -18,7 +18,7 @@ export const avatarColumns = [
   col.accessor("name", {}),
   col.accessor("rarity", {}),
   col.accessor("votag", {}),
-  col.accessor("damageType", {}),
+  col.accessor("element", {}),
   col.accessor("path", {}),
   col.accessor("spneed", {}),
 ];
