@@ -10,4 +10,5 @@ export default {
     url: z.string().parse(env.DB_URL),
     authToken: env.DB_AUTH_TOKEN,
   },
+  verbose: true,
 } satisfies Config;

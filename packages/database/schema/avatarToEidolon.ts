@@ -13,10 +13,12 @@ export const eidolons = sqliteTable("honkai_eidolon", {
     item_id: number;
     item_num: number;
   }>(),
-  param: text("param", { mode: "json" })
-    .$type<string[]>()
-    .notNull()
-    .default([]),
+  param: text("param", { mode: "json" }).$type<string[]>().notNull(),
+  /**
+   * WARN:
+   * @see https://github.com/drizzle-team/drizzle-orm/issues/1503
+   */
+  // .default([""]),
 });
 
 export const eidolonRelations = relations(eidolons, ({ one }) => ({
