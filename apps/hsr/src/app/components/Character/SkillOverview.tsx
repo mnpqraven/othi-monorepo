@@ -3,26 +3,26 @@
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { Separator, Slider } from "ui/primitive";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { characterMetadataQ } from "@hsr/hooks/queries/character";
 import type { SkillSchema } from "database/schema";
+import { trpc } from "@hsr/app/_trpc/client";
 import { SkillDescription } from "../Db/SkillDescription";
 
 interface Prop {
   characterId: number;
   selectedId: number;
   children?: ReactNode;
-  skills: SkillSchema[];
 }
-export function SkillOverview({
-  characterId,
-  selectedId,
-  skills,
-  children,
-}: Prop) {
+export function SkillOverview({ characterId, selectedId, children }: Prop) {
   const [selectedSlv, setSelectedSlv] = useState(0);
 
-  const { data: character } = useSuspenseQuery(characterMetadataQ(characterId));
+  const [character] = trpc.honkai.avatar.by.useSuspenseQuery({
+    charId: characterId,
+    withSkill: true,
+  });
+
+  const skills =
+    character?.avatarToSkills.map((e) => (e as { skill: SkillSchema }).skill) ??
+    [];
 
   const selectedSkill = skills.find((e) => e.id === selectedId);
 
@@ -48,7 +48,7 @@ export function SkillOverview({
             <h3 className="text-lg font-semibold leading-none tracking-tight">
               <span>{selectedSkill.name}</span>
               {selectedSkill.attackType === "Ultra" &&
-                ` (${character.spneed} Energy)`}
+                ` (${character?.spneed} Energy)`}
             </h3>
             {(selectedSkill.paramList ?? []).length > 1 ? (
               <div className="flex items-center gap-4">

@@ -45,11 +45,7 @@ export default async function Character({ params, searchParams }: Prop) {
 
       <TabsContent value="skill">
         <Suspense fallback={<SkillOverviewLoading />}>
-          <SkillOverview
-            characterId={characterId}
-            selectedId={selectedId}
-            skills={skills}
-          >
+          <SkillOverview characterId={characterId} selectedId={selectedId}>
             <SkillSelector
               characterId={characterId}
               selectedId={selectedId}

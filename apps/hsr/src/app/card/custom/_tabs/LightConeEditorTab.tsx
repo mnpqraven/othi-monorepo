@@ -12,13 +12,11 @@ import Image from "next/image";
 import { IMAGE_URL } from "@hsr/lib/constants";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useState } from "react";
-import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { img } from "@hsr/lib/utils";
 import { cn } from "lib";
-import { useQuery } from "@tanstack/react-query";
-import { characterMetadataQ } from "@hsr/hooks/queries/character";
-import { lightConeMetadataQ, lightConesQ } from "@hsr/hooks/queries/lightcone";
+import { trpc } from "@hsr/app/_trpc/client";
+import type { LightConeSchema } from "database/schema";
 import { charIdAtom, lcIdAtom } from "../../_store";
 import { LightConeUpdater } from "../_editor/LightConeUpdater";
 
@@ -26,17 +24,26 @@ export const LightConeEditorTab = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { data: lightConeList } = useQuery(lightConesQ());
+  const { data: lightConeList } = trpc.honkai.lightCone.list.useQuery(
+    {},
+    { initialData: [] }
+  );
   const charId = useAtomValue(charIdAtom);
   const [open, setOpen] = useState(false);
   const [lcId, setLcId] = useAtom(lcIdAtom);
 
-  const { data: charMeta } = useQuery(characterMetadataQ(charId));
-  const { data: lightCone } = useQuery(lightConeMetadataQ(lcId));
-  const path = charMeta?.avatar_base_type;
+  const { data: charMeta } = trpc.honkai.avatar.by.useQuery(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    { charId: charId! },
+    { enabled: Boolean(charId) }
+  );
+  const { data: lightCone } = trpc.honkai.lightCone.by.useQuery({
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    lcId: lcId!,
+  });
 
-  function onSelectLightCone(lc: EquipmentConfig) {
-    setLcId(lc.equipment_id);
+  function onSelectLightCone(lc: LightConeSchema) {
+    setLcId(lc.id);
     setOpen(false);
   }
 
@@ -50,28 +57,23 @@ export const LightConeEditorTab = forwardRef<
           <DialogContent className="max-w-4xl">
             <div className="grid grid-cols-4">
               {lightConeList
-                .sort(
-                  (a, b) =>
-                    b.rarity - a.rarity ||
-                    a.equipment_name.localeCompare(b.equipment_name)
-                )
-                .filter((e) => e.avatar_base_type === path)
+                .filter((e) => e.path === charMeta?.path)
                 .map((lc) => (
                   <Toggle
                     className="flex h-fit justify-between py-2"
-                    key={lc.equipment_id}
+                    key={lc.id}
                     onPressedChange={() => {
                       onSelectLightCone(lc);
                     }}
                   >
                     <Image
-                      alt={lc.equipment_name}
+                      alt={lc.name}
                       className="aspect-[256/300] w-16"
                       height={300}
-                      src={`${IMAGE_URL}image/light_cone_preview/${lc.equipment_id}.png`}
+                      src={`${IMAGE_URL}image/light_cone_preview/${lc.id}.png`}
                       width={256}
                     />
-                    <span>{lc.equipment_name}</span>
+                    <span>{lc.name}</span>
                   </Toggle>
                 ))}
             </div>
@@ -82,12 +84,10 @@ export const LightConeEditorTab = forwardRef<
           <>
             <LightConeCard
               className="w-48"
-              imgUrl={img(
-                `image/light_cone_preview/${lightCone.equipment_id}.png`
-              )}
-              name={lightCone.equipment_name}
+              imgUrl={img(`image/light_cone_preview/${lightCone.id}.png`)}
+              name={lightCone.name}
             />
-            {lightCone.equipment_name}
+            {lightCone.name}
           </>
         ) : null}
       </div>

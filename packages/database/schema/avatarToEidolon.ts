@@ -1,12 +1,6 @@
 import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
-import {
-  index,
-  int,
-  primaryKey,
-  sqliteTable,
-  text,
-} from "drizzle-orm/sqlite-core";
+import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { avatars } from ".";
 
 export type EidolonSchema = InferSelectModel<typeof eidolons>;
@@ -32,15 +26,18 @@ export const eidolonRelations = relations(eidolons, ({ one }) => ({
 export const avatarToEidolons = sqliteTable(
   "honkai_avatarEidolon",
   {
-    avatarId: int("avatar_id").references(() => avatars.id, {
-      onDelete: "cascade",
-    }),
-    eidolonId: int("eidolon_id").references(() => eidolons.id, {
-      onDelete: "cascade",
-    }),
+    eidolonId: int("eidolon_id")
+      .references(() => eidolons.id, {
+        onDelete: "cascade",
+      })
+      .primaryKey(),
+    avatarId: int("avatar_id")
+      .references(() => avatars.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
   },
   (t) => ({
-    pk: primaryKey(t.eidolonId),
     avatarIdx: index("idx_eidolon_avatar_id").on(t.avatarId),
   })
 );

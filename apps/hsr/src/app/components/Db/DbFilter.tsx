@@ -5,6 +5,7 @@ import { ElementIcon } from "@hsr/app/character-db/ElementIcon";
 import { useEffect, useRef } from "react";
 import type { Element, Path } from "@hsr/bindings/AvatarConfig";
 import { Input, Toggle } from "ui/primitive";
+import { ELEMENTS, PATHS } from "database/schema";
 
 interface Prop {
   onEnterKey?: (searchText: string) => void;
@@ -26,24 +27,6 @@ function DbFilter({
   updateElement,
 }: Prop) {
   const rarityList: number[] = Array.from(range(minRarity ?? 3, 5, 1));
-  const pathList: Path[] = [
-    "Destruction",
-    "Hunt",
-    "Erudition",
-    "Preservation",
-    "Harmony",
-    "Nihility",
-    "Abundance",
-  ];
-  const elementList: Element[] = [
-    "Fire",
-    "Ice",
-    "Wind",
-    "Lightning",
-    "Physical",
-    "Quantum",
-    "Imaginary",
-  ];
 
   // keybinds
   const searchInput = useRef<HTMLInputElement>(null);
@@ -111,7 +94,7 @@ function DbFilter({
       ) : null}
       {updatePath ? (
         <div className="flex rounded-md border p-1">
-          {pathList.map((path) => (
+          {PATHS.map((path) => (
             <Toggle
               className="text-muted-foreground hover:text-primary"
               key={path}
@@ -126,7 +109,7 @@ function DbFilter({
       ) : null}
       {updateElement ? (
         <div className="flex rounded-md border p-1">
-          {elementList.map((element) => (
+          {ELEMENTS.map((element) => (
             <Toggle
               key={element}
               onPressedChange={() => {

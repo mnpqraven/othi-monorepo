@@ -18,14 +18,11 @@ import { useRouter } from "next/navigation";
 import Fuse from "fuse.js";
 import Image from "next/image";
 import { cva } from "class-variance-authority";
-import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
-import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
 import { range } from "lib";
-import { useQuery } from "@tanstack/react-query";
-import { characterMetadatasQ } from "@hsr/hooks/queries/character";
-import { lightConesQ } from "@hsr/hooks/queries/lightcone";
+import type { AvatarSchema, LightConeSchema } from "database/schema";
 import { PathIcon } from "../character-db/PathIcon";
 import { ElementIcon } from "../character-db/ElementIcon";
+import { trpc } from "../_trpc/client";
 
 const kbdVariants = cva(
   "bg-muted text-muted-foreground pointer-events-none hidden h-5 select-none items-center gap-1 rounded border px-1.5 font-mono font-medium opacity-100 sm:inline-block",
@@ -57,22 +54,19 @@ function CommandCenter({ routes }: Prop) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const { data: lightConeList } = useQuery(lightConesQ());
-  const { data: characterList } = useQuery(characterMetadatasQ());
-  const [filteredLc, setFilteredLc] = useState<EquipmentConfig[]>([]);
-  const [filteredChar, setFilteredChar] = useState<AvatarConfig[]>([]);
+  const { data: lightConeList } = trpc.honkai.lightCone.list.useQuery(
+    {},
+    { initialData: [] }
+  );
+  const { data: characterList } = trpc.honkai.avatar.list.useQuery(
+    {},
+    { initialData: [] }
+  );
+  const [filteredLc, setFilteredLc] = useState<LightConeSchema[]>([]);
+  const [filteredChar, setFilteredChar] = useState<AvatarSchema[]>([]);
 
-  const keysLc: (keyof EquipmentConfig)[] = [
-    "equipment_name",
-    "avatar_base_type",
-    "equipment_id",
-  ];
-  const keysChar: (keyof AvatarConfig)[] = [
-    "avatar_name",
-    "damage_type",
-    "avatar_base_type",
-    "avatar_id",
-  ];
+  const keysLc: (keyof LightConeSchema)[] = ["name", "path", "id"];
+  const keysChar: (keyof AvatarSchema)[] = ["name", "element", "path", "id"];
   const fzLc = new Fuse(lightConeList, {
     keys: keysLc,
     threshold: 0.4,
@@ -147,17 +141,17 @@ function CommandCenter({ routes }: Prop) {
               {filteredChar.map((chara) => (
                 <CommandItem
                   className="w-full justify-between"
-                  key={chara.avatar_id}
+                  key={chara.id}
                   onSelect={() => {
-                    router.push(`/character-db/${chara.avatar_id}`);
+                    router.push(`/character-db/${chara.id}`);
                     setOpen(false);
                   }}
                   value={keysChar.map((key) => chara[key]).join("-")}
                 >
                   <div className="flex gap-2">
-                    <PathIcon path={chara.avatar_base_type} size="auto" />
-                    <ElementIcon element={chara.damage_type} size="auto" />
-                    <span>{chara.avatar_name}</span>
+                    <PathIcon path={chara.path} size="auto" />
+                    <ElementIcon element={chara.element} size="auto" />
+                    <span>{chara.name}</span>
                   </div>
 
                   <div className="flex">
@@ -180,16 +174,16 @@ function CommandCenter({ routes }: Prop) {
               {filteredLc.map((lc) => (
                 <CommandItem
                   className="w-full justify-between"
-                  key={lc.equipment_id}
+                  key={lc.id}
                   onSelect={() => {
-                    router.push(`/lightcone-db/${lc.equipment_id}`);
+                    router.push(`/lightcone-db/${lc.id}`);
                     setOpen(false);
                   }}
                   value={keysLc.map((key) => lc[key]).join("-")}
                 >
                   <div className="flex gap-2">
-                    <PathIcon path={lc.avatar_base_type} size="auto" />
-                    <span>{lc.equipment_name}</span>
+                    <PathIcon path={lc.path} size="auto" />
+                    <span>{lc.name}</span>
                   </div>
                   <div className="flex">
                     {Array.from(range(1, lc.rarity, 1)).map((rarity) => (

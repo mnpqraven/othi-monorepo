@@ -9,12 +9,10 @@ import type { RelicType } from "@hsr/bindings/RelicConfig";
 import { useAtomValue } from "jotai";
 import { mainstatSpreadAtom } from "@hsr/store/queries";
 import { useQuery } from "@tanstack/react-query";
+import { trpc } from "@hsr/app/_trpc/client";
 import { useRelicSetBonuses } from "./queries/useRelicSetBonus";
 import { characterPromotionQ, characterTraceQ } from "./queries/character";
-import {
-  optionLightConePromotion,
-  optionLightConeSkill,
-} from "./queries/lightcone";
+import { optionLightConePromotion } from "./queries/lightcone";
 
 interface BasicMetadata {
   id: number;
@@ -68,8 +66,10 @@ export function useStatParser(props?: StatParserConstructor) {
   const { data: lcPromotionData } = useQuery(
     optionLightConePromotion(props?.lightCone?.id)
   );
-  const { data: lcSkillData } = useQuery(
-    optionLightConeSkill(props?.lightCone?.id)
+  const { data: lcData } = trpc.honkai.lightCone.by.useQuery(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+    { lcId: props?.lightCone?.id!, withSkill: true },
+    { enabled: Boolean(props?.lightCone?.id) }
   );
   const { data: relicBonuses } = useRelicSetBonuses();
 
@@ -107,13 +107,13 @@ export function useStatParser(props?: StatParserConstructor) {
 
   // INFO: PERCENT FROM LC
   const lcTotal: Partial<Record<Property, number>> = {};
-  const lcProps = lcSkillData?.ability_property.at(
+  const lcProps = lcData?.skill?.abilityProperty?.at(
     props.lightCone?.imposition ?? 0
   );
   if (lcProps) {
-    lcProps.forEach(({ property_type, value }) => {
-      if (!lcTotal[property_type]) lcTotal[property_type] = value.value;
-      else lcTotal[property_type]! += value.value;
+    lcProps.forEach(({ propertyType, value }) => {
+      if (!lcTotal[propertyType]) lcTotal[propertyType] = value.value;
+      else lcTotal[propertyType] += value.value;
     });
   }
 
