@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     DB_URL: z.string(),
     DB_AUTH_TOKEN: z.string(),
+    EDGE_CONFIG: z.string(),
   },
   client: {
     NEXT_PUBLIC_HOST_NAS_WS: z.string(),

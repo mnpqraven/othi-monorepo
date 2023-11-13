@@ -1,11 +1,9 @@
 import { int, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
-import type { Element } from "./element";
-import { elements } from "./element";
+import { ELEMENTS, elements } from "./element";
 import { avatarToSkills } from "./avatarToSkill";
-import type { Path } from "./path";
-import { paths } from "./path";
+import { PATHS, paths } from "./path";
 import { traces } from "./trace";
 import { signatures } from "./avatarToSignature";
 
@@ -14,18 +12,16 @@ export const avatars = sqliteTable("honkai_avatar", {
   name: text("name").notNull(),
   rarity: int("rarity").notNull(),
   votag: text("votag"),
-  element: text("damage_type")
+  element: text("element", { enum: ELEMENTS })
     .references(() => elements.name, {
       onDelete: "set null",
     })
-    .notNull()
-    .$type<Element>(),
-  path: text("path")
+    .notNull(),
+  path: text("path", { enum: PATHS })
     .references(() => paths.name, {
       onDelete: "set null",
     })
-    .notNull()
-    .$type<Path>(),
+    .notNull(),
   spneed: int("spneed"),
 });
 

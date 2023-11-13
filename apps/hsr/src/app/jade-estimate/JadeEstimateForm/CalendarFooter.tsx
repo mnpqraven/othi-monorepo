@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 import { sameDate } from "lib/utils";
-import { useBannerList } from "@hsr/hooks/queries/useBannerList";
 import { useMemo } from "react";
 import { useQueries } from "@tanstack/react-query";
 import API from "@hsr/server/typedEndpoints";
@@ -17,6 +16,7 @@ import {
   TooltipTrigger,
 } from "ui/primitive";
 import { cn } from "lib";
+import { trpc } from "@hsr/app/_trpc/client";
 
 interface Prop {
   date: Date;
@@ -24,7 +24,10 @@ interface Prop {
 
 function CalendarFooter({ date }: Prop) {
   const { futurePatchDateList } = useFuturePatchDateList();
-  const { bannerList } = useBannerList();
+  const { data: bannerList } = trpc.honkai.banner.patchList.useQuery(
+    undefined,
+    { initialData: [] }
+  );
   const { getVersion, currentPatch } = usePatchDateHelper();
 
   const major = getVersion(date)?.slice(0, 3) ?? "";

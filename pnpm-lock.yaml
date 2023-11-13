@@ -649,6 +649,9 @@ importers:
       '@trpc/server':
         specifier: next
         version: 11.0.0-alpha-next-2023-11-09-13-31-03.98
+      '@vercel/edge-config':
+        specifier: ^0.2.1
+        version: 0.2.1
       database:
         specifier: workspace:*
         version: link:../database
