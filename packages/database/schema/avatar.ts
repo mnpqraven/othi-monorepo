@@ -13,14 +13,10 @@ export const avatars = sqliteTable("honkai_avatar", {
   rarity: int("rarity").notNull(),
   votag: text("votag"),
   element: text("element", { enum: ELEMENTS })
-    .references(() => elements.name, {
-      onDelete: "set null",
-    })
+    .references(() => elements.name, { onUpdate: "cascade" })
     .notNull(),
   path: text("path", { enum: PATHS })
-    .references(() => paths.name, {
-      onDelete: "set null",
-    })
+    .references(() => paths.name, { onUpdate: "cascade" })
     .notNull(),
   spneed: int("spneed"),
 });

@@ -1,5 +1,5 @@
 import type { InferSelectModel } from "drizzle-orm";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { avatars } from ".";
 
@@ -8,17 +8,21 @@ export const eidolons = sqliteTable("honkai_eidolon", {
   id: int("id").primaryKey(),
   rank: int("rank").notNull(),
   name: text("name").notNull(),
-  desc: text("desc", { mode: "json" }).$type<string[]>(),
+  desc: text("desc", { mode: "json" })
+    .$type<string[]>()
+    .default(sql`"[]"`),
   unlockCost: text("unlock_cost", { mode: "json" }).$type<{
     item_id: number;
     item_num: number;
   }>(),
-  param: text("param", { mode: "json" }).$type<string[]>().notNull(),
-  /**
-   * WARN:
-   * @see https://github.com/drizzle-team/drizzle-orm/issues/1503
-   */
-  // .default([""]),
+  param: text("param", { mode: "json" })
+    .$type<string[]>()
+    .notNull()
+    /**
+     * WARN:
+     * @see https://github.com/drizzle-team/drizzle-orm/issues/1503
+     */
+    .default(sql`"[]"`),
 });
 
 export const eidolonRelations = relations(eidolons, ({ one }) => ({

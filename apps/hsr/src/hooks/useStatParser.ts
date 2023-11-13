@@ -13,6 +13,7 @@ import { trpc } from "@hsr/app/_trpc/client";
 import { useRelicSetBonuses } from "./queries/useRelicSetBonus";
 import { characterPromotionQ, characterTraceQ } from "./queries/character";
 import { optionLightConePromotion } from "./queries/lightcone";
+import { z } from "zod";
 
 interface BasicMetadata {
   id: number;
@@ -67,8 +68,7 @@ export function useStatParser(props?: StatParserConstructor) {
     optionLightConePromotion(props?.lightCone?.id)
   );
   const { data: lcData } = trpc.honkai.lightCone.by.useQuery(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-    { lcId: props?.lightCone?.id!, withSkill: true },
+    { lcId: z.number().parse(props?.lightCone?.id), withSkill: true },
     { enabled: Boolean(props?.lightCone?.id) }
   );
   const { data: relicBonuses } = useRelicSetBonuses();
