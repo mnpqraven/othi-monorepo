@@ -55,7 +55,7 @@ export const avatarRouter = router({
     }),
 
   eidolons: publicProcedure.input(CharId).query(async ({ input }) => {
-    const query = db.query.avatarToEidolons.findMany({
+    const query = db.query.avatarEidolons.findMany({
       where: (map, { eq }) => eq(map.avatarId, input.charId),
       with: {
         eidolon: true,

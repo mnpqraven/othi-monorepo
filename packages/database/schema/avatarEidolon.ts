@@ -26,10 +26,10 @@ export const eidolons = sqliteTable("honkai_eidolon", {
 });
 
 export const eidolonRelations = relations(eidolons, ({ one }) => ({
-  avatarToEidolon: one(avatarToEidolons),
+  avatarEidolon: one(avatarEidolons),
 }));
 
-export const avatarToEidolons = sqliteTable(
+export const avatarEidolons = sqliteTable(
   "honkai_avatarEidolon",
   {
     eidolonId: int("eidolon_id")
@@ -48,15 +48,15 @@ export const avatarToEidolons = sqliteTable(
   })
 );
 
-export const avatarToEidolonRelations = relations(
-  avatarToEidolons,
+export const avatarEidolonRelations = relations(
+  avatarEidolons,
   ({ one }) => ({
     avatar: one(avatars, {
-      fields: [avatarToEidolons.avatarId],
+      fields: [avatarEidolons.avatarId],
       references: [avatars.id],
     }),
     eidolon: one(eidolons, {
-      fields: [avatarToEidolons.eidolonId],
+      fields: [avatarEidolons.eidolonId],
       references: [eidolons.id],
     }),
   })

@@ -4,8 +4,8 @@ import { index, int, primaryKey, sqliteTable } from "drizzle-orm/sqlite-core";
 import { avatars } from "./avatar";
 import { items } from "./item";
 
-export type AvatarPromotionSchema = InferSelectModel<typeof avatarToPromotions>;
-export const avatarToPromotions = sqliteTable(
+export type AvatarPromotionSchema = InferSelectModel<typeof avatarPromotions>;
+export const avatarPromotions = sqliteTable(
   "honkai_avatarPromotion",
   {
     characterId: int("avatar_id")
@@ -33,7 +33,7 @@ export const avatarToPromotions = sqliteTable(
   })
 );
 
-export const avatarToPromotionToItems = sqliteTable(
+export const avatarPromotionItems = sqliteTable(
   "honkai_avatarPromotion_item",
   {
     characterId: int("avatar_id").references(() => avatars.id, {
@@ -45,32 +45,33 @@ export const avatarToPromotionToItems = sqliteTable(
   },
   (t) => ({
     primaryKey: primaryKey(t.ascension, t.characterId, t.itemId),
+    ascensionIdx: index("honkai_avatarPromotionItem_ascension_idx").on(t.ascension),
   })
 );
 
 export const avatarPromotionRelations = relations(
-  avatarToPromotions,
+  avatarPromotions,
   ({ one }) => ({
     promotion: one(avatars, {
-      fields: [avatarToPromotions.characterId],
+      fields: [avatarPromotions.characterId],
       references: [avatars.id],
     }),
   })
 );
 
 export const avatarPromotionItemRelations = relations(
-  avatarToPromotionToItems,
+  avatarPromotionItems,
   ({ one }) => ({
     avatar: one(avatars, {
-      fields: [avatarToPromotionToItems.characterId],
+      fields: [avatarPromotionItems.characterId],
       references: [avatars.id],
     }),
-    promotion: one(avatarToPromotions, {
-      fields: [avatarToPromotionToItems.ascension],
-      references: [avatarToPromotions.ascension],
+    promotion: one(avatarPromotions, {
+      fields: [avatarPromotionItems.ascension],
+      references: [avatarPromotions.ascension],
     }),
     item: one(items, {
-      fields: [avatarToPromotionToItems.itemId],
+      fields: [avatarPromotionItems.itemId],
       references: [items.id],
     }),
   })

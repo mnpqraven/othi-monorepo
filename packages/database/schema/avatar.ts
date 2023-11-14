@@ -2,10 +2,14 @@ import { int, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
 import { ELEMENTS, elements } from "./element";
-import { avatarToSkills } from "./avatarToSkill";
+import { avatarToSkills } from "./avatarSkill";
 import { PATHS, paths } from "./path";
 import { traces } from "./trace";
-import { signatures } from "./avatarToSignature";
+import { signatures } from "./avatarSignature";
+import {
+  avatarPromotionItems,
+  avatarPromotions,
+} from "./avatarPromotion";
 
 export const avatars = sqliteTable("honkai_avatar", {
   id: int("id").primaryKey(),
@@ -26,6 +30,8 @@ export type AvatarSchema = InferSelectModel<typeof avatars>;
 export const avatarRelations = relations(avatars, ({ many }) => ({
   avatarToSkills: many(avatarToSkills),
   signature: many(signatures),
+  promotion: many(avatarPromotions),
+  promotionItem: many(avatarPromotionItems),
 }));
 
 export const avatarTraces = sqliteTable(

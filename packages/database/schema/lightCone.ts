@@ -1,9 +1,9 @@
 import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
 import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { lightConeSkills } from "./lightConeToSkill";
+import { lightConeSkills } from "./lightConeSkill";
 import { PATHS, paths } from "./path";
-import { signatures } from "./avatarToSignature";
+import { signatures } from "./avatarSignature";
 
 export const lightCones = sqliteTable(
   "honkai_lightCone",
