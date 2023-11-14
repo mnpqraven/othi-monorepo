@@ -15,10 +15,8 @@ export const avatarPromotionRouter = router({
       const query = db.query.avatarPromotions.findMany({
         with: {
           promotion: {
-            columns: {},
             with: {
               promotionItem: {
-                columns: {},
                 with: { item: input.withItems },
               },
             },

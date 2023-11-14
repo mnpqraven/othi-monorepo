@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import type { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
 import type { EquipmentPromotionConfig } from "@hsr/bindings/EquipmentPromotionConfig";
 import type { Property } from "@hsr/bindings/SkillTreeConfig";
 import type { Element } from "@hsr/bindings/PatchBanner";
 import { asPercentage, rotate } from "lib";
 import { useQuery } from "@tanstack/react-query";
-import { characterPromotionQ } from "@hsr/hooks/queries/character";
 import { optionLightConePromotion } from "@hsr/hooks/queries/lightcone";
+import type { AvatarPromotionSchema } from "database/schema";
+import { z } from "zod";
+import { trpc } from "@hsr/app/_trpc/client";
 import type { MihomoCharacter } from "../../types";
 import type { Field } from "./SpiderChartWrapper";
 
@@ -58,9 +59,12 @@ export function useDataProcess({ character }: Prop): {
   // main stat's impact from relic on stats (flat + %)
   // sub stat's impact from relic on stats (flat + %)
   // normalize summed data
-  const { data: charPromo } = useQuery(
-    characterPromotionQ(character?.id ? Number(character.id) : undefined)
+  const { data: charPromo } = trpc.honkai.avatar.promotions.by.useQuery(
+    { charId: z.number().parse(character?.id) },
+    { enabled: Boolean(character?.id) }
   );
+
+  // characterPromotionQ(character?.id ? Number(character.id) : undefined)
   const { data: lcPromo } = useQuery(
     optionLightConePromotion(Number(character?.light_cone?.id))
   );
@@ -207,26 +211,21 @@ interface AfterPromotion<T> {
 }
 
 export function charAfterPromotion({
-  promotionConfig,
+  promotionConfig: bindingPromote,
   level = 80,
   ascension = 6,
-}: AfterPromotion<AvatarPromotionConfig>) {
-  if (!promotionConfig)
-    return {
-      atk: 0,
-      def: 0,
-      hp: 0,
-    };
-  const atk_base = promotionConfig.attack_base[ascension]!;
-  const atk_sum =
-    atk_base + (level - 1) * promotionConfig.attack_add[ascension]!;
+}: AfterPromotion<AvatarPromotionSchema[]>) {
+  const promotionConfig = bindingPromote?.at(ascension);
+  if (!promotionConfig) return { atk: 0, def: 0, hp: 0 };
 
-  const def_base = promotionConfig.defence_base[ascension]!;
-  const def_sum =
-    def_base + (level - 1) * promotionConfig.defence_add[ascension]!;
+  const atk_base = promotionConfig.baseAttack;
+  const atk_sum = atk_base + (level - 1) * promotionConfig.addAttack;
 
-  const hp_base = promotionConfig.hpbase[ascension]!;
-  const hp_sum = hp_base + (level - 1) * promotionConfig.hpadd[ascension]!;
+  const def_base = promotionConfig.baseDefense;
+  const def_sum = def_base + (level - 1) * promotionConfig.addDefense;
+
+  const hp_base = promotionConfig.baseHp;
+  const hp_sum = hp_base + (level - 1) * promotionConfig.addHp;
 
   return { atk: atk_sum, def: def_sum, hp: hp_sum };
 }

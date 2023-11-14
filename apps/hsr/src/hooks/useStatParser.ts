@@ -1,4 +1,4 @@
-import type { AvatarPromotionConfig } from "@hsr/bindings/AvatarPromotionConfig";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { EquipmentPromotionConfig } from "@hsr/bindings/EquipmentPromotionConfig";
 import type { Property } from "@hsr/bindings/RelicSubAffixConfig";
 import {
@@ -6,14 +6,14 @@ import {
   lcAfterPromotion,
 } from "@hsr/app/card/[uid]/_components/useDataProcess";
 import type { RelicType } from "@hsr/bindings/RelicConfig";
-import { useAtomValue } from "jotai";
-import { mainstatSpreadAtom } from "@hsr/store/queries";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { trpc } from "@hsr/app/_trpc/client";
-import { useRelicSetBonuses } from "./queries/useRelicSetBonus";
-import { characterPromotionQ, characterTraceQ } from "./queries/character";
-import { optionLightConePromotion } from "./queries/lightcone";
 import { z } from "zod";
+import type { AvatarPromotionSchema } from "database/schema";
+import { useRelicSetBonuses } from "./queries/useRelicSetBonus";
+import { characterTraceQ } from "./queries/character";
+import { optionLightConePromotion } from "./queries/lightcone";
+import { optionsMainStatSpread } from "./queries/useMainStatSpread";
 
 interface BasicMetadata {
   id: number;
@@ -61,9 +61,11 @@ export interface StatParserConstructor {
 
 export function useStatParser(props?: StatParserConstructor) {
   const { data: traceData } = useQuery(characterTraceQ(props?.character.id));
-  const { data: charPromotionData } = useQuery(
-    characterPromotionQ(props?.character.id)
+  const { data: charPromotionData } = trpc.honkai.avatar.promotions.by.useQuery(
+    { charId: z.number().parse(props?.character.id) },
+    { enabled: Boolean(props?.character.id) }
   );
+  // characterPromotionQ(props?.character.id)
   const { data: lcPromotionData } = useQuery(
     optionLightConePromotion(props?.lightCone?.id)
   );
@@ -73,7 +75,8 @@ export function useStatParser(props?: StatParserConstructor) {
   );
   const { data: relicBonuses } = useRelicSetBonuses();
 
-  const mainStatLevels = useAtomValue(mainstatSpreadAtom);
+  const { data: mainStatLevels } = useSuspenseQuery(optionsMainStatSpread());
+  // const mainStatLevels = useAtomValue(mainstatSpreadAtom);
 
   if (!traceData || !charPromotionData || !props || !relicBonuses) {
     // console.log(
@@ -100,9 +103,9 @@ export function useStatParser(props?: StatParserConstructor) {
     atk: baseCharValues.atk + baseLcValues.atk,
     hp: baseCharValues.hp + baseLcValues.hp,
     def: baseCharValues.def + baseLcValues.def,
-    speed: charPromotionData.speed_base,
-    critical_chance: charPromotionData.critical_chance,
-    critical_damage: charPromotionData.critical_damage,
+    speed: charPromotionData.at(0)?.baseSpeed ?? 0,
+    critical_chance: charPromotionData.at(0)?.critChance ?? 0.05,
+    critical_damage: charPromotionData.at(0)?.critDamage ?? 0.5,
   };
 
   // INFO: PERCENT FROM LC
@@ -112,11 +115,10 @@ export function useStatParser(props?: StatParserConstructor) {
   );
   if (lcProps) {
     lcProps.forEach(({ propertyType, value }) => {
-      if (!lcTotal[propertyType]) lcTotal[propertyType] = value.value;
-      else lcTotal[propertyType] += value.value;
+      if (!lcTotal[propertyType]) lcTotal[propertyType] = value;
+      else lcTotal[propertyType] += value;
     });
   }
-
   // INFO: PERCENT FROM TRACES
   const tracePropList = traceData
     .filter((trace) =>
@@ -163,9 +165,7 @@ export function useStatParser(props?: StatParserConstructor) {
   const subStatNoStep = (relic: ParsedRelicSchema) =>
     relic.subStats
       .filter(Boolean)
-      // TODO: CHECK ASSERTION
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-      .map((ss) => ({ property: ss?.property!, value: ss?.value ?? 0 }));
+      .map(({ property, value }: SubStatSchema) => ({ property, value }));
 
   const relicPropList: {
     property: Property;
@@ -192,6 +192,7 @@ export function useStatParser(props?: StatParserConstructor) {
     });
   });
 
+  // WARN: lcTotal returns undefined
   const summed = sumProps([traceTotal, relicTotal, setBonusTotal, lcTotal]);
 
   // TODO: parse relic data then multiply base with trace altogether
@@ -203,6 +204,7 @@ export function useStatParser(props?: StatParserConstructor) {
   } = charAfterPromotion({
     promotionConfig: charPromotionData,
   });
+
   const {
     atk: maxLcAtk,
     def: maxLcDef,
@@ -232,7 +234,6 @@ export function useStatParser(props?: StatParserConstructor) {
     statTable: toStatTable(baseValues, summed),
     normalized,
   };
-  // console.log("useStatParser ret", result);
 
   return result;
 }
@@ -240,14 +241,15 @@ export function useStatParser(props?: StatParserConstructor) {
 function baseChar(
   level: number,
   ascension: number,
-  promoteData: AvatarPromotionConfig
+  promoteData: AvatarPromotionSchema[]
 ) {
-  const { attack_add, attack_base, hpadd, hpbase, defence_add, defence_base } =
-    promoteData;
+  const bindingPromote = promoteData.at(ascension)!;
+  const { addAttack, baseAttack, addHp, baseHp, addDefense, baseDefense } =
+    bindingPromote;
   return {
-    atk: attack_base[ascension]! + (level - 1) * attack_add[ascension]!,
-    hp: hpbase[ascension]! + (level - 1) * hpadd[ascension]!,
-    def: defence_base[ascension]! + (level - 1) * defence_add[ascension]!,
+    atk: baseAttack + (level - 1) * addAttack,
+    hp: baseHp + (level - 1) * addHp,
+    def: baseDefense + (level - 1) * addDefense,
   };
 }
 function baseLc(

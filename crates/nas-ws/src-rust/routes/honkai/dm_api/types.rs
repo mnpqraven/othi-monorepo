@@ -30,11 +30,27 @@ pub enum LightConeRarity {
 
 #[derive(Debug, Serialize, Deserialize, Clone, JsonSchema)]
 #[serde(rename(serialize = "camelCase"))]
-pub struct AbilityProperty {
+pub struct UpstreamAbilityProperty {
     #[serde(alias = "PropertyType")]
     property_type: Property,
     #[serde(alias = "Value")]
     value: Param,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, JsonSchema)]
+#[serde(rename_all(serialize = "camelCase"))]
+pub struct AbilityProperty {
+    property_type: Property,
+    value: f64,
+}
+
+impl From<UpstreamAbilityProperty> for AbilityProperty {
+    fn from(value: UpstreamAbilityProperty) -> Self {
+        Self {
+            property_type: value.property_type,
+            value: Param::into(value.value),
+        }
+    }
 }
 
 impl From<Param> for f64 {

@@ -2,6 +2,7 @@ import { db } from "database";
 import { z } from "zod";
 import { publicProcedure, router } from "../../trpc";
 import { CharId } from "../../inputSchemas";
+import { avatarPromotionRouter } from "./avatarPromotion";
 
 // TODO: promotion
 // TODO: trace
@@ -88,4 +89,6 @@ export const avatarRouter = router({
 
       return data;
     }),
+
+  promotions: avatarPromotionRouter,
 });
