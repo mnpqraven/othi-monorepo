@@ -1,8 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "wtf": "echo should not see on build",
-    "build": "dotenv -c -- turbo run build",
+    "build": "dotenv -c -- turbo run build --no-daemon",
     "dev": "dotenv -c -- turbo run dev --parallel",
     "db:push": "dotenv -c -- turbo run db:push",
     "codegen": "turbo run codegen",
