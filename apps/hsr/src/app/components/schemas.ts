@@ -17,4 +17,5 @@ export const objToDate = z
     },
     { required_error: "objToDate" }
   )
-  .transform((e) => new Date(e.year, e.month - 1, e.day));
+  .optional()
+  .transform((e) => (e ? new Date(e.year, e.month - 1, e.day) : new Date()));
