@@ -13,7 +13,7 @@ import { useCacheValidate } from "@hsr/hooks/useCacheValidate";
 import { useAtom } from "jotai";
 import type { JadeEstimateCfg } from "protocol/ts";
 import { EqTier, Server } from "protocol/ts";
-import type { PartialMessage } from "@bufbuild/protobuf";
+import type { PlainMessage } from "@bufbuild/protobuf";
 import {
   Button,
   Calendar,
@@ -59,7 +59,7 @@ interface Prop {
   submitButton?: boolean;
 }
 
-type FormSchema = PartialMessage<JadeEstimateCfg>;
+type FormSchema = PlainMessage<JadeEstimateCfg>;
 
 export default function JadeEstimateForm({ submitButton = false }: Prop) {
   const [open, setOpen] = useState(false);
