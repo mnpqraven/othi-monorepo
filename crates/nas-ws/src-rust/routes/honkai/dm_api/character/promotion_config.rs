@@ -1,9 +1,11 @@
 use super::types::MiniItem;
 use crate::{
+    builder::{get_db_client, traits::DbAction},
     handler::error::WorkerError,
     routes::honkai::{dm_api::types::Param, traits::DbData},
 };
 use async_trait::async_trait;
+use libsql_client::{args, Statement};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, HashMap};
@@ -100,5 +102,106 @@ impl DbData for AvatarPromotionConfig {
             })
             .collect();
         Ok(local)
+    }
+}
+
+#[async_trait]
+impl DbAction for AvatarPromotionConfig {
+    async fn seed() -> Result<(), WorkerError> {
+        let client = get_db_client().await?;
+        let promotion_db = AvatarPromotionConfig::get_upstream().await?;
+        let promotion_statements = promotion_db
+            .values()
+            .flat_map(|outer| {
+                outer
+                    .values()
+                    .map(|inner| {
+                        let UpstreamAvatarPromotionConfig {
+                            avatar_id,
+                            promotion,
+                            max_level,
+                            player_level_require,
+                            attack_base,
+                            attack_add,
+                            defence_base,
+                            defence_add,
+                            hpbase,
+                            hpadd,
+                            speed_base,
+                            critical_chance,
+                            critical_damage,
+                            base_aggro,
+                            promotion_cost_list: _,
+                        } = inner.clone();
+
+                        Statement::with_args(
+                            "INSERT OR REPLACE INTO honkai_avatarPromotion (
+                                avatar_id, ascension, max_level, trailblaze_level_require,
+                                base_attack, base_defense, base_hp,
+                                add_attack, add_defense, add_hp,
+                                base_speed, crit_chance, crit_damage, aggro
+                            ) VALUES (
+                                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                            )",
+                            args!(
+                                avatar_id,
+                                promotion,
+                                max_level,
+                                player_level_require,
+                                attack_base.value,
+                                defence_base.value,
+                                hpbase.value,
+                                attack_add.value,
+                                defence_add.value,
+                                hpadd.value,
+                                speed_base.value,
+                                critical_chance.value,
+                                critical_damage.value,
+                                base_aggro.value
+                            ),
+                        )
+                    })
+                    .collect::<Vec<Statement>>()
+            })
+            .collect::<Vec<Statement>>();
+
+        let item_statements = promotion_db
+            .values()
+            .flat_map(|outer| {
+                outer
+                    .values()
+                    .flat_map(|inner| {
+                        inner
+                            .promotion_cost_list
+                            .iter()
+                            .map(|cost| {
+                                Statement::with_args(
+                                    "INSERT OR REPLACE INTO honkai_avatarPromotion_item (
+                                        avatar_id, ascension, item_id, item_amount
+                                    ) VALUES ( ?, ?, ?, ?)",
+                                    args!(
+                                        inner.avatar_id,
+                                        inner.promotion,
+                                        cost.item_id,
+                                        cost.item_num
+                                    ),
+                                )
+                            })
+                            .collect::<Vec<Statement>>()
+                    })
+                    .collect::<Vec<Statement>>()
+            })
+            .collect::<Vec<Statement>>();
+
+        client.batch(promotion_statements).await?;
+        client.batch(item_statements).await?;
+
+        Ok(())
+    }
+    async fn teardown() -> Result<(), WorkerError> {
+        let client = get_db_client().await?;
+        client.execute("DELETE FROM honkai_avatarPromotion").await?;
+
+        Ok(())
     }
 }

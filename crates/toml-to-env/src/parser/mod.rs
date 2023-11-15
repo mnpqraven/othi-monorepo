@@ -27,7 +27,7 @@ impl EnvConfig {
                         .file_name()
                         .to_string_lossy()
                         .to_lowercase();
-                    filename.starts_with("config") && filename.ends_with(".toml")
+                    filename.to_lowercase().starts_with("config") && filename.ends_with(".toml")
                 })
                 .map(|path| path.unwrap().path())
                 .collect()

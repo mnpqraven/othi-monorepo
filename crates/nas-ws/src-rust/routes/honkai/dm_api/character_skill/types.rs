@@ -6,7 +6,7 @@ use crate::{
             character::types::{AvatarConfig, MiniItem},
             desc_param::{get_sorted_params, ParameterizedDescription},
             hash::{HashedString, TextHash},
-            types::{AbilityProperty, Anchor, AssetPath, Element, Param, SkillType, TextMap},
+            types::{UpstreamAbilityProperty, Anchor, AssetPath, Element, Param, SkillType, TextMap},
         },
         traits::DbData,
     },
@@ -159,7 +159,7 @@ pub struct UpstreamAvatarSkillTreeConfig {
     #[serde(alias = "PrePoint")]
     pre_point: Vec<u32>,
     #[serde(alias = "StatusAddList")]
-    status_add_list: Vec<AbilityProperty>,
+    status_add_list: Vec<UpstreamAbilityProperty>,
     #[serde(alias = "MaterialList")]
     material_list: Vec<MiniItem>,
     #[serde(alias = "AvatarPromotionLimit")]
@@ -190,7 +190,7 @@ pub struct AvatarSkillTreeConfig {
     pub max_level: u32,
     pub default_unlock: bool,
     pub pre_point: Vec<u32>,
-    pub status_add_list: Vec<AbilityProperty>,
+    pub status_add_list: Vec<UpstreamAbilityProperty>,
     pub material_list: Vec<Vec<MiniItem>>,
     pub avatar_promotion_limit: Vec<u32>,
     pub level_up_skill_id: Vec<u32>,

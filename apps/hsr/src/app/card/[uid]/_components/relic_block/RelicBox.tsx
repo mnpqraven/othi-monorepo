@@ -14,9 +14,11 @@ import { calculateSpread } from "@hsr/app/card/custom/_editor/_relic/SubstatSpre
 import type { SubStatSchema } from "@hsr/hooks/useStatParser";
 import { judgeRollValue } from "@hsr/app/card/custom/_editor/_relic/SpreadConfigBar";
 import type { RelicSubAffixConfig } from "@hsr/bindings/RelicSubAffixConfig";
-import { mainstatSpreadAtom, substatSpreadAtom } from "@hsr/store/queries";
 import { cn, range } from "lib/utils";
 import { Badge } from "ui/primitive";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { optionsMainStatSpread } from "@hsr/hooks/queries/useMainStatSpread";
+import { optionsSubStatSpread } from "@hsr/hooks/queries/useSubStatSpread";
 import { MarkerIcon } from "./MarkerIcon";
 
 interface RelicProps extends HTMLAttributes<HTMLDivElement> {
@@ -25,8 +27,8 @@ interface RelicProps extends HTMLAttributes<HTMLDivElement> {
 export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
   ({ atom, className, ...props }, ref) => {
     const data = useAtomValue(atom);
-    const mainstatSpread = useAtomValue(mainstatSpreadAtom);
-    const substatSpread = useAtomValue(substatSpreadAtom);
+    const { data: mainstatSpread } = useSuspenseQuery(optionsMainStatSpread());
+    const { data: substatSpread } = useSuspenseQuery(optionsSubStatSpread());
 
     const splitSubstatValue = useCallback(
       (sub: SubStatSchema, spread: RelicSubAffixConfig) =>

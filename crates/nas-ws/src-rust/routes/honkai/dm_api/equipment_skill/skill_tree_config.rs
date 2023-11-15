@@ -5,7 +5,7 @@ use crate::{
             character::types::MiniItem,
             desc_param::{get_sorted_params, ParameterizedDescription},
             hash::{HashedString, TextHash},
-            types::{AbilityProperty, Anchor, AssetPath, Param, TextMap},
+            types::{UpstreamAbilityProperty, Anchor, AssetPath, Param, TextMap},
         },
         traits::DbData,
     },
@@ -34,7 +34,7 @@ pub struct UpstreamSkillTreeConfig {
     #[serde(alias = "DefaultUnlock")]
     default_unlock: Option<bool>,
     #[serde(alias = "StatusAddList")]
-    status_add_list: Vec<AbilityProperty>,
+    status_add_list: Vec<UpstreamAbilityProperty>,
     #[serde(alias = "MaterialList")]
     material_list: Vec<MiniItem>,
     #[serde(alias = "AvatarPromotionLimit")]
@@ -66,7 +66,7 @@ pub struct SkillTreeConfig {
     anchor: Anchor,
     max_level: u32,
     default_unlock: Vec<bool>,
-    status_add_list: Vec<AbilityProperty>,
+    status_add_list: Vec<UpstreamAbilityProperty>,
     material_list: Vec<Vec<MiniItem>>,
     pub avatar_promotion_limit: Vec<Option<u32>>,
     level_up_skill_id: Vec<u32>,

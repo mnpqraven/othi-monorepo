@@ -1,4 +1,5 @@
-import type { EquipmentConfig, Path } from "@hsr/bindings/EquipmentConfig";
+import type { Path } from "@hsr/bindings/EquipmentConfig";
+import type { LightConeSchema } from "database/schema";
 import { useState } from "react";
 
 export default function useLightConeFilter() {
@@ -6,14 +7,14 @@ export default function useLightConeFilter() {
   const [path, setPath] = useState<Path[]>([]);
   const [query, updateQuery] = useState<string | undefined>(undefined);
 
-  const rarityFilter = (e: EquipmentConfig) => {
+  const rarityFilter = (e: LightConeSchema) => {
     if (rarity.length === 0) return true;
     return rarity.includes(e.rarity);
   };
 
-  const pathFilter = (e: EquipmentConfig) => {
+  const pathFilter = (e: LightConeSchema) => {
     if (path.length === 0) return true;
-    return path.includes(e.avatar_base_type);
+    return path.includes(e.path);
   };
 
   function updateRarity(value: number) {

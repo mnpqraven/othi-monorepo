@@ -17,7 +17,8 @@ module.exports = {
     "@vercel/style-guide/eslint/typescript",
   ].map(require.resolve),
   parserOptions: {
-    project,
+    project: true,
+    tsconfigRootDir: process.cwd(),
   },
   globals: {
     React: true,

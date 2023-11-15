@@ -16,10 +16,7 @@ import {
   PopoverTrigger,
 } from "ui/primitive";
 import { useQuery } from "@tanstack/react-query";
-import {
-  characterMetadataQ,
-  characterTraceQ,
-} from "@hsr/hooks/queries/character";
+import { characterTraceQ } from "@hsr/hooks/queries/character";
 import { trpc } from "@hsr/app/_trpc/client";
 import { TraceDescription } from "./TraceDescription";
 import { getLineTrips, traceVariants } from "./lineTrips";
@@ -37,7 +34,7 @@ function TraceTable({
   editMode = false,
   onChange,
 }: Prop) {
-  const { data } = useQuery(characterMetadataQ(characterId));
+  const { data } = trpc.honkai.avatar.by.useQuery({ charId: characterId });
   const [editModeTable, setEditModeTable] = useImmer<Record<number, boolean>>(
     {}
   );
@@ -54,7 +51,7 @@ function TraceTable({
 
   if (!data) return null;
 
-  const { avatar_base_type: path, spneed: maxEnergy } = data;
+  const { path, spneed: maxEnergy } = data;
 
   return (
     <div
@@ -73,7 +70,7 @@ function TraceTable({
       <TraceTableInner
         characterId={characterId}
         editMode={editMode}
-        maxEnergy={maxEnergy}
+        maxEnergy={maxEnergy ?? 0}
         onCheckedChange={onCheckedChange}
         path={path}
         wrapperSize={wrapperSize}

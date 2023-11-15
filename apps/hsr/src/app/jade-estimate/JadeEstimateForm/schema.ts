@@ -2,14 +2,11 @@ import { BattlePassType, EqTier, Server } from "protocol/ts";
 import * as z from "zod";
 
 export const schema = z.object({
-  untilDate: z.object(
-    {
-      day: z.number(),
-      month: z.number(),
-      year: z.number(),
-    },
-    { required_error: "Required field" }
-  ),
+  untilDate: z.object({
+    day: z.number(),
+    month: z.number(),
+    year: z.number(),
+  }),
   battlePass: z.object({
     battlePassType: z.nativeEnum(BattlePassType),
     currentLevel: z.number().nonnegative(),

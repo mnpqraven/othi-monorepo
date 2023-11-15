@@ -49,11 +49,7 @@ pub trait DbData // <T>
         Path::new(PREFIX_LOCAL_REPO).join(Self::path_data())
     }
 
-    /// read the local file for data, lazily writes from fallback url if not
-    /// exist
-    /// return hashmap with the db struct's PK as keys
-    /// WARN: this will error when used by maps that have multiple depths
-    async fn read() -> Result<Self::TLocal, WorkerError> {
+    async fn get_upstream() -> Result<Self::TUpstream, WorkerError> {
         let tmp_path = Self::to_local_tmp();
         let repo_path = Self::to_repo();
 
@@ -75,6 +71,15 @@ pub trait DbData // <T>
             }
         };
         let upstream_parsed: Self::TUpstream = serde_json::from_str(&upstream_data)?;
+        Ok(upstream_parsed)
+    }
+
+    /// read the local file for data, lazily writes from fallback url if not
+    /// exist
+    /// return hashmap with the db struct's PK as keys
+    /// WARN: this will error when used by maps that have multiple depths
+    async fn read() -> Result<Self::TLocal, WorkerError> {
+        let upstream_parsed = Self::get_upstream().await?;
 
         let local_data = Self::upstream_convert(upstream_parsed).await?;
 

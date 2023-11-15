@@ -1,11 +1,11 @@
 import { dateToISO, objToDate } from "@hsr/app/components/schemas";
-import type { PartialMessage } from "@bufbuild/protobuf";
+import type { PlainMessage } from "@bufbuild/protobuf";
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import type { JadeEstimateCfg } from "protocol/ts";
 import { BattlePassType, EqTier, Server } from "protocol/ts";
 
-type FormSchema = PartialMessage<JadeEstimateCfg>;
+type FormSchema = PlainMessage<JadeEstimateCfg>;
 
 export const defaultValues: FormSchema = {
   server: Server.America,
@@ -27,7 +27,11 @@ export const estimateFormAtom = atomWithStorage(
 );
 
 export const selectedCalendarDateAtom = atom(
-  (get) => objToDate.parse(get(estimateFormAtom).untilDate),
+  // TODO: need to figure out intreraction between jotai atoms and SSR
+  (get) => {
+    const prevForm = get(estimateFormAtom) as FormSchema | null;
+    return objToDate.parse((prevForm ?? defaultValues).untilDate);
+  },
   (get, set, date: Date) => {
     const prev = get(estimateFormAtom);
     set(estimateFormAtom, { ...prev, untilDate: dateToISO.parse(date) });

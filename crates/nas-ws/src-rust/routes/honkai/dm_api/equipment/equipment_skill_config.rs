@@ -5,7 +5,7 @@ use crate::{
         dm_api::{
             desc_param::{get_sorted_params, ParameterizedDescription},
             hash::TextHash,
-            types::{AbilityProperty, Param, TextMap},
+            types::{AbilityProperty, Param, TextMap, UpstreamAbilityProperty},
         },
         traits::DbData,
     },
@@ -34,7 +34,7 @@ pub struct UpstreamEquipmentSkillConfig {
     #[serde(alias = "ParamList")]
     pub param_list: Vec<Param>,
     #[serde(alias = "AbilityProperty")]
-    pub ability_property: Vec<AbilityProperty>,
+    pub ability_property: Vec<UpstreamAbilityProperty>,
 }
 
 /// skill info for light cones
@@ -46,7 +46,7 @@ pub struct EquipmentSkillConfig {
     pub level: Vec<u32>,
     pub ability_name: String,
     pub param_list: Vec<Vec<String>>,
-    pub ability_property: Vec<Vec<AbilityProperty>>,
+    pub ability_property: Vec<Vec<UpstreamAbilityProperty>>,
 }
 
 #[async_trait]
@@ -136,6 +136,16 @@ impl DbAction for EquipmentSkillConfig {
                     ability_property,
                     ..
                 } = v;
+                let cleaner_abi_property = ability_property
+                    .into_iter()
+                    .map(|outer| {
+                        outer
+                            .into_iter()
+                            .map(|inner| inner.into())
+                            .collect::<Vec<AbilityProperty>>()
+                    })
+                    .collect::<Vec<Vec<AbilityProperty>>>();
+
                 Statement::with_args(
                     "INSERT OR REPLACE INTO
                     honkai_lightConeSkill (
@@ -146,7 +156,7 @@ impl DbAction for EquipmentSkillConfig {
                         skill_name,
                         serde_json::to_string(&skill_desc).unwrap(),
                         serde_json::to_string(&param_list).unwrap(),
-                        serde_json::to_string(&ability_property).unwrap(),
+                        serde_json::to_string(&cleaner_abi_property).unwrap(),
                     ),
                 )
             })

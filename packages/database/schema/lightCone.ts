@@ -1,18 +1,20 @@
 import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
 import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { lightConeSkills } from "./lightConeToSkill";
-import { paths } from "./path";
-import { signatures } from "./avatarToSignature";
+import { lightConeSkills } from "./lightConeSkill";
+import { PATHS, paths } from "./path";
+import { signatures } from "./avatarSignature";
 
 export const lightCones = sqliteTable(
   "honkai_lightCone",
   {
     id: int("id").primaryKey(),
     release: int("release", { mode: "boolean" }),
-    name: text("name"),
-    rarity: int("rarity"),
-    path: text("path").references(() => paths.name, { onDelete: "set null" }),
+    name: text("name").notNull(),
+    rarity: int("rarity").notNull(),
+    path: text("path", { enum: PATHS })
+      .references(() => paths.name, { onDelete: "cascade" })
+      .notNull(),
     maxPromotion: int("max_promotion"),
     maxRank: int("max_rank"),
     skillId: int("skill_id").references(() => lightConeSkills.id, {

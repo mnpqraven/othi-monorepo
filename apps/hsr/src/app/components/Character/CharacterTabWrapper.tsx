@@ -41,11 +41,7 @@ export function CharacterTabWrapper({
       </TabsList>
 
       <TabsContent value="skill">
-        <SkillOverview
-          characterId={characterId}
-          selectedId={selectedSkillId}
-          skills={skills}
-        >
+        <SkillOverview characterId={characterId} selectedId={selectedSkillId}>
           <SkillSelector
             characterId={characterId}
             selectedId={selectedSkillId}

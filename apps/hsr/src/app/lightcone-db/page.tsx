@@ -1,6 +1,4 @@
-import getQueryClient from "@hsr/lib/queryClientHelper";
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { lightConesQ } from "@hsr/hooks/queries/lightcone";
+import { server } from "../_trpc/serverClient";
 import LightConeCatalogue from "./LightConeCatalogue";
 
 export const metadata = {
@@ -9,14 +7,11 @@ export const metadata = {
 };
 
 export default async function LightConeDb() {
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery(lightConesQ());
+  const lightCones = await server.honkai.lightCone.list();
 
   return (
     <main className="px-2 py-4 md:container md:px-0">
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <LightConeCatalogue />
-      </HydrationBoundary>
+      <LightConeCatalogue list={lightCones} />
     </main>
   );
 }
