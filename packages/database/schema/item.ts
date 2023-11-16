@@ -2,6 +2,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { avatarPromotionItems } from "./avatarPromotion";
+import { traceItem } from "./avatarTrace";
 
 export const items = sqliteTable("honkai_item", {
   id: int("id").primaryKey(),
@@ -40,6 +41,10 @@ export const itemRelations = relations(items, ({ one }) => ({
   promotion: one(avatarPromotionItems, {
     fields: [items.id],
     references: [avatarPromotionItems.itemId],
+  }),
+  traceItem: one(traceItem, {
+    fields: [items.id],
+    references: [traceItem.itemId],
   }),
 }));
 

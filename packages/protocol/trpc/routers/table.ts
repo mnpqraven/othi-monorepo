@@ -4,7 +4,6 @@ import type { AvatarSchema, ItemSchema, SkillSchema } from "database/schema";
 import {
   avatarToSkills,
   avatarEidolons,
-  avatarTraces,
   avatarPromotions,
   avatarPromotionItems,
   avatars,
@@ -22,8 +21,8 @@ import {
   signatures,
   skillTypes,
   skills,
-  traceMaterials,
   traces,
+  traceItem,
 } from "database/schema";
 import { db } from "database";
 import { publicProcedure, router } from "../trpc";
@@ -54,7 +53,7 @@ export const tableRouter = router({
   list: publicProcedure
     .input(TableSearch)
     .query(async ({ input: { tableName, pagination } }) =>
-      getTableData(tableName, pagination)
+      getTableData(tableName, pagination),
     ),
 });
 
@@ -65,7 +64,6 @@ function tableMap() {
     avatarEidolons,
     avatarPromotions,
     avatarPromotionItems,
-    avatarTraces,
     blogs,
     elements,
     eidolons,
@@ -81,7 +79,7 @@ function tableMap() {
     skills,
     skillTypes,
     traces,
-    traceMaterials,
+    traceItem,
   };
 }
 
@@ -97,7 +95,7 @@ export interface ServerTableResponse {
 
 async function getTableData(
   tableName: z.TypeOf<typeof ValidTableNames>,
-  pagination: Partial<z.TypeOf<typeof PaginationSearch>> = {}
+  pagination: Partial<z.TypeOf<typeof PaginationSearch>> = {},
 ): Promise<ServerTableResponse> {
   const parsing = ValidTableNames.safeParse(tableName);
 

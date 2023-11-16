@@ -8,6 +8,7 @@ use crate::{
         character::{eidolon::*, promotion_config::AvatarPromotionConfig, types::*},
         character_skill::types::*,
         equipment::{equipment_config::*, equipment_skill_config::*},
+        equipment_skill::skill_tree_config::SkillTreeConfig,
         item::types::*,
         types::*,
     },
@@ -34,7 +35,8 @@ pub async fn seed_table() -> Result<(), WorkerError> {
 
     AvatarConfig::seed().await?;
     AvatarSkillConfig::seed().await?;
-    AvatarSkillTreeConfig::seed().await?;
+    // AvatarSkillTreeConfig::seed().await?;
+    SkillTreeConfig::seed().await?;
     AvatarRankConfig::seed().await?;
     AvatarPromotionConfig::seed().await?;
 

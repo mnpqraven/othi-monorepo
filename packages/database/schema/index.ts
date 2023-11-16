@@ -1,8 +1,9 @@
 export * from "./avatar";
+export * from "./avatarEidolon";
 export * from "./avatarPromotion";
 export * from "./avatarSkill";
 export * from "./avatarSignature";
-export * from "./avatarEidolon";
+export * from "./avatarTrace";
 export * from "./blog";
 export * from "./element";
 export * from "./framework";
@@ -11,4 +12,3 @@ export * from "./path";
 export * from "./lightCone";
 export * from "./lightConeSkill";
 export * from "./skillType";
-export * from "./trace";
