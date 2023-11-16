@@ -17,6 +17,7 @@ export const lightConeRouter = router({
             .default({ name: true, rarity: true }),
         })
         .optional()
+        .default({ sort: { name: true, rarity: true }, all: true }),
     )
     .query(async ({ input }) => {
       const query = db.query.lightCones.findMany();
@@ -35,7 +36,7 @@ export const lightConeRouter = router({
       LcId.extend({
         withSkill: z.custom<true | undefined>().optional(),
         withSignature: z.custom<true | undefined>().optional(),
-      })
+      }),
     )
     .query(async ({ input }) => {
       const { lcId, withSignature, withSkill } = input;
