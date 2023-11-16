@@ -64,7 +64,7 @@ export default function RQProvider({ children }: RootProps) {
                 </Provider>
               </ReactQueryStreamedHydration>
 
-              <DevTools isInitialOpen={false} />
+              <DevTools isInitialOpen={false} theme="dark" />
               <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
           </TransportProvider>
