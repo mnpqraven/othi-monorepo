@@ -14,12 +14,12 @@ import { SignatureLightCone } from "./SignatureLightCone";
 import { TraceSummaryWrapper } from "./TraceSummaryWrapper";
 
 interface Prop {
-  params: { slug: string };
+  params: { charId: string };
   searchParams: Record<string, string | undefined>;
 }
 
 export default async function Character({ params, searchParams }: Prop) {
-  const characterId = parseInt(params.slug);
+  const characterId = parseInt(params.charId);
   const skills = await server.honkai.skill
     .by({ charId: characterId })
     .then((data) => data.sort(sortSkillsByDesc));
