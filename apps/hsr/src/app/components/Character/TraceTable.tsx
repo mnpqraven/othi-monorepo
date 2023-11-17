@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { cva } from "class-variance-authority";
 import Xarrow, { Xwrapper, useXarrow } from "react-xarrows";
-import { useTheme } from "next-themes";
 import type { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
 import { useImmer } from "use-immer";
 import { useEffect } from "react";
@@ -92,7 +91,6 @@ function TraceTableInner({
   maxEnergy: number;
 }) {
   const updateLines = useXarrow();
-  const { theme } = useTheme();
 
   const { data } = trpc.honkai.avatar.trace.by.useQuery(
     { charId: Number(characterId) },
@@ -138,7 +136,7 @@ function TraceTableInner({
               traceVariants(path)({ anchor: traceNode.anchor }),
               ""
             )}
-            id={String(traceNode.pointId)}
+            id={String(traceNode.anchor)}
             key={traceNode.pointId}
             style={{
               marginLeft: `${wrapperSize / -16}px`,
@@ -147,7 +145,6 @@ function TraceTableInner({
             {editMode && __experimental_getNodeType(traceNode) === "SMALL" ? (
               <Checkbox
                 className="absolute -top-2.5 left-3"
-                id={String(traceNode.pointId)}
                 onCheckedChange={(checked) => {
                   onCheckedChange(
                     checked === "indeterminate" ? false : checked,
@@ -196,15 +193,13 @@ function TraceTableInner({
         {data
           ? getLineTrips(path).map(([a, b]) => (
               <Xarrow
-                color={theme === "light" ? "black" : "white"}
+                color="silver"
                 curveness={0}
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                end={b!}
+                end={`${b}`}
                 endAnchor="middle"
                 key={`${a}-${b}`}
                 showHead={false}
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                start={a!}
+                start={`${a}`}
                 startAnchor="middle"
                 strokeWidth={2}
                 zIndex={-1}
