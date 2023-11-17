@@ -10,7 +10,6 @@ import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { trpc } from "@hsr/app/_trpc/client";
 import type { AvatarPromotionSchema } from "database/schema";
 import { useRelicSetBonuses } from "./queries/useRelicSetBonus";
-import { characterTraceQ } from "./queries/character";
 import { optionLightConePromotion } from "./queries/lightcone";
 import { optionsMainStatSpread } from "./queries/useMainStatSpread";
 
@@ -59,7 +58,11 @@ export interface StatParserConstructor {
 }
 
 export function useStatParser(props?: StatParserConstructor) {
-  const { data: traceData } = useQuery(characterTraceQ(props?.character.id));
+  // const { data: traceData } = useQuery(characterTraceQ(props?.character.id));
+  const { data: traceData } = trpc.honkai.avatar.trace.by.useQuery(
+    { charId: Number(props?.character.id) },
+    { enabled: Boolean(props?.character.id) }
+  );
   const { data: charPromotionData } = trpc.honkai.avatar.promotions.by.useQuery(
     { charId: Number(props?.character.id) },
     { enabled: Boolean(props?.character.id) }
@@ -120,12 +123,14 @@ export function useStatParser(props?: StatParserConstructor) {
   // INFO: PERCENT FROM TRACES
   const tracePropList = traceData
     .filter((trace) =>
-      Object.keys(props.traceTable).includes(String(trace.point_id))
+      Object.keys(props.traceTable).includes(String(trace.pointId))
     )
-    .filter((trace) => Boolean(trace.status_add_list.length))
+    .filter((trace) => Boolean(trace.statusAddList?.length))
     .map((trace) => ({
-      property: trace.status_add_list[0]!.property_type,
-      value: trace.status_add_list[0]!.value.value,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+      property: trace.statusAddList?.at(0)?.propertyType!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+      value: trace.statusAddList?.at(0)?.value!,
     }));
 
   const traceTotal: Partial<Record<Property, number>> = {};

@@ -5,10 +5,6 @@ import { useEffect, useState } from "react";
 import { useRelics } from "@hsr/hooks/queries/useRelic";
 import type { RelicConfig, RelicType } from "@hsr/bindings/RelicConfig";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  characterTraceQ,
-  characterPromotionQ,
-} from "@hsr/hooks/queries/character";
 import { optionLightConePromotion } from "@hsr/hooks/queries/lightcone";
 import { trpc } from "@hsr/app/_trpc/client";
 import { mhyCharacterIds } from "../../_store/card";
@@ -49,8 +45,8 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
 
       charIds.forEach((e) => {
         const charId = Number(e);
-        void client.prefetchQuery(characterTraceQ(charId));
-        void client.prefetchQuery(characterPromotionQ(charId));
+        void utils.honkai.avatar.trace.by.prefetch({ charId });
+        void utils.honkai.avatar.promotions.by.prefetch({ charId });
         void utils.honkai.avatar.by.prefetch({ charId });
       });
       lcIds.forEach((e) => {

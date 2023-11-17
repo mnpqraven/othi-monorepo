@@ -1,49 +1,46 @@
-import { int, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  index,
+  int,
+  primaryKey,
+  sqliteTable,
+  text,
+} from "drizzle-orm/sqlite-core";
+import type { InferSelectModel } from "drizzle-orm";
+import { relations } from "drizzle-orm";
+import type { Property } from "../types/honkai";
+import { ANCHORS } from "../types/honkai";
 import { items } from "./item";
 import { avatars } from "./avatar";
-import { relations } from "drizzle-orm";
+import { skills } from "./avatarSkill";
 
-const ANCHORS = [
-  "Point01",
-  "Point02",
-  "Point03",
-  "Point04",
-  "Point05",
-  "Point06",
-  "Point07",
-  "Point08",
-  "Point09",
-  "Point10",
-  "Point11",
-  "Point12",
-  "Point13",
-  "Point14",
-  "Point15",
-  "Point16",
-  "Point17",
-  "Point18",
-] as const;
-
-export const traces = sqliteTable("honkai_trace", {
-  pointId: int("point_id").primaryKey(),
-  maxLevel: int("max_level"),
-  avatarId: int("avatar_id").references(() => avatars.id),
-  // CORE = 2 | SMALL = 1 | BIG = 3
-  pointType: int("point_type"),
-  anchor: text("anchor", { enum: ANCHORS }),
-  defaultUnlock: int("default_unlock", { mode: "boolean" }),
-  prePoint: text("pre_point", { mode: "json" }).$type<{ list: number[] }>(),
-  statusAddList: text("status_add_list", { mode: "json" }).$type<{
-    propertyType: string;
-    value: number;
-  }>(),
-  avatarPromotionLimit: text("avatar_promotion_limit", { mode: "json" }).$type<
-    number[]
-  >(),
-  pointName: text("point_name"),
-  pointDesc: text("point_desc", { mode: "json" }).$type<{ list: string[] }>(),
-  paramList: text("param_list", { mode: "json" }).$type<{ list: string[][] }>(),
-});
+export type AvatarTraceSchema = InferSelectModel<typeof traces>;
+export const traces = sqliteTable(
+  "honkai_trace",
+  {
+    pointId: int("point_id").primaryKey(),
+    maxLevel: int("max_level"),
+    avatarId: int("avatar_id").references(() => avatars.id),
+    skillId: int("skill_id").references(() => skills.id),
+    // CORE = 2 | SMALL = 1 | BIG = 3
+    pointType: int("point_type"),
+    anchor: text("anchor", { enum: ANCHORS }),
+    defaultUnlock: int("default_unlock", { mode: "boolean" }),
+    prePoint: text("pre_point", { mode: "json" }).$type<{ list: number[] }>(),
+    statusAddList: text("status_add_list", { mode: "json" }).$type<
+      { propertyType: Property; value: number }[]
+    >(),
+    avatarPromotionLimit: text("avatar_promotion_limit", {
+      mode: "json",
+    }).$type<number[]>(),
+    pointName: text("point_name"),
+    pointDesc: text("point_desc", { mode: "json" }).$type<string[]>(),
+    paramList: text("param_list", { mode: "json" }).$type<string[][]>(),
+  },
+  (t) => ({
+    avatarIdx: index("honkai_avatar_id_idx").on(t.avatarId),
+    skillIdx: index("honkai_skill_id_idx").on(t.skillId),
+  }),
+);
 
 export const traceRelations = relations(traces, ({ one }) => ({
   avatar: one(avatars, {

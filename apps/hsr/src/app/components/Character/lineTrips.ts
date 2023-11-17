@@ -1,6 +1,6 @@
 import type { Path } from "@hsr/bindings/AvatarConfig";
-import type { Anchor } from "@hsr/bindings/SkillTreeConfig";
 import { cva } from "class-variance-authority";
+import type { Anchor } from "database/types/honkai";
 
 export function getLineTrips(path: Path): Anchor[][] {
   switch (path) {

@@ -1,3 +1,5 @@
+import "server-only";
+
 import { httpBatchLink } from "@trpc/client";
 import { appRouter } from "protocol/trpc";
 

@@ -35,7 +35,6 @@ pub async fn seed_table() -> Result<(), WorkerError> {
 
     AvatarConfig::seed().await?;
     AvatarSkillConfig::seed().await?;
-    // AvatarSkillTreeConfig::seed().await?;
     SkillTreeConfig::seed().await?;
     AvatarRankConfig::seed().await?;
     AvatarPromotionConfig::seed().await?;

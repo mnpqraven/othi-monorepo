@@ -173,16 +173,31 @@ impl DbAction for SkillTreeConfig {
                         .map(|e| e.clone().into())
                         .collect::<Vec<AbilityProperty>>();
 
+                    let rest = inner_tree.get(&1).unwrap();
+                    let unsplitted_desc = TextHash::from(rest.point_desc.clone())
+                        .read_from_textmap(&text_map)
+                        .unwrap_or_default();
+
+                    let sorted_params: Vec<String> = get_sorted_params(
+                        rest.param_list.iter().map(|e| e.value).collect(),
+                        &unsplitted_desc,
+                    )
+                    .iter()
+                    .map(|e| e.to_string())
+                    .collect();
+                    let sorted_params_json = serde_json::to_string(&sorted_params).unwrap();
+
                     Statement::with_args(
                         "INSERT OR REPLACE INTO honkai_trace (
-                            point_id, max_level, avatar_id, point_type,
+                            point_id, max_level, avatar_id, skill_id, point_type,
                             anchor, default_unlock, pre_point, status_add_list,
                             avatar_promotion_limit, point_name, point_desc, param_list
-                            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
                         args!(
                             item.point_id,
                             item.max_level,
                             item.avatar_id,
+                            item.level_up_skill_id.first().copied(),
                             item.point_type,
                             item.anchor.to_string(),
                             item.default_unlock.unwrap_or(false) as i32,
@@ -194,7 +209,7 @@ impl DbAction for SkillTreeConfig {
                                 item.point_desc.dehash(&text_map).unwrap_or_default(),
                             ))
                             .unwrap_or_default(),
-                            serde_json::to_string(&item.param_list).unwrap()
+                            sorted_params_json
                         ),
                     )
                 })

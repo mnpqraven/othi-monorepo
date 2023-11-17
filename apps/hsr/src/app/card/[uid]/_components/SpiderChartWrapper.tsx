@@ -12,10 +12,7 @@ import type { Property } from "@hsr/bindings/SkillTreeConfig";
 import { useStatParser } from "@hsr/hooks/useStatParser";
 import { useAtomValue } from "jotai";
 import { cn, rotate } from "lib/utils";
-import { optionLightConePromotion } from "@hsr/hooks/queries/lightcone";
-import { useQuery } from "@tanstack/react-query";
-import { characterPromotionQ } from "@hsr/hooks/queries/character";
-import { charIdAtom, lcIdAtom, statParseParam } from "../../_store";
+import { statParseParam } from "../../_store";
 import { filterOtherElements } from "./stat_block/StatTable";
 import { getNormalizedBoundProperty } from "./useDataProcess";
 import { SpiderChart } from "./SpiderChart";
@@ -25,14 +22,10 @@ interface Prop extends HTMLAttributes<HTMLDivElement> {
 }
 export const SpiderChartWrapper = forwardRef<HTMLDivElement, Prop>(
   ({ className, element, ...props }, ref) => {
-    const charId = useAtomValue(charIdAtom);
-    const lcId = useAtomValue(lcIdAtom);
     const parseParams = useAtomValue(statParseParam);
     const parsedStats = useStatParser(parseParams);
-    const { data: charPromo } = useQuery(characterPromotionQ(charId));
-    const { data: lcPromo } = useQuery(optionLightConePromotion(lcId));
 
-    if (!parsedStats || !charPromo || !lcPromo) return null;
+    if (!parsedStats) return null;
 
     const speed = parsedStats.baseValues.speed;
 

@@ -10,11 +10,14 @@ import { queryClientAtom } from "jotai-tanstack-query";
 import { Provider } from "jotai";
 import { createTransport, TransportProvider } from "protocol/rpc";
 import { useState } from "react";
-import { httpBatchLink } from "@trpc/client";
+import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
 import superjson from "superjson";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { DevTools } from "jotai-devtools";
+import type { AppRouter } from "protocol/trpc";
+import { createTRPCReact } from "@trpc/react-query";
 import { trpc } from "../_trpc/client";
+import { getUrl } from "../_trpc/shared";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
   defaultOptions: {
@@ -24,28 +27,36 @@ const TANSTACK_CONFIG: QueryClientConfig = {
 
 interface RootProps {
   children: React.ReactNode;
+  headers: Headers;
 }
+
+export const api = createTRPCReact<AppRouter>();
+
 const queryClient = new QueryClient(TANSTACK_CONFIG);
 
-const HydrateAtoms = ({ children }: RootProps) => {
+const HydrateAtoms = ({ children }: { children: React.ReactNode }) => {
   useHydrateAtoms([[queryClientAtom, queryClient]]);
   return children;
 };
 
-export default function RQProvider({ children }: RootProps) {
+export function AppProvider({ children, headers }: RootProps) {
   const transport = createTransport();
   const [trpcClient] = useState(() =>
-    trpc.createClient({
+    api.createClient({
       transformer: superjson,
       links: [
-        httpBatchLink({
-          url: "/api",
+        loggerLink({
+          enabled: (op) =>
+            // eslint-disable-next-line turbo/no-undeclared-env-vars
+            process.env.NODE_ENV === "development" ||
+            (op.direction === "down" && op.result instanceof Error),
+        }),
+        unstable_httpBatchStreamLink({
+          url: getUrl(),
           headers() {
-            // cache request for 1 day + revalidate once every 30 seconds
-            const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
-            return {
-              "cache-control": `s-maxage=30, stale-while-revalidate=${ONE_DAY_IN_SECONDS}`,
-            };
+            const heads = new Map(headers);
+            heads.set("x-trpc-source", "react");
+            return Object.fromEntries(heads);
           },
         }),
       ],

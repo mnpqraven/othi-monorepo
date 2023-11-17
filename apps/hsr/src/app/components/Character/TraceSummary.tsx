@@ -4,44 +4,42 @@ import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
 import Image from "next/image";
 import { asPercentage } from "lib/utils";
-import type { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
 import type { AvatarPropertyConfig } from "@hsr/bindings/AvatarPropertyConfig";
-import { IMAGE_URL } from "@hsr/lib/constants";
+import type { AvatarTraceSchema } from "database/schema";
+import { propertyIconUrl } from "@hsr/lib/propertyHelper";
+import type { Property } from "database/types/honkai";
 
 type Haystack = {
-  [key in string]?: { value: number; icon: string; label: string };
+  [key in string]?: { property: Property; value: number; label: string };
 };
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
-  skills: SkillTreeConfig[];
+  traces: AvatarTraceSchema[];
   properties: AvatarPropertyConfig[];
 }
 
-const TraceSummary = forwardRef<HTMLDivElement, Prop>(
-  ({ skills, properties, ...props }, ref) => {
+export const TraceSummary = forwardRef<HTMLDivElement, Prop>(
+  ({ traces, properties, ...props }, ref) => {
     const hay: Haystack = {};
-    skills.forEach((traceNode) => {
-      const property = traceNode.status_add_list[0];
+    traces.forEach((traceNode) => {
+      const property = traceNode.statusAddList?.at(0);
 
-      if (property?.property_type) {
-        const {
-          property_type: key,
-          value: { value },
-        } = property;
+      if (property?.propertyType) {
+        const { propertyType: key, value } = property;
 
         // upserting
         if (!hay[key])
           hay[key] = {
             value,
-            icon: traceNode.icon_path,
-            label: traceNode.point_name,
+            property: key,
+            label: traceNode.pointName ?? "",
           };
         else
           hay[key] = {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             value: hay[key]!.value + value,
-            icon: traceNode.icon_path,
-            label: traceNode.point_name,
+            property: key,
+            label: traceNode.pointName ?? "",
           };
       }
     });
@@ -52,12 +50,12 @@ const TraceSummary = forwardRef<HTMLDivElement, Prop>(
           .sort((a, b) => a.localeCompare(b))
           .map((key) => (
             <div className="flex items-center justify-between" key={key}>
-              <div className="flex items-center">
+              <div className="flex items-center gap-1">
                 <Image
                   alt={key}
-                  className="aspect-square h-8 w-8"
+                  className="aspect-square h-6 w-6 invert"
                   height={128}
-                  src={propertyUrl(hay[key]?.icon)}
+                  src={propertyIconUrl(hay[key]?.property ?? "MaxHP")}
                   width={128}
                 />
                 {properties.find((e) => e.property_type === key)?.property_name}
@@ -71,10 +69,3 @@ const TraceSummary = forwardRef<HTMLDivElement, Prop>(
   }
 );
 TraceSummary.displayName = "TraceSummary";
-
-function propertyUrl(icon: string | undefined) {
-  const lastSlash = icon?.lastIndexOf("/");
-  return `${IMAGE_URL}icon/property${icon?.slice(lastSlash)}`;
-}
-
-export { TraceSummary };

@@ -1,7 +1,8 @@
 import { Toaster } from "ui/primitive";
 import { Merriweather_Sans } from "next/font/google";
+import { headers } from "next/headers";
 import Navbar from "./components/Navbar";
-import Providers from "./components/Providers";
+import { AppProvider } from "./components/Providers";
 import "@hsr/css/globals.css";
 
 const font = Merriweather_Sans({ subsets: ["latin"], display: "swap" });
@@ -18,11 +19,11 @@ export default function RootLayout({ children }: RootProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={font.className}>
-        <Providers>
+        <AppProvider headers={headers()}>
           <Navbar />
           <Toaster />
           {children}
-        </Providers>
+        </AppProvider>
       </body>
     </html>
   );

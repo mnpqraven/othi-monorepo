@@ -1,14 +1,10 @@
 import {
-  getNodeType,
-  traceIconUrl,
+  __experimental_getNodeType,
+  __experimental_traceIconUrl,
 } from "@hsr/app/components/Character/TraceTable";
 import { groupTrips } from "@hsr/app/components/Character/lineTrips";
 import type { Path } from "@hsr/bindings/AvatarConfig";
-import type {
-  Anchor,
-  Property,
-  SkillTreeConfig,
-} from "@hsr/bindings/SkillTreeConfig";
+import type { Anchor, Property } from "@hsr/bindings/SkillTreeConfig";
 import { cva } from "class-variance-authority";
 import { useAtomValue, useSetAtom } from "jotai";
 import Image from "next/image";
@@ -16,8 +12,8 @@ import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
 import { asPercentage, cn } from "lib";
 import { Skeleton, Toggle } from "ui/primitive";
-import { useQuery } from "@tanstack/react-query";
-import { characterTraceQ } from "@hsr/hooks/queries/character";
+import { trpc } from "@hsr/app/_trpc/client";
+import type { AvatarTraceSchema } from "database/schema";
 import {
   charIdAtom,
   charTraceAtom,
@@ -46,7 +42,11 @@ interface Prop {
 
 export function TraceTableUpdater({ path }: Prop) {
   const characterId = useAtomValue(charIdAtom);
-  const { data: traces, status } = useQuery(characterTraceQ(characterId));
+  const { data: traces, status } = trpc.honkai.avatar.trace.by.useQuery(
+    { charId: Number(characterId) },
+    { enabled: Boolean(characterId) }
+  );
+  // const { data: traces, status } = useQuery(characterTraceQ(characterId));
   if (status !== "success") return "loading...";
 
   const splittedTraces = groupTrips(path);
@@ -67,7 +67,7 @@ export function TraceTableUpdater({ path }: Prop) {
 
 interface TripRowProps extends HTMLAttributes<HTMLDivElement> {
   anchors: Anchor[];
-  traceInfo: SkillTreeConfig[];
+  traceInfo: AvatarTraceSchema[];
   ascension: number;
 }
 const TripRow = forwardRef<HTMLDivElement, TripRowProps>(
@@ -81,8 +81,8 @@ const TripRow = forwardRef<HTMLDivElement, TripRowProps>(
     function updateCheckMap(checked: boolean, index: number) {
       const rightSideMap = traces
         .filter((e, i) => e && i >= index)
-        .map((trace: SkillTreeConfig, i) => ({
-          id: trace.point_id,
+        .map((trace: AvatarTraceSchema, i) => ({
+          id: trace.pointId,
           checked: i === 0 ? checked : false,
         }));
       updateMany(rightSideMap);
@@ -97,7 +97,7 @@ const TripRow = forwardRef<HTMLDivElement, TripRowProps>(
               atomData={traceDict}
               data={trace}
               index={index}
-              key={trace.point_id}
+              key={trace.pointId}
               onUpdateSlice={updateCheckMap}
               previousData={index > 0 ? traces.at(index - 1) : undefined}
             />
@@ -117,8 +117,8 @@ TripRow.displayName = "TripRow";
 
 interface ItemProps {
   index: number;
-  data: SkillTreeConfig;
-  previousData: SkillTreeConfig | undefined;
+  data: AvatarTraceSchema;
+  previousData: AvatarTraceSchema | undefined;
   atomData: Record<string | number, boolean>;
   onUpdateSlice: (checked: boolean, index: number) => void;
   ascension: number;
@@ -132,23 +132,23 @@ function TraceItem({
   ascension,
 }: ItemProps) {
   const disabled = !isPreviousChecked(previousData, atomData);
-  if (getNodeType(data) !== "SMALL")
+  if (__experimental_getNodeType(data) !== "SMALL")
     return (
       <div className="flex flex-col items-center gap-1 p-1">
         <span>A{ascension}</span>
         <div
           className={iconWrapVariants({
-            variant: getNodeType(data),
+            variant: __experimental_getNodeType(data),
           })}
         >
           <Image
             alt=""
             className={cn(
               "rounded-full",
-              getNodeType(data) !== "CORE" ? "invert" : ""
+              __experimental_getNodeType(data) !== "CORE" ? "invert" : ""
             )}
             height={48}
-            src={traceIconUrl(data)}
+            src={__experimental_traceIconUrl(data)}
             width={48}
           />
         </div>
@@ -160,27 +160,28 @@ function TraceItem({
       className="flex h-fit flex-col items-center gap-1 p-1"
       disabled={disabled}
       onPressedChange={(checked) => {
-        if (getNodeType(data) === "SMALL") onUpdateSlice(checked, index);
+        if (__experimental_getNodeType(data) === "SMALL")
+          onUpdateSlice(checked, index);
       }}
-      pressed={atomData[data.point_id]}
+      pressed={atomData[data.pointId]}
     >
-      {isPercentTrace(data.status_add_list.at(0)?.property_type)
-        ? asPercentage(data.status_add_list.at(0)?.value.value)
-        : data.status_add_list.at(0)?.value.value}
+      {isPercentTrace(data.statusAddList?.at(0)?.propertyType)
+        ? asPercentage(data.statusAddList?.at(0)?.value)
+        : data.statusAddList?.at(0)?.value}
 
       <div
         className={iconWrapVariants({
-          variant: getNodeType(data),
+          variant: __experimental_getNodeType(data),
         })}
       >
         <Image
           alt=""
           className={cn(
             "rounded-full",
-            getNodeType(data) !== "CORE" ? "invert" : ""
+            __experimental_getNodeType(data) !== "CORE" ? "invert" : ""
           )}
           height={48}
-          src={traceIconUrl(data)}
+          src={__experimental_traceIconUrl(data)}
           width={48}
         />
       </div>
@@ -190,16 +191,17 @@ function TraceItem({
 
 // TODO:
 function isPreviousChecked(
-  previousTrace: SkillTreeConfig | undefined,
+  previousTrace: AvatarTraceSchema | undefined,
   dict: Record<number | string, boolean>
 ) {
   // ok for first node
   if (!previousTrace) return true;
   // ok for having big parent
-  if (getNodeType(previousTrace) !== "SMALL") return true;
+  if (__experimental_getNodeType(previousTrace) !== "SMALL") return true;
 
-  return dict[previousTrace.point_id];
+  return dict[previousTrace.pointId];
 }
+
 function isPercentTrace(property: Property | undefined): boolean {
   if (property) {
     switch (property) {

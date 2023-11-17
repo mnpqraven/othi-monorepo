@@ -8,14 +8,16 @@ import {
   AccordionTrigger,
 } from "ui/primitive";
 import { useProperties } from "@hsr/hooks/queries/useProperties";
-import { useQuery } from "@tanstack/react-query";
-import { characterTraceQ } from "@hsr/hooks/queries/character";
+import { trpc } from "@hsr/app/_trpc/client";
 
 interface Prop {
   characterId: number;
 }
 function TraceSummaryWrapper({ characterId }: Prop) {
-  const { data: traces } = useQuery(characterTraceQ(characterId));
+  const { data: traces } = trpc.honkai.avatar.trace.by.useQuery(
+    { charId: characterId },
+    { enabled: Boolean(characterId) }
+  );
   const { data: properties } = useProperties();
 
   if (!traces || !properties) return null;
@@ -31,7 +33,7 @@ function TraceSummaryWrapper({ characterId }: Prop) {
           Total gain from traces
         </AccordionTrigger>
         <AccordionContent asChild>
-          <TraceSummary properties={properties} skills={traces} />
+          <TraceSummary properties={properties} traces={traces} />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

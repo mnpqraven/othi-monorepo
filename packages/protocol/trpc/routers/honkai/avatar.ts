@@ -3,6 +3,7 @@ import { z } from "zod";
 import { publicProcedure, router } from "../../trpc";
 import { CharId } from "../../inputSchemas";
 import { avatarPromotionRouter } from "./avatarPromotion";
+import { avatarTraceRouter } from "./avatarTrace";
 
 // TODO: promotion
 // TODO: trace
@@ -19,7 +20,7 @@ export const avatarRouter = router({
             })
             .default({ name: true, rarity: true }),
         })
-        .optional()
+        .optional(),
     )
     .query(async ({ input }) => {
       const query = db.query.avatars.findMany();
@@ -40,7 +41,7 @@ export const avatarRouter = router({
       CharId.extend({
         withSkill: z.custom<true | undefined>().optional(),
         withSignature: z.custom<true | undefined>().optional(),
-      })
+      }),
     )
     .query(({ input }) => {
       const { charId, withSignature, withSkill } = input;
@@ -91,4 +92,5 @@ export const avatarRouter = router({
     }),
 
   promotions: avatarPromotionRouter,
+  trace: avatarTraceRouter,
 });

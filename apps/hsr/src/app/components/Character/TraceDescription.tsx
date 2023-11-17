@@ -1,13 +1,12 @@
-import type { SkillTreeConfig } from "@hsr/bindings/SkillTreeConfig";
 import { asPercentage } from "lib/utils";
 import { useState } from "react";
 import { Slider } from "ui/primitive";
-import type { SkillSchema } from "database/schema";
+import type { AvatarTraceSchema, SkillSchema } from "database/schema";
 import { SkillDescription } from "../Db/SkillDescription";
 
 interface Prop {
   traceType: "CORE" | "SMALL" | "BIG";
-  trace: SkillTreeConfig;
+  trace: AvatarTraceSchema;
   maxEnergy: number;
   skill: SkillSchema | undefined;
 }
@@ -15,18 +14,17 @@ function TraceDescription({ trace, traceType, maxEnergy, skill }: Prop) {
   if (traceType === "SMALL")
     return (
       <span>
-        {trace.point_name}:{" "}
-        {asPercentage(trace.status_add_list.at(0)?.value.value)}
+        {trace.pointName}: {asPercentage(trace.statusAddList?.at(0)?.value)}
       </span>
     );
 
   if (traceType === "BIG")
     return (
       <div className="flex flex-col">
-        <div>{trace.point_name}</div>
+        <div>{trace.pointName}</div>
         <SkillDescription
-          paramList={trace.param_list}
-          skillDesc={trace.point_desc}
+          paramList={trace.paramList ?? []}
+          skillDesc={trace.pointDesc ?? []}
           slv={0}
         />
       </div>

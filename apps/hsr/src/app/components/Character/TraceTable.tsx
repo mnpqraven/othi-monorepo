@@ -15,9 +15,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "ui/primitive";
-import { useQuery } from "@tanstack/react-query";
-import { characterTraceQ } from "@hsr/hooks/queries/character";
 import { trpc } from "@hsr/app/_trpc/client";
+import type { AvatarTraceSchema } from "database/schema";
+import { propertyIconUrl } from "@hsr/lib/propertyHelper";
 import { TraceDescription } from "./TraceDescription";
 import { getLineTrips, traceVariants } from "./lineTrips";
 
@@ -94,7 +94,10 @@ function TraceTableInner({
   const updateLines = useXarrow();
   const { theme } = useTheme();
 
-  const { data } = useQuery(characterTraceQ(characterId));
+  const { data } = trpc.honkai.avatar.trace.by.useQuery(
+    { charId: Number(characterId) },
+    { enabled: Boolean(characterId) }
+  );
   const { data: skills } = trpc.honkai.skill.by.useQuery({
     charId: characterId,
   });
@@ -115,6 +118,17 @@ function TraceTableInner({
     }
   );
 
+  const iconInnerVariants = cva("rounded-full", {
+    variants: {
+      variant: {
+        SMALL: "scale-75",
+        BIG: "invert",
+        CORE: "",
+      },
+    },
+    defaultVariants: { variant: "CORE" },
+  });
+
   return (
     <div className="relative h-full w-full" id="parent-wrapper">
       <Xwrapper>
@@ -124,20 +138,20 @@ function TraceTableInner({
               traceVariants(path)({ anchor: traceNode.anchor }),
               ""
             )}
-            id={traceNode.anchor}
-            key={traceNode.point_id}
+            id={String(traceNode.pointId)}
+            key={traceNode.pointId}
             style={{
               marginLeft: `${wrapperSize / -16}px`,
             }}
           >
-            {editMode && getNodeType(traceNode) === "SMALL" ? (
+            {editMode && __experimental_getNodeType(traceNode) === "SMALL" ? (
               <Checkbox
                 className="absolute -top-2.5 left-3"
-                id={traceNode.point_id.toString()}
+                id={String(traceNode.pointId)}
                 onCheckedChange={(checked) => {
                   onCheckedChange(
                     checked === "indeterminate" ? false : checked,
-                    traceNode.point_id
+                    traceNode.pointId
                   );
                 }}
               />
@@ -145,18 +159,17 @@ function TraceTableInner({
             <Popover>
               <PopoverTrigger
                 className={iconWrapVariants({
-                  variant: getNodeType(traceNode),
+                  variant: __experimental_getNodeType(traceNode),
                 })}
               >
                 <Image
-                  alt={`${traceNode.point_id}`}
-                  className={cn(
-                    "rounded-full",
-                    getNodeType(traceNode) !== "CORE" ? "scale-90 invert" : ""
-                  )}
+                  alt={`${traceNode.pointId}`}
+                  className={iconInnerVariants({
+                    variant: __experimental_getNodeType(traceNode),
+                  })}
                   height={wrapperSize / 8}
                   onLoadingComplete={updateLines}
-                  src={traceIconUrl(traceNode)}
+                  src={__experimental_traceIconUrl(traceNode)}
                   style={{
                     // disable icons at the edge getting squished
                     minWidth: `${wrapperSize / 8}px`,
@@ -171,11 +184,9 @@ function TraceTableInner({
               >
                 <TraceDescription
                   maxEnergy={maxEnergy}
-                  skill={skills?.find(
-                    (e) => e.id === traceNode.level_up_skill_id[0]
-                  )}
+                  skill={skills?.find((e) => e.id === traceNode.skillId)}
                   trace={traceNode}
-                  traceType={getNodeType(traceNode)}
+                  traceType={__experimental_getNodeType(traceNode)}
                 />
               </PopoverContent>
             </Popover>
@@ -183,15 +194,14 @@ function TraceTableInner({
         ))}
 
         {data
-          ? getLineTrips(path).map(([a, b], index) => (
+          ? getLineTrips(path).map(([a, b]) => (
               <Xarrow
-                color={theme !== "dark" ? "black" : "white"}
+                color={theme === "light" ? "black" : "white"}
                 curveness={0}
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 end={b!}
                 endAnchor="middle"
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
+                key={`${a}-${b}`}
                 showHead={false}
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 start={a!}
@@ -224,6 +234,43 @@ export function getNodeType(node: SkillTreeConfig): "CORE" | "SMALL" | "BIG" {
   return "SMALL";
 }
 
+export function __experimental_getNodeType(
+  node: AvatarTraceSchema
+): "CORE" | "SMALL" | "BIG" {
+  switch (node.pointType) {
+    case 2:
+      return "CORE";
+    case 3:
+      return "BIG";
+    default:
+      return "SMALL";
+  }
+}
+
+export function __experimental_traceIconUrl(node: AvatarTraceSchema) {
+  const base = `https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon`;
+  switch (__experimental_getNodeType(node)) {
+    case "CORE": {
+      const suffixes = [
+        "basic_atk",
+        "skill",
+        "ultimate",
+        "talent",
+        "technique",
+      ];
+      return `${base}/skill/${node.avatarId}_${suffixes.at(
+        node.maxLevel !== 1 ? (node.pointId % 10) - 1 : 4
+      )}.png`;
+    }
+    case "SMALL":
+      return propertyIconUrl(
+        node.statusAddList?.at(0)?.propertyType ?? "MaxHP"
+      );
+    case "BIG": {
+      return `${base}/skill/${node.avatarId}_skilltree${node.pointId % 10}.png`;
+    }
+  }
+}
 export function traceIconUrl(node: SkillTreeConfig) {
   const base = `https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon`;
   switch (getNodeType(node)) {

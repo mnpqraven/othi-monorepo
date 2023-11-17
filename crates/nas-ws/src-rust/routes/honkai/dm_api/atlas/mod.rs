@@ -66,6 +66,8 @@ fn pair_bucket() -> Arc<[(u32, Vec<u32>)]> {
         (1213, vec![23015]),        // danhengil
         (1212, vec![23014]),        // jingliu
         (1112, vec![23016]),        // topaz
+        (1217, vec![23017]),        // huohuo
+        (1302, vec![23018]),        // argenti
     ]);
     base_feature_pair
 }

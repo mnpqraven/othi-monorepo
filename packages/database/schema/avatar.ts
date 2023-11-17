@@ -1,4 +1,4 @@
-import { int, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
 import { ELEMENTS, elements } from "./element";
