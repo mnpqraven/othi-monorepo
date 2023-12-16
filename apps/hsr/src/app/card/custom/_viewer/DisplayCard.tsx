@@ -3,8 +3,7 @@
 import { useAtomValue, useSetAtom } from "jotai";
 import type { LANGS } from "@hsr/lib/constants";
 import { Suspense, useEffect, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { characterMetadataQ } from "@hsr/hooks/queries/character";
+import { trpc } from "@hsr/app/_trpc/client";
 import { CharacterInfo } from "../../[uid]/_components/info_block/CharacterInfo";
 import { EidolonInfo } from "../../[uid]/_components/skill_block/EidolonInfo";
 import { LightConeInfo } from "../../[uid]/_components/skill_block/LightConeInfo";
@@ -31,7 +30,11 @@ export type DisplayCardProps =
 
 export function DisplayCard(props: DisplayCardProps) {
   const charId = useAtomValue(charIdAtom);
-  const { data: charMetadata } = useQuery(characterMetadataQ(charId));
+  const { data: charMetadata } = trpc.honkai.avatar.by.useQuery(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    { charId: charId! },
+    { enabled: Boolean(charId) }
+  );
 
   const updateConfig = useSetAtom(configAtom);
   const { enkaRef } = useEnkaRef();
@@ -55,29 +58,29 @@ export function DisplayCard(props: DisplayCardProps) {
         }}
       >
         <CharacterInfo
-          characterId={charMetadata.avatar_id}
+          characterId={charMetadata.id}
           className="relative z-10"
           id="block-1"
         />
 
         <div className="flex justify-evenly" id="block-2">
-          <EidolonInfo characterId={charMetadata.avatar_id} className="w-14" />
+          <EidolonInfo characterId={charMetadata.id} className="w-14" />
           <div className="flex flex-col pb-2">
             <LightConeInfo className="grow" id="lightcone-2.1" />
 
             <Suspense fallback={<SkillInfoLoading />}>
-              <SkillInfo characterId={charMetadata.avatar_id} id="skill-2.2" />
+              <SkillInfo characterId={charMetadata.id} id="skill-2.2" />
             </Suspense>
           </div>
         </div>
 
         <div className="col-span-2 flex gap-4" id="block-3">
           <div className="flex grow flex-col gap-2 place-self-end pb-2">
-            <SpiderChartWrapper element={charMetadata.damage_type} />
+            <SpiderChartWrapper element={charMetadata.element} />
 
             <StatTable
               className="grid grid-cols-2 gap-x-2"
-              element={charMetadata.damage_type}
+              element={charMetadata.element}
               id="stat-3"
             />
           </div>

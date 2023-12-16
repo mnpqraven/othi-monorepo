@@ -8,7 +8,6 @@ import {
 import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
 import { avatars } from "./avatar";
-import { skillTypes } from "./skillType";
 
 export const avatarToSkills = sqliteTable(
   "honkai_avatarSkill",
@@ -47,8 +46,6 @@ export const skills = sqliteTable("honkai_skill", {
   spNeed: int("spneed"),
   attackType: text("attack_type", {
     enum: ["Normal", "BPSkill", "Ultra", "Talent", "MazeNormal", "Maze"],
-  }).references(() => skillTypes.name, {
-    onDelete: "set null",
   }),
   skillDesc: text("skill_desc", { mode: "json" }).$type<string[]>(),
   paramList: text("param_list", { mode: "json" }).$type<string[][]>(),

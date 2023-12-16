@@ -1,28 +1,73 @@
 import { db } from "database";
-import type { AvatarSchema } from "database/schema";
-import { avatars } from "database/schema";
 import { z } from "zod";
 import { publicProcedure, router } from "../../trpc";
 import { CharId } from "../../inputSchemas";
+import { avatarPromotionRouter } from "./avatarPromotion";
 
+// TODO: promotion
+// TODO: trace
 export const avatarRouter = router({
-  list: publicProcedure.query(
-    async () =>
-      (await db.select().from(avatars).all()) satisfies Awaited<AvatarSchema[]>
-  ),
+  list: publicProcedure
+    .input(
+      z
+        .object({
+          all: z.boolean().default(true),
+          sort: z
+            .object({
+              rarity: z.boolean().default(true),
+              name: z.boolean().default(true),
+            })
+            .default({ name: true, rarity: true }),
+        })
+        .optional()
+    )
+    .query(async ({ input }) => {
+      const query = db.query.avatars.findMany();
+      const data = (await query).sort((a, b) => {
+        const raritySort =
+          Number(Boolean(input?.sort.rarity)) && b.rarity - a.rarity;
+        const nameSort =
+          Number(Boolean(input?.sort.name)) &&
+          (a.name.localeCompare(b.name) ||
+            (a.votag ?? "").localeCompare(b.votag ?? ""));
+        return raritySort || nameSort;
+      });
+      return data;
+    }),
+
+  by: publicProcedure
+    .input(
+      CharId.extend({
+        withSkill: z.custom<true | undefined>().optional(),
+        withSignature: z.custom<true | undefined>().optional(),
+      })
+    )
+    .query(({ input }) => {
+      const { charId, withSignature, withSkill } = input;
+      const query = db.query.avatars.findFirst({
+        where: (map, { eq }) => eq(map.id, charId),
+        with: {
+          avatarToSkills: withSkill ? { with: { skill: true } } : undefined,
+          signature: withSignature ? { with: { lightCone: true } } : undefined,
+        },
+      });
+
+      return query;
+    }),
+
   eidolons: publicProcedure.input(CharId).query(async ({ input }) => {
-    const query = db.query.avatarToEidolons.findMany({
+    const query = db.query.avatarEidolons.findMany({
       where: (map, { eq }) => eq(map.avatarId, input.charId),
       with: {
         eidolon: true,
       },
     });
     const data = (await query)
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      .map((e) => e.eidolon!)
+      .map((e) => e.eidolon)
       .sort((a, b) => a.rank - b.rank);
     return data;
   }),
+
   signatures: publicProcedure
     .input(CharId.extend({ skill: z.boolean().default(true) }))
     .query(async ({ input }) => {
@@ -44,4 +89,6 @@ export const avatarRouter = router({
 
       return data;
     }),
+
+  promotions: avatarPromotionRouter,
 });

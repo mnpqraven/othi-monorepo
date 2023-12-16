@@ -1,23 +1,27 @@
 import { int, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
-import { elements } from "./element";
-import { avatarToSkills } from "./avatarToSkill";
-import { paths } from "./path";
+import { ELEMENTS, elements } from "./element";
+import { avatarToSkills } from "./avatarSkill";
+import { PATHS, paths } from "./path";
 import { traces } from "./trace";
-import { signatures } from "./avatarToSignature";
+import { signatures } from "./avatarSignature";
+import {
+  avatarPromotionItems,
+  avatarPromotions,
+} from "./avatarPromotion";
 
 export const avatars = sqliteTable("honkai_avatar", {
   id: int("id").primaryKey(),
   name: text("name").notNull(),
   rarity: int("rarity").notNull(),
   votag: text("votag"),
-  damageType: text("damage_type").references(() => elements.name, {
-    onDelete: "set null",
-  }),
-  path: text("path").references(() => paths.name, {
-    onDelete: "set null",
-  }),
+  element: text("element", { enum: ELEMENTS })
+    .references(() => elements.name, { onUpdate: "cascade" })
+    .notNull(),
+  path: text("path", { enum: PATHS })
+    .references(() => paths.name, { onUpdate: "cascade" })
+    .notNull(),
   spneed: int("spneed"),
 });
 
@@ -26,6 +30,8 @@ export type AvatarSchema = InferSelectModel<typeof avatars>;
 export const avatarRelations = relations(avatars, ({ many }) => ({
   avatarToSkills: many(avatarToSkills),
   signature: many(signatures),
+  promotion: many(avatarPromotions),
+  promotionItem: many(avatarPromotionItems),
 }));
 
 export const avatarTraces = sqliteTable(

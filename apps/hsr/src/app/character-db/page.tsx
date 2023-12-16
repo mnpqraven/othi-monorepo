@@ -1,6 +1,4 @@
-import getQueryClient from "@hsr/lib/queryClientHelper";
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { characterMetadatasQ } from "@hsr/hooks/queries/character";
+import { server } from "../_trpc/serverClient";
 import CharacterCatalogue from "./CharacterCatalogue";
 
 export const metadata = {
@@ -9,14 +7,11 @@ export const metadata = {
 };
 
 export default async function CharacterDb() {
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery(characterMetadatasQ());
+  const characters = await server.honkai.avatar.list({});
 
   return (
     <main className="px-2 py-4 md:container md:px-0">
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <CharacterCatalogue />
-      </HydrationBoundary>
+      <CharacterCatalogue list={characters} />
     </main>
   );
 }

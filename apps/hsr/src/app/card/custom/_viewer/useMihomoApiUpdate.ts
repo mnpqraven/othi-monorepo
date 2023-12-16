@@ -7,13 +7,10 @@ import type { RelicConfig, RelicType } from "@hsr/bindings/RelicConfig";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   characterTraceQ,
-  characterMetadataQ,
   characterPromotionQ,
 } from "@hsr/hooks/queries/character";
-import {
-  optionLightConePromotion,
-  optionLightConeSkill,
-} from "@hsr/hooks/queries/lightcone";
+import { optionLightConePromotion } from "@hsr/hooks/queries/lightcone";
+import { trpc } from "@hsr/app/_trpc/client";
 import { mhyCharacterIds } from "../../_store/card";
 import {
   charStructAtom,
@@ -41,6 +38,7 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
   const { data: relicsData } = useRelics(setIds);
   const updateConfig = useSetAtom(configAtom);
   const client = useQueryClient();
+  const utils = trpc.useUtils();
 
   useEffect(() => {
     if (query.data) {
@@ -50,18 +48,18 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
         .map((e) => e.light_cone?.id);
 
       charIds.forEach((e) => {
-        const id = Number(e);
-        void client.prefetchQuery(characterTraceQ(id));
-        void client.prefetchQuery(characterPromotionQ(id));
-        void client.prefetchQuery(characterMetadataQ(id));
+        const charId = Number(e);
+        void client.prefetchQuery(characterTraceQ(charId));
+        void client.prefetchQuery(characterPromotionQ(charId));
+        void utils.honkai.avatar.by.prefetch({ charId });
       });
       lcIds.forEach((e) => {
-        const id = Number(e);
-        void client.prefetchQuery(optionLightConePromotion(id));
-        void client.prefetchQuery(optionLightConeSkill(id));
+        const lcId = Number(e);
+        void client.prefetchQuery(optionLightConePromotion(lcId));
+        void utils.honkai.lightCone.by.prefetch({ lcId });
       });
     }
-  }, [client, query.data]);
+  }, [client, query.data, utils]);
 
   useEffect(() => {
     if (query.data && props.mode === "API") {

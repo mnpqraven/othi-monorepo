@@ -2,7 +2,6 @@
 
 import { DbFilter } from "@hsr/app/components/Db/DbFilter";
 import useCharacterFilter from "@hsr/app/components/Db/useCharacterFilter";
-import type { AvatarConfig } from "@hsr/bindings/AvatarConfig";
 import { img } from "@hsr/lib/utils";
 import { useAtom, useSetAtom } from "jotai";
 import Image from "next/image";
@@ -17,11 +16,8 @@ import {
   DialogTrigger,
   Toggle,
 } from "ui/primitive";
-import { useQuery } from "@tanstack/react-query";
-import {
-  characterMetadataQ,
-  characterMetadatasQ,
-} from "@hsr/hooks/queries/character";
+import { trpc } from "@hsr/app/_trpc/client";
+import type { AvatarSchema } from "database/schema";
 import { CharacterUpdater } from "../_editor/CharacterUpdater";
 import { TraceTableUpdater } from "../_editor/TraceTableUpdater";
 import { charIdAtom, lcIdAtom } from "../../_store";
@@ -32,11 +28,15 @@ export const CharacterEditorTab = forwardRef<
 >(({ className, ...props }, ref) => {
   const [charId, updateId] = useAtom(charIdAtom);
   const updateLcId = useSetAtom(lcIdAtom);
-  const { data: chara } = useQuery(characterMetadataQ(charId));
-  const { data: characterList } = useQuery({
-    ...characterMetadatasQ(),
-    initialData: { list: [] },
-  });
+  const { data: chara } = trpc.honkai.avatar.by.useQuery(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    { charId: charId! },
+    { enabled: Boolean(charId) }
+  );
+  const { data: characterList } = trpc.honkai.avatar.list.useQuery(
+    {},
+    { initialData: [] }
+  );
   const [open, setOpen] = useState(false);
   const { filter } = useCharacterFilter();
 
@@ -45,8 +45,8 @@ export const CharacterEditorTab = forwardRef<
     .filter(filter.byPath)
     .filter(filter.byRarity);
 
-  function onCharacterSelect(to: AvatarConfig) {
-    updateId(to.avatar_id);
+  function onCharacterSelect(to: AvatarSchema) {
+    updateId(to.id);
     updateLcId(undefined);
     setOpen(false);
   }
@@ -66,7 +66,7 @@ export const CharacterEditorTab = forwardRef<
               {sorted.map((chara) => (
                 <CharacterSelectItem
                   chara={chara}
-                  key={chara.avatar_id}
+                  key={chara.id}
                   onSelect={onCharacterSelect}
                 />
               ))}
@@ -76,16 +76,16 @@ export const CharacterEditorTab = forwardRef<
 
         {chara ? (
           <CharacterCard
-            avatar_base_type={chara.avatar_base_type}
-            avatar_name={chara.avatar_name}
             className="w-48 p-4"
-            damage_type={chara.damage_type}
-            imgUrl={url(chara.avatar_id)}
+            element={chara.element}
+            imgUrl={url(chara.id)}
+            name={chara.name}
+            path={chara.path}
             rarity={chara.rarity}
           />
         ) : null}
 
-        {chara?.avatar_name}
+        {chara?.name}
       </div>
 
       {charId ? (
@@ -94,15 +94,15 @@ export const CharacterEditorTab = forwardRef<
         </Suspense>
       ) : null}
 
-      {chara ? <TraceTableUpdater path={chara.avatar_base_type} /> : null}
+      {chara ? <TraceTableUpdater path={chara.path} /> : null}
     </div>
   );
 });
 CharacterEditorTab.displayName = "CharacterEditorTab";
 
 interface ItemProps {
-  chara: AvatarConfig;
-  onSelect: (to: AvatarConfig) => void;
+  chara: AvatarSchema;
+  onSelect: (to: AvatarSchema) => void;
 }
 function CharacterSelectItem({ chara, onSelect }: ItemProps) {
   return (
@@ -113,12 +113,12 @@ function CharacterSelectItem({ chara, onSelect }: ItemProps) {
       }}
     >
       <Image
-        alt={chara.avatar_name}
+        alt={chara.name}
         height={64}
-        src={avatarUrl(chara.avatar_id)}
+        src={avatarUrl(chara.id)}
         width={64}
       />
-      <span className="grow justify-self-center">{chara.avatar_name}</span>
+      <span className="grow justify-self-center">{chara.name}</span>
     </Toggle>
   );
 }

@@ -13,25 +13,14 @@ import { ElementIcon } from "./ElementIcon";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
   rarity: number;
-  damage_type?: Element;
-  avatar_base_type: Path;
-  avatar_name: string;
+  element?: Element;
+  path: Path;
+  name: string;
   imgUrl: string;
 }
 
 const CharacterCard = forwardRef<HTMLDivElement, Prop>(
-  (
-    {
-      rarity,
-      avatar_base_type,
-      avatar_name,
-      damage_type,
-      imgUrl,
-      className,
-      ...props
-    },
-    ref
-  ) => {
+  ({ rarity, path, name, element, imgUrl, className, ...props }, ref) => {
     const { glowRef, flowRef, rotateToMouse, removeListener } = useCardEffect();
     return (
       <div
@@ -51,7 +40,7 @@ const CharacterCard = forwardRef<HTMLDivElement, Prop>(
           ref={flowRef}
         >
           <Image
-            alt={avatar_name}
+            alt={name}
             className={cn(
               "aspect-[374/512] rounded-tr-3xl bg-gradient-to-b",
               rarity === 5 ? "bg-[#d0aa6e]" : "bg-[#9c65d7]"
@@ -61,10 +50,10 @@ const CharacterCard = forwardRef<HTMLDivElement, Prop>(
             src={imgUrl}
             width={374}
           />
-          {damage_type ? (
+          {element ? (
             <ElementIcon
               className="absolute left-1 top-0"
-              element={damage_type}
+              element={element}
               ignoreTheme
               size="15%"
             />
@@ -72,10 +61,10 @@ const CharacterCard = forwardRef<HTMLDivElement, Prop>(
           <PathIcon
             className={cn(
               "absolute left-1 text-white",
-              damage_type ? "top-[15%]" : "top-0"
+              element ? "top-[15%]" : "top-0"
             )}
             ignoreTheme
-            path={avatar_base_type}
+            path={path}
             size="15%"
           />
           <RarityIcon className="top-[85%] h-6 w-full" rarity={rarity} />

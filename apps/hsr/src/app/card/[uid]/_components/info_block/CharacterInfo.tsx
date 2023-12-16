@@ -15,8 +15,7 @@ import {
 import { cn } from "lib/utils";
 import type { Element, Path } from "@hsr/bindings/AvatarConfig";
 import { selectAtom } from "jotai/utils";
-import { useQuery } from "@tanstack/react-query";
-import { characterMetadataQ } from "@hsr/hooks/queries/character";
+import { trpc } from "@hsr/app/_trpc/client";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
@@ -24,7 +23,7 @@ interface Prop extends HTMLAttributes<HTMLDivElement> {
 
 export const CharacterInfo = forwardRef<HTMLDivElement, Prop>(
   ({ className, characterId, ...props }: Prop, ref) => {
-    const { data } = useQuery(characterMetadataQ(characterId));
+    const { data } = trpc.honkai.avatar.by.useQuery({ charId: characterId });
     const level = useAtomValue(charLevelAtom);
     const ascension = useAtomValue(charPromotionAtom);
     const eidolon = useAtomValue(charEidAtom);
@@ -52,10 +51,10 @@ export const CharacterInfo = forwardRef<HTMLDivElement, Prop>(
         />
 
         <div className="grid w-full grid-cols-3">
-          <UserPlateLeft path={data.avatar_base_type} />
+          <UserPlateLeft path={data.path} />
 
           <div className="flex flex-col items-center place-self-center">
-            <div className="font-bold">{data.avatar_name}</div>
+            <div className="font-bold">{data.name}</div>
             <div>
               <span className="font-bold">Lv. {level}</span>/{maxLevel}
             </div>
@@ -65,10 +64,7 @@ export const CharacterInfo = forwardRef<HTMLDivElement, Prop>(
             </div>
           </div>
 
-          <UserPlateRight
-            element={data.damage_type}
-            path={data.avatar_base_type}
-          />
+          <UserPlateRight element={data.element} path={data.path} />
         </div>
 
         <RarityIcon

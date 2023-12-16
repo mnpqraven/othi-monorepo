@@ -9,7 +9,9 @@ export const signatures = sqliteTable(
     avatarId: int("avatar_id").references(() => avatars.id, {
       onDelete: "cascade",
     }),
-    lightConeId: int("lightcone_id").references(() => lightCones.id),
+    lightConeId: int("lightcone_id").references(() => lightCones.id, {
+      onDelete: "cascade",
+    }),
   },
   (t) => ({
     pk: primaryKey(t.avatarId, t.lightConeId),

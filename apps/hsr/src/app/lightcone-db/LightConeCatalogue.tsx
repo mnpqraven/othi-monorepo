@@ -4,19 +4,14 @@ import Link from "next/link";
 import Fuse from "fuse.js";
 import { useRouter } from "next/navigation";
 import { IMAGE_URL } from "@hsr/lib/constants";
-import type { EquipmentConfig } from "@hsr/bindings/EquipmentConfig";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { lightConesQ } from "@hsr/hooks/queries/lightcone";
+import type { LightConeSchema } from "database/schema";
 import useLightConeFilter from "../components/Db/useLightConeFilter";
 import { DbFilter } from "../components/Db/DbFilter";
 import { LightConeCard } from "./LightConeCard";
 
-function search(data: EquipmentConfig[], query: string | undefined) {
+function search(data: LightConeSchema[], query: string | undefined) {
   const fz = new Fuse(data, {
-    keys: [
-      "equipment_name",
-      "equipment_id",
-    ] satisfies (keyof EquipmentConfig)[],
+    keys: ["name", "id"] satisfies (keyof LightConeSchema)[],
     threshold: 0.4,
   });
 
@@ -24,18 +19,21 @@ function search(data: EquipmentConfig[], query: string | undefined) {
   return data;
 }
 
-function LightConeCatalogue() {
+interface Prop {
+  list: LightConeSchema[];
+}
+
+function LightConeCatalogue({ list }: Prop) {
   const router = useRouter();
   const { filter, query, updateQuery } = useLightConeFilter();
-  const { data } = useSuspenseQuery(lightConesQ());
 
-  const processedData = search(data, query)
+  const processedData = search(list, query)
     .filter(filter.byRarity)
     .filter(filter.byPath);
 
   function onEnter(_query: string) {
     if (processedData.length > 0)
-      router.push(`/lightcone-db/${processedData.at(0)?.equipment_id}`);
+      router.push(`/lightcone-db/${processedData.at(0)?.id}`);
   }
 
   return (
@@ -51,18 +49,18 @@ function LightConeCatalogue() {
           <div
             className="flex flex-col items-center gap-3 self-start"
             id="lc-card"
-            key={lc.equipment_id}
+            key={lc.id}
           >
-            <Link href={`/lightcone-db/${lc.equipment_id}`}>
+            <Link href={`/lightcone-db/${lc.id}`}>
               <LightConeCard
-                imgUrl={url(lc.equipment_id)}
-                name={lc.equipment_name}
-                path={lc.avatar_base_type}
+                imgUrl={url(lc.id)}
+                name={lc.name}
+                path={lc.path}
                 rarity={lc.rarity}
               />
             </Link>
 
-            <p className="text-center font-semibold">{lc.equipment_name}</p>
+            <p className="text-center font-semibold">{lc.name}</p>
           </div>
         ))}
       </div>

@@ -3,8 +3,10 @@ import { sql } from "drizzle-orm";
 import type { AvatarSchema, ItemSchema, SkillSchema } from "database/schema";
 import {
   avatarToSkills,
-  avatarToEidolons,
+  avatarEidolons,
   avatarTraces,
+  avatarPromotions,
+  avatarPromotionItems,
   avatars,
   blogs,
   elements,
@@ -60,7 +62,9 @@ function tableMap() {
   return {
     avatars,
     avatarToSkills,
-    avatarToEidolons,
+    avatarEidolons,
+    avatarPromotions,
+    avatarPromotionItems,
     avatarTraces,
     blogs,
     elements,

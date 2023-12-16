@@ -15,6 +15,7 @@ const nextConfig = {
       ["@swc-jotai/debug-label", {}],
     ],
     serverComponentsExternalPackages: ["@libsql/client"],
+    ppr: true,
   },
   transpilePackages: ["lib", "ui", "database", "protocol"],
 };

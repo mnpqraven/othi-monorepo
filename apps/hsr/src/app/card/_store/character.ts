@@ -1,7 +1,5 @@
-import { characterMetadataQ } from "@hsr/hooks/queries/character";
 import { atom } from "jotai";
 import { atomWithImmer } from "jotai-immer";
-import { atomsWithQuery } from "jotai-tanstack-query";
 
 interface CharacterSchema {
   // TODO: wrong type, this is string
@@ -58,8 +56,4 @@ export const charStructAtom = atom(
     set(charTraceAtom, next.trace);
     set(charSkillAtom, next.skills);
   }
-);
-
-export const [, charMetadataAtom] = atomsWithQuery((get) =>
-  characterMetadataQ(get(charIdAtom))
 );

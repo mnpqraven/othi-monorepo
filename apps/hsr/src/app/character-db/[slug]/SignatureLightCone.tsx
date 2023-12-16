@@ -16,7 +16,7 @@ export async function SignatureLightCone({ characterId, searchParams }: Prop) {
       charId: characterId,
       skill: true,
     })
-  ).sort((a, b) => (b.rarity ?? 0) - (a.rarity ?? 0));
+  ).sort((a, b) => b.rarity - a.rarity);
 
   const selectedLc = signatures[Number(searchParams.i ?? 0)];
 
@@ -28,7 +28,7 @@ export async function SignatureLightCone({ characterId, searchParams }: Prop) {
     <div className="block">
       <div className="flex flex-col gap-4 sm:grid sm:grid-cols-3">
         <div className="col-span-1 flex flex-col p-6">
-          <Portrait lightconeId={selectedLc.id} name={selectedLc.name ?? ""} />
+          <Portrait lightconeId={selectedLc.id} name={selectedLc.name} />
         </div>
 
         <div className="col-span-2 flex flex-col">
@@ -40,7 +40,7 @@ export async function SignatureLightCone({ characterId, searchParams }: Prop) {
                   key={lc.id}
                   type="button"
                 >
-                  <LightConeCard imgUrl={url(lc.id)} name={lc.name ?? ""} />
+                  <LightConeCard imgUrl={url(lc.id)} name={lc.name} />
                 </button>
               </Link>
             ))}

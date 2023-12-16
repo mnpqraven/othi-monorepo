@@ -1,4 +1,5 @@
-import type { AvatarConfig, Element, Path } from "@hsr/bindings/AvatarConfig";
+import type { Element, Path } from "@hsr/bindings/AvatarConfig";
+import type { AvatarSchema } from "database/schema";
 import { useState } from "react";
 
 export default function useCharacterFilter() {
@@ -7,19 +8,19 @@ export default function useCharacterFilter() {
   const [element, setElement] = useState<Element[]>([]);
   const [query, updateQuery] = useState<string | undefined>(undefined);
 
-  const rarityFilter = (e: AvatarConfig) => {
+  const rarityFilter = (e: AvatarSchema) => {
     if (rarity.length === 0) return true;
     return rarity.includes(e.rarity);
   };
 
-  const pathFilter = (e: AvatarConfig) => {
+  const pathFilter = (e: AvatarSchema) => {
     if (path.length === 0) return true;
-    return path.includes(e.avatar_base_type);
+    return path.includes(e.path);
   };
 
-  const elementFilter = (e: AvatarConfig) => {
+  const elementFilter = (e: AvatarSchema) => {
     if (element.length === 0) return true;
-    return element.includes(e.damage_type);
+    return element.includes(e.element);
   };
 
   function updateRarity(value: number) {

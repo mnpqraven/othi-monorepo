@@ -277,7 +277,9 @@ impl DbAction for AvatarConfig {
                      ..
                  }| {
                     Statement::with_args(
-                        "INSERT OR REPLACE INTO honkai_avatar VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT OR REPLACE INTO honkai_avatar (
+                            id, name, rarity, votag, element, path, spneed
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?)",
                         args!(
                             avatar_id,
                             avatar_name,

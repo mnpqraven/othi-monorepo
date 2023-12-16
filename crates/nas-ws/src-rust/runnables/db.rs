@@ -5,7 +5,7 @@ use crate::{
     handler::error::WorkerError,
     routes::honkai::dm_api::{
         atlas::SignatureAtlas,
-        character::{eidolon::*, types::*},
+        character::{eidolon::*, promotion_config::AvatarPromotionConfig, types::*},
         character_skill::types::*,
         equipment::{equipment_config::*, equipment_skill_config::*},
         item::types::*,
@@ -36,6 +36,7 @@ pub async fn seed_table() -> Result<(), WorkerError> {
     AvatarSkillConfig::seed().await?;
     AvatarSkillTreeConfig::seed().await?;
     AvatarRankConfig::seed().await?;
+    AvatarPromotionConfig::seed().await?;
 
     EquipmentSkillConfig::seed().await?;
     EquipmentConfig::seed().await?;
