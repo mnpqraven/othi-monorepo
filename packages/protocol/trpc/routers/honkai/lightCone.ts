@@ -11,20 +11,22 @@ export const lightConeRouter = router({
           all: z.boolean().default(true),
           sort: z
             .object({
-              rarity: z.boolean().default(true),
-              name: z.boolean().default(true),
+              rarity: z.boolean().optional().default(true),
+              name: z.boolean().optional().default(true),
             })
+            .partial()
             .default({ name: true, rarity: true }),
         })
-        .optional()
+        .partial()
+        .default({ sort: { name: true, rarity: true }, all: true }),
     )
     .query(async ({ input }) => {
       const query = db.query.lightCones.findMany();
       const data = (await query).sort((a, b) => {
         const raritySort =
-          Number(Boolean(input?.sort.rarity)) && b.rarity - a.rarity;
+          Number(Boolean(input.sort?.rarity)) && b.rarity - a.rarity;
         const nameSort =
-          Number(Boolean(input?.sort.name)) && a.name.localeCompare(b.name);
+          Number(Boolean(input.sort?.name)) && a.name.localeCompare(b.name);
         return raritySort || nameSort;
       });
       return data;
@@ -35,7 +37,7 @@ export const lightConeRouter = router({
       LcId.extend({
         withSkill: z.custom<true | undefined>().optional(),
         withSignature: z.custom<true | undefined>().optional(),
-      })
+      }),
     )
     .query(async ({ input }) => {
       const { lcId, withSignature, withSkill } = input;

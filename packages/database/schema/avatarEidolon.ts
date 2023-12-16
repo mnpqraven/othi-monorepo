@@ -45,19 +45,16 @@ export const avatarEidolons = sqliteTable(
   },
   (t) => ({
     avatarIdx: index("idx_eidolon_avatar_id").on(t.avatarId),
-  })
+  }),
 );
 
-export const avatarEidolonRelations = relations(
-  avatarEidolons,
-  ({ one }) => ({
-    avatar: one(avatars, {
-      fields: [avatarEidolons.avatarId],
-      references: [avatars.id],
-    }),
-    eidolon: one(eidolons, {
-      fields: [avatarEidolons.eidolonId],
-      references: [eidolons.id],
-    }),
-  })
-);
+export const avatarEidolonRelations = relations(avatarEidolons, ({ one }) => ({
+  avatar: one(avatars, {
+    fields: [avatarEidolons.avatarId],
+    references: [avatars.id],
+  }),
+  eidolon: one(eidolons, {
+    fields: [avatarEidolons.eidolonId],
+    references: [eidolons.id],
+  }),
+}));

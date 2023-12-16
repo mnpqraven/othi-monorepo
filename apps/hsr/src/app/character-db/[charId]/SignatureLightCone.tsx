@@ -1,7 +1,7 @@
 import { server } from "@hsr/app/_trpc/serverClient";
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
-import { Content } from "@hsr/app/lightcone-db/[slug]/Content";
-import { Portrait } from "@hsr/app/lightcone-db/[slug]/Portrait";
+import { Content } from "@hsr/app/lightcone-db/[lcId]/Content";
+import { Portrait } from "@hsr/app/lightcone-db/[lcId]/Portrait";
 import { IMAGE_URL } from "@hsr/lib/constants";
 import Link from "next/link";
 
@@ -36,7 +36,7 @@ export async function SignatureLightCone({ characterId, searchParams }: Prop) {
             {signatures.map((lc, i) => (
               <Link href={{ query: { ...searchParams, i } }} key={lc.id}>
                 <button
-                  className="relative p-2 cursor-default"
+                  className="relative cursor-default p-2"
                   key={lc.id}
                   type="button"
                 >

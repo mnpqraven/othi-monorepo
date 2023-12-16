@@ -2,10 +2,12 @@ import type { RelicInput } from "@hsr/app/card/_store/relic";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "ui/primitive";
+import { Root } from "@radix-ui/react-select";
 import type { RelicType } from "@hsr/bindings/RelicConfig";
 import type { RelicSetConfig } from "@hsr/bindings/RelicSetConfig";
 import { useRelicSets } from "@hsr/hooks/queries/useRelicSetList";
@@ -15,6 +17,7 @@ import { useAtom } from "jotai";
 import Image from "next/image";
 import { MainstatEditor } from "./MainstatEditor";
 import { RelicLevel } from "./RelicLevel";
+import { ComponentPropsWithoutRef, forwardRef } from "react";
 
 interface Prop {
   atom: PrimitiveAtom<RelicInput>;
@@ -31,17 +34,33 @@ export function RelicSelector({ atom }: Prop) {
   return (
     <div className="flex items-center justify-between gap-3">
       <span className="grow font-bold">{relicTypeName(relic.type)}</span>
-
       <RelicLevel atom={atom} />
 
       <MainstatEditor atom={atom} />
 
-      <Select onValueChange={updateRelic} value={`${relic.setId}`}>
-        <SelectTrigger className="w-96">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent className="max-h-full overflow-y-auto">
-          {relicSets?.filter(bySeparateType(relic.type)).map((set) => (
+      <RelicSelect
+        onValueChange={updateRelic}
+        value={`${relic.setId}`}
+        relics={relicSets?.filter(bySeparateType(relic.type))}
+      />
+    </div>
+  );
+}
+
+const RelicSelect = forwardRef<
+  HTMLButtonElement,
+  ComponentPropsWithoutRef<typeof Root> & {
+    relics: RelicSetConfig[] | undefined;
+  }
+>(function RelicSelect({ relics, ...props }, ref) {
+  return (
+    <Select {...props}>
+      <SelectTrigger className="w-96" ref={ref}>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup className="max-h-[24rem] overflow-y-auto">
+          {relics?.map((set) => (
             <SelectItem key={set.set_id} value={String(set.set_id)}>
               <div className="flex items-center gap-2">
                 <Image
@@ -55,11 +74,11 @@ export function RelicSelector({ atom }: Prop) {
               </div>
             </SelectItem>
           ))}
-        </SelectContent>
-      </Select>
-    </div>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
-}
+});
 
 function bySeparateType(type: RelicType) {
   switch (type) {

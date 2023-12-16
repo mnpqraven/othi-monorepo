@@ -4,12 +4,9 @@ import { relations } from "drizzle-orm";
 import { ELEMENTS, elements } from "./element";
 import { avatarToSkills } from "./avatarSkill";
 import { PATHS, paths } from "./path";
-import { traces } from "./trace";
 import { signatures } from "./avatarSignature";
-import {
-  avatarPromotionItems,
-  avatarPromotions,
-} from "./avatarPromotion";
+import { avatarPromotionItems, avatarPromotions } from "./avatarPromotion";
+import { traces } from "./avatarTrace";
 
 export const avatars = sqliteTable("honkai_avatar", {
   id: int("id").primaryKey(),
@@ -32,28 +29,29 @@ export const avatarRelations = relations(avatars, ({ many }) => ({
   signature: many(signatures),
   promotion: many(avatarPromotions),
   promotionItem: many(avatarPromotionItems),
+  avatarToTrace: many(traces),
 }));
 
-export const avatarTraces = sqliteTable(
-  "honkai_avatarTrace",
-  {
-    avatarId: int("avatar_id").references(() => avatars.id, {
-      onDelete: "cascade",
-    }),
-    pointId: int("point_id").references(() => traces.id, {
-      onDelete: "cascade",
-    }),
-  },
-  (t) => ({ pk: primaryKey(t.avatarId, t.pointId) })
-);
-
-export const traceRelations = relations(avatarTraces, ({ one }) => ({
-  avatar: one(avatars, {
-    fields: [avatarTraces.avatarId],
-    references: [avatars.id],
-  }),
-  trace: one(traces, {
-    fields: [avatarTraces.pointId],
-    references: [traces.id],
-  }),
-}));
+// export const avatarTraces = sqliteTable(
+//   "honkai_avatarTrace",
+//   {
+//     avatarId: int("avatar_id").references(() => avatars.id, {
+//       onDelete: "cascade",
+//     }),
+//     pointId: int("point_id").references(() => traces.avatarId, {
+//       onDelete: "cascade",
+//     }),
+//   },
+//   (t) => ({ pk: primaryKey(t.avatarId, t.pointId) }),
+// );
+//
+// export const traceRelations = relations(avatarTraces, ({ one }) => ({
+//   avatar: one(avatars, {
+//     fields: [avatarTraces.avatarId],
+//     references: [avatars.id],
+//   }),
+//   trace: one(traces, {
+//     fields: [avatarTraces.pointId],
+//     references: [traces.id],
+//   }),
+// }));

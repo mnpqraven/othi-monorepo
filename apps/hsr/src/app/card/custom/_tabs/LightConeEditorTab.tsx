@@ -7,7 +7,7 @@ import {
   DialogTrigger,
   Toggle,
 } from "ui/primitive";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import Image from "next/image";
 import { IMAGE_URL } from "@hsr/lib/constants";
 import type { HTMLAttributes } from "react";
@@ -30,20 +30,19 @@ export const LightConeEditorTab = forwardRef<
   );
   const charId = useAtomValue(charIdAtom);
   const [open, setOpen] = useState(false);
-  const [lcId, setLcId] = useAtom(lcIdAtom);
+  const setLcId = useSetAtom(lcIdAtom);
+  const [localLc, setLocalLc] = useState<LightConeSchema | undefined>(
+    undefined
+  );
 
   const { data: charMeta } = trpc.honkai.avatar.by.useQuery(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     { charId: charId! },
     { enabled: Boolean(charId) }
   );
-  const { data: lightCone } = trpc.honkai.lightCone.by.useQuery({
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    lcId: lcId!,
-  });
 
   function onSelectLightCone(lc: LightConeSchema) {
     setLcId(lc.id);
+    setLocalLc(lc);
     setOpen(false);
   }
 
@@ -80,14 +79,14 @@ export const LightConeEditorTab = forwardRef<
           </DialogContent>
         </Dialog>
 
-        {lightCone ? (
+        {localLc ? (
           <>
             <LightConeCard
               className="w-48"
-              imgUrl={img(`image/light_cone_preview/${lightCone.id}.png`)}
-              name={lightCone.name}
+              imgUrl={img(`image/light_cone_preview/${localLc.id}.png`)}
+              name={localLc.name}
             />
-            {lightCone.name}
+            {localLc.name}
           </>
         ) : null}
       </div>

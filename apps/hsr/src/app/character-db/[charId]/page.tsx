@@ -9,16 +9,17 @@ import { SkillOverviewLoading } from "@hsr/app/components/Character/SkillOvervie
 import { SkillSelector } from "@hsr/app/components/Character/SkillSelector";
 import { server } from "@hsr/app/_trpc/serverClient";
 import { sortSkillsByDesc } from "@hsr/lib/utils";
+import Loading from "@hsr/app/card/[uid]/loading";
 import { SignatureLightCone } from "./SignatureLightCone";
 import { TraceSummaryWrapper } from "./TraceSummaryWrapper";
 
 interface Prop {
-  params: { slug: string };
+  params: { charId: string };
   searchParams: Record<string, string | undefined>;
 }
 
 export default async function Character({ params, searchParams }: Prop) {
-  const characterId = parseInt(params.slug);
+  const characterId = parseInt(params.charId);
   const skills = await server.honkai.skill
     .by({ charId: characterId })
     .then((data) => data.sort(sortSkillsByDesc));
@@ -62,10 +63,12 @@ export default async function Character({ params, searchParams }: Prop) {
       </TabsContent>
 
       <TabsContent value="signature">
-        <SignatureLightCone
-          characterId={characterId}
-          searchParams={searchParams}
-        />
+        <Suspense fallback={<Loading />}>
+          <SignatureLightCone
+            characterId={characterId}
+            searchParams={searchParams}
+          />
+        </Suspense>
       </TabsContent>
 
       <TabsContent value="trace">

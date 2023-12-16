@@ -8,7 +8,6 @@ import {
 import type { RelicType } from "@hsr/bindings/RelicConfig";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { trpc } from "@hsr/app/_trpc/client";
-import { z } from "zod";
 import type { AvatarPromotionSchema } from "database/schema";
 import { useRelicSetBonuses } from "./queries/useRelicSetBonus";
 import { characterTraceQ } from "./queries/character";
@@ -62,15 +61,14 @@ export interface StatParserConstructor {
 export function useStatParser(props?: StatParserConstructor) {
   const { data: traceData } = useQuery(characterTraceQ(props?.character.id));
   const { data: charPromotionData } = trpc.honkai.avatar.promotions.by.useQuery(
-    { charId: z.number().parse(props?.character.id) },
+    { charId: Number(props?.character.id) },
     { enabled: Boolean(props?.character.id) }
   );
-  // characterPromotionQ(props?.character.id)
   const { data: lcPromotionData } = useQuery(
     optionLightConePromotion(props?.lightCone?.id)
   );
   const { data: lcData } = trpc.honkai.lightCone.by.useQuery(
-    { lcId: z.number().parse(props?.lightCone?.id), withSkill: true },
+    { lcId: Number(props?.lightCone?.id), withSkill: true },
     { enabled: Boolean(props?.lightCone?.id) }
   );
   const { data: relicBonuses } = useRelicSetBonuses();

@@ -8,7 +8,6 @@ import { Badge, Input, Label } from "ui/primitive";
 import { cn } from "lib";
 import { trpc } from "@hsr/app/_trpc/client";
 import type { SkillSchema } from "database/schema";
-import { z } from "zod";
 import { getSkillMaxLevel } from "../../[uid]/_components/skill_block/SkillInfo";
 import {
   charEidAtom,
@@ -30,7 +29,7 @@ const skillTypeMap = [
 export function CharacterUpdater() {
   const charId = useAtomValue(charIdAtom);
   const { data: skills } = trpc.honkai.skill.by.useQuery(
-    { charId: z.number().parse(charId) },
+    { charId: Number(charId) },
     { enabled: Boolean(charId) }
   );
   const maxLevel = useAtomValue(charMaxLevelAtom);

@@ -11,6 +11,7 @@ import type { ParentSizeProvidedProps } from "@visx/responsive/lib/components/Pa
 import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale";
 import { Bar, BarStackHorizontal } from "@visx/shape";
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
+import { Loader2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import {
   Card,
@@ -64,9 +65,9 @@ function LightConeRanking({ id }: Prop) {
     };
   }, [dataKey]);
 
-  if (!data) return <>loading</>;
+  // if (!data) return <>loading</>;
 
-  const sortedList = data.list.sort((a, b) => {
+  const sortedList = data?.list.sort((a, b) => {
     const nameCmp = a.equipment_name.localeCompare(b.equipment_name);
     return accessor()(b) - accessor()(a) || nameCmp;
   });
@@ -79,39 +80,46 @@ function LightConeRanking({ id }: Prop) {
           Pure stat ranking compared to other light cones
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <Select
-          defaultValue={dataKey}
-          onValueChange={(e) => {
-            setDatakey(e as typeof dataKey);
-          }}
-        >
-          <SelectTrigger className="bg-background sticky top-0">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="atk">Attack</SelectItem>
-            <SelectItem value="def">Defense</SelectItem>
-            <SelectItem value="hp">HP</SelectItem>
-            <SelectItem value="all">All</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className="mt-4 h-[450px] overflow-auto rounded-md">
-          <ParentSize debounceTime={10}>
-            {(parent) => (
-              <RankingChart
-                currentLcId={id}
-                data={sortedList}
-                dataAccessor={accessor()}
-                mode={dataKey}
-                {...parent}
-                height={sortedList.length * 40}
-                promotion={DEFAULT_INDEX}
-              />
-            )}
-          </ParentSize>
-        </div>
-      </CardContent>
+      {data && sortedList ? (
+        <CardContent>
+          <Select
+            defaultValue={dataKey}
+            onValueChange={(e) => {
+              setDatakey(e as typeof dataKey);
+            }}
+          >
+            <SelectTrigger className="bg-background sticky top-0">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="atk">Attack</SelectItem>
+              <SelectItem value="def">Defense</SelectItem>
+              <SelectItem value="hp">HP</SelectItem>
+              <SelectItem value="all">All</SelectItem>
+            </SelectContent>
+          </Select>
+          <div className="mt-4 h-[450px] overflow-auto rounded-md">
+            <ParentSize debounceTime={10}>
+              {(parent) => (
+                <RankingChart
+                  currentLcId={id}
+                  data={sortedList}
+                  dataAccessor={accessor()}
+                  mode={dataKey}
+                  {...parent}
+                  height={sortedList.length * 40}
+                  promotion={DEFAULT_INDEX}
+                />
+              )}
+            </ParentSize>
+          </div>
+        </CardContent>
+      ) : (
+        <CardContent className="flex justify-center gap-2">
+          <Loader2 className="animate-spin" />
+          Loading ...
+        </CardContent>
+      )}
     </Card>
   );
 }

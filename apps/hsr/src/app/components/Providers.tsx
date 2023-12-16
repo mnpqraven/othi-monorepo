@@ -13,6 +13,7 @@ import { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
 import superjson from "superjson";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
+import { DevTools } from "jotai-devtools";
 import { trpc } from "../_trpc/client";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
@@ -62,6 +63,8 @@ export default function RQProvider({ children }: RootProps) {
                   <HydrateAtoms>{children}</HydrateAtoms>
                 </Provider>
               </ReactQueryStreamedHydration>
+
+              <DevTools isInitialOpen={false} theme="dark" />
               <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
           </TransportProvider>

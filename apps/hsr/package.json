@@ -65,7 +65,7 @@
     "jotai-tanstack-query": "^0.7.2",
     "lib": "workspace:*",
     "lucide-react": "^0.258.0",
-    "next": "14.0.3-canary.6",
+    "next": "14.0.2",
     "next-themes": "^0.2.1",
     "optics-ts": "^2.4.1",
     "protocol": "workspace:*",

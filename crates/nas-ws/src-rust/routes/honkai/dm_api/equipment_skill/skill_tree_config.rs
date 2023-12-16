@@ -1,16 +1,18 @@
 use crate::{
+    builder::{get_db_client, traits::DbAction},
     handler::error::WorkerError,
     routes::honkai::{
         dm_api::{
             character::types::MiniItem,
             desc_param::{get_sorted_params, ParameterizedDescription},
             hash::{HashedString, TextHash},
-            types::{UpstreamAbilityProperty, Anchor, AssetPath, Param, TextMap},
+            types::{AbilityProperty, Anchor, AssetPath, Param, TextMap, UpstreamAbilityProperty},
         },
         traits::DbData,
     },
 };
 use async_trait::async_trait;
+use libsql_client::{args, Statement};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, HashMap};
@@ -145,6 +147,85 @@ impl DbData for SkillTreeConfig {
             })
             .collect();
         Ok(transformed)
+    }
+}
+
+#[async_trait]
+impl DbAction for SkillTreeConfig {
+    async fn seed() -> Result<(), WorkerError> {
+        let text_map: HashMap<String, String> = TextMap::read().await?;
+        let upstream_db = SkillTreeConfig::get_upstream().await?;
+
+        let statements_config = upstream_db
+            .values()
+            .flat_map(|inner_tree| {
+                inner_tree.values().map(|item| {
+                    let avatar_promotion_limits = inner_tree
+                        .values()
+                        .map(|item| item.avatar_promotion_limit.unwrap_or_default())
+                        .collect::<Vec<u32>>();
+                    let promotion_limits_json =
+                        serde_json::to_string(&avatar_promotion_limits).unwrap();
+
+                    let truncated = item
+                        .status_add_list
+                        .iter()
+                        .map(|e| e.clone().into())
+                        .collect::<Vec<AbilityProperty>>();
+
+                    Statement::with_args(
+                        "INSERT OR REPLACE INTO honkai_trace (
+                            point_id, max_level, avatar_id, point_type,
+                            anchor, default_unlock, pre_point, status_add_list,
+                            avatar_promotion_limit, point_name, point_desc, param_list
+                            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                        args!(
+                            item.point_id,
+                            item.max_level,
+                            item.avatar_id,
+                            item.point_type,
+                            item.anchor.to_string(),
+                            item.default_unlock.unwrap_or(false) as i32,
+                            serde_json::to_string(&item.pre_point).unwrap(),
+                            serde_json::to_string(&truncated).unwrap(),
+                            promotion_limits_json,
+                            item.point_name.dehash(&text_map).unwrap_or_default(),
+                            serde_json::to_string(&ParameterizedDescription::from(
+                                item.point_desc.dehash(&text_map).unwrap_or_default(),
+                            ))
+                            .unwrap_or_default(),
+                            serde_json::to_string(&item.param_list).unwrap()
+                        ),
+                    )
+                })
+            })
+            .collect::<Vec<Statement>>();
+
+        let statements_item = upstream_db
+            .values()
+            .flat_map(|inner_tree| {
+                inner_tree.values().flat_map(|config| {
+                    config.material_list.iter().map(|item| {
+                        Statement::with_args(
+                            "INSERT OR REPLACE INTO honkai_traceMaterial (
+                                point_id, level, item_id, item_amount
+                                ) VALUES (?,?,?,?)",
+                            args!(config.point_id, config.level, item.item_id, item.item_num),
+                        )
+                    })
+                })
+            })
+            .collect::<Vec<Statement>>();
+
+        let client = get_db_client().await?;
+
+        client.batch(statements_config).await?;
+        client.batch(statements_item).await?;
+
+        Ok(())
+    }
+    async fn teardown() -> Result<(), WorkerError> {
+        Ok(())
     }
 }
 

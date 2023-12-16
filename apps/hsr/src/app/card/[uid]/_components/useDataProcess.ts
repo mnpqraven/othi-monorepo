@@ -7,7 +7,6 @@ import { asPercentage, rotate } from "lib";
 import { useQuery } from "@tanstack/react-query";
 import { optionLightConePromotion } from "@hsr/hooks/queries/lightcone";
 import type { AvatarPromotionSchema } from "database/schema";
-import { z } from "zod";
 import { trpc } from "@hsr/app/_trpc/client";
 import type { MihomoCharacter } from "../../types";
 import type { Field } from "./SpiderChartWrapper";
@@ -60,7 +59,7 @@ export function useDataProcess({ character }: Prop): {
   // sub stat's impact from relic on stats (flat + %)
   // normalize summed data
   const { data: charPromo } = trpc.honkai.avatar.promotions.by.useQuery(
-    { charId: z.number().parse(character?.id) },
+    { charId: Number(character?.id) },
     { enabled: Boolean(character?.id) }
   );
 
