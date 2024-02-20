@@ -3,7 +3,11 @@
   "display": "Next.js",
   "extends": "./base.json",
   "compilerOptions": {
-    "plugins": [{ "name": "next" }],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "allowJs": true,
     "declaration": false,
     "declarationMap": false,
@@ -17,7 +21,8 @@
     "baseUrl": ".",
     "paths": {
       "@db-center/*": ["../../apps/db-center/src/*"],
-      "@hsr/*": ["../../apps/hsr/src/*"]
+      "@hsr/*": ["../../apps/hsr/src/*"],
+      "@planning/*": ["../../apps/planning/src/*"]
     }
   },
   "include": ["src", "next-env.d.ts"],
