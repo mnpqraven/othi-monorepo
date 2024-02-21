@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "ui/primitive";
-import { Root } from "@radix-ui/react-select";
+import type { Root } from "@radix-ui/react-select";
 import type { RelicType } from "@hsr/bindings/RelicConfig";
 import type { RelicSetConfig } from "@hsr/bindings/RelicSetConfig";
 import { useRelicSets } from "@hsr/hooks/queries/useRelicSetList";
@@ -15,9 +15,10 @@ import { img } from "@hsr/lib/utils";
 import type { PrimitiveAtom } from "jotai";
 import { useAtom } from "jotai";
 import Image from "next/image";
+import type { ComponentPropsWithoutRef } from "react";
+import { forwardRef } from "react";
 import { MainstatEditor } from "./MainstatEditor";
 import { RelicLevel } from "./RelicLevel";
-import { ComponentPropsWithoutRef, forwardRef } from "react";
 
 interface Prop {
   atom: PrimitiveAtom<RelicInput>;
@@ -40,8 +41,8 @@ export function RelicSelector({ atom }: Prop) {
 
       <RelicSelect
         onValueChange={updateRelic}
-        value={`${relic.setId}`}
         relics={relicSets?.filter(bySeparateType(relic.type))}
+        value={`${relic.setId}`}
       />
     </div>
   );

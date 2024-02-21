@@ -50,7 +50,9 @@ export const optionRelicSet = (setId: number | undefined) =>
   queryOptions<List<RelicSetConfig>, unknown, RelicSetConfig[]>({
     queryKey: ["relic_set", setId],
     queryFn: () =>
-      setId ? API.relicSet.get({ relicSetId: setId }) : Promise.reject(),
+      setId
+        ? API.relicSet.get({ relicSetId: setId })
+        : Promise.reject(new Error()),
     select: (data) => data.list.sort((a, b) => a.set_id - b.set_id),
     enabled: Boolean(setId),
   });

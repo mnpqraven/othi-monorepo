@@ -11,10 +11,10 @@ export function CharacterCatalogueItem({ chara }: Prop) {
     <div className="flex flex-col gap-2" id="character-card" key={chara.id}>
       <Link href={`/character-db/${chara.id}`}>
         <CharacterCard
-          path={chara.path}
-          name={chara.name}
           element={chara.element}
           imgUrl={url(chara.id)}
+          name={chara.name}
+          path={chara.path}
           rarity={chara.rarity}
         />
       </Link>

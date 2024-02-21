@@ -65,7 +65,7 @@ export function chartOptions({
           },
         },
       },
-      valueFormatter: (value) => `${value.toString()} %`,
+      valueFormatter: (value) => `${value?.toString()} %`,
     },
   };
 }

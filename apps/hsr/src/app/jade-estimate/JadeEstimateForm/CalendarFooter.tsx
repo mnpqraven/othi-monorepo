@@ -48,7 +48,7 @@ function CalendarFooter({ date }: Prop) {
       queryFn: async () =>
         chara?.id
           ? API.character.get({ characterId: chara.id })
-          : Promise.reject(),
+          : Promise.reject(new Error()),
       enabled: Boolean(banner) && Boolean(chara?.id),
     })),
   });
@@ -57,7 +57,9 @@ function CalendarFooter({ date }: Prop) {
     queries: lcs.map((lc) => ({
       queryKey: ["lightConeMetadata", lc?.id],
       queryFn: async () =>
-        lc?.id ? API.lightConeMetadata.get({ lcId: lc.id }) : Promise.reject(),
+        lc?.id
+          ? API.lightConeMetadata.get({ lcId: lc.id })
+          : Promise.reject(new Error()),
       enabled: Boolean(lc) && Boolean(lc?.id),
     })),
   });

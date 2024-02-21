@@ -6,6 +6,6 @@ export const optionLightConePromotion = (lcId: number | undefined) =>
   queryOptions<EquipmentPromotionConfig>({
     queryKey: ["lightConePromotion", lcId],
     queryFn: () =>
-      lcId ? API.lightConePromotion.get({ lcId }) : Promise.reject(),
+      lcId ? API.lightConePromotion.get({ lcId }) : Promise.reject(new Error()),
     enabled: Boolean(lcId),
   });

@@ -7,6 +7,6 @@ export const avatarTraceRouter = router({
     const query = db.query.traces.findMany({
       where: (map, { eq }) => eq(map.avatarId, input.charId),
     });
-    return await query;
+    return query;
   }),
 });

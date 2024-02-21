@@ -20,6 +20,7 @@ interface Prop<TData, TFilter extends string>
   table: Table<TData>;
   options: TFilter[];
   columnKey: keyof TData;
+  placeholder?: string;
 }
 
 export function DataTableMultiSelectExpand<TData, TFilter extends string>({
@@ -46,11 +47,11 @@ export function DataTableMultiSelectExpand<TData, TFilter extends string>({
             <CommandGroup>
               {options.map((option) => {
                 const rowsWithEventName = rows.filter(
-                  (row) => row.getValue(columnKey as string) === option
+                  (row) => row.getValue(columnKey as string) === option,
                 );
 
                 const isSelected = rowsWithEventName.every((row) =>
-                  row.getIsSelected()
+                  row.getIsSelected(),
                 );
 
                 return (
@@ -60,7 +61,7 @@ export function DataTableMultiSelectExpand<TData, TFilter extends string>({
                       // probably will need to pass this filterFn as props for
                       // more complex selectors
                       const filtered = rows.filter(
-                        (row) => row.getValue(columnKey as string) === option
+                        (row) => row.getValue(columnKey as string) === option,
                       );
                       if (filtered.every((row) => row.getIsSelected())) {
                         filtered.forEach((row) => {
@@ -77,7 +78,7 @@ export function DataTableMultiSelectExpand<TData, TFilter extends string>({
                         "border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
                         isSelected
                           ? "bg-primary text-primary-foreground"
-                          : "opacity-50 [&_svg]:invisible"
+                          : "opacity-50 [&_svg]:invisible",
                       )}
                     >
                       <Check className={cn("h-4 w-4")} />

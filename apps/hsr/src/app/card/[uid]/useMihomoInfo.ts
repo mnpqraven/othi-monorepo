@@ -31,11 +31,11 @@ export const optionsMihomoInfo = (
     queryFn: () =>
       uid
         ? getMihomoInfo(
-            uid,
-            lang,
-            isServer ? env.NEXT_PUBLIC_HOST_HSR : undefined
-          )
-        : Promise.reject(),
+          uid,
+          lang,
+          isServer ? env.NEXT_PUBLIC_HOST_HSR : undefined
+        )
+        : Promise.reject(new Error()),
     enabled: Boolean(uid),
   });
 
@@ -113,7 +113,7 @@ export async function getMihomoInfo(
   const response = await fetch(url);
   if (!response.ok) {
     return response.json().then(({ error }: { error: string }) => {
-      return Promise.reject(error);
+      return Promise.reject(new Error(error));
     });
   }
   return response.json() as Promise<MihomoResponse>;

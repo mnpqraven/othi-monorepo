@@ -8,7 +8,7 @@ export const optionsRelic = (setIds: number[] | undefined) =>
   queryOptions<List<RelicConfig>, unknown, RelicConfig[]>({
     queryKey: ["relics", setIds],
     queryFn: () =>
-      setIds ? API.relics.post({ list: setIds }) : Promise.reject(),
+      setIds ? API.relics.post({ list: setIds }) : Promise.reject(new Error()),
     select: (data) => data.list.sort((a, b) => a.set_id - b.set_id),
     enabled: Boolean(setIds),
   });
