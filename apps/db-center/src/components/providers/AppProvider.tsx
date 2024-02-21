@@ -23,9 +23,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient(TANSTACK_CONFIG));
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      transformer: superjson,
-      links: [httpBatchLink({ url: "/api" })],
-    })
+      links: [httpBatchLink({ url: "/api", transformer: superjson })],
+    }),
   );
 
   return (

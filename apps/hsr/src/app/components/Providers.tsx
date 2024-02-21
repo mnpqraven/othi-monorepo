@@ -43,7 +43,6 @@ export function AppProvider({ children, headers }: RootProps) {
   const transport = createTransport();
   const [trpcClient] = useState(() =>
     api.createClient({
-      transformer: superjson,
       links: [
         loggerLink({
           enabled: (op) =>
@@ -53,6 +52,7 @@ export function AppProvider({ children, headers }: RootProps) {
         }),
         unstable_httpBatchStreamLink({
           url: getUrl(),
+          transformer: superjson,
           headers() {
             const heads = new Map(headers);
             heads.set("x-trpc-source", "react");
