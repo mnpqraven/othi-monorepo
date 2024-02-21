@@ -191,16 +191,16 @@ function getDefaultTextValue(
  */
 export function calculateSpread({
   value,
-  spreadData: spread,
+  spreadData,
 }: {
   value: number | undefined;
   spreadData: RelicSubAffixConfig;
 }): { valid: boolean; rolls: number[]; message?: string } {
-  const { property } = spread;
+  const { property } = spreadData;
 
   // 5% correction
-  const absMin = getSpreadValues(spread).minRoll.value * 0.95;
-  const absMax = getSpreadValues(spread).maxRoll.value * 1.05;
+  const absMin = getSpreadValues(spreadData).minRoll.value * 0.95;
+  const absMax = getSpreadValues(spreadData).maxRoll.value * 1.05;
 
   if (!value)
     return {
@@ -223,16 +223,15 @@ export function calculateSpread({
     return {
       valid: false,
       rolls: Array.from(range(0, 5)).fill(0),
-      message: `Please enter value between ${
-        prettyProperty(property, Number(absMin)).prettyValue
-      } and ${prettyProperty(property, absMax * 6).prettyValue}`,
+      message: `Please enter value between ${prettyProperty(property, Number(absMin)).prettyValue
+        } and ${prettyProperty(property, absMax * 6).prettyValue}`,
     };
 
   // INFO: top down strategy
   const toUpdate: number[] = [];
   let tempVal = value;
   while (tempVal > 0) {
-    const maxRoll = getSpreadValues(spread).maxRoll.value;
+    const maxRoll = getSpreadValues(spreadData).maxRoll.value;
     toUpdate.push(tempVal >= maxRoll ? maxRoll : tempVal);
     tempVal -= maxRoll;
   }
@@ -260,9 +259,8 @@ export function calculateSpread({
     rolls,
     message: valid
       ? undefined
-      : `Please enter value between ${
-          prettyProperty(property, absMin * approxRolls).prettyValue
-        } and ${prettyProperty(property, absMax * approxRolls).prettyValue}`,
+      : `Please enter value between ${prettyProperty(property, absMin * approxRolls).prettyValue
+      } and ${prettyProperty(property, absMax * approxRolls).prettyValue}`,
   };
 }
 

@@ -36,7 +36,7 @@ export const LightConeEditorTab = forwardRef<
   );
 
   const { data: charMeta } = trpc.honkai.avatar.by.useQuery(
-    { charId: charId! },
+    { charId: Number(charId) },
     { enabled: Boolean(charId) }
   );
 
