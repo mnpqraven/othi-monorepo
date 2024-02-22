@@ -31,6 +31,10 @@ const config: Config = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -78,7 +82,7 @@ const config: Config = {
   },
   plugins: [
     require("tailwindcss-animate"),
-    plugin(function ({ addUtilities }) {
+    plugin(function({ addUtilities }) {
       addUtilities({
         ".border-skewed": {
           "clip-path": "polygon(10% 0, 100% 0, 90% 100%, 0 100%)",

@@ -8,9 +8,11 @@ type Props = Omit<HTMLAttributes<HTMLButtonElement>, "onClick">;
 
 export const ThemeToggle = forwardRef<HTMLButtonElement, Props>(
   function ThemeToggle({ ...props }, ref) {
-    const { theme, setTheme } = useTheme();
+    const t = useTheme();
+    const { theme, setTheme } = t;
 
     function toggleTheme() {
+      console.log(t);
       setTheme(theme === "light" ? "dark" : "light");
     }
     return (
@@ -26,5 +28,5 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, Props>(
         <span className="sr-only">Toggle theme</span>
       </Button>
     );
-  }
+  },
 );
