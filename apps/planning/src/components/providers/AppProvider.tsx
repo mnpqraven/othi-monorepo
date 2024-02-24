@@ -1,10 +1,10 @@
 "use client";
 
 import { Provider } from "jotai";
+import { DevTools } from "jotai-devtools";
 import type { QueryClientConfig } from "@tanstack/react-query";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
-import { DevTools } from "jotai-devtools";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
 import { TooltipProvider } from "ui/primitive/tooltip";
@@ -23,7 +23,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [httpBatchLink({ url: "/api", transformer: superjson })],
-    }),
+    })
   );
 
   return (
@@ -31,12 +31,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       <TooltipProvider delayDuration={300}>
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
-            <Provider>
-              {children}
+            {children}
 
-              <DevTools isInitialOpen={false} />
-              <ReactQueryDevtools initialIsOpen={false} />
-            </Provider>
+            <DevTools isInitialOpen={false} theme="dark" />
+            <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </trpc.Provider>
       </TooltipProvider>

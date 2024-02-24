@@ -1,4 +1,5 @@
-import { gameStoreAtom, gameStoreSplittedAtom } from "@planning/app/_store";
+"use client";
+
 import { useAtomValue } from "jotai";
 import {
   Accordion,
@@ -7,14 +8,15 @@ import {
   AccordionTrigger,
 } from "ui/primitive";
 import { GameStoreItem } from "./GameStoreItem";
+import { gamesAtom, gamesSplittedAtom } from "../_schema/store";
 
 export function GameStoreList() {
-  const list = useAtomValue(gameStoreAtom);
-  const listAtoms = useAtomValue(gameStoreSplittedAtom);
+  const list = useAtomValue(gamesAtom);
+  const listAtoms = useAtomValue(gamesSplittedAtom);
   return (
     <Accordion type="multiple">
       {listAtoms.map((atom, index) => (
-        <AccordionItem value={`game-${index}`}>
+        <AccordionItem value={`game-${index}`} key={`game-${index}`}>
           <AccordionTrigger>{list.at(index)?.name}</AccordionTrigger>
           <AccordionContent>
             <GameStoreItem atom={atom} key={index} />

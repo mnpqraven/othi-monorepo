@@ -1,56 +1,29 @@
 import { PrimitiveAtom, useAtom } from "jotai";
-import { useForm } from "react-hook-form";
-import {
-  Button,
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-  Toggle,
-} from "ui/primitive";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { addNewGameSchema } from "../_schema/form";
-import { GameStore } from "../_schema/types";
+import { Button, Toggle } from "ui/primitive";
 import { Check, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { GameSchema } from "../_schema/form";
+import { NewGameForm, useNewGameForm } from "./NewGameForm";
 
 interface Prop {
-  atom: PrimitiveAtom<GameStore>;
+  atom: PrimitiveAtom<GameSchema>;
 }
 export function GameStoreItem({ atom }: Prop) {
   const [data, setData] = useAtom(atom);
   const [editMode, setEditMode] = useState(false);
-  const form = useForm<z.TypeOf<typeof addNewGameSchema>>({
-    resolver: zodResolver(addNewGameSchema),
-    defaultValues: data,
-  });
+  const { form } = useNewGameForm({ defaultValues: data });
 
-  function onSave() {}
+  function onSave(values: GameSchema) {
+    setData(values);
+  }
 
   return (
     <div className="flex justify-between">
-      <Form {...form}>
-        <form>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <Input {...field} autoComplete="off" disabled={!editMode} />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
+      <NewGameForm form={form} />
 
       <div className="flex justify-center gap-4">
         {editMode ? (
-          <Button variant="success" onClick={() => onSave()}>
+          <Button variant="success" onClick={() => onSave(form.getValues())}>
             <Check />
           </Button>
         ) : null}
