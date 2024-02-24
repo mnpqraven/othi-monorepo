@@ -3,7 +3,7 @@
 import { Button } from "ui/primitive";
 import { useSetAtom } from "jotai";
 import { GameStoreList } from "./_components/GameStoreList";
-import { GameSchema } from "./_schema/form";
+import type { GameSchema } from "./_schema/form";
 import { addGamesAtom } from "./_schema/store";
 import { NewGameForm, useNewGameForm } from "./_components/NewGameForm";
 

@@ -1,8 +1,9 @@
-import { PrimitiveAtom, useAtom } from "jotai";
+import type { PrimitiveAtom } from "jotai";
+import { useAtom } from "jotai";
 import { Button, Toggle } from "ui/primitive";
 import { Check, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { GameSchema } from "../_schema/form";
+import type { GameSchema } from "../_schema/form";
 import { NewGameForm, useNewGameForm } from "./NewGameForm";
 
 interface Prop {
@@ -23,18 +24,25 @@ export function GameStoreItem({ atom }: Prop) {
 
       <div className="flex justify-center gap-4">
         {editMode ? (
-          <Button variant="success" onClick={() => onSave(form.getValues())}>
+          <Button
+            onClick={() => {
+              onSave(form.getValues());
+            }}
+            variant="success"
+          >
             <Check />
           </Button>
         ) : null}
         <Toggle
-          variant="outline"
+          onClick={() => {
+            setEditMode(!editMode);
+          }}
           pressed={editMode}
-          onClick={() => setEditMode(!editMode)}
+          variant="outline"
         >
           Edit
         </Toggle>
-        <Button variant="outline" className="p-2">
+        <Button className="p-2" variant="outline">
           <Trash2 className="text-destructive h-4 w-4" />
         </Button>
       </div>

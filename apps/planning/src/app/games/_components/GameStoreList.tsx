@@ -7,8 +7,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "ui/primitive";
-import { GameStoreItem } from "./GameStoreItem";
 import { gamesAtom, gamesSplittedAtom } from "../_schema/store";
+import { GameStoreItem } from "./GameStoreItem";
 
 export function GameStoreList() {
   const list = useAtomValue(gamesAtom);
@@ -16,10 +16,11 @@ export function GameStoreList() {
   return (
     <Accordion type="multiple">
       {listAtoms.map((atom, index) => (
-        <AccordionItem value={`game-${index}`} key={`game-${index}`}>
+        // eslint-disable-next-line react/no-array-index-key
+        <AccordionItem key={`game-${index}`} value={`game-${index}`}>
           <AccordionTrigger>{list.at(index)?.name}</AccordionTrigger>
           <AccordionContent>
-            <GameStoreItem atom={atom} key={index} />
+            <GameStoreItem atom={atom} />
           </AccordionContent>
         </AccordionItem>
       ))}

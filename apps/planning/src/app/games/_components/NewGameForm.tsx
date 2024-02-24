@@ -1,4 +1,5 @@
-import { UseFormReturn, useFieldArray, useForm } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import {
   FormField,
   FormItem,
@@ -8,13 +9,11 @@ import {
   Form,
   Button,
 } from "ui/primitive";
-import {
-  GameSchema,
-  gameSchema,
-  gameSchemaDefaultValues,
-} from "../_schema/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { HTMLAttributes, forwardRef } from "react";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
+import { gameSchema, gameSchemaDefaultValues } from "../_schema/form";
+import type { GameSchema } from "../_schema/form";
 
 interface Prop extends HTMLAttributes<HTMLFormElement> {
   defaultValues?: GameSchema;
@@ -30,7 +29,7 @@ export function useNewGameForm(props?: { defaultValues?: GameSchema }) {
   return { form };
 }
 
-export const NewGameForm = forwardRef<HTMLAttributes<HTMLFormElement>, Prop>(
+export const NewGameForm = forwardRef<HTMLFormElement, Prop>(
   function NewGameForm({ disabled, form, ...props }, ref) {
     const { fields, append, remove } = useFieldArray({
       control: form.control,
@@ -38,7 +37,7 @@ export const NewGameForm = forwardRef<HTMLAttributes<HTMLFormElement>, Prop>(
     });
     return (
       <Form {...form}>
-        <form {...props}>
+        <form {...props} ref={ref}>
           <FormField
             control={form.control}
             name="name"
@@ -48,19 +47,24 @@ export const NewGameForm = forwardRef<HTMLAttributes<HTMLFormElement>, Prop>(
                 <Input
                   {...field}
                   autoComplete="off"
-                  disabled={disabled}
                   className="w-72"
+                  disabled={disabled}
                 />
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="button" onClick={() => append({ name: "", type: "" })}>
+          <Button
+            onClick={() => {
+              append({ name: "", type: "" });
+            }}
+            type="button"
+          >
             Add Task
           </Button>
 
           {fields.map((field, index) => (
-            <div key={field.id} className="flex gap-8">
+            <div className="flex gap-8" key={field.id}>
               <FormField
                 control={form.control}
                 name={`tasks.${index}.name`}
@@ -70,14 +74,20 @@ export const NewGameForm = forwardRef<HTMLAttributes<HTMLFormElement>, Prop>(
                     <Input
                       {...field}
                       autoComplete="off"
-                      disabled={disabled}
                       className="w-72"
+                      disabled={disabled}
                     />
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button onClick={() => remove(index)}>Remove</Button>
+              <Button
+                onClick={() => {
+                  remove(index);
+                }}
+              >
+                Remove
+              </Button>
             </div>
           ))}
         </form>

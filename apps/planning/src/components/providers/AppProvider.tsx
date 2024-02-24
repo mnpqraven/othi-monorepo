@@ -1,6 +1,5 @@
 "use client";
 
-import { Provider } from "jotai";
 import { DevTools } from "jotai-devtools";
 import type { QueryClientConfig } from "@tanstack/react-query";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
