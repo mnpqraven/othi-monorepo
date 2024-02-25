@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "ui/primitive";
+import { Button, Card, CardContent, CardHeader, CardTitle } from "ui/primitive";
 import { useSetAtom } from "jotai";
 import { GameStoreList } from "./_components/GameStoreList";
 import type { GameSchema } from "./_schema/form";
@@ -16,11 +16,25 @@ export default function Games() {
   }
 
   return (
-    <div>
-      <NewGameForm form={form} />
-      <Button onClick={form.handleSubmit(onSubmit)}>Add</Button>
+    <div className="flex flex-col gap-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>New Task</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <NewGameForm form={form} />
+          <Button onClick={form.handleSubmit(onSubmit)}>Add</Button>
+        </CardContent>
+      </Card>
 
-      <GameStoreList />
+      <Card>
+        <CardHeader>
+          <CardTitle>Current Tasks</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <GameStoreList />
+        </CardContent>
+      </Card>
     </div>
   );
 }

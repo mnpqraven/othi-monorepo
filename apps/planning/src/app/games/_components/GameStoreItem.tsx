@@ -20,7 +20,7 @@ export function GameStoreItem({ atom }: Prop) {
 
   return (
     <div className="flex justify-between">
-      <NewGameForm form={form} />
+      <NewGameForm disabled={!editMode} form={form} />
 
       <div className="flex justify-center gap-4">
         {editMode ? (
