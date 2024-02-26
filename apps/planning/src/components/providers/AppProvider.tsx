@@ -34,8 +34,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             <Provider>
               {children}
 
-              {/* <DevTools isInitialOpen={false} theme="dark" /> */}
-              {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+              <DevTools isInitialOpen={false} theme="dark" />
+              <ReactQueryDevtools initialIsOpen={false} />
             </Provider>
           </QueryClientProvider>
         </trpc.Provider>
