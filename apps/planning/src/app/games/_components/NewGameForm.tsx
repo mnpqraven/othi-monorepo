@@ -74,32 +74,35 @@ export const NewGameForm = forwardRef<HTMLFormElement, Prop>(
     return (
       <Form {...form}>
         <form {...props} ref={ref}>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <Input
-                  {...field}
-                  autoComplete="off"
-                  className="w-72"
-                  disabled={disabled}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button
-            disabled={disabled}
-            onClick={() => {
-              append({ name: "", type: "DAILY" });
-            }}
-            type="button"
-            variant="outline"
-          >
-            Add Task
-          </Button>
+          <div className="flex items-end gap-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <Input
+                    {...field}
+                    autoComplete="off"
+                    className="w-72"
+                    disabled={disabled}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              disabled={disabled}
+              onClick={() => {
+                append({ name: "", type: "DAILY" });
+              }}
+              type="button"
+              variant="outline"
+            >
+              Add Task
+            </Button>
+          </div>
 
           {fields.map((task, index) => (
             <TaskRow
@@ -110,10 +113,14 @@ export const NewGameForm = forwardRef<HTMLFormElement, Prop>(
               key={task.id}
             />
           ))}
+
+          <span className="text-destructive text-sm font-medium">
+            {form.formState.errors.tasks?.message}
+          </span>
         </form>
       </Form>
     );
-  }
+  },
 );
 
 interface RowProps {
@@ -250,7 +257,8 @@ function TaskRow({ control, index, disabled = false, errs }: RowProps) {
           Remove
         </Button>
       </div>
-      <div className="flex flex-col gap-2 text-destructive">
+
+      <div className="text-destructive flex flex-col gap-2">
         {errMessages.map((message) => (
           <span key={message}>{message}</span>
         ))}

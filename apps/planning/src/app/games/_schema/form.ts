@@ -22,7 +22,9 @@ export const taskSchema = z.object({
 
 export const gameSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
-  tasks: z.array(taskSchema),
+  tasks: z
+    .array(taskSchema)
+    .min(1, { message: "Please add at least one task" }),
 });
 
 export const gameSchemaDefaultValues: GameSchema = {

@@ -1,16 +1,31 @@
 import type { PrimitiveAtom } from "jotai";
-import { useAtom } from "jotai";
-import { Button, Toggle } from "ui/primitive";
+import { useAtom, useSetAtom } from "jotai";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  Toggle,
+  useToast,
+} from "ui/primitive";
 import { Check, Trash2 } from "lucide-react";
 import { useState } from "react";
 import type { GameSchema } from "../_schema/form";
+import { deleteGamesAtom } from "../_schema/store";
 import { NewGameForm, useNewGameForm } from "./NewGameForm";
 
 interface Prop {
   atom: PrimitiveAtom<GameSchema>;
+  index: number;
 }
-export function GameStoreItem({ atom }: Prop) {
+export function GameStoreItem({ atom, index }: Prop) {
   const [data, setData] = useAtom(atom);
+  const { toast } = useToast();
+  const deleteGame = useSetAtom(deleteGamesAtom);
   const [editMode, setEditMode] = useState(false);
   const { form } = useNewGameForm({ defaultValues: data });
 
@@ -24,12 +39,7 @@ export function GameStoreItem({ atom }: Prop) {
 
       <div className="flex justify-center gap-4">
         {editMode ? (
-          <Button
-            onClick={() => {
-              onSave(form.getValues());
-            }}
-            variant="success"
-          >
+          <Button onClick={form.handleSubmit(onSave)} variant="success">
             <Check />
           </Button>
         ) : null}
@@ -42,9 +52,32 @@ export function GameStoreItem({ atom }: Prop) {
         >
           Edit
         </Toggle>
-        <Button className="p-2" variant="outline">
-          <Trash2 className="text-destructive h-4 w-4" />
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="p-2" variant="outline">
+              <Trash2 className="text-destructive h-4 w-4" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you sure?</DialogTitle>
+              <DialogDescription>
+                This action cannot be undone
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                onClick={() => {
+                  deleteGame(index);
+                  toast({ description: "Game deleted", variant: "success" });
+                }}
+                variant="destructive"
+              >
+                Delete
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

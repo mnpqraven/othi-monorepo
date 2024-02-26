@@ -21,9 +21,11 @@ export default function Games() {
         <CardHeader>
           <CardTitle>New Task</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-4">
           <NewGameForm form={form} />
-          <Button onClick={form.handleSubmit(onSubmit)}>Add</Button>
+          <Button className="w-fit" onClick={form.handleSubmit(onSubmit)}>
+            Add
+          </Button>
         </CardContent>
       </Card>
 

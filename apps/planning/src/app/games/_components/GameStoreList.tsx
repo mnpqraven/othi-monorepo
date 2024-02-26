@@ -20,7 +20,7 @@ export function GameStoreList() {
         <AccordionItem key={`game-${index}`} value={`game-${index}`}>
           <AccordionTrigger>{list.at(index)?.name}</AccordionTrigger>
           <AccordionContent className="p-4">
-            <GameStoreItem atom={atom} />
+            <GameStoreItem atom={atom} index={index} />
           </AccordionContent>
         </AccordionItem>
       ))}

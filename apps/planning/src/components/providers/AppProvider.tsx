@@ -10,6 +10,7 @@ import { TooltipProvider } from "ui/primitive/tooltip";
 import { httpBatchLink } from "@trpc/client";
 import { trpc } from "@planning/app/_trpc/client";
 import superjson from "superjson";
+import { Provider } from "jotai";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
   defaultOptions: {
@@ -22,7 +23,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [httpBatchLink({ url: "/api", transformer: superjson })],
-    })
+    }),
   );
 
   return (
@@ -30,10 +31,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       <TooltipProvider delayDuration={300}>
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
-            {children}
+            <Provider>
+              {children}
 
-            <DevTools isInitialOpen={false} theme="dark" />
-            <ReactQueryDevtools initialIsOpen={false} />
+              {/* <DevTools isInitialOpen={false} theme="dark" /> */}
+              {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+            </Provider>
           </QueryClientProvider>
         </trpc.Provider>
       </TooltipProvider>
