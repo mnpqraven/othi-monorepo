@@ -23,6 +23,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
+import { v4 } from "uuid";
 import { gameSchema, gameSchemaDefaultValues } from "../_schema/form";
 import type { GameSchema } from "../_schema/form";
 
@@ -95,7 +96,13 @@ export const NewGameForm = forwardRef<HTMLFormElement, Prop>(
             <Button
               disabled={disabled}
               onClick={() => {
-                append({ name: "", type: "DAILY" });
+                append({
+                  name: "",
+                  type: "DAILY",
+                  id: v4(),
+                  timeMin: 0,
+                  timeHour: 0,
+                });
               }}
               type="button"
               variant="outline"

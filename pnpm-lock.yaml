@@ -625,6 +625,9 @@ importers:
       ulid:
         specifier: ^2.3.0
         version: 2.3.0
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -650,6 +653,9 @@ importers:
       '@types/react-dom':
         specifier: ^18
         version: 18.2.19
+      '@types/uuid':
+        specifier: ^9.0.8
+        version: 9.0.8
       autoprefixer:
         specifier: ^10
         version: 10.4.17(postcss@8.4.35)
@@ -16577,7 +16583,6 @@ packages:
   /uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
-    dev: true
 
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}

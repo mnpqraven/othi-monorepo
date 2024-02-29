@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import { z } from "zod";
 
 export type GameSchema = z.TypeOf<typeof gameSchema>;
@@ -5,6 +6,7 @@ export type TaskSchema = z.TypeOf<typeof taskSchema>;
 
 export const taskSchema = z.object({
   name: z.string(),
+  id: z.string().uuid(),
   type: z.enum(["DAILY", "WEEKLY", "MONTHLY"]),
   weekDay: z.enum(["mon", "tue", "wed", "thu", "fri", "sat", "sun"]).optional(),
   monthDay: z.number().optional(),
@@ -22,6 +24,7 @@ export const taskSchema = z.object({
 
 export const gameSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
+  id: z.string().uuid().default(v4()),
   tasks: z
     .array(taskSchema)
     .min(1, { message: "Please add at least one task" }),
@@ -29,5 +32,6 @@ export const gameSchema = z.object({
 
 export const gameSchemaDefaultValues: GameSchema = {
   name: "",
+  id: v4(),
   tasks: [],
 };

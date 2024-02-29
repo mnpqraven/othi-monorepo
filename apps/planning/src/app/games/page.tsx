@@ -13,6 +13,7 @@ export default function Games() {
 
   function onSubmit(values: GameSchema) {
     addToList(values);
+    form.reset();
   }
 
   return (

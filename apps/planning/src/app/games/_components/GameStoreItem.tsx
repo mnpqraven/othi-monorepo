@@ -31,6 +31,8 @@ export function GameStoreItem({ atom, index }: Prop) {
 
   function onSave(values: GameSchema) {
     setData(values);
+    setEditMode(false);
+    toast({ title: "Success", description: "Task updated" });
   }
 
   return (
