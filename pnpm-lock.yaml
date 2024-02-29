@@ -537,7 +537,7 @@ importers:
         version: 11.0.0-next-beta.289(@trpc/server@11.0.0-next-beta.289)
       '@trpc/next':
         specifier: 11.0.0-next-beta.289
-        version: 11.0.0-next-beta.289(@tanstack/react-query@5.22.2)(@trpc/client@11.0.0-next-beta.289)(@trpc/react-query@11.0.0-next-beta.289)(@trpc/server@11.0.0-next-beta.289)(next@14.0.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 11.0.0-next-beta.289(@tanstack/react-query@5.22.2)(@trpc/client@11.0.0-next-beta.289)(@trpc/react-query@11.0.0-next-beta.289)(@trpc/server@11.0.0-next-beta.289)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/react-query':
         specifier: 11.0.0-next-beta.289
         version: 11.0.0-next-beta.289(@tanstack/react-query@5.22.2)(@trpc/client@11.0.0-next-beta.289)(@trpc/server@11.0.0-next-beta.289)(react-dom@18.2.0)(react@18.2.0)
@@ -567,7 +567,7 @@ importers:
         version: 0.5.1(drizzle-orm@0.28.6)(zod@3.22.4)
       geist:
         specifier: ^1.0.0
-        version: 1.2.2(next@14.0.2)
+        version: 1.2.2(next@14.1.0)
       immer:
         specifier: ^10.0.3
         version: 10.0.3
@@ -587,14 +587,14 @@ importers:
         specifier: ^0.284.0
         version: 0.284.0(react@18.2.0)
       next:
-        specifier: 14.0.2
-        version: 14.0.2(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 14.1.0
+        version: 14.1.0(react-dom@18.2.0)(react@18.2.0)
       next-auth:
         specifier: ^4.23.2
-        version: 4.24.6(next@14.0.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 4.24.6(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
       next-themes:
         specifier: ^0.2.1
-        version: 0.2.1(next@14.0.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 0.2.1(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
       optics-ts:
         specifier: ^2.4.1
         version: 2.4.1
@@ -6289,7 +6289,7 @@ packages:
       '@trpc/server': 11.0.0-next-beta.289
     dev: false
 
-  /@trpc/next@11.0.0-next-beta.289(@tanstack/react-query@5.22.2)(@trpc/client@11.0.0-next-beta.289)(@trpc/react-query@11.0.0-next-beta.289)(@trpc/server@11.0.0-next-beta.289)(next@14.0.2)(react-dom@18.2.0)(react@18.2.0):
+  /@trpc/next@11.0.0-next-beta.289(@tanstack/react-query@5.22.2)(@trpc/client@11.0.0-next-beta.289)(@trpc/react-query@11.0.0-next-beta.289)(@trpc/server@11.0.0-next-beta.289)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-AKCrcbtHh/zFrld6lMG0RC37d/aac4ZisLDjJcViMnEmJXCo0J5nhoZa6f+G9N683NdMWZVmY2rmJidw9IX3QQ==}
     peerDependencies:
       '@tanstack/react-query': ^5.0.0
@@ -6309,7 +6309,7 @@ packages:
       '@trpc/client': 11.0.0-next-beta.289(@trpc/server@11.0.0-next-beta.289)
       '@trpc/react-query': 11.0.0-next-beta.289(@tanstack/react-query@5.22.2)(@trpc/client@11.0.0-next-beta.289)(@trpc/server@11.0.0-next-beta.289)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server': 11.0.0-next-beta.289
-      next: 14.0.2(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)
+      next: 14.1.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -11135,12 +11135,12 @@ packages:
       next: 14.0.1(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /geist@1.2.2(next@14.0.2):
+  /geist@1.2.2(next@14.1.0):
     resolution: {integrity: sha512-uRDrxhvdnPwWJmh+K5+/5LXSKwvJzaYCl9tDXgiBi4hj7hB4K7+n/WLcvJMFs5btvyn0r9OSwCd1s6CmqAsxEw==}
     peerDependencies:
       next: '>=13.2.0 <15'
     dependencies:
-      next: 14.0.2(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)
+      next: 14.1.0(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
   /gensync@1.0.0-beta.2:
@@ -13085,7 +13085,7 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /next-auth@4.24.6(next@14.0.2)(react-dom@18.2.0)(react@18.2.0):
+  /next-auth@4.24.6(next@14.1.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-djQt3ZEaWEIxcsuh3HTW2uuzLfXMRjHH+ugAsichlQSbH4iA5MRcgMA2HvTNvsDTDLh44tyU72+/gWsxgTbAKg==}
     peerDependencies:
       next: ^12.2.5 || ^13 || ^14
@@ -13100,7 +13100,7 @@ packages:
       '@panva/hkdf': 1.1.1
       cookie: 0.5.0
       jose: 4.15.4
-      next: 14.0.2(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)
+      next: 14.1.0(react-dom@18.2.0)(react@18.2.0)
       oauth: 0.9.15
       openid-client: 5.6.4
       preact: 10.19.5

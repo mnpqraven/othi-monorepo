@@ -4,6 +4,7 @@ import type { GameSchema } from "./form";
 
 // NOTE: types in types.ts need to be conformed with form in form.ts
 export const gamesAtom = atomWithStorage<GameSchema[]>("gameList", []);
+gamesAtom.debugLabel = "gamesAtom";
 
 export const addGamesAtom = atom(null, (get, set, update: GameSchema) => {
   set(gamesAtom, [...get(gamesAtom), update]);
