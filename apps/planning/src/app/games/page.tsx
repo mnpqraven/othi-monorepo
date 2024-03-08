@@ -1,15 +1,16 @@
 "use client";
 
 import { Button, Card, CardContent, CardHeader, CardTitle } from "ui/primitive";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { GameStoreList } from "./_components/GameStoreList";
 import type { GameSchema } from "./_schema/form";
-import { addGamesAtom } from "./_schema/store";
+import { addGamesAtom, gamesAtom } from "./_schema/store";
 import { NewGameForm, useNewGameForm } from "./_components/NewGameForm";
 
 export default function Games() {
   const addToList = useSetAtom(addGamesAtom);
   const { form } = useNewGameForm();
+  const games = useAtomValue(gamesAtom);
 
   function onSubmit(values: GameSchema) {
     addToList(values);
@@ -38,6 +39,11 @@ export default function Games() {
           <GameStoreList />
         </CardContent>
       </Card>
+
+      <div>
+        gamesAtom:
+        <pre>{JSON.stringify(games, null, 2)}</pre>
+      </div>
     </div>
   );
 }

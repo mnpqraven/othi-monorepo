@@ -18,7 +18,9 @@ export function GameStoreList() {
       {listAtoms.map((atom, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <AccordionItem key={`game-${index}`} value={`game-${index}`}>
-          <AccordionTrigger>{list.at(index)?.name}</AccordionTrigger>
+          <AccordionTrigger className="font-bold">
+            {list.at(index)?.name}
+          </AccordionTrigger>
           <AccordionContent className="p-4">
             <GameStoreItem atom={atom} index={index} />
           </AccordionContent>

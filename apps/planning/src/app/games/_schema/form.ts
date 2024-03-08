@@ -9,7 +9,7 @@ export const taskSchema = z.object({
   id: z.string().uuid(),
   type: z.enum(["DAILY", "WEEKLY", "MONTHLY"]),
   weekDay: z.enum(["mon", "tue", "wed", "thu", "fri", "sat", "sun"]).optional(),
-  monthDay: z.number().optional(),
+  monthDay: z.coerce.number().min(0).max(24).optional(),
   timeHour: z.coerce
     .number()
     .min(0, { message: "Hour must be between 0 and 24" })

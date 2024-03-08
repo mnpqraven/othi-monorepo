@@ -75,7 +75,7 @@ export const NewGameForm = forwardRef<HTMLFormElement, Prop>(
     return (
       <Form {...form}>
         <form {...props} ref={ref}>
-          <div className="flex items-end gap-4">
+          <div className="mb-4 flex items-end gap-4">
             <FormField
               control={form.control}
               name="name"
@@ -151,7 +151,7 @@ function TaskRow({ control, index, disabled = false, errs }: RowProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-8">
+      <div className="flex items-end gap-8">
         <FormField
           control={control}
           name={`tasks.${index}.name`}
@@ -222,6 +222,7 @@ function TaskRow({ control, index, disabled = false, errs }: RowProps) {
             )}
           />
         ) : null}
+
         {currentTask?.type === "MONTHLY" ? (
           <FormField
             control={control}
@@ -229,37 +230,50 @@ function TaskRow({ control, index, disabled = false, errs }: RowProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Day</FormLabel>
-                <Input {...field} disabled={disabled} />
+                <Input
+                  {...field}
+                  className="w-36"
+                  disabled={disabled}
+                  max={31}
+                  min={0}
+                  type="number"
+                />
               </FormItem>
             )}
           />
         ) : null}
 
-        <FormField
-          control={control}
-          name={`tasks.${index}.timeHour`}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>HH</FormLabel>
-              <Input {...field} className="w-12" disabled={disabled} />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={`tasks.${index}.timeMin`}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>MM</FormLabel>
-              <Input {...field} className="w-12" disabled={disabled} />
-            </FormItem>
-          )}
-        />
+        {currentTask?.type === "DAILY" ? (
+          <>
+            <FormField
+              control={control}
+              name={`tasks.${index}.timeHour`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>HH</FormLabel>
+                  <Input {...field} className="w-14" disabled={disabled} />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name={`tasks.${index}.timeMin`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>MM</FormLabel>
+                  <Input {...field} className="w-14" disabled={disabled} />
+                </FormItem>
+              )}
+            />
+          </>
+        ) : null}
+
         <Button
           disabled={disabled}
           onClick={() => {
             remove(index);
           }}
+          variant="destructive"
         >
           Remove
         </Button>
