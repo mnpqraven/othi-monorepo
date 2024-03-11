@@ -3,6 +3,7 @@ import type {
   FieldError,
   FieldErrorsImpl,
   Merge,
+  UseFieldArrayRemove,
   UseFormReturn,
 } from "react-hook-form";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
@@ -24,8 +25,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
 import { v4 } from "uuid";
-import { gameSchema, gameSchemaDefaultValues } from "../_schema/form";
 import type { GameSchema } from "../_schema/form";
+import { gameSchema, gameSchemaDefaultValues } from "../_schema/form";
+import { Weekdays } from "../_schema/types";
 
 interface Prop extends HTMLAttributes<HTMLFormElement> {
   defaultValues?: GameSchema;
@@ -33,8 +35,8 @@ interface Prop extends HTMLAttributes<HTMLFormElement> {
   form: UseFormReturn<GameSchema>;
 }
 
-interface Option {
-  value: string;
+interface Option<T = string> {
+  value: T;
   label: string;
 }
 
@@ -43,14 +45,14 @@ const frequencyOptions: Option[] = [
   { value: "WEEKLY", label: "Weekly" },
   { value: "MONTHLY", label: "Monthly" },
 ];
-const dayOptions: Option[] = [
-  { value: "mon", label: "Monday" },
-  { value: "tue", label: "Tuesday" },
-  { value: "wed", label: "Wednesday" },
-  { value: "thu", label: "Thursday" },
-  { value: "fri", label: "Friday" },
-  { value: "sat", label: "Saturday" },
-  { value: "sun", label: "Sunday" },
+const dayOptions: Option<Weekdays>[] = [
+  { value: Weekdays.Mon, label: "Monday" },
+  { value: Weekdays.Tue, label: "Tuesday" },
+  { value: Weekdays.Wed, label: "Wednesday" },
+  { value: Weekdays.Thu, label: "Thursday" },
+  { value: Weekdays.Fri, label: "Friday" },
+  { value: Weekdays.Sat, label: "Saturday" },
+  { value: Weekdays.Sun, label: "Sunday" },
 ];
 
 export function useNewGameForm(props?: { defaultValues?: GameSchema }) {
@@ -63,7 +65,7 @@ export function useNewGameForm(props?: { defaultValues?: GameSchema }) {
 
 export const NewGameForm = forwardRef<HTMLFormElement, Prop>(
   function NewGameForm({ disabled, form, ...props }, ref) {
-    const { fields, append } = useFieldArray({
+    const { fields, append, remove } = useFieldArray({
       control: form.control,
       name: "tasks",
     });
@@ -118,6 +120,7 @@ export const NewGameForm = forwardRef<HTMLFormElement, Prop>(
               errs={errs(index)}
               index={index}
               key={task.id}
+              removeFn={remove}
             />
           ))}
 
@@ -135,15 +138,17 @@ interface RowProps {
   index: number;
   disabled?: boolean;
   errs?: Merge<FieldError, FieldErrorsImpl<GameSchema["tasks"][number]>>;
+  removeFn: UseFieldArrayRemove;
 }
-function TaskRow({ control, index, disabled = false, errs }: RowProps) {
+function TaskRow({
+  control,
+  index,
+  disabled = false,
+  errs,
+  removeFn,
+}: RowProps) {
   const { tasks } = useWatch({ control });
   const currentTask = tasks?.at(index);
-
-  const { remove } = useFieldArray({
-    control,
-    name: "tasks",
-  });
 
   const errMessages = errs
     ? Object.values(errs).map((e: FieldError) => e.message)
@@ -191,6 +196,27 @@ function TaskRow({ control, index, disabled = false, errs }: RowProps) {
                   ))}
                 </SelectContent>
               </Select>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name={`tasks.${index}.timeHour`}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>HH</FormLabel>
+              <Input {...field} className="w-14" disabled={disabled} />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={`tasks.${index}.timeMin`}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>MM</FormLabel>
+              <Input {...field} className="w-14" disabled={disabled} />
             </FormItem>
           )}
         />
@@ -243,36 +269,12 @@ function TaskRow({ control, index, disabled = false, errs }: RowProps) {
           />
         ) : null}
 
-        {currentTask?.type === "DAILY" ? (
-          <>
-            <FormField
-              control={control}
-              name={`tasks.${index}.timeHour`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>HH</FormLabel>
-                  <Input {...field} className="w-14" disabled={disabled} />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name={`tasks.${index}.timeMin`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>MM</FormLabel>
-                  <Input {...field} className="w-14" disabled={disabled} />
-                </FormItem>
-              )}
-            />
-          </>
-        ) : null}
-
         <Button
           disabled={disabled}
           onClick={() => {
-            remove(index);
+            removeFn(index);
           }}
+          type="button"
           variant="destructive"
         >
           Remove

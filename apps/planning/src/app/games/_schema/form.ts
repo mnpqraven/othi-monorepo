@@ -1,5 +1,6 @@
 import { v4 } from "uuid";
 import { z } from "zod";
+import { Weekdays } from "./types";
 
 export type GameSchema = z.TypeOf<typeof gameSchema>;
 export type TaskSchema = z.TypeOf<typeof taskSchema>;
@@ -8,7 +9,7 @@ export const taskSchema = z.object({
   name: z.string(),
   id: z.string().uuid(),
   type: z.enum(["DAILY", "WEEKLY", "MONTHLY"]),
-  weekDay: z.enum(["mon", "tue", "wed", "thu", "fri", "sat", "sun"]).optional(),
+  weekDay: z.nativeEnum(Weekdays).optional(),
   monthDay: z.coerce.number().min(0).max(24).optional(),
   timeHour: z.coerce
     .number()

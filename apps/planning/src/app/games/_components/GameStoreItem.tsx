@@ -28,6 +28,7 @@ export function GameStoreItem({ atom, index }: Prop) {
   const deleteGame = useSetAtom(deleteGamesAtom);
   const [editMode, setEditMode] = useState(false);
   const { form } = useNewGameForm({ defaultValues: data });
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   function onSave(values: GameSchema) {
     setData(values);
@@ -54,7 +55,7 @@ export function GameStoreItem({ atom, index }: Prop) {
         >
           Edit
         </Toggle>
-        <Dialog>
+        <Dialog onOpenChange={setDeleteOpen} open={deleteOpen}>
           <DialogTrigger asChild>
             <Button className="p-2" variant="outline">
               <Trash2 className="text-destructive h-4 w-4" />
@@ -72,6 +73,7 @@ export function GameStoreItem({ atom, index }: Prop) {
                 onClick={() => {
                   deleteGame(index);
                   toast({ description: "Game deleted", variant: "success" });
+                  setDeleteOpen(false);
                 }}
                 variant="destructive"
               >

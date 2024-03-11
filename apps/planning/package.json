@@ -23,6 +23,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "database": "workspace:*",
+    "dayjs": "^1.11.10",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.28.6",
     "drizzle-zod": "^0.5.1",
