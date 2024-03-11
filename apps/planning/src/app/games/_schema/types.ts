@@ -1,11 +1,7 @@
-export interface GameStore {
-  name: string;
-  tasks: Task[];
-}
-export interface Task {
-  name: string;
-  type: "daily" | "weekly";
-}
+import { z } from "zod";
+
+export const TaskType = z.enum(["DAILY", "WEEKLY", "MONTHLY"]);
+export type TaskType = z.TypeOf<typeof TaskType>;
 
 export enum Weekdays {
   Mon = "mon",

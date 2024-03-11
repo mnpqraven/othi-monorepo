@@ -33,7 +33,7 @@ export default function Games() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Current Tasks</CardTitle>
+          <CardTitle>Current Games</CardTitle>
         </CardHeader>
         <CardContent>
           <GameStoreList />

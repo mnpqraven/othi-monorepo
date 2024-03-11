@@ -10,10 +10,8 @@ const ONE_MONTH_UNIX = ONE_DAY_UNIX * dayjs().daysInMonth();
 export function useTime() {
   const gamesLib = useAtomValue(gamesAtom);
 
-  function timeById({ taskId, gameId }: { taskId: string; gameId: string }) {
-    const task = gamesLib
-      .find((e) => e.id === gameId)
-      ?.tasks.find((e) => e.id === taskId);
+  function timeById({ taskId }: { taskId: string }) {
+    const task = gamesLib.flatMap((e) => e.tasks).find((e) => e.id === taskId);
 
     if (task) {
       const rnUnix = new Date().getTime();

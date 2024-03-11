@@ -6,30 +6,24 @@ import { ordinalSuffix, weekdayLabel } from "@planning/app/games/_schema/types";
 import { modifyTrackerAtom, taskTrackerAtom } from "../_schema/store";
 
 interface Prop {
-  gameId: string;
-  tasks: TaskSchema[];
-  type: "DAILY" | "WEEKLY" | "MONTHLY";
+  tasks: (TaskSchema & { gameName?: string })[];
+  showGameDetail?: boolean;
 }
-export function TaskChecklist({ tasks, type, gameId }: Prop) {
+export function TaskChecklist({ tasks, showGameDetail = false }: Prop) {
   const updateTask = useSetAtom(modifyTrackerAtom);
   // TODO: use optics to optimize re-rendering
   const storageData = useAtomValue(taskTrackerAtom);
   const { timeById } = useTime();
 
-  const sorted =
-    type === "DAILY"
-      ? tasks.sort((a, b) => {
-        if (a.timeHour === b.timeHour)
-          return (a.timeMin ?? 0) - (b.timeMin ?? 0);
-        return (a.timeHour ?? 0) - (b.timeHour ?? 0);
-      })
-      : tasks;
+  const sorted = tasks.sort((a, b) => {
+    if (a.timeHour === b.timeHour) return (a.timeMin ?? 0) - (b.timeMin ?? 0);
+    return (a.timeHour ?? 0) - (b.timeHour ?? 0);
+  });
 
   function onStatusChange(
     checked: boolean | "indeterminate",
     task: GameSchema["tasks"][number],
   ) {
-    // if (checked === "indeterminate") return;
     if (checked) {
       updateTask({ type: "ADD", data: { id: task.id, done: true } });
     } else {
@@ -50,22 +44,24 @@ export function TaskChecklist({ tasks, type, gameId }: Prop) {
               }}
             />
             <label className="flex items-center gap-2" htmlFor={task.id}>
-              <Badge>{timeById({ taskId: task.id, gameId })}</Badge>
+              <Badge>{timeById({ taskId: task.id })}</Badge>
               {task.name}
             </label>
           </div>
 
-          {task.type === "WEEKLY" ? (
-            <Badge className="mr-4" variant="outline">
-              {weekdayLabel(task.weekDay)}
-            </Badge>
-          ) : null}
+          <div className="flex items-center gap-2">
+            {task.type === "WEEKLY" ? (
+              <Badge variant="outline">{weekdayLabel(task.weekDay)}</Badge>
+            ) : null}
 
-          {task.type === "MONTHLY" && task.monthDay ? (
-            <Badge className="mr-4" variant="outline">
-              {ordinalSuffix(task.monthDay)}
-            </Badge>
-          ) : null}
+            {task.type === "MONTHLY" && task.monthDay ? (
+              <Badge variant="outline">{ordinalSuffix(task.monthDay)}</Badge>
+            ) : null}
+
+            {showGameDetail ? (
+              <Badge variant="outline">{task.gameName}</Badge>
+            ) : null}
+          </div>
         </div>
       ))}
     </div>
