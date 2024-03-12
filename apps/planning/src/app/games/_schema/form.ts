@@ -1,5 +1,6 @@
 import { v4 } from "uuid";
 import { z } from "zod";
+import type { Option } from "@planning/lib/generics";
 import { TaskType, Weekdays } from "./types";
 
 export type GameSchema = z.TypeOf<typeof gameSchema>;
@@ -36,3 +37,19 @@ export const gameSchemaDefaultValues: GameSchema = {
   id: v4(),
   tasks: [],
 };
+
+export const frequencyOptions: Option[] = [
+  { value: "DAILY", label: "Daily" },
+  { value: "WEEKLY", label: "Weekly" },
+  { value: "MONTHLY", label: "Monthly" },
+];
+
+export const dayOptions: Option<Weekdays>[] = [
+  { value: Weekdays.Mon, label: "Monday" },
+  { value: Weekdays.Tue, label: "Tuesday" },
+  { value: Weekdays.Wed, label: "Wednesday" },
+  { value: Weekdays.Thu, label: "Thursday" },
+  { value: Weekdays.Fri, label: "Friday" },
+  { value: Weekdays.Sat, label: "Saturday" },
+  { value: Weekdays.Sun, label: "Sunday" },
+];
