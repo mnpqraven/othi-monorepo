@@ -12,36 +12,32 @@ export function GameChecklistType() {
 
   interface ChecklistBlock {
     label: string;
-    type: "DAILY" | "WEEKLY" | "MONTHLY";
     tasks: (TaskSchema & { gameName: string })[];
   }
   const types: ChecklistBlock[] = [
     {
       label: "Daily",
-      type: "DAILY",
       tasks: tasks.filter((e) => e.type === "DAILY"),
     },
     {
       label: "Weekly",
-      type: "WEEKLY",
       tasks: tasks.filter((e) => e.type === "WEEKLY"),
     },
     {
       label: "Monthly",
-      type: "MONTHLY",
       tasks: tasks.filter((e) => e.type === "MONTHLY"),
     },
   ];
 
   return (
     <div className="flex flex-col gap-8">
-      {types.map(({ label, tasks, type }) => (
+      {types.map(({ label, tasks }) => (
         <Card key={label}>
           <CardHeader>
             <CardTitle>{label}</CardTitle>
           </CardHeader>
           <CardContent>
-            <TaskChecklist showGameDetail tasks={tasks} type={type} />
+            <TaskChecklist showGameDetail tasks={tasks} />
           </CardContent>
         </Card>
       ))}

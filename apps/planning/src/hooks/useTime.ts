@@ -3,29 +3,49 @@ import { useAtomValue } from "jotai";
 import dayjs from "dayjs";
 import type { Weekdays } from "@planning/app/games/_schema/types";
 import { WeekdayToInt } from "@planning/app/games/_schema/types";
+import { useCallback, useEffect, useState } from "react";
 
 const ONE_DAY_UNIX = 86_400_000;
 const ONE_MONTH_UNIX = ONE_DAY_UNIX * dayjs().daysInMonth();
 
-export function useTime() {
+interface Prop {
+  interval: number;
+}
+export function useTime(props?: Prop) {
   const gamesLib = useAtomValue(gamesAtom);
+  const [currentTime, setCurrentTime] = useState(new Date().getTime());
 
-  function timeById({ taskId }: { taskId: string }) {
-    const task = gamesLib.flatMap((e) => e.tasks).find((e) => e.id === taskId);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().getTime());
+    }, props?.interval ?? 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [props?.interval]);
 
-    if (task) {
-      const rnUnix = new Date().getTime();
-      const { timeMin, timeHour, weekDay, monthDay } = task;
-      switch (task.type) {
-        case "DAILY":
-          return solveTimeDaily(rnUnix, timeHour, timeMin);
-        case "WEEKLY":
-          return solveTimeWeekly(rnUnix, weekDay, timeHour, timeMin);
-        case "MONTHLY":
-          return solveTimeMonthly(rnUnix, monthDay, timeHour, timeMin);
+  const timeById = useCallback(
+    ({ taskId }: { taskId: string }) => {
+      const task = gamesLib
+        .flatMap((e) => e.tasks)
+        .find((e) => e.id === taskId);
+
+      if (task) {
+        // const rnUnix = new Date().getTime();
+        const rnUnix = currentTime;
+        const { timeMin, timeHour, weekDay, monthDay } = task;
+        switch (task.type) {
+          case "DAILY":
+            return solveTimeDaily(rnUnix, timeHour, timeMin);
+          case "WEEKLY":
+            return solveTimeWeekly(rnUnix, weekDay, timeHour, timeMin);
+          case "MONTHLY":
+            return solveTimeMonthly(rnUnix, monthDay, timeHour, timeMin);
+        }
       }
-    }
-  }
+    },
+    [currentTime, gamesLib],
+  );
   return { timeById };
 }
 
@@ -36,6 +56,7 @@ function solveTimeDaily(rnUnix: number, cfgHour?: number, cfgMin?: number) {
   const nextDate = new Date();
   nextDate.setHours(cfgHour);
   nextDate.setMinutes(cfgMin);
+  nextDate.setSeconds(0);
   const nextDateUnix = nextDate.getTime() + ONE_DAY_UNIX;
 
   return timeDiffToString(rnUnix, nextDateUnix);
@@ -53,7 +74,8 @@ function solveTimeWeekly(
   const nextDate = dayjs()
     .day(WeekdayToInt(cfgWeekday))
     .hour(cfgHour)
-    .minute(cfgMin);
+    .minute(cfgMin)
+    .second(0);
   const nextDateUnix = nextDate.unix() * 1000;
 
   return timeDiffToString(rnUnix, nextDateUnix);
@@ -75,6 +97,7 @@ function solveTimeMonthly(
   nextDate.setDate(cfgMonthday);
   nextDate.setHours(cfgHour);
   nextDate.setMinutes(cfgMin);
+  nextDate.setSeconds(0);
   const nextDateUnix =
     nextDate.getTime() > rnUnix
       ? nextDate.getTime()

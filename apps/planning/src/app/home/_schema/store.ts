@@ -6,7 +6,7 @@ export const groupModeAtom = atom<GroupMode>("TYPE");
 
 interface Task {
   id: string;
-  done: boolean;
+  done?: boolean;
 }
 interface TaskTracker {
   lastUpdated: number; // unix
@@ -39,13 +39,13 @@ export const modifyTrackerAtom = atom(
     } else {
       // NOTE: remove
       const { id } = payload;
-      const nextTask = get(taskTrackerAtom).tasks.map((task) =>
-        task.id === id ? { ...task, done: false } : task,
+      const nextTasks = get(taskTrackerAtom).tasks.filter(
+        (task) => task.id !== id,
       );
       set(taskTrackerAtom, {
         ...current,
         lastUpdated: new Date().getTime(),
-        tasks: nextTask,
+        tasks: nextTasks,
       });
     }
   },
