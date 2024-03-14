@@ -31,12 +31,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       <TooltipProvider delayDuration={300}>
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
-            {/* <Provider> */}
-            {children}
+            <Provider>
+              {children}
 
-            <DevTools isInitialOpen={false} theme="dark" />
-            <ReactQueryDevtools initialIsOpen={false} />
-            {/* </Provider> */}
+              <DevTools isInitialOpen={false} theme="dark" />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </Provider>
           </QueryClientProvider>
         </trpc.Provider>
       </TooltipProvider>

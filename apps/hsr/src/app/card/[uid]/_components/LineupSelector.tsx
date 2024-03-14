@@ -29,7 +29,7 @@ export const LineupSelector = forwardRef<HTMLDivElement, Props>(
             pressed={index === selectIndex}
           >
             <Image
-              alt=""
+              alt={`char-${index}`}
               className="cursor-pointer rounded-full border"
               height={64}
               onClick={() => {

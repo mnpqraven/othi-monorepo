@@ -5,19 +5,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "ui/primitive/tooltip";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useHydrateAtoms } from "jotai/utils";
-import { queryClientAtom } from "jotai-tanstack-query";
 import { Provider } from "jotai";
 import { createTransport, TransportProvider } from "protocol/rpc";
 import { useState } from "react";
-import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
+import { httpBatchLink, loggerLink } from "@trpc/client";
 import superjson from "superjson";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { DevTools } from "jotai-devtools";
 import type { AppRouter } from "protocol/trpc";
 import { createTRPCReact } from "@trpc/react-query";
 import { trpc } from "../_trpc/client";
-import { getUrl } from "../_trpc/shared";
+import { getUrl, transformer } from "../_trpc/shared";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
   defaultOptions: {
@@ -32,15 +30,9 @@ interface RootProps {
 
 export const api = createTRPCReact<AppRouter>();
 
-const queryClient = new QueryClient(TANSTACK_CONFIG);
-
-const HydrateAtoms = ({ children }: { children: React.ReactNode }) => {
-  useHydrateAtoms([[queryClientAtom, queryClient]]);
-  return children;
-};
-
 export function AppProvider({ children, headers }: RootProps) {
   const transport = createTransport();
+  const [queryClient] = useState(() => new QueryClient(TANSTACK_CONFIG));
   const [trpcClient] = useState(() =>
     api.createClient({
       links: [
@@ -50,9 +42,9 @@ export function AppProvider({ children, headers }: RootProps) {
             process.env.NODE_ENV === "development" ||
             (op.direction === "down" && op.result instanceof Error),
         }),
-        unstable_httpBatchStreamLink({
+        httpBatchLink({
+          transformer,
           url: getUrl(),
-          transformer: superjson,
           headers() {
             const heads = new Map(headers);
             heads.set("x-trpc-source", "react");
@@ -70,9 +62,9 @@ export function AppProvider({ children, headers }: RootProps) {
           <TransportProvider transport={transport}>
             <QueryClientProvider client={queryClient}>
               <ReactQueryStreamedHydration transformer={superjson}>
-                <Provider>
-                  <HydrateAtoms>{children}</HydrateAtoms>
-                </Provider>
+                {/* <Provider> */}
+                {children}
+                {/* </Provider> */}
               </ReactQueryStreamedHydration>
 
               <DevTools isInitialOpen={false} theme="dark" />
