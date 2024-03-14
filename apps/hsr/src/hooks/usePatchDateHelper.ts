@@ -3,6 +3,9 @@ import { BASE_1_0 } from "@hsr/lib/constants";
 const THREE_WEEKS = 86400000 * 21;
 const SIX_WEEKS = 86400000 * 42;
 
+// NOTE: needs to be synced with nas-ws/src-rust/routes/honkai/mod.rs
+const VERSION_LIMIT = [{ major: 1, limit: 6 }];
+
 export interface PatchDate {
   startDate: Date;
   midDate: Date;
@@ -29,10 +32,18 @@ export function usePatchDateHelper() {
     patch.startDate.setDate(patch.startDate.getDate() + 42);
     patch.midDate = new Date(patch.midDate.getTime() + SIX_WEEKS);
     patch.endDate = new Date(patch.endDate.getTime() + SIX_WEEKS);
-    patch.version = {
-      major: patch.version.major,
-      minor: patch.version.minor + 1,
-    };
+    const find = VERSION_LIMIT.find((e) => e.major === patch.version.major);
+    if (find && find.limit === patch.version.minor) {
+      patch.version = {
+        major: patch.version.major + 1,
+        minor: 0,
+      };
+    } else {
+      patch.version = {
+        major: patch.version.major,
+        minor: patch.version.minor + 1,
+      };
+    }
     return patch;
   }
 

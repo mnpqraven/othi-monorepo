@@ -3,6 +3,7 @@ use crate::{
     routes::honkai::{
         dm_api::{character::types::AvatarConfig, types::SkillType},
         traits::DbData,
+        VERSION_LIMIT,
     },
 };
 use chrono::{DateTime, Duration, TimeZone, Utc};
@@ -148,7 +149,25 @@ impl Patch {
         self.date_start += Duration::weeks(6);
         self.date_2nd_banner += Duration::weeks(6);
         self.date_end += Duration::weeks(6);
-        self.version.0.minor += 1;
+
+        // incrementing version
+        let limit_config_current = VERSION_LIMIT
+            .iter()
+            .find(|(major_ver, _)| major_ver.eq(&self.version.0.major));
+        match limit_config_current {
+            Some((_, major_limit)) => match self.version.0.minor.eq(major_limit) {
+                true => {
+                    self.version.0.major += 1;
+                    self.version.0.minor = 0;
+                }
+                false => {
+                    self.version.0.minor += 1;
+                }
+            },
+            None => {
+                self.version.0.minor += 1;
+            }
+        }
     }
 
     /// Creates a patch
@@ -220,12 +239,33 @@ impl Patch {
         Ok(amount)
     }
 
-    pub fn generate(index: u32, info: Option<Vec<(&str, Version)>>) -> Vec<Self> {
+    pub fn generate(
+        index: u32,
+        info: Option<Vec<(&str, Version)>>,
+        major_limit: Vec<(u64, u64)>,
+    ) -> Vec<Self> {
         let mut patches = vec![];
         let mut current = Patch::current();
         let PatchVersion(mut next_version) = current.version.clone();
+        let major_limit_find = major_limit
+            .iter()
+            .find(|(major, _)| major.eq(&next_version.major));
+
         for _ in 0..index {
-            next_version.minor += 1;
+            match major_limit_find {
+                Some((some_major, some_limit)) => {
+                    if next_version.minor.eq(some_limit) {
+                        next_version.major = *some_major;
+                        next_version.minor = 1;
+                    } else {
+                        next_version.minor += 1;
+                    }
+                }
+                None => {
+                    next_version.minor += 1;
+                }
+            }
+
             let name: String = match info.clone() {
                 Some(info) => match info.iter().find(|(_, version)| version.eq(&next_version)) {
                     Some((name, _)) => name.to_string(),
