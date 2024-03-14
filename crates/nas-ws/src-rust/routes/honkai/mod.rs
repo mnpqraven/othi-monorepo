@@ -22,6 +22,10 @@ use self::dm_api::{atlas, character, character_skill};
 use axum::routing::{get, post};
 use axum::Router;
 
+/// (major version, upper limit)
+/// E.g: 1.x only runs up to 1.6 (1,6)
+pub const VERSION_LIMIT: [(u64, u64); 1] = [(1, 6)];
+
 pub fn honkai_routes() -> Router {
     Router::new()
         .route("/jade_estimate", post(jade_estimate::handle))

@@ -37,6 +37,8 @@ pub enum ItemSubType {
     Material,
     MuseumExhibit,
     RelicSetShowOnly,
+    TravelBrochurePaster,
+    ChessRogueDiceSurface,
     MuseumStuff,
     Formula,
     Mission,

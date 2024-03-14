@@ -23,7 +23,9 @@ interface Prop {
 }
 
 function CalendarFooter({ date }: Prop) {
+  // rust api
   const { futurePatchDateList } = useFuturePatchDateList();
+  // edge config store
   const { data: bannerList } = trpc.honkai.banner.patchList.useQuery(
     undefined,
     { initialData: [] }

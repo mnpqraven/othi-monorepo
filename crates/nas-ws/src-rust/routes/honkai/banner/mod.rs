@@ -1,5 +1,5 @@
 use self::types::Banner;
-use super::patch::types::PatchBanner;
+use super::{patch::types::PatchBanner, VERSION_LIMIT};
 use crate::{
     handler::error::WorkerError,
     routes::{
@@ -38,7 +38,7 @@ pub async fn patch_banner_list() -> Result<Json<List<PatchBanner>>, WorkerError>
         })
         .collect();
 
-    let patches = Patch::generate(5, None);
+    let patches = Patch::generate(5, None, VERSION_LIMIT.to_vec());
     let future_banners = PatchBanner::from_patches(patches, banner_info).await?;
     info!("Total elapsed: {:.2?}", now.elapsed());
     Ok(Json(future_banners.into()))
@@ -53,8 +53,12 @@ pub async fn patch_date_list() -> Result<Json<List<Patch>>, WorkerError> {
             Version::parse("1.3.0")?,
         ),
         ("Jolted Awake From a Winter Dream", Version::parse("1.4.0")?),
+        ("The Crepuscule Zone", Version::parse("1.5.0")?),
+        ("Crown of the Mundane and Divine", Version::parse("1.6.0")?),
+        ("If One Dreams At Midnight", Version::parse("2.0.0")?),
+        ("Into the Yawning Chasm", Version::parse("2.1.0")?),
     ];
 
-    let future_patches = Patch::generate(5, Some(patches_info));
+    let future_patches = Patch::generate(5, Some(patches_info), VERSION_LIMIT.to_vec());
     Ok(Json(future_patches.into()))
 }
