@@ -3,6 +3,7 @@ import { atomWithStorage } from "jotai/utils";
 
 export type GroupMode = "GAME" | "TYPE";
 export const groupModeAtom = atom<GroupMode>("TYPE");
+groupModeAtom.debugLabel = "groupModeAtom";
 
 interface Task {
   id: string;
@@ -17,6 +18,7 @@ export const taskTrackerAtom = atomWithStorage<TaskTracker>("taskTracker", {
   lastUpdated: new Date().getTime(),
   tasks: [],
 });
+taskTrackerAtom.debugLabel = "taskTrackerAtom";
 
 type ModifyReducer =
   | { type: "ADD"; data: Task }
