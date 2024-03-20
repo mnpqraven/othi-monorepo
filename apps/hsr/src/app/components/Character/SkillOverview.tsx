@@ -20,9 +20,9 @@ export function SkillOverview({ characterId, selectedId, children }: Prop) {
     withSkill: true,
   });
 
-  const skills =
-    character?.avatarToSkills.map((e) => (e as { skill: SkillSchema }).skill) ??
-    [];
+  const skills = character.avatarToSkills.map(
+    (e) => (e as { skill: SkillSchema }).skill
+  );
 
   const selectedSkill = skills.find((e) => e.id === selectedId);
 
@@ -48,7 +48,7 @@ export function SkillOverview({ characterId, selectedId, children }: Prop) {
             <h3 className="text-lg font-semibold leading-none tracking-tight">
               <span>{selectedSkill.name}</span>
               {selectedSkill.attackType === "Ultra" &&
-                ` (${character?.spneed} Energy)`}
+                ` (${character.spneed} Energy)`}
             </h3>
             {(selectedSkill.paramList ?? []).length > 1 ? (
               <div className="flex items-center gap-4">
