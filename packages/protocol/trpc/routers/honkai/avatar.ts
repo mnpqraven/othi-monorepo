@@ -43,15 +43,16 @@ export const avatarRouter = router({
         withSignature: z.custom<true | undefined>().optional(),
       }),
     )
-    .query(({ input }) => {
+    .query(async ({ input }) => {
       const { charId, withSignature, withSkill } = input;
-      const query = db.query.avatars.findFirst({
+      const query = await db.query.avatars.findFirst({
         where: (map, { eq }) => eq(map.id, charId),
         with: {
           avatarToSkills: withSkill ? { with: { skill: true } } : undefined,
           signature: withSignature ? { with: { lightCone: true } } : undefined,
         },
       });
+      if (!query) throw new Error(`Resource ID ${charId} not found`);
 
       return query;
     }),

@@ -1,6 +1,5 @@
 use self::{
-    eidolon::AvatarRankConfig, promotion_config::AvatarPromotionConfig,
-    types::AvatarConfig,
+    eidolon::AvatarRankConfig, promotion_config::AvatarPromotionConfig, types::AvatarConfig,
 };
 use crate::{
     handler::error::WorkerError,
@@ -15,10 +14,10 @@ use tracing::info;
 
 pub mod eidolon;
 pub mod promotion_config;
+pub mod rpc;
 #[cfg(test)]
 mod tests;
 pub mod types;
-pub mod rpc;
 
 /// Retrieves a single character info
 pub async fn character(Path(character_id): Path<u32>) -> Result<Json<AvatarConfig>, WorkerError> {
@@ -26,7 +25,9 @@ pub async fn character(Path(character_id): Path<u32>) -> Result<Json<AvatarConfi
 
     let avatar_db: HashMap<u32, AvatarConfig> = AvatarConfig::read().await?;
 
-    let data = avatar_db.get(&character_id).ok_or(WorkerError::EmptyBody)?;
+    let data = avatar_db
+        .get(&character_id)
+        .ok_or(WorkerError::NotFound(character_id.to_string()))?;
 
     info!("Duration: {:?}", now.elapsed());
     Ok(Json(data.clone()))

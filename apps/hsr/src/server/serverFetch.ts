@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { env } from "@hsr/env";
+import { extractError } from "./handle";
 
 export async function serverFetch<TPayload, TResponse>(
   endpoint: string,
@@ -10,40 +11,31 @@ export async function serverFetch<TPayload, TResponse>(
   // params?: string | number
 ): Promise<TResponse> {
   const url = env.NEXT_PUBLIC_HOST_NAS_WS + endpoint;
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  const body = opt?.payload ? JSON.stringify(opt.payload) : undefined;
 
   // POST
-  if (opt) {
-    const { payload, method } = opt;
-    const body = JSON.stringify(payload);
-    const res = await fetch(url, {
-      body,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method,
-    });
-
-    if (res.ok) {
-      return res.json() as Promise<TResponse>;
-    }
-    console.error("api fetch failed, code:", res.status);
-    console.error("url:", url);
-    const errText = await res.text();
-    console.error("unknown error", errText);
-    return Promise.reject(Error(`unknown error ${errText}`));
-  }
-  // GET
   const res = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "GET",
+    body,
+    headers,
+    method: opt?.method ?? "GET",
   });
 
   if (res.ok) {
     return res.json() as Promise<TResponse>;
   }
-  console.error("api fetch failed, code:", res.status);
-  console.error("url:", url);
-  return Promise.reject(Error(`unknown error ${await res.text()}`));
+
+  const errText = await res.text();
+  const errString = extractError(JSON.parse(errText));
+
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
+  if (process.env.NODE_ENV !== "production") {
+    console.error(`api fetch failed, code: ${res.status}, url: ${url}`);
+    console.error("unknown error", errString);
+  }
+
+  return Promise.reject(Error(errString));
 }

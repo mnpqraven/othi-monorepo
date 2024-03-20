@@ -3,6 +3,7 @@ use axum::{
     response::{IntoResponse, Response},
 };
 use serde::Serialize;
+use serde_json::json;
 use std::fmt::Display;
 
 /// general error type of the application, this should be used in junctions
@@ -72,7 +73,8 @@ impl IntoResponse for WorkerError {
         } else {
             tracing::error!(msg);
         };
-        (code, msg).into_response()
+        let err_body = json!({"error": msg});
+        (code, err_body.to_string()).into_response()
     }
 }
 

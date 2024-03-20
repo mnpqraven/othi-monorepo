@@ -12,14 +12,15 @@ export default function Error({ error, reset }: ErrorProps) {
   useEffect(() => {
     // Log the error to an error reporting service
     // eslint-disable-next-line no-console
-    console.error(error);
+    console.error("error page", error);
   }, [error]);
 
   const router = useRouter();
 
   return (
     <div>
-      <h2>Something went wrong!</h2>
+      <h2>Something went wrong!</h2> <br />
+      {error.message} <br />
       <Button onClick={reset}>Try again</Button>
       <Button
         onClick={() => {

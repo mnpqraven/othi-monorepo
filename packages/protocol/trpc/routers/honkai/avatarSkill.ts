@@ -12,7 +12,7 @@ export const skillRouter = router({
   by: publicProcedure
     .input(CharId.extend({ clean: z.boolean().default(true) }))
     .query(async ({ input }) => {
-      const query = db.query.avatarToSkills
+      const query = await db.query.avatarToSkills
         .findMany({
           where: (map, { eq }) => eq(map.avatarId, input.charId),
           columns: {},
@@ -21,9 +21,7 @@ export const skillRouter = router({
         .then((res) => res.map((e) => e.skill));
 
       if (input.clean) {
-        return query.then((res) =>
-          res.filter((skill) => skill.attackType !== "MazeNormal")
-        );
+        return query.filter((skill) => skill.attackType !== "MazeNormal");
       }
 
       return query;
