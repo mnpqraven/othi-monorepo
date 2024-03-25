@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { Separator, Slider } from "ui/primitive";
 import type { SkillSchema } from "database/schema";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import { SkillDescription } from "../Db/SkillDescription";
 
 interface Prop {

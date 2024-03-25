@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from "ui/primitive";
 import { cn } from "lib";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 
 interface Prop {
   date: Date;

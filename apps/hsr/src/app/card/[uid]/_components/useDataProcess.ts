@@ -7,7 +7,7 @@ import { asPercentage, rotate } from "lib";
 import { useQuery } from "@tanstack/react-query";
 import { optionLightConePromotion } from "@hsr/hooks/queries/lightcone";
 import type { AvatarPromotionSchema } from "database/schema";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import type { MihomoCharacter } from "../../types";
 import type { Field } from "./SpiderChartWrapper";
 

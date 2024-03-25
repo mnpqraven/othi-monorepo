@@ -13,7 +13,7 @@ import {
   DataTablePagination,
   DataTableToggleColumn,
 } from "ui/shared/table";
-import { trpc } from "@db-center/app/_trpc/client";
+import { trpc } from "protocol";
 import { keepPreviousData } from "@tanstack/react-query";
 import { TABLE_DICT } from "./_data/dataset";
 import type { Categories } from "./types";
@@ -35,19 +35,19 @@ export default function Page({ params }: Params) {
 
   const { data, isLoading } = trpc.table.list.useQuery(
     { tableName, pagination },
-    { placeholderData: keepPreviousData }
+    { placeholderData: keepPreviousData },
   );
 
   const chunkData = useMemo(
     () =>
       data
         ? search<EitherArray<ValidTableSchemas>[number]>(
-            data.data,
-            dict?.searchKeys ?? [],
-            keyword
-          )
+          data.data,
+          dict?.searchKeys ?? [],
+          keyword,
+        )
         : [],
-    [data, dict?.searchKeys, keyword]
+    [data, dict?.searchKeys, keyword],
   );
 
   const { table: tableDef } = useTable({

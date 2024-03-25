@@ -1,11 +1,9 @@
 import { Toaster } from "ui/primitive";
-import { Merriweather_Sans } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import { headers } from "next/headers";
 import Navbar from "./components/Navbar";
 import { AppProvider } from "./components/Providers";
 import "@hsr/css/globals.css";
-
-const font = Merriweather_Sans({ subsets: ["latin"], display: "swap" });
 
 export const metadata = {
   title: "Honkai Star Rail Gacha Planner",
@@ -18,7 +16,7 @@ interface RootProps {
 export default function RootLayout({ children }: RootProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={font.className}>
+      <body className={GeistSans.className}>
         <AppProvider headers={headers()}>
           <Navbar />
           <Toaster />

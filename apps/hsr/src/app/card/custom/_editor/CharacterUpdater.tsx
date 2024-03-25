@@ -6,7 +6,7 @@ import type { HTMLAttributes } from "react";
 import { forwardRef, useEffect, useMemo } from "react";
 import { Badge, Input, Label } from "ui/primitive";
 import { cn } from "lib";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import type { SkillSchema } from "database/schema";
 import { getSkillMaxLevel } from "../../[uid]/_components/skill_block/SkillInfo";
 import {

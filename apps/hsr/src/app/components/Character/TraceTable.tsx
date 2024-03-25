@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "ui/primitive";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import type { AvatarTraceSchema } from "database/schema";
 import { propertyIconUrl } from "@hsr/lib/propertyHelper";
 import { TraceDescription } from "./TraceDescription";

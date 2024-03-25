@@ -7,7 +7,7 @@ import {
 } from "@hsr/app/card/[uid]/_components/useDataProcess";
 import type { RelicType } from "@hsr/bindings/RelicConfig";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import type { AvatarPromotionSchema } from "database/schema";
 import { useRelicSetBonuses } from "./queries/useRelicSetBonus";
 import { optionLightConePromotion } from "./queries/lightcone";

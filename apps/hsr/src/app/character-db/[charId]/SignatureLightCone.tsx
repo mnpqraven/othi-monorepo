@@ -1,4 +1,4 @@
-import { server } from "@hsr/app/_trpc/serverClient";
+import { server } from "protocol/trpc";
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { Content } from "@hsr/app/lightcone-db/[lcId]/Content";
 import { Portrait } from "@hsr/app/lightcone-db/[lcId]/Portrait";

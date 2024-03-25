@@ -12,7 +12,7 @@ import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
 import { asPercentage, cn } from "lib";
 import { Skeleton, Toggle } from "ui/primitive";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import type { AvatarTraceSchema } from "database/schema";
 import {
   charIdAtom,

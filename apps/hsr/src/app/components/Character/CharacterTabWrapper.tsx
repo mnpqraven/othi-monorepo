@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "ui/primitive";
 import { useQueryClient } from "@tanstack/react-query";
 import API from "@hsr/server/typedEndpoints";
 import { useMemo, type ReactNode } from "react";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import { sortSkillsByDesc } from "@hsr/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { SkillOverview } from "./SkillOverview";

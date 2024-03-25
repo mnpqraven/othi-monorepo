@@ -16,7 +16,7 @@ import {
   DialogTrigger,
   Toggle,
 } from "ui/primitive";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import type { AvatarSchema } from "database/schema";
 import { CharacterUpdater } from "../_editor/CharacterUpdater";
 import { TraceTableUpdater } from "../_editor/TraceTableUpdater";

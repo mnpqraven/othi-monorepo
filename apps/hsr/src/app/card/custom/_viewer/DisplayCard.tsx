@@ -3,7 +3,7 @@
 import { useAtomValue, useSetAtom } from "jotai";
 import type { LANGS } from "@hsr/lib/constants";
 import { Suspense, useEffect, useRef } from "react";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import { CharacterInfo } from "../../[uid]/_components/info_block/CharacterInfo";
 import { EidolonInfo } from "../../[uid]/_components/skill_block/EidolonInfo";
 import { LightConeInfo } from "../../[uid]/_components/skill_block/LightConeInfo";
@@ -22,10 +22,10 @@ import { useMihomoApiUpdate } from "./useMihomoApiUpdate";
 type Lang = (typeof LANGS)[number];
 export type DisplayCardProps =
   | {
-      mode: "API";
-      uid: string;
-      lang: Lang | undefined;
-    }
+    mode: "API";
+    uid: string;
+    lang: Lang | undefined;
+  }
   | { mode: "CUSTOM" };
 
 export function DisplayCard(props: DisplayCardProps) {

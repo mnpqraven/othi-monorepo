@@ -1,4 +1,4 @@
-import { server } from "../_trpc/serverClient";
+import { server } from "protocol/trpc";
 import LightConeCatalogue from "./LightConeCatalogue";
 
 export const metadata = {

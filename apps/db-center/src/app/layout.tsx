@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font";
+import { GeistSans } from "geist/font/sans";
+import { headers } from "next/headers";
 import { AppProvider } from "@db-center/components/providers/AppProvider";
 import { Navbar } from "@db-center/components/navbar/Navbar";
 import { Toaster } from "ui/primitive";
@@ -17,10 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={GeistSans.className}>
-        <AppProvider>
+        <AppProvider headers={headers()}>
           <Navbar />
 
-          <main className="py-8 px-4">{children}</main>
+          <main className="px-4 py-8">{children}</main>
           <Toaster />
         </AppProvider>
       </body>

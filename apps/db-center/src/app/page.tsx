@@ -19,15 +19,15 @@ interface DictProps extends HTMLAttributes<HTMLDivElement> {
 }
 const DictItem = forwardRef<HTMLDivElement, DictProps>(function DictItem(
   { data, ...props },
-  ref
+  ref,
 ) {
   return (
     <div {...props} ref={ref}>
-      <p className="py-4 font-bold text-xl">{data.category.name}</p>
-      <div className="grid grid-cols-2 border rounded-md p-4 gap-4">
+      <p className="py-4 text-xl font-bold">{data.category.name}</p>
+      <div className="grid grid-cols-2 gap-4 rounded-md border p-4">
         {data.tables.map((table) => (
           <div className="flex flex-col gap-2" key={table.route}>
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <span>{table.name}</span>
               <div className="flex gap-2">
                 <Button asChild>
@@ -40,9 +40,9 @@ const DictItem = forwardRef<HTMLDivElement, DictProps>(function DictItem(
 
             {table.api?.map((api) => (
               <Link
-                className="text-sm text-muted-foreground"
-                href={`/api/${[data.category.route, table.route, api].join(
-                  "."
+                className="text-muted-foreground text-sm"
+                href={`/trpc/api/${[data.category.route, table.route, api].join(
+                  ".",
                 )}`}
                 key={api}
               >

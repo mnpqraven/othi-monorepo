@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from "ui/primitive";
 import { useProperties } from "@hsr/hooks/queries/useProperties";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 
 interface Prop {
   characterId: number;

@@ -7,7 +7,7 @@ import { charEidAtom } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn, range, sanitizeNewline } from "lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "ui/primitive";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import type { EidolonSchema } from "database/schema";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {

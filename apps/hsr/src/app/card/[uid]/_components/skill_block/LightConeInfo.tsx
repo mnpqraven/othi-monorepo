@@ -13,7 +13,7 @@ import {
 } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn } from "lib/utils";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import { ImpositionIcon } from "../ImpositionIcon";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {

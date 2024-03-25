@@ -15,7 +15,7 @@ import { forwardRef, useState } from "react";
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { img } from "@hsr/lib/utils";
 import { cn } from "lib";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import type { LightConeSchema } from "database/schema";
 import { charIdAtom, lcIdAtom } from "../../_store";
 import { LightConeUpdater } from "../_editor/LightConeUpdater";

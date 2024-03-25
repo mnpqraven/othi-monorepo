@@ -20,9 +20,9 @@ import Image from "next/image";
 import { cva } from "class-variance-authority";
 import { range } from "lib";
 import type { AvatarSchema, LightConeSchema } from "database/schema";
+import { trpc } from "protocol";
 import { PathIcon } from "../character-db/PathIcon";
 import { ElementIcon } from "../character-db/ElementIcon";
-import { trpc } from "../_trpc/client";
 
 const kbdVariants = cva(
   "bg-muted text-muted-foreground pointer-events-none hidden h-5 select-none items-center gap-1 rounded border px-1.5 font-mono font-medium opacity-100 sm:inline-block",
@@ -221,7 +221,7 @@ export { CommandCenter };
 
 interface RouteItemProps
   extends Route,
-    ComponentPropsWithoutRef<typeof CommandItem> {}
+  ComponentPropsWithoutRef<typeof CommandItem> { }
 
 const RouteItem = forwardRef<
   ElementRef<typeof CommandPrimitive.Item>,

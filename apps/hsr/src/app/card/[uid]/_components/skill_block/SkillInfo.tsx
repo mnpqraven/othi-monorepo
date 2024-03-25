@@ -16,7 +16,7 @@ import { charEidAtom, charSkillAtom } from "@hsr/app/card/_store";
 import { hoverVerbosityAtom } from "@hsr/app/card/_store/main";
 import { cn } from "lib/utils";
 import type { SkillSchema } from "database/schema";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;
@@ -220,7 +220,7 @@ export function SkillInfoLoading() {
         <div className="flex flex-col items-center" key={label}>
           <span>{label}</span>
 
-          <Skeleton className="w-12 h-12 rounded-md" />
+          <Skeleton className="h-12 w-12 rounded-md" />
 
           <Loader2 className="animate-spin" />
         </div>

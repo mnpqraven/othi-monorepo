@@ -15,7 +15,7 @@ import {
 import { cn } from "lib/utils";
 import type { Element, Path } from "@hsr/bindings/AvatarConfig";
 import { selectAtom } from "jotai/utils";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 
 interface Prop extends HTMLAttributes<HTMLDivElement> {
   characterId: number;

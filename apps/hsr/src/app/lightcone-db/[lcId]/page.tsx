@@ -1,4 +1,4 @@
-import { server } from "@hsr/app/_trpc/serverClient";
+import { server } from "protocol/trpc";
 import { notFound } from "next/navigation";
 import { Portrait } from "./Portrait";
 import { Content } from "./Content";

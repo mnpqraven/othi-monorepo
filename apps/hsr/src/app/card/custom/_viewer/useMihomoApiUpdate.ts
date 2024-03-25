@@ -6,7 +6,7 @@ import { useRelics } from "@hsr/hooks/queries/useRelic";
 import type { RelicConfig, RelicType } from "@hsr/bindings/RelicConfig";
 import { useQueryClient } from "@tanstack/react-query";
 import { optionLightConePromotion } from "@hsr/hooks/queries/lightcone";
-import { trpc } from "@hsr/app/_trpc/client";
+import { trpc } from "protocol";
 import { mhyCharacterIds } from "../../_store/card";
 import {
   charStructAtom,

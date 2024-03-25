@@ -1,4 +1,4 @@
-import { server } from "../_trpc/serverClient";
+import { server } from "protocol/trpc";
 import CharacterCatalogue from "./CharacterCatalogue";
 
 export const metadata = {

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Fragment } from "react";
 import { sanitizeNewline } from "lib/utils";
 import { Badge, Toggle } from "ui/primitive";
-import { server } from "@hsr/app/_trpc/serverClient";
+import { server } from "protocol/trpc";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "protocol/trpc";
 import Link from "next/link";
