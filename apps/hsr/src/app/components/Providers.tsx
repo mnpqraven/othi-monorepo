@@ -48,6 +48,11 @@ export function AppProvider({ children, headers }: RootProps) {
           headers() {
             const heads = new Map(headers);
             heads.set("x-trpc-source", "react");
+            const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
+            heads.set(
+              "cache-control",
+              `s-maxage=30, stale-while-revalidate=${ONE_DAY_IN_SECONDS}`
+            );
             return Object.fromEntries(heads);
           },
         }),

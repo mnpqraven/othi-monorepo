@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "dotenv -e ../../.env -c development -- next dev --port 4000",
-    "build": "dotenv -e ../../.env -- next build",
+    "build": "next build",
     "start": "next start",
     "codegen": "npx tsx scripts/codegen.ts",
     "lint": "next lint",
