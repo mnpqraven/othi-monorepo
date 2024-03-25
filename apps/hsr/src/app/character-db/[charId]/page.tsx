@@ -20,9 +20,11 @@ interface Prop {
 
 export default async function Character({ params, searchParams }: Prop) {
   const characterId = parseInt(params.charId);
-  const _testValidity = await server.honkai.avatar.by({ charId: characterId });
-  const skills = await server.honkai.skill
-    .by({ charId: characterId })
+  const _testValidity = await server().honkai.avatar.by({
+    charId: characterId,
+  });
+  const skills = await server()
+    .honkai.skill.by({ charId: characterId })
     .then((data) => data.sort(sortSkillsByDesc));
   const selectedId = Number(searchParams.id ?? skills.at(0)?.id);
 

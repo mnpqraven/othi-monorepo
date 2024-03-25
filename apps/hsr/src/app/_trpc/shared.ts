@@ -13,7 +13,7 @@ function getBaseUrl() {
 }
 
 export function getUrl() {
-  return `${getBaseUrl()}/api`;
+  return `${getBaseUrl()}/api/trpc`;
 }
 
 /**

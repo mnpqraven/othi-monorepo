@@ -3,7 +3,7 @@ import { appRouter } from "protocol/trpc";
 
 const handler = (req: Request) =>
   fetchRequestHandler({
-    endpoint: "/api",
+    endpoint: "/api/trpc",
     req,
     router: appRouter,
     createContext: () => ({}),

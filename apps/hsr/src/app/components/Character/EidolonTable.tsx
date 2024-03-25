@@ -14,7 +14,9 @@ interface Prop {
 
 export async function EidolonTable({ characterId, searchParams }: Prop) {
   const selectedEidolon = Number(searchParams.i ?? 1);
-  const eidolons = await server.honkai.avatar.eidolons({ charId: characterId });
+  const eidolons = await server().honkai.avatar.eidolons({
+    charId: characterId,
+  });
 
   const top = eidolons
     .filter((e) => e.rank <= 3)

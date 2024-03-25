@@ -12,7 +12,7 @@ interface Prop {
 
 export async function SignatureLightCone({ characterId, searchParams }: Prop) {
   const signatures = (
-    await server.honkai.avatar.signatures({
+    await server().honkai.avatar.signatures({
       charId: characterId,
       skill: true,
     })

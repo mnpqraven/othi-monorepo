@@ -61,14 +61,14 @@ export function AppProvider({ children, headers }: RootProps) {
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <TransportProvider transport={transport}>
             <QueryClientProvider client={queryClient}>
-              <ReactQueryStreamedHydration transformer={superjson}>
-                {/* <Provider> */}
-                {children}
-                {/* </Provider> */}
-              </ReactQueryStreamedHydration>
+              <Provider>
+                <ReactQueryStreamedHydration transformer={superjson}>
+                  {children}
+                </ReactQueryStreamedHydration>
 
-              <DevTools isInitialOpen={false} theme="dark" />
-              <ReactQueryDevtools initialIsOpen={false} />
+                <DevTools isInitialOpen={false} theme="dark" />
+                <ReactQueryDevtools initialIsOpen={false} />
+              </Provider>
             </QueryClientProvider>
           </TransportProvider>
         </trpc.Provider>

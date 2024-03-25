@@ -10,7 +10,7 @@ interface Prop {
 
 export default async function LightConePage({ params }: Prop) {
   const lcId = parseInt(params.lcId);
-  const lc = await server.honkai.lightCone.by({ lcId, withSkill: true });
+  const lc = await server().honkai.lightCone.by({ lcId, withSkill: true });
 
   if (!lc) notFound();
 

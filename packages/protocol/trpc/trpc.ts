@@ -6,7 +6,7 @@ import superjson from "superjson";
  * Initialization of tRPC backend
  * Should be done only once per backend!
  */
-const t = initTRPC.create({
+export const t = initTRPC.create({
   transformer: superjson,
   errorFormatter(opts) {
     const { shape, error } = opts;

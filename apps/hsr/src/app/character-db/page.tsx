@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 export default async function CharacterDb() {
-  const characters = await server.honkai.avatar.list({});
+  const characters = await server().honkai.avatar.list({});
 
   return (
     <main className="px-2 py-4 md:container md:px-0">
