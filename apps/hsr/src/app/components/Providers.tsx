@@ -13,8 +13,6 @@ import superjson from "superjson";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { DevTools } from "jotai-devtools";
 import { trpc, trpcUrl } from "protocol";
-import { createTRPCReact } from "@trpc/react-query";
-import type { AppRouter } from "protocol/trpc";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
   defaultOptions: {
