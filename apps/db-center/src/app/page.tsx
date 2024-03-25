@@ -41,7 +41,7 @@ const DictItem = forwardRef<HTMLDivElement, DictProps>(function DictItem(
             {table.api?.map((api) => (
               <Link
                 className="text-muted-foreground text-sm"
-                href={`/trpc/api/${[data.category.route, table.route, api].join(
+                href={`/api/trpc/${[data.category.route, table.route, api].join(
                   ".",
                 )}`}
                 key={api}

@@ -1,4 +1,3 @@
-export { rpc } from "./rpc";
 export { trpc } from "./trpc/generators/client";
 export {
   trpcUrl,

@@ -11,17 +11,13 @@ import { useState } from "react";
 import { TooltipProvider } from "ui/primitive/tooltip";
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import superjson from "superjson";
-import type { AppRouter } from "protocol/trpc";
-import { createTRPCReact } from "@trpc/react-query";
-import { trpcUrl } from "protocol";
+import { trpc, trpcUrl } from "protocol";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
   defaultOptions: {
     queries: { refetchOnWindowFocus: false },
   },
 };
-
-export const trpc = createTRPCReact<AppRouter>();
 
 interface RootProps {
   children: React.ReactNode;

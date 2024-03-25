@@ -12,7 +12,7 @@ import { httpBatchLink, loggerLink } from "@trpc/client";
 import superjson from "superjson";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { DevTools } from "jotai-devtools";
-import { trpcUrl } from "protocol";
+import { trpc, trpcUrl } from "protocol";
 import { createTRPCReact } from "@trpc/react-query";
 import type { AppRouter } from "protocol/trpc";
 
@@ -26,8 +26,6 @@ interface RootProps {
   children: React.ReactNode;
   headers: Headers;
 }
-
-export const trpc = createTRPCReact<AppRouter>();
 
 export function AppProvider({ children, headers }: RootProps) {
   const transport = createTransport();
