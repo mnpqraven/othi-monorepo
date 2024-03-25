@@ -1,3 +1,7 @@
 export { rpc } from "./rpc";
-
-// "dev": "pnpm dlx ts-node -T index.ts",
+export { trpc } from "./trpc/generators/client";
+export {
+  trpcUrl,
+  type RouterInputs,
+  type RouterOutputs,
+} from "./trpc/generators/shared";
