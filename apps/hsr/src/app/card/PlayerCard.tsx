@@ -63,6 +63,6 @@ export const PlayerCard = forwardRef<HTMLButtonElement, Prop>(
         </Link>
       </Button>
     );
-  }
+  },
 );
 PlayerCard.displayName = "PlayerCard";

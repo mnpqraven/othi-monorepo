@@ -30,7 +30,7 @@ export function CharacterUpdater() {
   const charId = useAtomValue(charIdAtom);
   const { data: skills } = trpc.honkai.skill.by.useQuery(
     { charId: Number(charId) },
-    { enabled: Boolean(charId) }
+    { enabled: Boolean(charId) },
   );
   const maxLevel = useAtomValue(charMaxLevelAtom);
 
@@ -38,13 +38,13 @@ export function CharacterUpdater() {
 
   const sortedSkills = skills
     .filter(
-      ({ attackType }) => attackType !== "MazeNormal" && attackType !== "Maze"
+      ({ attackType }) => attackType !== "MazeNormal" && attackType !== "Maze",
     )
     .filter(({ tag }) => tag !== "Cancel")
     .sort((a, b) => {
       const toInt = (
         ttype: SkillType | null | undefined,
-        typeDesc: string | null
+        typeDesc: string | null,
       ) => {
         if (ttype === "Maze") return 4;
         if (ttype === "Ultra") return 3;
@@ -179,7 +179,7 @@ function SkillSection({
       data[0]
         ? getSkillMaxLevel(data[0].attackType, data[0].typeDesc ?? "", eidolon)
         : 10,
-    [data, eidolon]
+    [data, eidolon],
   );
 
   return (
@@ -193,7 +193,7 @@ function SkillSection({
             src={`${getImagePath(
               charId,
               data[0].attackType,
-              data[0].typeDesc
+              data[0].typeDesc,
             )}`}
             width={64}
           />

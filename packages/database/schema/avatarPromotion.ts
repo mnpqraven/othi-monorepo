@@ -30,7 +30,7 @@ export const avatarPromotions = sqliteTable(
   (t) => ({
     primaryKey: primaryKey(t.characterId, t.ascension),
     ascensionIdx: index("honkai_avatarPromotion_ascension_idx").on(t.ascension),
-  })
+  }),
 );
 
 export const avatarPromotionItems = sqliteTable(
@@ -45,8 +45,10 @@ export const avatarPromotionItems = sqliteTable(
   },
   (t) => ({
     primaryKey: primaryKey(t.ascension, t.characterId, t.itemId),
-    ascensionIdx: index("honkai_avatarPromotionItem_ascension_idx").on(t.ascension),
-  })
+    ascensionIdx: index("honkai_avatarPromotionItem_ascension_idx").on(
+      t.ascension,
+    ),
+  }),
 );
 
 export const avatarPromotionRelations = relations(
@@ -56,7 +58,7 @@ export const avatarPromotionRelations = relations(
       fields: [avatarPromotions.characterId],
       references: [avatars.id],
     }),
-  })
+  }),
 );
 
 export const avatarPromotionItemRelations = relations(
@@ -74,5 +76,5 @@ export const avatarPromotionItemRelations = relations(
       fields: [avatarPromotionItems.itemId],
       references: [items.id],
     }),
-  })
+  }),
 );

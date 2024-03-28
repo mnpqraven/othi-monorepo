@@ -64,14 +64,14 @@ const SpreadConfigBar = forwardRef<HTMLDivElement, Prop>(
         ))}
       </div>
     );
-  }
+  },
 );
 SpreadConfigBar.displayName = "SpreadConfigBar";
 export { SpreadConfigBar };
 
 export function judgeRollValue(
   value: number,
-  spreadInfo: RelicSubAffixConfig
+  spreadInfo: RelicSubAffixConfig,
 ): "LOW" | "MID" | "HIGH" | "ERROR" {
   // 5% correction
   const lowerBound = spreadInfo.base_value * 0.95;
@@ -93,7 +93,7 @@ export function judgeRollValue(
 
 function getRollValue(
   key: "HIGH" | "MID" | "LOW" | "NONE",
-  spreadConfig: RelicSubAffixConfig
+  spreadConfig: RelicSubAffixConfig,
 ): number {
   const { base_value, step_num, step_value } = spreadConfig;
   switch (key) {

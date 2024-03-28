@@ -10,7 +10,7 @@ export const ELEMENTS = [
   "Imaginary",
 ] as const;
 
-export type Element = typeof ELEMENTS[number]
+export type Element = (typeof ELEMENTS)[number];
 
 export const elements = sqliteTable("honkai_element", {
   name: text("name", { enum: ELEMENTS }).primaryKey(),

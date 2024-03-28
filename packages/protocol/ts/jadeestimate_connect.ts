@@ -21,6 +21,5 @@ export const JadeEstimateService = {
       O: JadeEstimateResponse,
       kind: MethodKind.Unary,
     },
-  }
+  },
 } as const;
-

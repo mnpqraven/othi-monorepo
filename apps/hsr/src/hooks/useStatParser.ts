@@ -61,18 +61,18 @@ export function useStatParser(props?: StatParserConstructor) {
   // const { data: traceData } = useQuery(characterTraceQ(props?.character.id));
   const { data: traceData } = trpc.honkai.avatar.trace.by.useQuery(
     { charId: Number(props?.character.id) },
-    { enabled: Boolean(props?.character.id) }
+    { enabled: Boolean(props?.character.id) },
   );
   const { data: charPromotionData } = trpc.honkai.avatar.promotions.by.useQuery(
     { charId: Number(props?.character.id) },
-    { enabled: Boolean(props?.character.id) }
+    { enabled: Boolean(props?.character.id) },
   );
   const { data: lcPromotionData } = useQuery(
-    optionLightConePromotion(props?.lightCone?.id)
+    optionLightConePromotion(props?.lightCone?.id),
   );
   const { data: lcData } = trpc.honkai.lightCone.by.useQuery(
     { lcId: Number(props?.lightCone?.id), withSkill: true },
-    { enabled: Boolean(props?.lightCone?.id) }
+    { enabled: Boolean(props?.lightCone?.id) },
   );
   const { data: relicBonuses } = useRelicSetBonuses();
 
@@ -112,7 +112,7 @@ export function useStatParser(props?: StatParserConstructor) {
   // INFO: PERCENT FROM LC
   const lcTotal: Partial<Record<Property, number>> = {};
   const lcProps = lcData?.skill?.abilityProperty?.at(
-    props.lightCone?.imposition ?? 0
+    props.lightCone?.imposition ?? 0,
   );
   if (lcProps) {
     lcProps.forEach(({ propertyType, value }) => {
@@ -123,7 +123,7 @@ export function useStatParser(props?: StatParserConstructor) {
   // INFO: PERCENT FROM TRACES
   const tracePropList = traceData
     .filter((trace) =>
-      Object.keys(props.traceTable).includes(String(trace.pointId))
+      Object.keys(props.traceTable).includes(String(trace.pointId)),
     )
     .filter((trace) => Boolean(trace.statusAddList?.length))
     .map((trace) => ({
@@ -175,7 +175,7 @@ export function useStatParser(props?: StatParserConstructor) {
     value: number;
   }[][] = props.relic.map((relic) => {
     const find = mainStatLevels[relic.type].find(
-      (e) => e.property === relic.property
+      (e) => e.property === relic.property,
     );
     if (!find) return [...subStatNoStep(relic)];
     const value = find.base_value + find.level_add * relic.level;
@@ -244,7 +244,7 @@ export function useStatParser(props?: StatParserConstructor) {
 function baseChar(
   level: number,
   ascension: number,
-  promoteData: AvatarPromotionSchema[]
+  promoteData: AvatarPromotionSchema[],
 ) {
   const bindingPromote = promoteData.at(ascension)!;
   const { addAttack, baseAttack, addHp, baseHp, addDefense, baseDefense } =
@@ -258,7 +258,7 @@ function baseChar(
 function baseLc(
   level: number,
   ascension: number,
-  promoteData: EquipmentPromotionConfig | undefined
+  promoteData: EquipmentPromotionConfig | undefined,
 ) {
   if (promoteData) {
     const {
@@ -280,7 +280,7 @@ function baseLc(
 }
 
 function sumProps(
-  props: Partial<Record<Property, number>>[]
+  props: Partial<Record<Property, number>>[],
 ): Partial<Record<Property, number>> {
   const ret: Partial<Record<Property, number>> = {};
   props.forEach((prop) => {
@@ -320,21 +320,21 @@ const CUSTOM_KEYS: Property[] = [
 
 function toStatTable(
   baseValue: BaseValueSchema,
-  map: Partial<Record<Property, number>>
+  map: Partial<Record<Property, number>>,
 ) {
   const { atk, critical_chance, critical_damage, def, hp, speed } = baseValue;
   // automated keys inside map
   // will be spreaded for autofill
   const automatedKeys: Partial<Record<Property, number>> = Object.fromEntries(
     Object.entries(map).filter(
-      ([key, _value]) => !CUSTOM_KEYS.includes(key as Property)
-    )
+      ([key, _value]) => !CUSTOM_KEYS.includes(key as Property),
+    ),
   );
   const eleKeys: Partial<Record<Property, number>> = Object.fromEntries(
     ELE_KEYS.map((key) => [
       key,
       orZero(map[key]) + orZero(map.AllDamageTypeAddedRatio),
-    ])
+    ]),
   );
 
   // leave the trinity to generic keys

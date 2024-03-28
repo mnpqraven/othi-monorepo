@@ -9,7 +9,7 @@ export const avatarPromotionRouter = router({
       CharId.extend({
         withItems: z.custom<true | undefined>().optional(),
         maxAscension: z.number().optional(),
-      })
+      }),
     )
     .query(async ({ input }) => {
       const query = db.query.avatarPromotions.findMany({
@@ -25,7 +25,7 @@ export const avatarPromotionRouter = router({
         where: (map, { eq, lte }) =>
           input.maxAscension
             ? eq(map.characterId, input.charId).append(
-                lte(map.ascension, input.maxAscension)
+                lte(map.ascension, input.maxAscension),
               )
             : eq(map.characterId, input.charId),
         orderBy: (data, { asc }) => [asc(data.ascension)],

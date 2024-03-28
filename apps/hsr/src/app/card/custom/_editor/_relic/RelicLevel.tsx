@@ -15,7 +15,7 @@ export const RelicLevel = forwardRef<HTMLInputElement, Prop>(
   ({ atom, className, ...props }, ref) => {
     const levelAtom = useMemo(
       () => focusAtom(atom, (optic) => optic.prop("level")),
-      [atom]
+      [atom],
     );
     const [level, setLevel] = useAtom(levelAtom);
 
@@ -33,6 +33,6 @@ export const RelicLevel = forwardRef<HTMLInputElement, Prop>(
         ref={ref}
       />
     );
-  }
+  },
 );
 RelicLevel.displayName = "RelicLevel";

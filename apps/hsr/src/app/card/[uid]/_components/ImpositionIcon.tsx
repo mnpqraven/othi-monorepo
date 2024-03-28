@@ -14,7 +14,7 @@ const ImpositionIcon = forwardRef<HTMLDivElement, Prop>(
         imposition >= 5
           ? "bg-[#F9CC71] text-[#191919]"
           : "bg-[#191919] text-[#F9CC71]",
-        className
+        className,
       )}
       ref={ref}
       style={{ lineHeight: "24px" }}
@@ -22,7 +22,7 @@ const ImpositionIcon = forwardRef<HTMLDivElement, Prop>(
     >
       {asRoman(imposition)}
     </div>
-  )
+  ),
 );
 ImpositionIcon.displayName = "ImpositionIcon";
 

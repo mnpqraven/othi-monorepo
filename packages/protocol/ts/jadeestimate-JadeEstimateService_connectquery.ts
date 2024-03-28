@@ -5,7 +5,11 @@
 
 import { JadeEstimateCfg, JadeEstimateResponse } from "./jadeestimate_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import { createQueryService, createUnaryHooks, UnaryFunctionsWithHooks } from "@connectrpc/connect-query";
+import {
+  createQueryService,
+  createUnaryHooks,
+  UnaryFunctionsWithHooks,
+} from "@connectrpc/connect-query";
 
 export const typeName = "jadeestimate.JadeEstimateService";
 
@@ -24,12 +28,15 @@ export const JadeEstimateService = {
       O: JadeEstimateResponse,
       kind: MethodKind.Unary,
     },
-  }
+  },
 } as const;
 
-const $queryService = createQueryService({  service: JadeEstimateService,});
+const $queryService = createQueryService({ service: JadeEstimateService });
 
 /**
  * @generated from rpc jadeestimate.JadeEstimateService.Post
  */
-export const post: UnaryFunctionsWithHooks<JadeEstimateCfg, JadeEstimateResponse> = {   ...$queryService.post,  ...createUnaryHooks($queryService.post)};
+export const post: UnaryFunctionsWithHooks<
+  JadeEstimateCfg,
+  JadeEstimateResponse
+> = { ...$queryService.post, ...createUnaryHooks($queryService.post) };

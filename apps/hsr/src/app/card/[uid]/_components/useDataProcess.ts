@@ -60,12 +60,12 @@ export function useDataProcess({ character }: Prop): {
   // normalize summed data
   const { data: charPromo } = trpc.honkai.avatar.promotions.by.useQuery(
     { charId: Number(character?.id) },
-    { enabled: Boolean(character?.id) }
+    { enabled: Boolean(character?.id) },
   );
 
   // characterPromotionQ(character?.id ? Number(character.id) : undefined)
   const { data: lcPromo } = useQuery(
-    optionLightConePromotion(Number(character?.light_cone?.id))
+    optionLightConePromotion(Number(character?.light_cone?.id)),
   );
 
   if (charPromo && character && lcPromo) {
@@ -106,7 +106,7 @@ export function useDataProcess({ character }: Prop): {
           currentGreyLc,
           maxedGreyChar,
           maxedGreyLc,
-        }
+        },
       );
 
       const label = getFieldLabel(key);
@@ -134,7 +134,7 @@ export function useDataProcess({ character }: Prop): {
     const preRotate = data
       .sort(
         (fieldA, fieldB) =>
-          getSortValue(fieldA.field) - getSortValue(fieldB.field)
+          getSortValue(fieldA.field) - getSortValue(fieldB.field),
       )
       .filter(filterFieldsByRole(character.element.name))
       .filter(filterEmptyValues())
@@ -146,7 +146,7 @@ export function useDataProcess({ character }: Prop): {
   }
 
   function normalizeKeyValue<
-    T extends { atk: number; def: number; hp: number }
+    T extends { atk: number; def: number; hp: number },
   >(
     key: Field,
     additionSum: number,
@@ -161,7 +161,7 @@ export function useDataProcess({ character }: Prop): {
       currentGreyLc: T;
       maxedGreyChar: T;
       maxedGreyLc: T;
-    }
+    },
   ): number {
     switch (key) {
       case "hp":
@@ -281,7 +281,7 @@ function getNormalizedBound(field: Field, charSpd: number) {
 
 export function getNormalizedBoundProperty(
   property: Property,
-  charSpd: number
+  charSpd: number,
 ) {
   switch (property) {
     case "MaxHP":
@@ -315,7 +315,7 @@ export function getNormalizedBoundProperty(
 }
 
 function filterFieldsByRole<T extends { field: Field }>(
-  element: Element
+  element: Element,
 ): (data: T) => boolean {
   const defaultFields: Field[] = [
     "hp",

@@ -9,13 +9,8 @@ import {
   selectAtom,
   splitAtom,
 } from "jotai/utils";
-import type {
-  CardConfig,
-  CardConfigAction} from "../[uid]/configReducer";
-import {
-  configReducer,
-  initialConfig,
-} from "../[uid]/configReducer";
+import type { CardConfig, CardConfigAction } from "../[uid]/configReducer";
+import { configReducer, initialConfig } from "../[uid]/configReducer";
 import type { MihomoPlayer } from "../types";
 import {
   charIdAtom,
@@ -35,12 +30,12 @@ import {
 
 export const configAtom = atomWithReducer<CardConfig, CardConfigAction>(
   initialConfig,
-  configReducer
+  configReducer,
 );
 
 export const hoverVerbosityAtom = selectAtom(
   configAtom,
-  (atom) => atom.hoverVerbosity
+  (atom) => atom.hoverVerbosity,
 );
 
 export const armoryStructAtom = atom((get) => ({
@@ -52,7 +47,9 @@ export const armoryStructAtom = atom((get) => ({
 export const statParseParam = atom<StatParserConstructor | undefined>((get) => {
   const charId = get(charIdAtom);
   const lcId = get(lcIdAtom);
-  const relic = get(relicsStructAtom).filter((e) => Boolean(e.property) && e.setId);
+  const relic = get(relicsStructAtom).filter(
+    (e) => Boolean(e.property) && e.setId,
+  );
   if (!charId || !lcId) return undefined;
   return {
     character: {
@@ -73,6 +70,6 @@ export const statParseParam = atom<StatParserConstructor | undefined>((get) => {
 
 export const cachedProfilesAtom = atomWithStorage<MihomoPlayer[]>(
   "playerProfiles",
-  []
+  [],
 );
 export const cachedProfileAtoms = splitAtom(cachedProfilesAtom);

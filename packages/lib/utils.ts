@@ -20,7 +20,7 @@ export const DEFAULT_PAGINATION: PaginationState = {
 export function search<T>(
   data: T[],
   keys: FuseOptionKey<T>[],
-  query: string | undefined
+  query: string | undefined,
 ) {
   const fz = new Fuse(data, {
     keys,

@@ -3,5 +3,5 @@ import { defaultGachaQuery } from "./types";
 
 export const gachaGraphFormAtom = atomWithStorage(
   "gachaForm",
-  defaultGachaQuery
+  defaultGachaQuery,
 );

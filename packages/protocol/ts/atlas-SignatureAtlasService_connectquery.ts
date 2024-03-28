@@ -6,7 +6,11 @@
 import { Empty, MethodKind } from "@bufbuild/protobuf";
 import { SignatureReturn, SignatureReturns } from "./atlas_pb";
 import { CharId } from "./shared_pb";
-import { createQueryService, createUnaryHooks, UnaryFunctionsWithHooks } from "@connectrpc/connect-query";
+import {
+  createQueryService,
+  createUnaryHooks,
+  UnaryFunctionsWithHooks,
+} from "@connectrpc/connect-query";
 
 export const typeName = "dm.atlas.SignatureAtlasService";
 
@@ -34,17 +38,23 @@ export const SignatureAtlasService = {
       O: SignatureReturn,
       kind: MethodKind.Unary,
     },
-  }
+  },
 } as const;
 
-const $queryService = createQueryService({  service: SignatureAtlasService,});
+const $queryService = createQueryService({ service: SignatureAtlasService });
 
 /**
  * @generated from rpc dm.atlas.SignatureAtlasService.List
  */
-export const list: UnaryFunctionsWithHooks<Empty, SignatureReturns> = {   ...$queryService.list,  ...createUnaryHooks($queryService.list)};
+export const list: UnaryFunctionsWithHooks<Empty, SignatureReturns> = {
+  ...$queryService.list,
+  ...createUnaryHooks($queryService.list),
+};
 
 /**
  * @generated from rpc dm.atlas.SignatureAtlasService.ByCharId
  */
-export const byCharId: UnaryFunctionsWithHooks<CharId, SignatureReturn> = {   ...$queryService.byCharId,  ...createUnaryHooks($queryService.byCharId)};
+export const byCharId: UnaryFunctionsWithHooks<CharId, SignatureReturn> = {
+  ...$queryService.byCharId,
+  ...createUnaryHooks($queryService.byCharId),
+};

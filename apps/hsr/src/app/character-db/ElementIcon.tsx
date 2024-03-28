@@ -58,7 +58,7 @@ const ElementIcon = forwardRef<HTMLDivElement, Prop>(
         />
       </div>
     );
-  }
+  },
 );
 ElementIcon.displayName = "ElementIcon";
 

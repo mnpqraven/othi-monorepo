@@ -21,7 +21,7 @@ export function SkillOverview({ characterId, selectedId, children }: Prop) {
   });
 
   const skills = character.avatarToSkills.map(
-    (e) => (e as { skill: SkillSchema }).skill
+    (e) => (e as { skill: SkillSchema }).skill,
   );
 
   const selectedSkill = skills.find((e) => e.id === selectedId);

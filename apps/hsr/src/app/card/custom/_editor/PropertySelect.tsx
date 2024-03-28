@@ -31,7 +31,7 @@ export const PropertySelect = forwardRef<HTMLDivElement, Prop>(
       id,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <Select
@@ -62,6 +62,6 @@ export const PropertySelect = forwardRef<HTMLDivElement, Prop>(
         </SelectContent>
       </Select>
     );
-  }
+  },
 );
 PropertySelect.displayName = "PropertySelect ";

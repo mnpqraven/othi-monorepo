@@ -17,7 +17,7 @@ export const signatures = sqliteTable(
     pk: primaryKey(t.avatarId, t.lightConeId),
     signatureIdx: index("idx_signature_avatar_id").on(t.avatarId),
     lightConeIdx: index("idx_signature_lightcone_id").on(t.lightConeId),
-  })
+  }),
 );
 
 export const signaturesRelations = relations(signatures, ({ one }) => ({

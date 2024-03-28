@@ -1,6 +1,20 @@
-export type Path = "Destruction" | "Hunt" | "Erudition" | "Harmony" | "Nihility" | "Preservation" | "Abundance";
+export type Path =
+  | "Destruction"
+  | "Hunt"
+  | "Erudition"
+  | "Harmony"
+  | "Nihility"
+  | "Preservation"
+  | "Abundance";
 
-export type Element = "Fire" | "Ice" | "Physical" | "Wind" | "Lightning" | "Quantum" | "Imaginary";
+export type Element =
+  | "Fire"
+  | "Ice"
+  | "Physical"
+  | "Wind"
+  | "Lightning"
+  | "Quantum"
+  | "Imaginary";
 
 export interface AvatarConfig {
   avatar_base_type: Path;

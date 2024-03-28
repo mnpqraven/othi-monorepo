@@ -17,11 +17,11 @@ interface Prop {
 export function MainstatEditor({ atom }: Prop) {
   const mainstatPropertyAtom = useMemo(
     () => focusAtom(atom, (o) => o.prop("property")),
-    [atom]
+    [atom],
   );
   const substatsAtom = useMemo(
     () => focusAtom(atom, (o) => o.prop("subStats")),
-    [atom]
+    [atom],
   );
   const typeAtom = useMemo(() => selectAtom(atom, (o) => o.type), [atom]);
 
@@ -38,7 +38,7 @@ export function MainstatEditor({ atom }: Prop) {
       prev.map((substat) => {
         if (substat?.property === prop) return undefined;
         return substat;
-      })
+      }),
     );
   }
 

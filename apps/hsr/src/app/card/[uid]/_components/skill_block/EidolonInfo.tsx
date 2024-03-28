@@ -24,7 +24,7 @@ export const EidolonInfo = forwardRef<HTMLDivElement, Prop>(
       <div
         className={cn(
           "flex flex-col items-center justify-center gap-2 pt-[72px]",
-          className
+          className,
         )}
         ref={ref}
         {...props}
@@ -40,7 +40,7 @@ export const EidolonInfo = forwardRef<HTMLDivElement, Prop>(
         ))}
       </div>
     );
-  }
+  },
 );
 EidolonInfo.displayName = "EidolonInfo ";
 
@@ -64,7 +64,7 @@ const EidolonIcon = forwardRef<HTMLDivElement, IconProps>(
       className,
       ...props
     },
-    ref
+    ref,
   ) => {
     const hoverVerbosity = useAtomValue(hoverVerbosityAtom);
 
@@ -76,7 +76,7 @@ const EidolonIcon = forwardRef<HTMLDivElement, IconProps>(
               alt={String(currentEidolon)}
               className={cn(
                 "invert dark:invert-0",
-                currentEidolon <= eidolon ? "opacity-100" : "opacity-25"
+                currentEidolon <= eidolon ? "opacity-100" : "opacity-25",
               )}
               height={height}
               src={src}
@@ -110,7 +110,7 @@ const EidolonIcon = forwardRef<HTMLDivElement, IconProps>(
         ) : null}
       </Tooltip>
     );
-  }
+  },
 );
 EidolonIcon.displayName = "EidolonIcon ";
 

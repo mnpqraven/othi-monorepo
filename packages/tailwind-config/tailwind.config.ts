@@ -82,7 +82,7 @@ const config: Config = {
   },
   plugins: [
     require("tailwindcss-animate"),
-    plugin(function({ addUtilities }) {
+    plugin(function ({ addUtilities }) {
       addUtilities({
         ".border-skewed": {
           "clip-path": "polygon(10% 0, 100% 0, 90% 100%, 0 100%)",

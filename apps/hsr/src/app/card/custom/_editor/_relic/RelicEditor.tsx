@@ -26,15 +26,15 @@ import { SubstatSpreadConfig } from "./SubstatSpreadConfig";
 export function RelicEditor({ atom }: { atom: PrimitiveAtom<RelicInput> }) {
   const setIdAtom = useMemo(
     () => selectAtom(atom, (optic) => optic.setId),
-    [atom]
+    [atom],
   );
   const propertyAtom = useMemo(
     () => selectAtom(atom, (optic) => optic.property),
-    [atom]
+    [atom],
   );
   const substatsAtom = useMemo(
     () => focusAtom(atom, (optic) => optic.prop("subStats")),
-    [atom]
+    [atom],
   );
 
   const relic = useAtomValue(atom);
@@ -67,7 +67,7 @@ export function RelicEditor({ atom }: { atom: PrimitiveAtom<RelicInput> }) {
       substats.map((substat, i) => {
         if (i === index) return { property: prop, step: 1, value };
         return substat;
-      })
+      }),
     );
   }
 

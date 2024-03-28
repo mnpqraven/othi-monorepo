@@ -37,7 +37,7 @@ const schema = z.object({
     .refine(
       (val) =>
         z.string().regex(/^\d+$/).transform(Number).safeParse(val).success,
-      { message: "Invalid number" }
+      { message: "Invalid number" },
     ),
   lang: z.enum(LANGS),
 });
@@ -58,7 +58,7 @@ export default function Profile() {
   const playerProfileAtoms = useAtomValue(cachedProfileAtoms);
   const queryProfileAtom = useMemo(
     () => atom(query.data?.player),
-    [query.data]
+    [query.data],
   );
   const queryProfile = useAtomValue(queryProfileAtom);
 

@@ -43,7 +43,7 @@ export const CharacterInfo = forwardRef<HTMLDivElement, Prop>(
           id="left-avatar"
           style={{
             backgroundImage: `url(${img(
-              `image/character_preview/${characterId}.png`
+              `image/character_preview/${characterId}.png`,
             )})`,
             backgroundRepeat: "no-repeat",
             boxShadow: "0 0 10px 10px hsl(var(--background)) inset",
@@ -74,7 +74,7 @@ export const CharacterInfo = forwardRef<HTMLDivElement, Prop>(
         />
       </div>
     );
-  }
+  },
 );
 
 CharacterInfo.displayName = "CharacterInfo";
@@ -82,11 +82,11 @@ CharacterInfo.displayName = "CharacterInfo";
 function UserPlateLeft({ path }: { path: Path }) {
   const playerInfoAtom = useMemo(
     () => selectAtom(configAtom, (atom) => atom.showPlayerInfo),
-    []
+    [],
   );
   const playerNameAtom = useMemo(
     () => selectAtom(configAtom, (atom) => atom.name),
-    []
+    [],
   );
   const showPlayerInfo = useAtomValue(playerInfoAtom);
   const name = useAtomValue(playerNameAtom);
@@ -106,7 +106,7 @@ function UserPlateLeft({ path }: { path: Path }) {
 function UserPlateRight({ path, element }: { path: Path; element: Element }) {
   const playerInfoAtom = useMemo(
     () => selectAtom(configAtom, (atom) => atom.showPlayerInfo),
-    []
+    [],
   );
   const showPlayerInfo = useAtomValue(playerInfoAtom);
   if (showPlayerInfo)

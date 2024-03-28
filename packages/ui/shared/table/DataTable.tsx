@@ -31,14 +31,14 @@ function DataTableInner<TData>(
     className,
     ...props
   }: Prop<TData>,
-  ref: ForwardedRef<HTMLDivElement>
+  ref: ForwardedRef<HTMLDivElement>,
 ) {
   return (
     <div className={className} ref={ref} {...props}>
       <Table className="border-separate border-spacing-0">
         <TableHeader
           className={cn(
-            stickyHeader ? "[&_th]:sticky [&_th]:top-0 [&_th]:bg-muted" : ""
+            stickyHeader ? "[&_th]:sticky [&_th]:top-0 [&_th]:bg-muted" : "",
           )}
         >
           {table.getHeaderGroups().map((headerGroup) => (
@@ -59,7 +59,7 @@ function DataTableInner<TData>(
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 );
@@ -88,7 +88,7 @@ function DataTableInner<TData>(
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -108,7 +108,7 @@ function DataTableInner<TData>(
               <TableCell
                 className={cn(
                   "h-24 text-center",
-                  spacing === "sm" ? "p-2" : "p-4"
+                  spacing === "sm" ? "p-2" : "p-4",
                 )}
                 colSpan={table.getAllColumns().length}
               >

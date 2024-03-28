@@ -40,7 +40,7 @@ export default function Page() {
         theme,
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, selectedBanner, theme]
+    [data, selectedBanner, theme],
   );
 
   return (

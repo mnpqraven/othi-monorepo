@@ -42,10 +42,10 @@ export default function Page({ params }: Params) {
     () =>
       data
         ? search<EitherArray<ValidTableSchemas>[number]>(
-          data.data,
-          dict?.searchKeys ?? [],
-          keyword,
-        )
+            data.data,
+            dict?.searchKeys ?? [],
+            keyword,
+          )
         : [],
     [data, dict?.searchKeys, keyword],
   );

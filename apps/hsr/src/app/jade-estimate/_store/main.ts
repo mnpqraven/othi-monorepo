@@ -23,7 +23,7 @@ export const defaultValues: FormSchema = {
 
 export const estimateFormAtom = atomWithStorage(
   "jadeEstimateForm",
-  defaultValues
+  defaultValues,
 );
 
 export const selectedCalendarDateAtom = atom(
@@ -35,7 +35,7 @@ export const selectedCalendarDateAtom = atom(
   (get, set, date: Date) => {
     const prev = get(estimateFormAtom);
     set(estimateFormAtom, { ...prev, untilDate: dateToISO.parse(date) });
-  }
+  },
 );
 
 export const selectedMonthAtom = atom(new Date());

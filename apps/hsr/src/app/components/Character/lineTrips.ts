@@ -393,6 +393,6 @@ export function groupTrips(path: Path): Anchor[][] {
     }
   };
   return val().map((e) =>
-    e.map((a) => `Point${String(a).padStart(2, "0")}`)
+    e.map((a) => `Point${String(a).padStart(2, "0")}`),
   ) as Anchor[][];
 }

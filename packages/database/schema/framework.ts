@@ -13,7 +13,7 @@ export const frameworks = sqliteTable(
   (t) => ({
     nameIdx: uniqueIndex("idx_frameworks_name").on(t.name),
     urlIdx: uniqueIndex("idx_frameworks_url").on(t.url),
-  })
+  }),
 );
 
 export type Framework = InferSelectModel<typeof frameworks>;

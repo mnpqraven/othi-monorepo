@@ -29,7 +29,7 @@ export const LightConeInfo = forwardRef<HTMLDivElement, Prop>(
     const { data: lightCone } = trpc.honkai.lightCone.by.useQuery(
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       { lcId: lightConeId!, withSkill: true },
-      { enabled: Boolean(lightConeId) }
+      { enabled: Boolean(lightConeId) },
     );
     const skill = lightCone?.skill;
 
@@ -82,6 +82,6 @@ export const LightConeInfo = forwardRef<HTMLDivElement, Prop>(
         </Tooltip>
       </div>
     );
-  }
+  },
 );
 LightConeInfo.displayName = "LightConeInfo";

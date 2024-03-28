@@ -177,8 +177,8 @@ export function GachaForm({ selectedBanner }: Prop) {
                       range(
                         selectedBanner.minConst + 1,
                         selectedBanner.maxConst - 1,
-                        1
-                      )
+                        1,
+                      ),
                     ).map((e) => (
                       <SelectItem key={e} value={String(e)}>
                         {selectedBanner.constPrefix}{" "}

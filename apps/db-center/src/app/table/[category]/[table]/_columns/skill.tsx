@@ -22,7 +22,7 @@ export const skillColumns = [
               return a + b;
             }
             return `${a + b}(${i + 1})`;
-          }, "")
+          }, ""),
         )}
       </div>
     ),

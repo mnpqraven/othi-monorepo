@@ -66,7 +66,7 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
   const [beforeFirstRender, setBeforeFirstRender] = useState(true);
   // INFO: month marker on calendar
   const [selectedCalendarDate, setSelectedCalendarDate] = useAtom(
-    selectedCalendarDateAtom
+    selectedCalendarDateAtom,
   );
 
   const [monthController, setMonthController] = useAtom(selectedMonthAtom);
@@ -86,7 +86,7 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
   const { futurePatchDateList: binding } = useFuturePatchDateList();
   const futurePatchDateList = useMemo(
     () => getPatchDates(binding, server),
-    [binding, server]
+    [binding, server],
   );
 
   useCacheValidate({
@@ -183,7 +183,7 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
                         <Button
                           className={cn(
                             "min-w-[208px] justify-between pl-3 text-left font-normal",
-                            !dateField.value && "text-muted-foreground"
+                            !dateField.value && "text-muted-foreground",
                           )}
                           variant="outline"
                         >
@@ -247,14 +247,14 @@ export default function JadeEstimateForm({ submitButton = false }: Prop) {
                         mode="single"
                         modifiers={{
                           patchStart: futurePatchDateList.map(
-                            (e) => new Date(e.dateStart)
+                            (e) => new Date(e.dateStart),
                           ),
                           patchBanner: futurePatchDateList
                             .map((e) => new Date(e.dateStart))
                             .concat(
                               futurePatchDateList.map(
-                                (e) => new Date(e.date2ndBanner)
-                              )
+                                (e) => new Date(e.date2ndBanner),
+                              ),
                             ),
                         }}
                         modifiersStyles={{
@@ -410,7 +410,7 @@ function getPatchDates(patches: Patch[], server: Server) {
   return patches.map((e) => ({
     ...e,
     date2ndBanner: new Date(
-      new Date(e.date2ndBanner).getTime() + diff
+      new Date(e.date2ndBanner).getTime() + diff,
     ).toISOString(),
     dateEnd: new Date(new Date(e.dateEnd).getTime() + diff).toISOString(),
     dateStart: new Date(new Date(e.dateStart).getTime() + diff).toISOString(),

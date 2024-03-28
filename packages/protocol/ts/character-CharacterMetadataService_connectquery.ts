@@ -6,7 +6,11 @@
 import { CharId } from "./shared_pb";
 import { CharacterMetadata, CharacterMetadatas } from "./character_pb";
 import { Empty, MethodKind } from "@bufbuild/protobuf";
-import { createQueryService, createUnaryHooks, UnaryFunctionsWithHooks } from "@connectrpc/connect-query";
+import {
+  createQueryService,
+  createUnaryHooks,
+  UnaryFunctionsWithHooks,
+} from "@connectrpc/connect-query";
 
 export const typeName = "dm.character.CharacterMetadataService";
 
@@ -34,17 +38,23 @@ export const CharacterMetadataService = {
       O: CharacterMetadatas,
       kind: MethodKind.Unary,
     },
-  }
+  },
 } as const;
 
-const $queryService = createQueryService({  service: CharacterMetadataService,});
+const $queryService = createQueryService({ service: CharacterMetadataService });
 
 /**
  * @generated from rpc dm.character.CharacterMetadataService.ById
  */
-export const byId: UnaryFunctionsWithHooks<CharId, CharacterMetadata> = {   ...$queryService.byId,  ...createUnaryHooks($queryService.byId)};
+export const byId: UnaryFunctionsWithHooks<CharId, CharacterMetadata> = {
+  ...$queryService.byId,
+  ...createUnaryHooks($queryService.byId),
+};
 
 /**
  * @generated from rpc dm.character.CharacterMetadataService.List
  */
-export const list: UnaryFunctionsWithHooks<Empty, CharacterMetadatas> = {   ...$queryService.list,  ...createUnaryHooks($queryService.list)};
+export const list: UnaryFunctionsWithHooks<Empty, CharacterMetadatas> = {
+  ...$queryService.list,
+  ...createUnaryHooks($queryService.list),
+};

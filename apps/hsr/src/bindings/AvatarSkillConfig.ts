@@ -1,4 +1,10 @@
-export type SkillType = "Normal" | "BPSkill" | "Ultra" | "Talent" | "MazeNormal" | "Maze";
+export type SkillType =
+  | "Normal"
+  | "BPSkill"
+  | "Ultra"
+  | "Talent"
+  | "MazeNormal"
+  | "Maze";
 
 export type ParameterizedDescription = string[];
 
@@ -16,7 +22,14 @@ export type SKillEffect =
 
 export type AssetPath = string;
 
-export type Element = "Fire" | "Ice" | "Physical" | "Wind" | "Lightning" | "Quantum" | "Imaginary";
+export type Element =
+  | "Fire"
+  | "Ice"
+  | "Physical"
+  | "Wind"
+  | "Lightning"
+  | "Quantum"
+  | "Imaginary";
 
 export interface AvatarSkillConfig {
   attack_type?: SkillType | null;

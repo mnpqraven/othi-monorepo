@@ -30,7 +30,7 @@ export function Exporter() {
       .catch(() =>
         toast({
           description: "No character selected, please select a character",
-        })
+        }),
       );
   }
 
@@ -86,7 +86,7 @@ interface Options {
 
 export async function exportImage(
   element: HTMLDivElement | null | undefined,
-  opt: Options = { mode: "DOWNLOAD" }
+  opt: Options = { mode: "DOWNLOAD" },
 ): Promise<void> {
   if (element) {
     if (opt.mode === "DOWNLOAD") {

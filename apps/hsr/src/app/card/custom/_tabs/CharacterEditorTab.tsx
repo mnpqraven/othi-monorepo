@@ -31,11 +31,11 @@ export const CharacterEditorTab = forwardRef<
   const { data: chara } = trpc.honkai.avatar.by.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     { charId: charId! },
-    { enabled: Boolean(charId) }
+    { enabled: Boolean(charId) },
   );
   const { data: characterList } = trpc.honkai.avatar.list.useQuery(
     {},
-    { initialData: [] }
+    { initialData: [] },
   );
   const [open, setOpen] = useState(false);
   const { filter } = useCharacterFilter();

@@ -2,7 +2,7 @@ import type { SkillType } from "@hsr/bindings/AvatarSkillConfig";
 
 export function parseSkillType(
   skillType: SkillType | undefined | null,
-  fallbackSkillDesc: string
+  fallbackSkillDesc: string,
 ) {
   if (skillType)
     switch (skillType) {
@@ -46,7 +46,7 @@ export function keepPreviousData<T>(data: T | undefined): T | undefined {
 export function getImagePath(
   characterId: number | null | undefined,
   attackType: SkillType | null | undefined,
-  typeDesc: string | undefined | null = ""
+  typeDesc: string | undefined | null = "",
 ): string | undefined {
   let ttype = "";
   if (attackType) {
@@ -93,7 +93,7 @@ export function getImagePath(
 }
 
 export function sortSkillsByDesc<
-  T extends { attackType: SkillType | null | undefined }
+  T extends { attackType: SkillType | null | undefined },
 >(a: T, b: T) {
   const toInt = (ttype: SkillType | null | undefined) => {
     if (ttype === "Maze") return 5;

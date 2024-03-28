@@ -24,12 +24,12 @@ export function CharacterTabWrapper({
   });
   const { data: skills } = trpc.honkai.skill.by.useQuery(
     { charId: characterId },
-    { select: (data) => data.sort(sortSkillsByDesc), initialData: [] }
+    { select: (data) => data.sort(sortSkillsByDesc), initialData: [] },
   );
   const searchParams = useSearchParams();
   const selectedSkillId = useMemo(
     () => Number(searchParams.get("id") ?? skills.at(0)?.id),
-    [searchParams, skills]
+    [searchParams, skills],
   );
 
   return (

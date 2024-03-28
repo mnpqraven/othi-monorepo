@@ -3,7 +3,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ProbabilityRatePayload, ProbabilityRateResponse } from "./probabilityrate_pb";
+import {
+  ProbabilityRatePayload,
+  ProbabilityRateResponse,
+} from "./probabilityrate_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -21,6 +24,5 @@ export const ProbabilityRateService = {
       O: ProbabilityRateResponse,
       kind: MethodKind.Unary,
     },
-  }
+  },
 } as const;
-

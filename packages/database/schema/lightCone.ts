@@ -27,7 +27,7 @@ export const lightCones = sqliteTable(
   },
   (t) => ({
     lightConeSkillIdx: index("idx_lightcone_skill_id").on(t.skillId),
-  })
+  }),
 );
 
 export type LightConeSchema = InferSelectModel<typeof lightCones>;

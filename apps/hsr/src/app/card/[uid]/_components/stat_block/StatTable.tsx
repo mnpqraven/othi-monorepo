@@ -33,17 +33,17 @@ export const StatTable = forwardRef<HTMLDivElement, Prop>(
       }))
       .filter(({ property }) => filterOtherElements(property, element))
       .sort((a, b) =>
-        sortByProperty(a.property as Property, b.property as Property)
+        sortByProperty(a.property as Property, b.property as Property),
       ) as {
-        property: Property;
-        value: number;
-      }[];
+      property: Property;
+      value: number;
+    }[];
 
     return (
       <div
         className={cn(
           "shadow-border rounded-md border p-2 shadow-md",
-          className
+          className,
         )}
         ref={ref}
         {...props}
@@ -53,7 +53,7 @@ export const StatTable = forwardRef<HTMLDivElement, Prop>(
             <TooltipTrigger
               className={cn(
                 "flex items-center gap-2 py-1",
-                index % 2 === 0 ? "border-r" : ""
+                index % 2 === 0 ? "border-r" : "",
               )}
               disabled={hoverVerbosity === "none"}
             >
@@ -73,13 +73,13 @@ export const StatTable = forwardRef<HTMLDivElement, Prop>(
         ))}
       </div>
     );
-  }
+  },
 );
 StatTable.displayName = "StatTable";
 
 export function filterOtherElements(
   property: string,
-  element: Element
+  element: Element,
 ): boolean {
   const exceptLightning = [
     "Fire",

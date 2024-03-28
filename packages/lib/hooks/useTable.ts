@@ -55,10 +55,10 @@ export function useTable<TData>({
   pagination: controlledPagination,
 }: Props<TData>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    initialState?.columnFilters ?? []
+    initialState?.columnFilters ?? [],
   );
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(
-    initialState?.rowSelection ?? {}
+    initialState?.rowSelection ?? {},
   );
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: initialState?.pagination?.pageIndex ?? 0,

@@ -22,13 +22,13 @@ export const MarkerIcon = forwardRef<HTMLSpanElement, MarkerIconProps>(
         {...props}
       />
     ) : null;
-  }
+  },
 );
 MarkerIcon.displayName = "MarkerIcon";
 
 function isActive<T extends { setId?: number }>(
   currentSetId: number | undefined,
-  relics: T[]
+  relics: T[],
 ) {
   if (!currentSetId) return false;
   const count = relics.filter((e) => e.setId === currentSetId).length;

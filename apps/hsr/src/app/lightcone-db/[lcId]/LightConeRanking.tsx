@@ -174,7 +174,7 @@ function RankingChart({
         round: true,
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [xMax, dataAccessor]
+    [xMax, dataAccessor],
   );
 
   const getEquiment = (e: EquipmentRanking) => e.equipment_name;
@@ -189,7 +189,7 @@ function RankingChart({
         paddingInner: 0.2,
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [height, dataAccessor]
+    [height, dataAccessor],
   );
 
   if (width < 10) return null;
@@ -330,7 +330,7 @@ function RankingChart({
                           tooltipData: toTooltipData(
                             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                             data[bar.index]!,
-                            DEFAULT_INDEX
+                            DEFAULT_INDEX,
                           ),
                           tooltipTop: eventSvgCoords?.y,
                           tooltipLeft: eventSvgCoords?.x,
@@ -342,7 +342,7 @@ function RankingChart({
                       y={bar.y}
                     />
                   );
-                })
+                }),
               )
             }
           </BarStackHorizontal>
@@ -376,7 +376,7 @@ function RankingChart({
 
 function toTooltipData(
   point: EquipmentRanking,
-  promotionIndex: number
+  promotionIndex: number,
 ): TooltipData {
   const { atk, def, hp, equipment_name } = point;
   return {

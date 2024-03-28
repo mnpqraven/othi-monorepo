@@ -66,6 +66,6 @@ export const TraceSummary = forwardRef<HTMLDivElement, Prop>(
           ))}
       </div>
     );
-  }
+  },
 );
 TraceSummary.displayName = "TraceSummary";

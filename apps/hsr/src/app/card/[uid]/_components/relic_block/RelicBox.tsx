@@ -33,28 +33,28 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
     const splitSubstatValue = useCallback(
       (sub: SubStatSchema, spread: RelicSubAffixConfig) =>
         calculateSpread({ value: sub.value, spreadData: spread }),
-      []
+      [],
     );
     const judge = useCallback(
       (roll: number, spread: RelicSubAffixConfig) =>
         judgeRollValue(roll, spread),
-      []
+      [],
     );
 
     function cal(sub: SubStatSchema | undefined) {
       const spreadInfo = substatSpread.find(
-        (e) => e.property === sub?.property
+        (e) => e.property === sub?.property,
       );
       if (sub && spreadInfo) {
         return splitSubstatValue(sub, spreadInfo).rolls.map((roll) =>
-          judge(roll, spreadInfo)
+          judge(roll, spreadInfo),
         );
       }
       return [];
     }
 
     const promotionConfig = mainstatSpread[data.type].find(
-      (e) => e.property === data.property
+      (e) => e.property === data.property,
     );
     const mainStatValue =
       (promotionConfig?.base_value ?? 0) +
@@ -64,7 +64,7 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
       <div
         className={cn(
           "shadow-border flex h-fit gap-1 rounded-md border p-2 shadow-md",
-          className
+          className,
         )}
         ref={ref}
         {...props}
@@ -130,7 +130,7 @@ export const RelicBox = forwardRef<HTMLDivElement, RelicProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 RelicBox.displayName = "Relic";
 

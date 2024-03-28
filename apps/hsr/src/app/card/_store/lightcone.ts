@@ -28,5 +28,5 @@ export const lcStructAtom = atom(
     set(lcLevelAtom, next.level);
     set(lcPromotionAtom, next.ascension);
     set(lcImpositionAtom, next.imposition);
-  }
+  },
 );

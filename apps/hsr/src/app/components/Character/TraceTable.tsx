@@ -35,7 +35,7 @@ function TraceTable({
 }: Prop) {
   const { data } = trpc.honkai.avatar.by.useQuery({ charId: characterId });
   const [editModeTable, setEditModeTable] = useImmer<Record<number, boolean>>(
-    {}
+    {},
   );
 
   useEffect(() => {
@@ -94,7 +94,7 @@ function TraceTableInner({
 
   const { data } = trpc.honkai.avatar.trace.by.useQuery(
     { charId: Number(characterId) },
-    { enabled: Boolean(characterId) }
+    { enabled: Boolean(characterId) },
   );
   const { data: skills } = trpc.honkai.skill.by.useQuery({
     charId: characterId,
@@ -113,7 +113,7 @@ function TraceTableInner({
       defaultVariants: {
         variant: "CORE",
       },
-    }
+    },
   );
 
   const iconInnerVariants = cva("rounded-full", {
@@ -134,7 +134,7 @@ function TraceTableInner({
           <div
             className={cn(
               traceVariants(path)({ anchor: traceNode.anchor }),
-              ""
+              "",
             )}
             id={String(traceNode.anchor)}
             key={traceNode.pointId}
@@ -148,7 +148,7 @@ function TraceTableInner({
                 onCheckedChange={(checked) => {
                   onCheckedChange(
                     checked === "indeterminate" ? false : checked,
-                    traceNode.pointId
+                    traceNode.pointId,
                   );
                 }}
               />
@@ -222,7 +222,7 @@ export function getNodeType(node: SkillTreeConfig): "CORE" | "SMALL" | "BIG" {
   if (node.icon_path.includes("_SkillTree")) return "BIG";
   if (
     ["Normal.png", "BP.png", "Maze.png", "Passive.png", "Ultra.png"].some(
-      (ends) => node.icon_path.endsWith(ends)
+      (ends) => node.icon_path.endsWith(ends),
     )
   )
     return "CORE";
@@ -230,7 +230,7 @@ export function getNodeType(node: SkillTreeConfig): "CORE" | "SMALL" | "BIG" {
 }
 
 export function __experimental_getNodeType(
-  node: AvatarTraceSchema
+  node: AvatarTraceSchema,
 ): "CORE" | "SMALL" | "BIG" {
   switch (node.pointType) {
     case 2:
@@ -254,12 +254,12 @@ export function __experimental_traceIconUrl(node: AvatarTraceSchema) {
         "technique",
       ];
       return `${base}/skill/${node.avatarId}_${suffixes.at(
-        node.maxLevel !== 1 ? (node.pointId % 10) - 1 : 4
+        node.maxLevel !== 1 ? (node.pointId % 10) - 1 : 4,
       )}.png`;
     }
     case "SMALL":
       return propertyIconUrl(
-        node.statusAddList?.at(0)?.propertyType ?? "MaxHP"
+        node.statusAddList?.at(0)?.propertyType ?? "MaxHP",
       );
     case "BIG": {
       return `${base}/skill/${node.avatarId}_skilltree${node.pointId % 10}.png`;

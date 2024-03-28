@@ -15,7 +15,7 @@ interface Prop extends HTMLAttributes<HTMLDivElement> {
 export const SkillSelector = forwardRef<HTMLDivElement, Prop>(
   function SkillSelector(
     { className, skills, selectedId, characterId, ...props },
-    ref
+    ref,
   ) {
     return (
       <div
@@ -43,7 +43,7 @@ export const SkillSelector = forwardRef<HTMLDivElement, Prop>(
                   src={`${getImagePath(
                     characterId,
                     skill.attackType,
-                    skill.typeDesc
+                    skill.typeDesc,
                   )}`}
                   width={64}
                 />
@@ -56,5 +56,5 @@ export const SkillSelector = forwardRef<HTMLDivElement, Prop>(
         ))}
       </div>
     );
-  }
+  },
 );

@@ -22,5 +22,5 @@ export const lightConeSkillRelations = relations(
       fields: [lightConeSkills.id],
       references: [lightCones.skillId],
     }),
-  })
+  }),
 );

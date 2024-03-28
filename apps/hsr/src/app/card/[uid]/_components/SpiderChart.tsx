@@ -46,7 +46,7 @@ const genPoints = (length: number, radius: number) => {
 function genPolygonPoints<Datum>(
   dataArray: Datum[],
   scale: (n: number) => number,
-  getValue: (d: Datum) => number
+  getValue: (d: Datum) => number,
 ) {
   const step = (Math.PI * 2) / dataArray.length;
   const points: { x: number; y: number }[] = new Array(dataArray.length).fill({
@@ -123,7 +123,7 @@ export function SpiderChart<T>({
         width,
         height,
       })(polygonPoints.points),
-    [width, height, margin, polygonPoints.points]
+    [width, height, margin, polygonPoints.points],
   );
 
   const handleMouseMove: MouseEventHandler<SVGRectElement> = useCallback(
@@ -139,7 +139,7 @@ export function SpiderChart<T>({
         });
       }
     },
-    [showTooltip, voronoiLayout, width]
+    [showTooltip, voronoiLayout, width],
   );
 
   return width < 10 ? null : (

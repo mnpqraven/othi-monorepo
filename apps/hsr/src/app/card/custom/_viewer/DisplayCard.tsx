@@ -22,10 +22,10 @@ import { useMihomoApiUpdate } from "./useMihomoApiUpdate";
 type Lang = (typeof LANGS)[number];
 export type DisplayCardProps =
   | {
-    mode: "API";
-    uid: string;
-    lang: Lang | undefined;
-  }
+      mode: "API";
+      uid: string;
+      lang: Lang | undefined;
+    }
   | { mode: "CUSTOM" };
 
 export function DisplayCard(props: DisplayCardProps) {
@@ -33,7 +33,7 @@ export function DisplayCard(props: DisplayCardProps) {
   const { data: charMetadata } = trpc.honkai.avatar.by.useQuery(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     { charId: charId! },
-    { enabled: Boolean(charId) }
+    { enabled: Boolean(charId) },
   );
 
   const updateConfig = useSetAtom(configAtom);

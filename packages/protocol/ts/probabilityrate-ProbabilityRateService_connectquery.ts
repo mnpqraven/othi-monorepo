@@ -3,9 +3,16 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ProbabilityRatePayload, ProbabilityRateResponse } from "./probabilityrate_pb";
+import {
+  ProbabilityRatePayload,
+  ProbabilityRateResponse,
+} from "./probabilityrate_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import { createQueryService, createUnaryHooks, UnaryFunctionsWithHooks } from "@connectrpc/connect-query";
+import {
+  createQueryService,
+  createUnaryHooks,
+  UnaryFunctionsWithHooks,
+} from "@connectrpc/connect-query";
 
 export const typeName = "probabilityrate.ProbabilityRateService";
 
@@ -24,12 +31,15 @@ export const ProbabilityRateService = {
       O: ProbabilityRateResponse,
       kind: MethodKind.Unary,
     },
-  }
+  },
 } as const;
 
-const $queryService = createQueryService({  service: ProbabilityRateService,});
+const $queryService = createQueryService({ service: ProbabilityRateService });
 
 /**
  * @generated from rpc probabilityrate.ProbabilityRateService.Post
  */
-export const post: UnaryFunctionsWithHooks<ProbabilityRatePayload, ProbabilityRateResponse> = {   ...$queryService.post,  ...createUnaryHooks($queryService.post)};
+export const post: UnaryFunctionsWithHooks<
+  ProbabilityRatePayload,
+  ProbabilityRateResponse
+> = { ...$queryService.post, ...createUnaryHooks($queryService.post) };

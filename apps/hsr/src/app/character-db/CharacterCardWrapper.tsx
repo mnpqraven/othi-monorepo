@@ -33,7 +33,7 @@ const CharacterCard = forwardRef<HTMLDivElement, Prop>(
           className={cn(
             "relative h-full w-full rounded-tr-3xl border-b-2 bg-gradient-to-b from-transparent from-80%  to-black/50",
             rarity === 5 ? "border-[#ffc870]" : "border-[#c199fd]",
-            styles.card
+            styles.card,
           )}
           onMouseLeave={removeListener}
           onMouseMove={rotateToMouse}
@@ -43,7 +43,7 @@ const CharacterCard = forwardRef<HTMLDivElement, Prop>(
             alt={name}
             className={cn(
               "aspect-[374/512] rounded-tr-3xl bg-gradient-to-b",
-              rarity === 5 ? "bg-[#d0aa6e]" : "bg-[#9c65d7]"
+              rarity === 5 ? "bg-[#d0aa6e]" : "bg-[#9c65d7]",
             )}
             height={512}
             priority={rarity === 5}
@@ -61,7 +61,7 @@ const CharacterCard = forwardRef<HTMLDivElement, Prop>(
           <PathIcon
             className={cn(
               "absolute left-1 text-white",
-              element ? "top-[15%]" : "top-0"
+              element ? "top-[15%]" : "top-0",
             )}
             ignoreTheme
             path={path}
@@ -72,7 +72,7 @@ const CharacterCard = forwardRef<HTMLDivElement, Prop>(
         </div>
       </div>
     );
-  }
+  },
 );
 CharacterCard.displayName = "CharacterCard";
 
@@ -100,6 +100,6 @@ export const RarityIcon = forwardRef<HTMLDivElement, RarityIconProps>(
         </div>
       ))}
     </div>
-  )
+  ),
 );
 RarityIcon.displayName = "RarityIcon";

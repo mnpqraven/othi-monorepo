@@ -15,7 +15,7 @@ export function rpc<T extends ServiceType>(service: T): PromiseClient<T> {
     service,
     createGrpcWebTransport({
       baseUrl: env.NEXT_PUBLIC_HOST_NAS_WS,
-    })
+    }),
   );
   return client;
 }

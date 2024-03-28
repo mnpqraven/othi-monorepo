@@ -23,7 +23,7 @@ export const charEidAtom = atom(0);
 export const charSkillAtom = atomWithImmer<Record<string, number>>({});
 
 export const charTraceAtom = atomWithImmer<Record<string | number, boolean>>(
-  {}
+  {},
 );
 
 export const updateManyCharTraceAtom = atom(
@@ -34,7 +34,7 @@ export const updateManyCharTraceAtom = atom(
         draft[id] = checked;
       });
     });
-  }
+  },
 );
 
 export const maxLevelAtom = atom((get) => get(charPromotionAtom) * 10 + 20);
@@ -55,5 +55,5 @@ export const charStructAtom = atom(
     set(charEidAtom, next.eidolon);
     set(charTraceAtom, next.trace);
     set(charSkillAtom, next.skills);
-  }
+  },
 );

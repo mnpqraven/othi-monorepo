@@ -22,7 +22,7 @@ export const avatarToSkills = sqliteTable(
   (t) => ({
     avatarIdx: index("idx_avatarSkill_avatar_id").on(t.avatarId),
     skillIdx: uniqueIndex("idx_avatarSkill_skill_id").on(t.skillId),
-  })
+  }),
 );
 
 export const avatarToSkillRelations = relations(avatarToSkills, ({ one }) => ({

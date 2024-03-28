@@ -84,7 +84,7 @@ export function usePatchDateHelper() {
   }
 
   function getVersion(
-    abitraryDate?: Date
+    abitraryDate?: Date,
   ): `${number}.${number}.${1 | 2}` | undefined {
     const { phase, patch } = getPhase(abitraryDate);
     if (!phase) return undefined;

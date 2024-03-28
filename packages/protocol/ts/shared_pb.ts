@@ -3,7 +3,14 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from "@bufbuild/protobuf";
 import { Message, proto3 } from "@bufbuild/protobuf";
 
 /**
@@ -26,20 +33,31 @@ export class CharId extends Message<CharId> {
     { no: 1, name: "char_id", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CharId {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): CharId {
     return new CharId().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CharId {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): CharId {
     return new CharId().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CharId {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): CharId {
     return new CharId().fromJsonString(jsonString, options);
   }
 
-  static equals(a: CharId | PlainMessage<CharId> | undefined, b: CharId | PlainMessage<CharId> | undefined): boolean {
+  static equals(
+    a: CharId | PlainMessage<CharId> | undefined,
+    b: CharId | PlainMessage<CharId> | undefined,
+  ): boolean {
     return proto3.util.equals(CharId, a, b);
   }
 }
-

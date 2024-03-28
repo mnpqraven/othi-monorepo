@@ -31,6 +31,5 @@ export const SignatureAtlasService = {
       O: SignatureReturn,
       kind: MethodKind.Unary,
     },
-  }
+  },
 } as const;
-

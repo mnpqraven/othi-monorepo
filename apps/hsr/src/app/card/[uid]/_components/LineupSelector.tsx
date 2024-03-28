@@ -42,6 +42,6 @@ export const LineupSelector = forwardRef<HTMLDivElement, Props>(
         ))}
       </div>
     );
-  }
+  },
 );
 LineupSelector.displayName = "LineupSelector";

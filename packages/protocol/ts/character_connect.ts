@@ -31,6 +31,5 @@ export const CharacterMetadataService = {
       O: CharacterMetadatas,
       kind: MethodKind.Unary,
     },
-  }
+  },
 } as const;
-

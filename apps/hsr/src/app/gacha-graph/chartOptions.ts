@@ -34,14 +34,14 @@ export function chartOptions({
       textStyle: { color: theme === "light" ? "black" : "white" },
     },
     series: Array.from(
-      range(currentEidolon + 1, selectedBanner.maxConst, 1)
+      range(currentEidolon + 1, selectedBanner.maxConst, 1),
     ).map((eidolon) =>
       createChartSeries(
         selectedBanner.constShorthand,
         eidolon,
         data,
-        selectedBanner.bannerType === "LC" ? 1 : 0
-      )
+        selectedBanner.bannerType === "LC" ? 1 : 0,
+      ),
     ),
     color: [
       "#caffbf",
@@ -74,7 +74,7 @@ function createChartSeries(
   constShorthand: string,
   eidolon: number,
   queryData: ChartData,
-  padding = 0
+  padding = 0,
 ): SeriesOption {
   const data = queryData.data.map((eidsInRoll) => {
     const currentEid =

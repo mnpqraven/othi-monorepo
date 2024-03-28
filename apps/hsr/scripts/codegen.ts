@@ -19,7 +19,7 @@ async function main() {
   console.log("executing TS type codegen...");
   const schemasPath = path.join(dirname, "..", ".schemas");
   const schemaFiles = (await fs.readdir(schemasPath)).filter((x) =>
-    x.endsWith(".json")
+    x.endsWith(".json"),
   );
 
   for (const filename of schemaFiles) {
@@ -27,7 +27,7 @@ async function main() {
 
     const filePath = path.join(schemasPath, filename);
     const schema = JSON.parse(
-      await fs.readFile(filePath, { encoding: "utf-8" })
+      await fs.readFile(filePath, { encoding: "utf-8" }),
     );
     const compiled = await compile(schema, schema.title, {
       additionalProperties: false,
@@ -47,7 +47,7 @@ async function main() {
       "..",
       "src",
       "bindings",
-      jsonFileToTS(filename)
+      jsonFileToTS(filename),
     );
 
     if (await fileExists(outputPath)) {

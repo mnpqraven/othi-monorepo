@@ -11,7 +11,7 @@ import { useCallback, useRef } from "react";
  */
 export function useDebounce(
   onChange: (val: never) => unknown,
-  duration: number
+  duration: number,
 ) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const onEdit = useCallback(
@@ -21,7 +21,7 @@ export function useDebounce(
       }
       timeoutRef.current = setTimeout(() => onChange(val), duration);
     },
-    [duration, onChange]
+    [duration, onChange],
   );
   return onEdit;
 }

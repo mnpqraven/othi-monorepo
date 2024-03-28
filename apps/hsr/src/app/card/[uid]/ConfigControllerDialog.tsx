@@ -74,7 +74,7 @@ const ConfigIcon = forwardRef<HTMLButtonElement, ConfigIconProps>(
         <SlidersHorizontal />
       </Button>
     );
-  }
+  },
 );
 ConfigIcon.displayName = "ConfigIcon";
 

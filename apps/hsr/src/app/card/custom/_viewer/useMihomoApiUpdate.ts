@@ -23,7 +23,7 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
   const { query } = useMihomoInfo(
     mode === "API"
       ? { uid: props.uid, lang: props.lang }
-      : { uid: undefined, lang: undefined }
+      : { uid: undefined, lang: undefined },
   );
   const setCharStruct = useSetAtom(charStructAtom);
   const setLcStruct = useSetAtom(lcStructAtom);
@@ -121,11 +121,11 @@ export function useMihomoApiUpdate(props: DisplayCardProps) {
                     property,
                     value,
                     step,
-                  })
+                  }),
                 ),
               };
-            }
-          )
+            },
+          ),
         );
       }
     }
@@ -143,7 +143,7 @@ function findRelicType({
   relicsData: RelicConfig[];
 }): RelicType {
   const find = relicsData.find(
-    (e) => e.id === Number(id) && e.set_id === Number(setId)
+    (e) => e.id === Number(id) && e.set_id === Number(setId),
   );
   return find ? find.ttype : "HEAD";
 }

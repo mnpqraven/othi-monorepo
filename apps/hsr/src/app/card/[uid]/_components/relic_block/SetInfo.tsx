@@ -25,7 +25,7 @@ export const SetInfo = forwardRef<
   if (!relicBonuses || !relicSets) return null;
 
   const activeSets = relicBonuses.filter((e) =>
-    relics.map((a) => a.setId).includes(e.set_id)
+    relics.map((a) => a.setId).includes(e.set_id),
   );
 
   const setSummary: { setId: number; num: number; name: string | undefined }[] =
@@ -89,10 +89,10 @@ export const SetInfo = forwardRef<
                           slv={0}
                         />
                       </div>
-                    ) : null
+                    ) : null,
                   )}
                 </div>
-              ) : null
+              ) : null,
             )}
           </TooltipContent>
         )}

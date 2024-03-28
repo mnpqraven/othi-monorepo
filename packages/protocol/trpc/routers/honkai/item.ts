@@ -8,7 +8,7 @@ import { publicProcedure, router } from "../../trpc";
 export const itemRouter = router({
   list: publicProcedure.query(
     async () =>
-      (await db.select().from(items).all()) satisfies Awaited<ItemSchema[]>
+      (await db.select().from(items).all()) satisfies Awaited<ItemSchema[]>,
   ),
   paginated: publicProcedure
     .input(
@@ -16,7 +16,7 @@ export const itemRouter = router({
         limit: z.number().min(1).max(100).nullish(),
         page: z.number().min(0).optional(),
         cursor: z.number().nullish(),
-      })
+      }),
     )
     .query(async ({ input: { limit: mightLimit, page = 0 } }) => {
       const limit = mightLimit ?? 25;

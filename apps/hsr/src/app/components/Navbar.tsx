@@ -61,7 +61,7 @@ function Navbar({ className, ...props }: HTMLAttributes<HTMLElement>) {
   const pathnameClass = (path: string) =>
     cn(
       defaultLinkClass,
-      !pathname.startsWith(path) ? "text-muted-foreground" : ""
+      !pathname.startsWith(path) ? "text-muted-foreground" : "",
     );
 
   return (
@@ -69,7 +69,7 @@ function Navbar({ className, ...props }: HTMLAttributes<HTMLElement>) {
       <nav
         className={cn(
           "mr-auto flex flex-1 items-center space-x-4 lg:space-x-6",
-          className
+          className,
         )}
         {...props}
       >

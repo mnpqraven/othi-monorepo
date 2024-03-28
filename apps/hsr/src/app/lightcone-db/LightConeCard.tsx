@@ -35,7 +35,7 @@ const LightConeCard = forwardRef<HTMLDivElement, Prop>(
           <div
             className={cn(
               "absolute left-[18%] top-[14%] h-[76%] w-[65%] rotate-[13deg] cursor-pointer",
-              styles.card
+              styles.card,
             )}
           >
             <div className={styles.glow} ref={glowRef} />
@@ -60,7 +60,7 @@ const LightConeCard = forwardRef<HTMLDivElement, Prop>(
           <PathIcon
             className={cn(
               "absolute left-1 text-white",
-              element ? "top-[15%]" : "top-0"
+              element ? "top-[15%]" : "top-0",
             )}
             path={path}
             size="15%"
@@ -71,7 +71,7 @@ const LightConeCard = forwardRef<HTMLDivElement, Prop>(
         ) : null}
       </div>
     );
-  }
+  },
 );
 LightConeCard.displayName = "LightConeCard";
 
@@ -99,6 +99,6 @@ const RarityIcon = forwardRef<HTMLDivElement, RarityIconProps>(
         </div>
       ))}
     </div>
-  )
+  ),
 );
 RarityIcon.displayName = "RarityIcon";

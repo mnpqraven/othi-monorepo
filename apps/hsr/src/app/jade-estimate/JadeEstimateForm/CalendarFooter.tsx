@@ -28,18 +28,18 @@ function CalendarFooter({ date }: Prop) {
   // edge config store
   const { data: bannerList } = trpc.honkai.banner.patchList.useQuery(
     undefined,
-    { initialData: [] }
+    { initialData: [] },
   );
   const { getVersion, currentPatch } = usePatchDateHelper();
 
   const major = getVersion(date)?.slice(0, 3) ?? "";
   const versionInfo = futurePatchDateList.find((e) =>
-    e.version.startsWith(major)
+    e.version.startsWith(major),
   );
 
   const banner = useMemo(
     () => bannerList.find((e) => e.version === getVersion(date)),
-    [bannerList, getVersion, date]
+    [bannerList, getVersion, date],
   );
   const charas = banner?.chara ?? [null, null, null, null];
   const lcs = banner?.lc ?? [null, null, null, null];
@@ -99,7 +99,7 @@ function CalendarFooter({ date }: Prop) {
                 </TooltipContent>
               )}
             </Tooltip>
-          )
+          ),
         )}
       </div>
 
@@ -122,7 +122,7 @@ function CalendarFooter({ date }: Prop) {
                 </TooltipContent>
               )}
             </Tooltip>
-          )
+          ),
         )}
       </div>
     </div>
@@ -147,7 +147,7 @@ function LoadingIcon({
       <Skeleton
         className={cn(
           "flex h-12 w-12 items-center justify-center",
-          rounded ? "rounded-full" : "rounded-md"
+          rounded ? "rounded-full" : "rounded-md",
         )}
       >
         <ExternalLink />

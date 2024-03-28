@@ -11,7 +11,7 @@ export const optionsRelicSlotType = (setIds: number[] | undefined) =>
 
 export function useRelicSlotType(
   setIds: number[] | undefined,
-  opt: Options = {}
+  opt: Options = {},
 ) {
   const query = useQuery({
     ...optionsRelicSlotType(setIds),

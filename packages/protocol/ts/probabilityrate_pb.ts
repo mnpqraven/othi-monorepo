@@ -3,7 +3,14 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from "@bufbuild/protobuf";
 import { Message, proto3 } from "@bufbuild/protobuf";
 
 /**
@@ -74,27 +81,61 @@ export class ProbabilityRatePayload extends Message<ProbabilityRatePayload> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "probabilityrate.ProbabilityRatePayload";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "current_eidolon", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    {
+      no: 1,
+      name: "current_eidolon",
+      kind: "scalar",
+      T: 5 /* ScalarType.INT32 */,
+    },
     { no: 2, name: "pity", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
     { no: 3, name: "pulls", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-    { no: 4, name: "next_guaranteed", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 5, name: "enpitomized_pity", kind: "scalar", T: 5 /* ScalarType.INT32 */, opt: true },
+    {
+      no: 4,
+      name: "next_guaranteed",
+      kind: "scalar",
+      T: 8 /* ScalarType.BOOL */,
+    },
+    {
+      no: 5,
+      name: "enpitomized_pity",
+      kind: "scalar",
+      T: 5 /* ScalarType.INT32 */,
+      opt: true,
+    },
     { no: 6, name: "banner", kind: "enum", T: proto3.getEnumType(BannerType) },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ProbabilityRatePayload {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): ProbabilityRatePayload {
     return new ProbabilityRatePayload().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ProbabilityRatePayload {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): ProbabilityRatePayload {
     return new ProbabilityRatePayload().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ProbabilityRatePayload {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): ProbabilityRatePayload {
     return new ProbabilityRatePayload().fromJsonString(jsonString, options);
   }
 
-  static equals(a: ProbabilityRatePayload | PlainMessage<ProbabilityRatePayload> | undefined, b: ProbabilityRatePayload | PlainMessage<ProbabilityRatePayload> | undefined): boolean {
+  static equals(
+    a:
+      | ProbabilityRatePayload
+      | PlainMessage<ProbabilityRatePayload>
+      | undefined,
+    b:
+      | ProbabilityRatePayload
+      | PlainMessage<ProbabilityRatePayload>
+      | undefined,
+  ): boolean {
     return proto3.util.equals(ProbabilityRatePayload, a, b);
   }
 }
@@ -125,19 +166,37 @@ export class ProbabilityRateResponse extends Message<ProbabilityRateResponse> {
     { no: 2, name: "data", kind: "message", T: ReducedSims, repeated: true },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ProbabilityRateResponse {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): ProbabilityRateResponse {
     return new ProbabilityRateResponse().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ProbabilityRateResponse {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): ProbabilityRateResponse {
     return new ProbabilityRateResponse().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ProbabilityRateResponse {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): ProbabilityRateResponse {
     return new ProbabilityRateResponse().fromJsonString(jsonString, options);
   }
 
-  static equals(a: ProbabilityRateResponse | PlainMessage<ProbabilityRateResponse> | undefined, b: ProbabilityRateResponse | PlainMessage<ProbabilityRateResponse> | undefined): boolean {
+  static equals(
+    a:
+      | ProbabilityRateResponse
+      | PlainMessage<ProbabilityRateResponse>
+      | undefined,
+    b:
+      | ProbabilityRateResponse
+      | PlainMessage<ProbabilityRateResponse>
+      | undefined,
+  ): boolean {
     return proto3.util.equals(ProbabilityRateResponse, a, b);
   }
 }
@@ -162,19 +221,31 @@ export class ReducedSims extends Message<ReducedSims> {
     { no: 1, name: "index", kind: "message", T: ReducedSim, repeated: true },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ReducedSims {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): ReducedSims {
     return new ReducedSims().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ReducedSims {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): ReducedSims {
     return new ReducedSims().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ReducedSims {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): ReducedSims {
     return new ReducedSims().fromJsonString(jsonString, options);
   }
 
-  static equals(a: ReducedSims | PlainMessage<ReducedSims> | undefined, b: ReducedSims | PlainMessage<ReducedSims> | undefined): boolean {
+  static equals(
+    a: ReducedSims | PlainMessage<ReducedSims> | undefined,
+    b: ReducedSims | PlainMessage<ReducedSims> | undefined,
+  ): boolean {
     return proto3.util.equals(ReducedSims, a, b);
   }
 }
@@ -205,20 +276,31 @@ export class ReducedSim extends Message<ReducedSim> {
     { no: 2, name: "rate", kind: "scalar", T: 1 /* ScalarType.DOUBLE */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ReducedSim {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): ReducedSim {
     return new ReducedSim().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ReducedSim {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): ReducedSim {
     return new ReducedSim().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ReducedSim {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): ReducedSim {
     return new ReducedSim().fromJsonString(jsonString, options);
   }
 
-  static equals(a: ReducedSim | PlainMessage<ReducedSim> | undefined, b: ReducedSim | PlainMessage<ReducedSim> | undefined): boolean {
+  static equals(
+    a: ReducedSim | PlainMessage<ReducedSim> | undefined,
+    b: ReducedSim | PlainMessage<ReducedSim> | undefined,
+  ): boolean {
     return proto3.util.equals(ReducedSim, a, b);
   }
 }
-

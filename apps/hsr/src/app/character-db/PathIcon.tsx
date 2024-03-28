@@ -19,7 +19,7 @@ interface Prop extends HTMLAttributes<HTMLDivElement> {
 const PathIcon = forwardRef<HTMLDivElement, Prop>(
   (
     { path, size, iconClass: className, ignoreTheme = false, ...props },
-    ref
+    ref,
   ) => {
     const { theme } = useTheme();
     const filterDark = { filter: "drop-shadow(1px 1px 1px rgb(0 0 0 / 1))" };
@@ -47,7 +47,7 @@ const PathIcon = forwardRef<HTMLDivElement, Prop>(
         />
       </div>
     );
-  }
+  },
 );
 PathIcon.displayName = "PathIcon";
 

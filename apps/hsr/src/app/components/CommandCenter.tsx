@@ -36,7 +36,7 @@ const kbdVariants = cva(
     defaultVariants: {
       size: "default",
     },
-  }
+  },
 );
 
 interface Route {
@@ -56,11 +56,11 @@ function CommandCenter({ routes }: Prop) {
 
   const { data: lightConeList } = trpc.honkai.lightCone.list.useQuery(
     {},
-    { initialData: [] }
+    { initialData: [] },
   );
   const { data: characterList } = trpc.honkai.avatar.list.useQuery(
     {},
-    { initialData: [] }
+    { initialData: [] },
   );
   const [filteredLc, setFilteredLc] = useState<LightConeSchema[]>([]);
   const [filteredChar, setFilteredChar] = useState<AvatarSchema[]>([]);
@@ -221,7 +221,7 @@ export { CommandCenter };
 
 interface RouteItemProps
   extends Route,
-  ComponentPropsWithoutRef<typeof CommandItem> { }
+    ComponentPropsWithoutRef<typeof CommandItem> {}
 
 const RouteItem = forwardRef<
   ElementRef<typeof CommandPrimitive.Item>,

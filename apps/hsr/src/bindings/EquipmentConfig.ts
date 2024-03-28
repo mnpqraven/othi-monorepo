@@ -1,4 +1,11 @@
-export type Path = "Destruction" | "Hunt" | "Erudition" | "Harmony" | "Nihility" | "Preservation" | "Abundance";
+export type Path =
+  | "Destruction"
+  | "Hunt"
+  | "Erudition"
+  | "Harmony"
+  | "Nihility"
+  | "Preservation"
+  | "Abundance";
 
 /**
  * metadata for light cones

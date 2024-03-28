@@ -24,24 +24,24 @@ interface ProfileParam {
 export const optionsMihomoInfo = (
   uid: string | undefined,
   lang: Lang = "en",
-  isServer = false
+  isServer = false,
 ) =>
   queryOptions<MihomoResponse, Error, MihomoResponse>({
     queryKey: ["mihoyoInfo", uid, lang, isServer],
     queryFn: () =>
       uid
         ? getMihomoInfo(
-          uid,
-          lang,
-          isServer ? env.NEXT_PUBLIC_HOST_HSR : undefined
-        )
+            uid,
+            lang,
+            isServer ? env.NEXT_PUBLIC_HOST_HSR : undefined,
+          )
         : Promise.reject(new Error()),
     enabled: Boolean(uid),
   });
 
 export function useMihomoInfo(
   { uid, lang }: Partial<ProfileParam>,
-  opt: Options = {}
+  opt: Options = {},
 ) {
   const displayToast = opt.displayToast ?? true;
   const { toast } = useToast();
@@ -73,7 +73,7 @@ export function useMihomoInfo(
 
 export function useSuspendedMihomoInfo(
   { uid, lang }: Partial<ProfileParam>,
-  opt: SuspendedOptions = {}
+  opt: SuspendedOptions = {},
 ) {
   const displayToast = opt.displayToast ?? true;
 
@@ -106,7 +106,7 @@ export function useSuspendedMihomoInfo(
 export async function getMihomoInfo(
   uid: string,
   lang = "en",
-  host?: string
+  host?: string,
 ): Promise<MihomoResponse> {
   let url = `/api/profile/${uid}?lang=${lang}`;
   if (host) url = host + url;

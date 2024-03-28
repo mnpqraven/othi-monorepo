@@ -7,7 +7,7 @@ export async function serverFetch<TPayload, TResponse>(
   opt?: {
     payload?: TPayload;
     method: "POST" | "DELETE";
-  }
+  },
   // params?: string | number
 ): Promise<TResponse> {
   const url = env.NEXT_PUBLIC_HOST_NAS_WS + endpoint;

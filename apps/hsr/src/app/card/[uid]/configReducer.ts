@@ -11,7 +11,7 @@ export const initialConfig: CardConfig = {
 
 export function configReducer(
   state: CardConfig,
-  action: CardConfigAction
+  action: CardConfigAction,
 ): CardConfig {
   const { payload, type } = action;
   switch (type) {

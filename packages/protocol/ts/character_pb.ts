@@ -3,7 +3,14 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from "@bufbuild/protobuf";
 import { Message, proto3 } from "@bufbuild/protobuf";
 
 /**
@@ -23,22 +30,40 @@ export class CharacterMetadatas extends Message<CharacterMetadatas> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "dm.character.CharacterMetadatas";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "list", kind: "message", T: CharacterMetadata, repeated: true },
+    {
+      no: 1,
+      name: "list",
+      kind: "message",
+      T: CharacterMetadata,
+      repeated: true,
+    },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CharacterMetadatas {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): CharacterMetadatas {
     return new CharacterMetadatas().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CharacterMetadatas {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): CharacterMetadatas {
     return new CharacterMetadatas().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CharacterMetadatas {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): CharacterMetadatas {
     return new CharacterMetadatas().fromJsonString(jsonString, options);
   }
 
-  static equals(a: CharacterMetadatas | PlainMessage<CharacterMetadatas> | undefined, b: CharacterMetadatas | PlainMessage<CharacterMetadatas> | undefined): boolean {
+  static equals(
+    a: CharacterMetadatas | PlainMessage<CharacterMetadatas> | undefined,
+    b: CharacterMetadatas | PlainMessage<CharacterMetadatas> | undefined,
+  ): boolean {
     return proto3.util.equals(CharacterMetadatas, a, b);
   }
 }
@@ -90,24 +115,45 @@ export class CharacterMetadata extends Message<CharacterMetadata> {
   static readonly typeName = "dm.character.CharacterMetadata";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "avatar_id", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 2, name: "avatar_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "avatar_full_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    {
+      no: 2,
+      name: "avatar_name",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 3,
+      name: "avatar_full_name",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CharacterMetadata {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): CharacterMetadata {
     return new CharacterMetadata().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CharacterMetadata {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): CharacterMetadata {
     return new CharacterMetadata().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CharacterMetadata {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): CharacterMetadata {
     return new CharacterMetadata().fromJsonString(jsonString, options);
   }
 
-  static equals(a: CharacterMetadata | PlainMessage<CharacterMetadata> | undefined, b: CharacterMetadata | PlainMessage<CharacterMetadata> | undefined): boolean {
+  static equals(
+    a: CharacterMetadata | PlainMessage<CharacterMetadata> | undefined,
+    b: CharacterMetadata | PlainMessage<CharacterMetadata> | undefined,
+  ): boolean {
     return proto3.util.equals(CharacterMetadata, a, b);
   }
 }
-

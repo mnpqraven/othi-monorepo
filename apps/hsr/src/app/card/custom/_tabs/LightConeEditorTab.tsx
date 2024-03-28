@@ -26,18 +26,18 @@ export const LightConeEditorTab = forwardRef<
 >(({ className, ...props }, ref) => {
   const { data: lightConeList } = trpc.honkai.lightCone.list.useQuery(
     {},
-    { initialData: [] }
+    { initialData: [] },
   );
   const charId = useAtomValue(charIdAtom);
   const [open, setOpen] = useState(false);
   const setLcId = useSetAtom(lcIdAtom);
   const [localLc, setLocalLc] = useState<LightConeSchema | undefined>(
-    undefined
+    undefined,
   );
 
   const { data: charMeta } = trpc.honkai.avatar.by.useQuery(
     { charId: Number(charId) },
-    { enabled: Boolean(charId) }
+    { enabled: Boolean(charId) },
   );
 
   function onSelectLightCone(lc: LightConeSchema) {

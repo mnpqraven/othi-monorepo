@@ -16,7 +16,7 @@ function CharacterIcon({ data: avatar }: Prop) {
             alt=""
             className={cn(
               "h-12 w-12 rounded-full border",
-              elementVariant({ border: avatar.damage_type })
+              elementVariant({ border: avatar.damage_type }),
             )}
             height={128}
             src={`https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/${avatar.avatar_id}.png`}

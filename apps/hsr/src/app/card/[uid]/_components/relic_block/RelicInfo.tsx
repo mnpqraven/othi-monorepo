@@ -13,7 +13,7 @@ export const RelicInfo = forwardRef<
 >(({ className, ...props }, ref) => {
   const baseUrlAtom = useMemo(
     () => selectAtom(configAtom, (o) => o.showBaseUrl),
-    []
+    [],
   );
   const uidAtom = useMemo(() => selectAtom(configAtom, (o) => o.uid), []);
 

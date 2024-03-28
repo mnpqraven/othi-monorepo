@@ -33,7 +33,7 @@ const iconWrapVariants = cva(
     defaultVariants: {
       variant: "CORE",
     },
-  }
+  },
 );
 
 interface Prop {
@@ -44,7 +44,7 @@ export function TraceTableUpdater({ path }: Prop) {
   const characterId = useAtomValue(charIdAtom);
   const { data: traces, status } = trpc.honkai.avatar.trace.by.useQuery(
     { charId: Number(characterId) },
-    { enabled: Boolean(characterId) }
+    { enabled: Boolean(characterId) },
   );
   // const { data: traces, status } = useQuery(characterTraceQ(characterId));
   if (status !== "success") return "loading...";
@@ -73,7 +73,7 @@ interface TripRowProps extends HTMLAttributes<HTMLDivElement> {
 const TripRow = forwardRef<HTMLDivElement, TripRowProps>(
   ({ anchors, traceInfo, ascension, className, ...props }, ref) => {
     const traces = anchors.map((anchor) =>
-      traceInfo.find((e) => e.anchor === anchor)
+      traceInfo.find((e) => e.anchor === anchor),
     );
     const traceDict = useAtomValue(charTraceAtom);
     const updateMany = useSetAtom(updateManyCharTraceAtom);
@@ -107,11 +107,11 @@ const TripRow = forwardRef<HTMLDivElement, TripRowProps>(
               <span>...</span>
               <Skeleton className="h-12 w-12 rounded-full" />
             </div>
-          )
+          ),
         )}
       </div>
     );
-  }
+  },
 );
 TripRow.displayName = "TripRow";
 
@@ -145,7 +145,7 @@ function TraceItem({
             alt=""
             className={cn(
               "rounded-full",
-              __experimental_getNodeType(data) !== "CORE" ? "invert" : ""
+              __experimental_getNodeType(data) !== "CORE" ? "invert" : "",
             )}
             height={48}
             src={__experimental_traceIconUrl(data)}
@@ -178,7 +178,7 @@ function TraceItem({
           alt=""
           className={cn(
             "rounded-full",
-            __experimental_getNodeType(data) !== "CORE" ? "invert" : ""
+            __experimental_getNodeType(data) !== "CORE" ? "invert" : "",
           )}
           height={48}
           src={__experimental_traceIconUrl(data)}
@@ -192,7 +192,7 @@ function TraceItem({
 // TODO:
 function isPreviousChecked(
   previousTrace: AvatarTraceSchema | undefined,
-  dict: Record<number | string, boolean>
+  dict: Record<number | string, boolean>,
 ) {
   // ok for first node
   if (!previousTrace) return true;

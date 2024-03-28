@@ -58,7 +58,7 @@ export const SpiderChartWrapper = forwardRef<HTMLDivElement, Prop>(
         };
       })
       .sort((a, b) =>
-        sortByProperty(a.property as Property, b.property as Property)
+        sortByProperty(a.property as Property, b.property as Property),
       )
       .filter(({ property }) => filterOtherElements(property, element))
       .reverse() as {
@@ -94,7 +94,7 @@ export const SpiderChartWrapper = forwardRef<HTMLDivElement, Prop>(
         </ParentSize>
       </div>
     );
-  }
+  },
 );
 
 // existing fields:

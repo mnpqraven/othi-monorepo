@@ -30,7 +30,7 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Prop>(
           spreadData: spreadInfo!,
           value: value?.value,
         }).rolls,
-      [spreadInfo, value?.value]
+      [spreadInfo, value?.value],
     );
     const spreadLocalAtom = useMemo(
       () =>
@@ -45,11 +45,11 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Prop>(
             });
           }
         }),
-      [atomm, defaultSpreadRolls]
+      [atomm, defaultSpreadRolls],
     );
     const spreadSplittedLocalAtom = useMemo(
       () => splitAtom(spreadLocalAtom),
-      [spreadLocalAtom]
+      [spreadLocalAtom],
     );
     const [readOnlySpread, setSpread] = useAtom(spreadLocalAtom);
     const spreadAtoms = useAtomValue(spreadSplittedLocalAtom);
@@ -166,7 +166,7 @@ const SubstatSpreadConfig = forwardRef<HTMLDivElement, Prop>(
         </div>
       </div>
     );
-  }
+  },
 );
 SubstatSpreadConfig.displayName = "RelicSpreadConfig";
 
@@ -179,7 +179,7 @@ export { SubstatSpreadConfig };
 
 function getDefaultTextValue(
   value: number | undefined,
-  prop: Property | undefined
+  prop: Property | undefined,
 ) {
   if (!value || !prop) return "";
   if (isPropertyPercent(prop)) return (value * 100).toFixed(2);
@@ -223,8 +223,9 @@ export function calculateSpread({
     return {
       valid: false,
       rolls: Array.from(range(0, 5)).fill(0),
-      message: `Please enter value between ${prettyProperty(property, Number(absMin)).prettyValue
-        } and ${prettyProperty(property, absMax * 6).prettyValue}`,
+      message: `Please enter value between ${
+        prettyProperty(property, Number(absMin)).prettyValue
+      } and ${prettyProperty(property, absMax * 6).prettyValue}`,
     };
 
   // INFO: top down strategy
@@ -248,7 +249,7 @@ export function calculateSpread({
   // even strategy
   const mean = value / approxRolls;
   const rolls = Array.from({ length: 6 }).map((_, i) =>
-    i < approxRolls ? mean : 0
+    i < approxRolls ? mean : 0,
   );
   const valid = rolls
     .filter((num) => num !== 0)
@@ -259,8 +260,9 @@ export function calculateSpread({
     rolls,
     message: valid
       ? undefined
-      : `Please enter value between ${prettyProperty(property, absMin * approxRolls).prettyValue
-      } and ${prettyProperty(property, absMax * approxRolls).prettyValue}`,
+      : `Please enter value between ${
+          prettyProperty(property, absMin * approxRolls).prettyValue
+        } and ${prettyProperty(property, absMax * approxRolls).prettyValue}`,
   };
 }
 

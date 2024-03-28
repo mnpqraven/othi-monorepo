@@ -43,7 +43,7 @@ function ComboboxInner<T>(
     emptyLabel = "No result found.",
     ...props
   }: Prop<T>,
-  ref: ForwardedRef<HTMLButtonElement>
+  ref: ForwardedRef<HTMLButtonElement>,
 ) {
   const [open, setOpen] = useState(false);
   const [stateValue, setValue] = useState(defaultValue);
@@ -85,7 +85,7 @@ function ComboboxInner<T>(
                       const currentValue = valueAccessor(item);
                       if (onValueChange)
                         onValueChange(
-                          currentValue === value ? "" : currentValue
+                          currentValue === value ? "" : currentValue,
                         );
 
                       setValue(currentValue === value ? "" : currentValue);
@@ -99,7 +99,7 @@ function ComboboxInner<T>(
                         "ml-auto h-4 w-4",
                         value === valueAccessor(item)
                           ? "opacity-100"
-                          : "opacity-0"
+                          : "opacity-0",
                       )}
                     />
                   </CommandItem>

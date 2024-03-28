@@ -16,7 +16,7 @@ interface Prop {
 function TraceSummaryWrapper({ characterId }: Prop) {
   const { data: traces } = trpc.honkai.avatar.trace.by.useQuery(
     { charId: characterId },
-    { enabled: Boolean(characterId) }
+    { enabled: Boolean(characterId) },
   );
   const { data: properties } = useProperties();
 

@@ -35,7 +35,7 @@ export const SkillInfo = forwardRef<HTMLDivElement, Prop>(
       <div
         className={cn(
           className,
-          "shadow-border flex items-center justify-evenly rounded-md border py-2 shadow-md"
+          "shadow-border flex items-center justify-evenly rounded-md border py-2 shadow-md",
         )}
         ref={ref}
         {...props}
@@ -51,7 +51,7 @@ export const SkillInfo = forwardRef<HTMLDivElement, Prop>(
                   src={getImagePath(
                     characterId,
                     first.attackType,
-                    first.typeDesc
+                    first.typeDesc,
                   )}
                 />
                 <span
@@ -59,14 +59,14 @@ export const SkillInfo = forwardRef<HTMLDivElement, Prop>(
                     "w-full text-center font-bold",
                     isImprovedByEidolon(first.attackType, eidolon)
                       ? "text-[#6cfff7]"
-                      : ""
+                      : "",
                   )}
                 >
                   {skList[first.id] ===
                   getSkillMaxLevel(
                     first.attackType,
                     first.typeDesc ?? "",
-                    eidolon
+                    eidolon,
                   ) ? (
                     <span className="flex items-center justify-end">
                       {skList[first.id] ?? 1}
@@ -78,17 +78,17 @@ export const SkillInfo = forwardRef<HTMLDivElement, Prop>(
                       {getSkillMaxLevel(
                         first.attackType,
                         first.typeDesc ?? "",
-                        eidolon
+                        eidolon,
                       )}
                     </span>
                   )}
                 </span>
               </div>
-            ) : null
+            ) : null,
         )}
       </div>
     );
-  }
+  },
 );
 SkillInfo.displayName = "SkillInfo";
 
@@ -157,7 +157,7 @@ function getLabel2(typeDesc: string): string {
 export function getSkillMaxLevel(
   skillType: SkillType | null | undefined,
   skillTypeDesc: string,
-  eidolon: number
+  eidolon: number,
 ): number {
   if (skillTypeDesc === "Talent") return eidolon >= 5 ? 15 : 10;
   switch (skillType) {
@@ -175,7 +175,7 @@ export function getSkillMaxLevel(
 
 function isImprovedByEidolon(
   type: SkillType | null | undefined,
-  eidolon: number
+  eidolon: number,
 ): boolean {
   if (!type) return false;
   if (["Normal", "BPSkill"].includes(type) && eidolon >= 3) return true;
