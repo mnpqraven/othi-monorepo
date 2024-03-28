@@ -7,10 +7,8 @@ import { ThemeProvider } from "next-themes";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
 import { TooltipProvider } from "ui/primitive/tooltip";
-import { httpBatchLink } from "@trpc/client";
-import { trpc } from "@planning/app/_trpc/client";
-import superjson from "superjson";
 import { Provider } from "jotai";
+import { TrpcProvider } from "protocol/trpc/react";
 
 const TANSTACK_CONFIG: QueryClientConfig = {
   defaultOptions: {
@@ -18,18 +16,17 @@ const TANSTACK_CONFIG: QueryClientConfig = {
   },
 };
 
-export function AppProvider({ children }: { children: React.ReactNode }) {
+interface RootProps {
+  children: React.ReactNode;
+  headers: Headers;
+}
+export function AppProvider({ children, headers }: RootProps) {
   const [queryClient] = useState(() => new QueryClient(TANSTACK_CONFIG));
-  const [trpcClient] = useState(() =>
-    trpc.createClient({
-      links: [httpBatchLink({ url: "/api", transformer: superjson })],
-    }),
-  );
 
   return (
     <ThemeProvider attribute="class">
       <TooltipProvider delayDuration={300}>
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <TrpcProvider headers={headers} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
             <Provider>
               {children}
@@ -38,7 +35,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
               <ReactQueryDevtools initialIsOpen={false} />
             </Provider>
           </QueryClientProvider>
-        </trpc.Provider>
+        </TrpcProvider>
       </TooltipProvider>
     </ThemeProvider>
   );

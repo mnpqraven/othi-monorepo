@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { AppProvider } from "@planning/components/providers/AppProvider";
 import { Navbar } from "@planning/components/navbar/Navbar";
 import { Toaster } from "ui/primitive";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Othi's gacha planner",
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={GeistSans.className}>
-        <AppProvider>
+        <AppProvider headers={headers()}>
           <Navbar />
 
           <main className="px-4 py-8">{children}</main>
