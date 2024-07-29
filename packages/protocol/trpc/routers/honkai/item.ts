@@ -2,7 +2,6 @@ import type { ItemSchema } from "database/schema/item";
 import { items } from "database/schema/item";
 import * as z from "zod";
 import { db } from "database";
-import { sql } from "drizzle-orm";
 import { publicProcedure, router } from "../../trpc";
 
 export const itemRouter = router({
@@ -22,9 +21,7 @@ export const itemRouter = router({
       const limit = mightLimit ?? 25;
       // const cursor = mightCursor ?? 0;
       const offset = page * limit;
-      const total = await db
-        .select({ count: sql<number>`count(*)` })
-        .from(items);
+      const total = (await db.select().from(items)).length;
       const data = await db.query.items.findMany({
         limit,
         offset,
@@ -38,7 +35,7 @@ export const itemRouter = router({
           limit,
           offset,
           page,
-          total: total.at(0)?.count ?? 0,
+          total,
         },
         nextCursor,
       };

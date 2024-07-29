@@ -7,7 +7,7 @@ import Link from "next/link";
 import { LoadingEidolonTable } from "@hsr/app/components/Character/LoadingEidolonTable";
 import { SkillOverviewLoading } from "@hsr/app/components/Character/SkillOverviewLoading";
 import { SkillSelector } from "@hsr/app/components/Character/SkillSelector";
-import { server } from "protocol/trpc";
+import { trpcServer } from "protocol/trpc/react/server";
 import { sortSkillsByDesc } from "@hsr/lib/utils";
 import Loading from "@hsr/app/card/[uid]/loading";
 import { SignatureLightCone } from "./SignatureLightCone";
@@ -20,11 +20,11 @@ interface Prop {
 
 export default async function Character({ params, searchParams }: Prop) {
   const characterId = parseInt(params.charId);
-  const _testValidity = await server().honkai.avatar.by({
+  const _testValidity = await trpcServer.honkai.avatar.by({
     charId: characterId,
   });
-  const skills = await server()
-    .honkai.skill.by({ charId: characterId })
+  const skills = await trpcServer.honkai.skill
+    .by({ charId: characterId })
     .then((data) => data.sort(sortSkillsByDesc));
   const selectedId = Number(searchParams.id ?? skills.at(0)?.id);
 

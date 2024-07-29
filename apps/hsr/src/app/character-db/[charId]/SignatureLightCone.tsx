@@ -1,4 +1,4 @@
-import { server } from "protocol/trpc";
+import { trpcServer } from "protocol/trpc/react/server";
 import { LightConeCard } from "@hsr/app/lightcone-db/LightConeCard";
 import { Content } from "@hsr/app/lightcone-db/[lcId]/Content";
 import { Portrait } from "@hsr/app/lightcone-db/[lcId]/Portrait";
@@ -12,7 +12,7 @@ interface Prop {
 
 export async function SignatureLightCone({ characterId, searchParams }: Prop) {
   const signatures = (
-    await server().honkai.avatar.signatures({
+    await trpcServer.honkai.avatar.signatures({
       charId: characterId,
       skill: true,
     })

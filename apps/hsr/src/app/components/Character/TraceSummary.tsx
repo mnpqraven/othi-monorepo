@@ -36,8 +36,7 @@ export const TraceSummary = forwardRef<HTMLDivElement, Prop>(
           };
         else
           hay[key] = {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            value: hay[key]!.value + value,
+            value: hay[key].value + value,
             property: key,
             label: traceNode.pointName ?? "",
           };
@@ -66,6 +65,6 @@ export const TraceSummary = forwardRef<HTMLDivElement, Prop>(
           ))}
       </div>
     );
-  },
+  }
 );
 TraceSummary.displayName = "TraceSummary";

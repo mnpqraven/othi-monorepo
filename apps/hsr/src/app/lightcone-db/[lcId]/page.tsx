@@ -1,4 +1,4 @@
-import { server } from "protocol/trpc";
+import { trpcServer } from "protocol/trpc/react/server";
 import { notFound } from "next/navigation";
 import { Portrait } from "./Portrait";
 import { Content } from "./Content";
@@ -10,7 +10,7 @@ interface Prop {
 
 export default async function LightConePage({ params }: Prop) {
   const lcId = parseInt(params.lcId);
-  const lc = await server().honkai.lightCone.by({ lcId, withSkill: true });
+  const lc = await trpcServer.honkai.lightCone.by({ lcId, withSkill: true });
 
   if (!lc) notFound();
 

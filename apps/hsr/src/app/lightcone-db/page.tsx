@@ -1,4 +1,4 @@
-import { server } from "protocol/trpc";
+import { trpcServer } from "protocol/trpc/react/server";
 import LightConeCatalogue from "./LightConeCatalogue";
 
 export const metadata = {
@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 export default async function LightConeDb() {
-  const lightCones = await server().honkai.lightCone.list();
+  const lightCones = await trpcServer.honkai.lightCone.list();
 
   return (
     <main className="px-2 py-4 md:container md:px-0">

@@ -1,44 +1,35 @@
 "use client";
 
 import { Provider } from "jotai";
-import type { QueryClientConfig } from "@tanstack/react-query";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { DevTools } from "jotai-devtools";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { SessionProvider } from "next-auth/react";
-import { useState } from "react";
 import { TooltipProvider } from "ui/primitive/tooltip";
-import { TrpcProvider } from "protocol/trpc/react";
-
-const TANSTACK_CONFIG: QueryClientConfig = {
-  defaultOptions: {
-    queries: { refetchOnWindowFocus: false },
-  },
-};
+import { TRPCReactProvider } from "protocol/trpc/react";
+import { transformer } from "protocol/trpc/react/transformer";
+import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 
 interface RootProps {
   children: React.ReactNode;
   headers: Headers;
 }
 
-export function AppProvider({ children, headers }: RootProps) {
-  const [queryClient] = useState(() => new QueryClient(TANSTACK_CONFIG));
-
+export function AppProvider({ children }: RootProps) {
   return (
     <SessionProvider>
       <ThemeProvider attribute="class">
         <TooltipProvider delayDuration={300}>
-          <TrpcProvider headers={headers} queryClient={queryClient}>
-            <QueryClientProvider client={queryClient}>
-              <Provider>
+          <TRPCReactProvider>
+            <Provider>
+              <ReactQueryStreamedHydration transformer={transformer}>
                 {children}
+              </ReactQueryStreamedHydration>
 
-                <DevTools isInitialOpen={false} />
-                <ReactQueryDevtools initialIsOpen={false} />
-              </Provider>
-            </QueryClientProvider>
-          </TrpcProvider>
+              <DevTools isInitialOpen={false} />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </Provider>
+          </TRPCReactProvider>
         </TooltipProvider>
       </ThemeProvider>
     </SessionProvider>

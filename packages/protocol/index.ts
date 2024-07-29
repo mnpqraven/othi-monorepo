@@ -1,6 +1,5 @@
-export { trpc } from "./trpc/generators/client";
 export {
-  trpcUrl,
+  trpc,
   type RouterInputs,
   type RouterOutputs,
-} from "./trpc/generators/shared";
+} from "./trpc/react/client";

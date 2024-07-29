@@ -3,8 +3,8 @@ const nextConfig = {
   transpilePackages: ["lib", "ui"],
   experimental: {
     swcPlugins: [
-      ["@swc-jotai/debug-label", {}],
-      ["@swc-jotai/react-refresh", {}],
+      // ["@swc-jotai/debug-label", {}],
+      // ["@swc-jotai/react-refresh", {}],
     ],
   },
 };

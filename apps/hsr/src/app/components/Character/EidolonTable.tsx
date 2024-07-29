@@ -2,9 +2,8 @@ import Image from "next/image";
 import { Fragment } from "react";
 import { sanitizeNewline } from "lib/utils";
 import { Badge, Toggle } from "ui/primitive";
-import { server } from "protocol/trpc";
-import type { inferRouterOutputs } from "@trpc/server";
-import type { AppRouter } from "protocol/trpc";
+import { trpcServer } from "protocol/trpc/react/server";
+import type { RouterOutputs } from "protocol/trpc";
 import Link from "next/link";
 
 interface Prop {
@@ -14,7 +13,7 @@ interface Prop {
 
 export async function EidolonTable({ characterId, searchParams }: Prop) {
   const selectedEidolon = Number(searchParams.i ?? 1);
-  const eidolons = await server().honkai.avatar.eidolons({
+  const eidolons = await trpcServer.honkai.avatar.eidolons({
     charId: characterId,
   });
 
@@ -61,7 +60,7 @@ export async function EidolonTable({ characterId, searchParams }: Prop) {
 }
 
 interface EidolonRowProps {
-  data: inferRouterOutputs<AppRouter>["honkai"]["avatar"]["eidolons"];
+  data: RouterOutputs["honkai"]["avatar"]["eidolons"];
   selectedEidolon: number;
   characterId: number;
   searchParams: Record<string, string | undefined>;

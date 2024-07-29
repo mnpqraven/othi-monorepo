@@ -106,10 +106,7 @@ async function getTableData(
 
   const dbStruct = tableMap()[name];
 
-  const totalQ = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(dbStruct);
-  const totalItems = totalQ.at(0)?.count ?? 0;
+  const totalItems = (await db.select().from(dbStruct)).length;
 
   const data = (await db
     .select()

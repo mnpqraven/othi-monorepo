@@ -17,16 +17,16 @@
   "dependencies": {
     "@libsql/client": "^0.3.5",
     "@t3-oss/env-nextjs": "^0.6.1",
-    "better-sqlite3": "^8.7.0",
+    "better-sqlite3": "^11.1.2",
     "dotenv": "^16.3.1",
-    "drizzle-orm": "^0.28.6",
+    "drizzle-orm": "^0.32.1",
     "drizzle-zod": "^0.5.1",
     "ulid": "^2.3.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "drizzle-kit": "^0.19.13",
+    "drizzle-kit": "^0.23.0",
     "eslint": "^8",
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "14.0.0",

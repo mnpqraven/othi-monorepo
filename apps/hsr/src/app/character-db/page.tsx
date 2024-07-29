@@ -1,4 +1,4 @@
-import { server } from "protocol/trpc";
+import { trpcServer } from "protocol/trpc/react/server";
 import CharacterCatalogue from "./CharacterCatalogue";
 
 export const metadata = {
@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 export default async function CharacterDb() {
-  const characters = await server().honkai.avatar.list({});
+  const characters = await trpcServer.honkai.avatar.list({});
 
   return (
     <main className="px-2 py-4 md:container md:px-0">
