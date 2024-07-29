@@ -1,6 +1,5 @@
 import { Toaster } from "ui/primitive";
 import { GeistSans } from "geist/font/sans";
-import { headers } from "next/headers";
 import Navbar from "./components/Navbar";
 import { AppProvider } from "./components/Providers";
 import "@hsr/css/globals.css";
@@ -17,9 +16,10 @@ export default function RootLayout({ children }: RootProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={GeistSans.className}>
-        <AppProvider headers={headers()}>
+        <AppProvider>
           <Navbar />
           <Toaster />
+
           {children}
         </AppProvider>
       </body>

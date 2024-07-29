@@ -11,8 +11,8 @@ const nextConfig = {
   },
   experimental: {
     swcPlugins: [
-      // ["@swc-jotai/react-refresh", {}],
-      // ["@swc-jotai/debug-label", {}],
+      ["@swc-jotai/react-refresh", {}],
+      ["@swc-jotai/debug-label", {}],
     ],
     serverComponentsExternalPackages: ["@libsql/client"],
   },

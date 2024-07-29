@@ -12,7 +12,6 @@ import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experime
 
 interface RootProps {
   children: React.ReactNode;
-  headers: Headers;
 }
 
 export function AppProvider({ children }: RootProps) {
@@ -26,7 +25,7 @@ export function AppProvider({ children }: RootProps) {
                 {children}
               </ReactQueryStreamedHydration>
 
-              <DevTools isInitialOpen={false} />
+              <DevTools isInitialOpen={false} theme="dark" />
               <ReactQueryDevtools initialIsOpen={false} />
             </Provider>
           </TRPCReactProvider>
