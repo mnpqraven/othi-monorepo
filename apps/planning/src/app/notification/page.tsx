@@ -13,7 +13,7 @@ export default function NotificationPage() {
         case "granted": {
           const text = `HEY! Your task abcd is now overdue.`;
           console.log("should see");
-          const notification = new Notification("To do list", {
+          const _noti = new Notification("To do list", {
             body: text,
           });
           break;

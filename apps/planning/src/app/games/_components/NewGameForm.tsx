@@ -26,34 +26,12 @@ import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
 import { v4 } from "uuid";
 import type { GameSchema } from "../_schema/form";
-import { gameSchema, gameSchemaDefaultValues } from "../_schema/form";
-import { Weekdays } from "../_schema/types";
-
-interface Prop extends HTMLAttributes<HTMLFormElement> {
-  defaultValues?: GameSchema;
-  disabled?: boolean;
-  form: UseFormReturn<GameSchema>;
-}
-
-interface Option<T = string> {
-  value: T;
-  label: string;
-}
-
-const frequencyOptions: Option[] = [
-  { value: "DAILY", label: "Daily" },
-  { value: "WEEKLY", label: "Weekly" },
-  { value: "MONTHLY", label: "Monthly" },
-];
-const dayOptions: Option<Weekdays>[] = [
-  { value: Weekdays.Mon, label: "Monday" },
-  { value: Weekdays.Tue, label: "Tuesday" },
-  { value: Weekdays.Wed, label: "Wednesday" },
-  { value: Weekdays.Thu, label: "Thursday" },
-  { value: Weekdays.Fri, label: "Friday" },
-  { value: Weekdays.Sat, label: "Saturday" },
-  { value: Weekdays.Sun, label: "Sunday" },
-];
+import {
+  dayOptions,
+  frequencyOptions,
+  gameSchema,
+  gameSchemaDefaultValues,
+} from "../_schema/form";
 
 export function useNewGameForm(props?: { defaultValues?: GameSchema }) {
   const form = useForm<GameSchema>({
@@ -63,6 +41,11 @@ export function useNewGameForm(props?: { defaultValues?: GameSchema }) {
   return { form };
 }
 
+interface Prop extends HTMLAttributes<HTMLFormElement> {
+  defaultValues?: GameSchema;
+  disabled?: boolean;
+  form: UseFormReturn<GameSchema>;
+}
 export const NewGameForm = forwardRef<HTMLFormElement, Prop>(
   function NewGameForm({ disabled, form, ...props }, ref) {
     const { fields, append, remove } = useFieldArray({
@@ -269,16 +252,18 @@ function TaskRow({
           />
         ) : null}
 
-        <Button
-          disabled={disabled}
-          onClick={() => {
-            removeFn(index);
-          }}
-          type="button"
-          variant="destructive"
-        >
-          Remove
-        </Button>
+        {disabled ? null : (
+          <Button
+            disabled={disabled}
+            onClick={() => {
+              removeFn(index);
+            }}
+            type="button"
+            variant="destructive"
+          >
+            Remove
+          </Button>
+        )}
       </div>
 
       <div className="text-destructive flex flex-col gap-2">
