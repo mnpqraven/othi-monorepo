@@ -11,7 +11,6 @@ import { transformer } from "protocol/trpc/react/transformer";
 
 interface RootProps {
   children: React.ReactNode;
-  headers: Headers;
 }
 export function AppProvider({ children }: RootProps) {
   return (
