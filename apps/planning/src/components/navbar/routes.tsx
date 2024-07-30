@@ -12,6 +12,7 @@ export const routes: NavbarItem[] = [
   { label: "Home", path: "/", icon: <Home /> },
   { label: "Games", path: "/games", icon: <Gamepad2 /> },
   { label: "Config", path: "/config", icon: <Settings /> },
+  { label: "Categories", path: "/categories", icon: <Settings /> },
   { label: "Drag-n-Drop", path: "/dragndrop", icon: <Settings /> },
 ];
 

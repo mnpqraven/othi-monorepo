@@ -8,5 +8,9 @@ interface TimerBadgeProp extends ComponentPropsWithoutRef<typeof Badge> {
 }
 export function TimerBadge({ task, ...props }: TimerBadgeProp) {
   const { timeById } = useTime();
-  return <Badge {...props}>{timeById({ taskId: task.id })}</Badge>;
+  const amount = timeById({ taskId: task.id });
+
+  if (!amount) return null;
+
+  return <Badge {...props}>{amount}</Badge>;
 }

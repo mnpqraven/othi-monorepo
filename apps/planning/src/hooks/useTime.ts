@@ -67,9 +67,10 @@ function solveTimeWeekly(
   cfgWeekday: Weekdays | undefined,
   cfgHour: number | undefined,
   cfgMin: number | undefined,
-) {
+): string | undefined {
   if (cfgWeekday === undefined || cfgHour === undefined || cfgMin === undefined)
-    throw new Error("solveTimeWeekly throw, contact Othi");
+    return undefined;
+  // throw new Error("solveTimeWeekly throw, contact Othi");
 
   const nextDate = dayjs()
     .day(WeekdayToInt(cfgWeekday))

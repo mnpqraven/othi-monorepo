@@ -39,6 +39,12 @@ export function* range(start: number, end: number, step = 1) {
   }
 }
 
+export function* chunks<T>(arr: T[], chunkSize: number) {
+  for (let i = 0; i < arr.length; i += chunkSize) {
+    yield arr.slice(i, i + chunkSize);
+  }
+}
+
 /**
  * This function removes trailing zeroes if it's a whole number (eg. 18.00)
  * Otherwise a float percent with n decimals is returned
@@ -48,18 +54,6 @@ export function* range(start: number, end: number, step = 1) {
 export function asPercentage(data: number | undefined, fixed?: number): string {
   if (!data) return "0 %";
   return `${Number(`${(data * 100).toFixed(fixed ?? 2)}`)} %`;
-}
-
-/**
- * If 2 Javascript Date objects has the same date, ignoring its hours,
- * minutes and seconds
- */
-export function sameDate(a: Date, b: Date): boolean {
-  return (
-    a.getDate() === b.getDate() &&
-    a.getMonth() === b.getMonth() &&
-    a.getFullYear() === b.getFullYear()
-  );
 }
 
 /**
