@@ -41,7 +41,6 @@ export default function Page() {
       const dragId = new CategoryDragId(event.active.id.toString());
       setOpen(true);
       const dropId = CategoryDropId.fromId(event.over.id.toString());
-      console.log("dropId", dropId, event.over.id);
       if (dropId) {
         const { day, startTime } = dropId;
         updatePreInfo({
