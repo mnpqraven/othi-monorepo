@@ -72,7 +72,7 @@
     "eslint": "^8.57.0",
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "^14.2.5",
-    "jotai-devtools": "^0.8.0",
+    "jotai-devtools": "^0.10.0",
     "postcss": "^8.4.40",
     "tailwind-config": "workspace:*",
     "tailwindcss": "^3.4.7",

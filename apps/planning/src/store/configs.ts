@@ -1,11 +1,19 @@
 import { atomWithStorage } from "jotai/utils";
+import { v4 } from "uuid";
 import { z } from "zod";
 
 export const categorySchema = z.object({
+  id: z.string().uuid(),
   name: z.string().min(1, "Name is required"),
   type: z.enum(["game", "other"]),
 });
 export type Category = z.TypeOf<typeof categorySchema>;
+
+export const defaultCategory = (): Category => ({
+  id: v4(),
+  name: "",
+  type: "game",
+});
 
 export const categoriesAtom = atomWithStorage<Category[]>("categories", []);
 

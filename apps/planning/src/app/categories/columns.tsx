@@ -12,6 +12,7 @@ import { ConfirmPopover } from "ui/shared/ConfirmPopover";
 const col = createColumnHelper<Category>();
 
 export const categoryColumns = [
+  col.accessor("id", { header: "ID" }),
   col.accessor("name", { header: "Name" }),
   col.accessor("type", { header: "Type" }),
   col.display({

@@ -1,15 +1,18 @@
 import { useDraggable } from "@dnd-kit/core";
 import type { Category } from "@planning/store/configs";
-import { Badge, badgeVariants } from "ui/primitive";
+import { Badge } from "ui/primitive";
 import type { Transform } from "@dnd-kit/utilities";
+import { CategoryDragId } from "./_data/drag";
 
 interface Prop {
   data: Category;
 }
 export function DraggableCategory({ data }: Prop) {
+  const catId = new CategoryDragId(data.id);
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: `category-${data.name}`,
+    id: catId.id,
   });
+
   return (
     <Badge
       ref={setNodeRef}
@@ -25,5 +28,6 @@ export function DraggableCategory({ data }: Prop) {
 }
 function transformText(transform: Transform | undefined | null) {
   if (!transform) return undefined;
-  return `translate3d(${transform.x}px, ${transform.y}px, 0)`;
+  const { x, y } = transform;
+  return `translate3d(${x}px, ${y}px, 0)`;
 }

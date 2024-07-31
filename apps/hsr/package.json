@@ -108,7 +108,7 @@
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "14.0.1",
     "eslint-plugin-storybook": "^0.6.15",
-    "jotai-devtools": "^0.8.0",
+    "jotai-devtools": "^0.10.0",
     "json-schema-to-typescript": "^13.1.2",
     "postcss": "8.4.23",
     "prettier": "^2.8.8",

@@ -1,4 +1,5 @@
 import "./globals.css";
+import "jotai-devtools/styles.css";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { AppProvider } from "@planning/components/providers/AppProvider";

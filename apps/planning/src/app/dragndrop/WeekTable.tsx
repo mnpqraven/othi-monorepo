@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "ui/primitive";
+import { CategoryDropId } from "./_data/drop";
 
 export function WeekTable() {
   // 48 rows, half an hour per row
@@ -63,10 +64,9 @@ interface DragCellProp {
 }
 
 function DragCell({ day, time, first }: DragCellProp) {
-  const { value, label } = day;
+  const { value } = day;
   const { isOver, setNodeRef } = useDroppable({
-    // NOTE: needs unique
-    id: `timetable-${value}-${label}-${time}`,
+    id: new CategoryDropId({ day: value, time }).id,
   });
 
   return (
@@ -86,5 +86,6 @@ function DragCell({ day, time, first }: DragCellProp) {
 function indexToHour(index: number) {
   const hour = Math.floor(index / 2);
   const mins = index % 2 === 0 ? 0 : 30;
-  return `${hour}:${mins.toString().padStart(2, "0")}`;
+  const fmtTime = (val: number) => val.toString().padStart(2, "0");
+  return `${fmtTime(hour)}:${fmtTime(mins)}`;
 }

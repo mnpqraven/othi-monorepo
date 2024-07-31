@@ -5,6 +5,7 @@ import {
   categoriesAtom,
   categoryReducer,
   categorySchema,
+  defaultCategory,
 } from "@planning/store/configs";
 import {
   Button,
@@ -26,16 +27,13 @@ import { useReducerAtom } from "@planning/hooks/useReducerAtom";
 export function CategoryForm() {
   const form = useForm<Category>({
     resolver: zodResolver(categorySchema),
-    defaultValues: {
-      name: "",
-      type: "game",
-    },
+    defaultValues: defaultCategory(),
   });
 
   const [_, dispatch] = useReducerAtom(categoriesAtom, categoryReducer);
   function onSubmit(payload: Category) {
     dispatch({ type: "add", payload });
-    form.reset();
+    form.reset(defaultCategory());
   }
 
   return (

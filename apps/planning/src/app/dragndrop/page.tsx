@@ -11,13 +11,14 @@ import {
   useToast,
 } from "ui/primitive";
 import { useState } from "react";
-import { Droppable } from "./Droppable";
-import { Draggable } from "./Draggable";
-import { MonthTable } from "./MonthTable";
-import { WeekTable } from "./WeekTable";
 import { useAtomValue } from "jotai";
 import { categoriesAtom } from "@planning/store/configs";
+import { MonthTable } from "./MonthTable";
+import { WeekTable } from "./WeekTable";
 import { DraggableCategory } from "./DraggableCategory";
+import { CategoryDragId } from "./_data/drag";
+import { useCreateTaskDialog } from "./useCreateTaskDialog";
+import { CategoryDropId } from "./_data/drop";
 
 const selects = [
   { value: "week", label: "Weekly" },
@@ -26,6 +27,7 @@ const selects = [
 
 export default function Page() {
   const { toast } = useToast();
+  const { setOpen, updatePreInfo } = useCreateTaskDialog();
 
   const [viewType, setViewType] = useState("week");
   const categories = useAtomValue(categoriesAtom);
@@ -35,23 +37,25 @@ export default function Page() {
       toast({ description: "drag event" });
     }
 
-    if (event.over && event.active) {
-      // TODO: handle drag drop of category here
+    if (event.over) {
+      const dragId = new CategoryDragId(event.active.id.toString());
+      setOpen(true);
+      const dropId = CategoryDropId.fromId(event.over.id.toString());
+      console.log("dropId", dropId, event.over.id);
+      if (dropId) {
+        const { day, startTime } = dropId;
+        updatePreInfo({
+          uuid: dragId.uuid,
+          startTime,
+          day,
+        });
+      }
     }
-
-    console.log("drag event", event);
   }
 
   return (
     <div className="flex flex-col gap-4">
       <DndContext onDragEnd={handleDragEnd}>
-        <Draggable>Drag me</Draggable>
-        <Droppable>
-          <div className="flex h-[300px] w-[300px] items-center justify-center rounded-md border">
-            drop zone
-          </div>
-        </Droppable>
-
         <div className="flex justify-between">
           <div>Drag a category to a date to start adding a new task</div>
 

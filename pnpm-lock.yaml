@@ -193,8 +193,8 @@ importers:
         specifier: ^14.2.5
         version: 14.2.5(eslint@8.57.0)(typescript@5.5.4)
       jotai-devtools:
-        specifier: ^0.6.3
-        version: 0.6.3(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(redux@5.0.1)
+        specifier: ^0.10.0
+        version: 0.10.0(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(redux@5.0.1)
       postcss:
         specifier: ^8.4.40
         version: 8.4.40
@@ -497,8 +497,8 @@ importers:
         specifier: ^0.6.15
         version: 0.6.15(eslint@8.43.0)(typescript@5.5.4)
       jotai-devtools:
-        specifier: ^0.8.0
-        version: 0.8.0(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)(redux@5.0.1)
+        specifier: ^0.10.0
+        version: 0.10.0(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)(redux@5.0.1)
       json-schema-to-typescript:
         specifier: ^13.1.2
         version: 13.1.2
@@ -708,8 +708,8 @@ importers:
         specifier: ^14.2.5
         version: 14.2.5(eslint@8.57.0)(typescript@5.5.4)
       jotai-devtools:
-        specifier: ^0.8.0
-        version: 0.8.0(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(redux@5.0.1)
+        specifier: ^0.10.0
+        version: 0.10.0(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(redux@5.0.1)
       postcss:
         specifier: ^8.4.40
         version: 8.4.40
@@ -884,10 +884,10 @@ importers:
         version: link:../database
       drizzle-orm:
         specifier: ^0.32.1
-        version: 0.32.1(@libsql/client@0.7.0)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1)
+        version: 0.32.1(@libsql/client@0.8.0)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1)
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.32.1(@libsql/client@0.7.0)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1))(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.32.1(@libsql/client@0.8.0)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1))(zod@3.23.8)
       next:
         specifier: ^14.2.5
         version: 14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1035,6 +1035,9 @@ importers:
       tailwind-merge:
         specifier: ^2.4.0
         version: 2.4.0
+      vaul:
+        specifier: ^0.9.1
+        version: 0.9.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
       '@turbo/gen':
         specifier: ^1.13.4
@@ -2264,20 +2267,14 @@ packages:
   '@floating-ui/dom@1.6.8':
     resolution: {integrity: sha512-kx62rP19VZ767Q653wsP1XZCGIirkE09E0QUGNYTM/ttbbQHqcGPdSfWFxUyyNLc/W6aoJRBajOSXhP6GXjC0Q==}
 
-  '@floating-ui/react-dom@1.3.0':
-    resolution: {integrity: sha512-htwHm67Ji5E/pROEAr7f8IKFShuiCKHwUC/UY4vC3I5jiSvGFAYnSYiZO5MlGmads+QqvUkR9ANHEguGrDv72g==}
-    peerDependencies:
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
-
   '@floating-ui/react-dom@2.1.1':
     resolution: {integrity: sha512-4h84MJt3CHrtG18mGsXuLCHMrug49d7DFkU0RMIyshRveBeyV2hmV/pDaF2Uxtu8kgq5r46llp5E5FQiR0K2Yg==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
-  '@floating-ui/react@0.19.2':
-    resolution: {integrity: sha512-JyNk4A0Ezirq8FlXECvRtQOX/iBe5Ize0W/pLkrZjfHW9GUV7Xnq6zm6fyZuQzaHHqEnVizmvlA96e1/CkZv+w==}
+  '@floating-ui/react@0.26.20':
+    resolution: {integrity: sha512-RixKJJG92fcIsVoqrFr4Onpzh7hlOx4U7NV4aLhMLmtvjZ5oTB/WzXaANYUZATKqXvvW7t9sCxtzejip26N5Ag==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -2368,11 +2365,11 @@ packages:
   '@libsql/client@0.3.6':
     resolution: {integrity: sha512-3Mc4ZDI7X5ZLkMxX5XijiBeqhvyrny356lcj/KVVIeMXt9j6g4l+CRIsUvgcsyCAOUHqWqh0+TjI91bCKmdW+w==}
 
-  '@libsql/client@0.7.0':
-    resolution: {integrity: sha512-1aLDtWzsErr68GZ640TVyOLkL/+lB2YK8cYvJIfiI7Mt+DEPB22Jkoz2QfBDg5PVGX/efeRHog2j/oVbUhxO8Q==}
+  '@libsql/client@0.8.0':
+    resolution: {integrity: sha512-ncx6p2wsaZtCAbRJCIkaTO14ya18qFYLJ1yTm5zHgwd9mlcvgenG4imSgJy2zNrKJkeyr1wzD+80jNqI7nCYoA==}
 
-  '@libsql/core@0.7.0':
-    resolution: {integrity: sha512-hCYfXa0S4t9CJtxZIWacboylrcx94ZQO0dEngH4f0f/LHg6ymHSZiubbojAwD7tNy94ahICoGPjEi6aEIyhlcQ==}
+  '@libsql/core@0.8.0':
+    resolution: {integrity: sha512-Bqs7bKfUNwm8NTLfKPbI4WME+3BTEBeDZTec0b9XZQ9hvjM4YlGXKKCuIDm8ECUYx4Mb1Gc0X14pm2/4r6ImdA==}
 
   '@libsql/darwin-arm64@0.1.34':
     resolution: {integrity: sha512-Wv8jvkj/fUAO8DF3A4HaddCMldUUpKcg/WW1sY95FNsSHOxktyxqU80jAp/tCuZ85GQIJozvgSr51/ARIC0gsw==}
@@ -2459,37 +2456,25 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@mantine/core@6.0.22':
-    resolution: {integrity: sha512-6kv0eY7n565fyjgS20qUYeCSxg3f1TJ5vurzbP1HHtFXXKSY0bYoqqDoHipFCt6NxsPQGeiC6cC0c/IWIlxoKQ==}
+  '@mantine/code-highlight@7.11.2':
+    resolution: {integrity: sha512-9q4p4LDbuuUhQ8GjzmI/Ven2JxjoT8+Sjnv76hNGJK9xRtorJs2PJn/fdQTd7QX9tOaalnsENIj85bSZ4V3X2g==}
     peerDependencies:
-      '@mantine/hooks': 6.0.22
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
+      '@mantine/core': 7.11.2
+      '@mantine/hooks': 7.11.2
+      react: ^18.2.0
+      react-dom: ^18.2.0
 
-  '@mantine/hooks@6.0.22':
-    resolution: {integrity: sha512-e10//QTN2sAmC4Ryeu5X5L/TsxnrjXMOaGq3dxFPIPsCSwLzyxqySfjzVViWmoPWAj0Ak9MvE2MHFjzmOpA80w==}
+  '@mantine/core@7.11.2':
+    resolution: {integrity: sha512-T64RjdgY8UPAv249miW1lQyPPot1JbCcKKsAZMNQHgcttcxLhrFpKVvglc4/48hdSoxI4LYJPNvqp7zciZmucQ==}
     peerDependencies:
-      react: '>=16.8.0'
+      '@mantine/hooks': 7.11.2
+      react: ^18.2.0
+      react-dom: ^18.2.0
 
-  '@mantine/prism@6.0.22':
-    resolution: {integrity: sha512-EW3SCmRzg2MlfJPAxkHXFLYMoPdmRp2EhCxqTcgCEeKwSk4TLlLF39aAjFtk2B+rtiqWlA/7Kh7YrhOZ78TdpA==}
+  '@mantine/hooks@7.11.2':
+    resolution: {integrity: sha512-jhyVe/sbDEG2U8rr2lMecUPgQxcfr5hh9HazqGfkS7ZRIMDO7uJ947yAcTMGGkp5Lxtt5TBFt1Cb6tiB2/1agg==}
     peerDependencies:
-      '@mantine/core': 6.0.22
-      '@mantine/hooks': 6.0.22
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
-
-  '@mantine/styles@6.0.22':
-    resolution: {integrity: sha512-Rud/IQp2EFYDiP4csRy2XBrho/Ct+W2/b+XbvCRTeQTmpFy/NfAKm/TWJa5zPvuv/iLTjGkVos9SHw/DteESpQ==}
-    peerDependencies:
-      '@emotion/react': '>=11.9.0'
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
-
-  '@mantine/utils@6.0.22':
-    resolution: {integrity: sha512-RSKlNZvxhMCkOFZ6slbYvZYbWjHUM+PxDQnupIOxIdsTZQQjx/BFfrfJ7kQFOP+g7MtpOds8weAetEs5obwMOQ==}
-    peerDependencies:
-      react: '>=16.8.0'
+      react: ^18.2.0
 
   '@mdx-js/react@2.3.0':
     resolution: {integrity: sha512-zQH//gdOmuu7nt2oJR29vFhDv88oGPmVw6BggmrHeMI+xgEkp1B2dX9/bMBSYtK0dyLX/aOmesKS09g222K1/g==}
@@ -2628,9 +2613,6 @@ packages:
         optional: true
       webpack-plugin-serve:
         optional: true
-
-  '@radix-ui/number@1.0.0':
-    resolution: {integrity: sha512-Ofwh/1HX69ZfJRiRBMTy7rgjAzHmwe4kW9C9Y99HTRUcYLUuVT0KESFj15rPjRgKJs20GPq8Bm5aEDJ8DuA3vA==}
 
   '@radix-ui/number@1.0.1':
     resolution: {integrity: sha512-T5gIdVO2mmPW3NNhjNgEP3cqMXjXL9UbO0BzWcXfvdBs+BohbQxvd/K5hSVKmn9/lbTdsQVKbUcP5WLCwvUbBg==}
@@ -2815,11 +2797,6 @@ packages:
         optional: true
       '@types/react-dom':
         optional: true
-
-  '@radix-ui/react-direction@1.0.0':
-    resolution: {integrity: sha512-2HV05lGUgYcA6xgLQ4BKPDmtL+QbIZYH5fCOTAOOcJ5O0QbWS3i9lKaurLzliYUDhORI2Qr3pyjhJh44lKA3rQ==}
-    peerDependencies:
-      react: ^16.8 || ^17.0 || ^18.0
 
   '@radix-ui/react-direction@1.0.1':
     resolution: {integrity: sha512-RXcvnXgyvYvBEOhCBuddKecVkoMiI10Jcm5cTI7abJRAHYfFxeu+FBQs/DvdxSYucxR5mna0dNsL6QFlds5TMA==}
@@ -3097,12 +3074,6 @@ packages:
       react: ^16.8 || ^17.0 || ^18.0
       react-dom: ^16.8 || ^17.0 || ^18.0
 
-  '@radix-ui/react-primitive@1.0.1':
-    resolution: {integrity: sha512-fHbmislWVkZaIdeF6GZxF0A/NH/3BjrGIYj+Ae6eTmTCr7EB0RQAAVEiqsXK6p3/JcRqVSBQoceZroj30Jj3XA==}
-    peerDependencies:
-      react: ^16.8 || ^17.0 || ^18.0
-      react-dom: ^16.8 || ^17.0 || ^18.0
-
   '@radix-ui/react-primitive@1.0.3':
     resolution: {integrity: sha512-yi58uVyoAcK/Nq1inRY56ZSjKypBNKTa/1mcL8qdl6oJeEaDbOldlzrGn7P6Q3Id5d+SYNGc5AJgc4vGhjs5+g==}
     peerDependencies:
@@ -3141,12 +3112,6 @@ packages:
         optional: true
       '@types/react-dom':
         optional: true
-
-  '@radix-ui/react-scroll-area@1.0.2':
-    resolution: {integrity: sha512-k8VseTxI26kcKJaX0HPwkvlNBPTs56JRdYzcZ/vzrNUkDlvXBy8sMc7WvCpYzZkHgb+hd72VW9MqkqecGtuNgg==}
-    peerDependencies:
-      react: ^16.8 || ^17.0 || ^18.0
-      react-dom: ^16.8 || ^17.0 || ^18.0
 
   '@radix-ui/react-scroll-area@1.1.0':
     resolution: {integrity: sha512-9ArIZ9HWhsrfqS765h+GZuLoxaRHD/j0ZWOWilsCvYTpYJp8XwCqNG7Dt9Nu/TItKOdgLGkOPCodQvDc+UMwYg==}
@@ -3215,11 +3180,6 @@ packages:
 
   '@radix-ui/react-slot@1.0.0':
     resolution: {integrity: sha512-3mrKauI/tWXo1Ll+gN5dHcxDPdm/Df1ufcDLCecn+pnCIVcdWE7CujXo8QaXOWRJyZyQWWbpB8eFwHzWXlv5mQ==}
-    peerDependencies:
-      react: ^16.8 || ^17.0 || ^18.0
-
-  '@radix-ui/react-slot@1.0.1':
-    resolution: {integrity: sha512-avutXAFL1ehGvAXtPquu0YK5oz6ctS474iM3vNGQIkswrVhdrS52e3uoMQBzZhNRAIE0jBnUyXWNmSjGHhCFcw==}
     peerDependencies:
       react: ^16.8 || ^17.0 || ^18.0
 
@@ -5067,10 +5027,6 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
 
-  clsx@1.1.1:
-    resolution: {integrity: sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==}
-    engines: {node: '>=6'}
-
   clsx@1.2.1:
     resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
     engines: {node: '>=6'}
@@ -5272,9 +5228,6 @@ packages:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
     hasBin: true
-
-  csstype@3.0.9:
-    resolution: {integrity: sha512-rpw6JPxK6Rfg1zLOYCSwle2GFOOsnjmDYDaBwEcwoOg4qlsIVCN789VkBZDJAGi4T07gI4YSutR43t9Zz4Lzuw==}
 
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
@@ -6505,6 +6458,10 @@ packages:
   header-case@1.0.1:
     resolution: {integrity: sha512-i0q9mkOeSuhXw6bGgiQCCBgY/jlZuV/7dZXyZ9c6LcBrqwvT8eT719E9uxE5LiZftdl+z81Ugbg/VvXV4OJOeQ==}
 
+  highlight.js@11.10.0:
+    resolution: {integrity: sha512-SYVnVFswQER+zu1laSya563s+F8VDGt7o35d4utbamowvUNLLMovFqwCLSocpZTz3MgaSRA1IbqRWZv97dtErQ==}
+    engines: {node: '>=12.0.0'}
+
   hmac-drbg@1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
 
@@ -6917,18 +6874,10 @@ packages:
   jose@4.15.9:
     resolution: {integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==}
 
-  jotai-devtools@0.6.3:
-    resolution: {integrity: sha512-QPS6m2ft6laT5YrVlIlCzjRl1LYmwCtT3jL9TJcrlB5bUxqcls03CmNMRwVBpSOzx3WwiZVEmXALhlI1UvufPQ==}
+  jotai-devtools@0.10.0:
+    resolution: {integrity: sha512-ltGzJMam7sXbC827U1A2H6rMg+iiK5VzaBmanVfVpWS4fK9/8Mq5NLaG3n2OFtsQgI0nUDaNl/3NObI38sBx+A==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      '@emotion/react': '>=11.0.0'
-      react: '>=17.0.0'
-
-  jotai-devtools@0.8.0:
-    resolution: {integrity: sha512-dSxiDuEz/fvgxC5hCWJfRHTSaDz8RBaQ2DUO3SJqvskIP44BUxx5EJSQHN9WdbPqp9VQ2Db8yIR9jLGbpnuLtA==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      '@emotion/react': '>=11.0.0'
       react: '>=17.0.0'
 
   jotai-immer@0.2.0:
@@ -8020,11 +7969,6 @@ packages:
     resolution: {integrity: sha512-66hKPCr+72mlfiSjlEB1+45IjXSqvVAIy6mocupoww4tBFE9R9IhwwUGoI4G++Tc9Aq+2rxOt0RFU6gPcrte0A==}
     engines: {node: '>= 0.8'}
 
-  prism-react-renderer@1.3.5:
-    resolution: {integrity: sha512-IJ+MSwBWKG+SM3b2SUfdrhC+gu01QkV2KmRQgREThBfSQRoufqRfxfHUxpG1WcaFjP+kojcFyO9Qqtpgt3qLCg==}
-    peerDependencies:
-      react: '>=0.14.9'
-
   process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
 
@@ -8213,6 +8157,12 @@ packages:
       '@types/react': ^16.8.0 || ^17.0.0 || ^18.0.0
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
+  react-number-format@5.4.0:
+    resolution: {integrity: sha512-NWdICrqLhI7rAS8yUeLVd6Wr4cN7UjJ9IBTS0f/a9i7UB4x4Ti70kGnksBtZ7o4Z7YRbvCMMR/jQmkoOBa/4fg==}
+    peerDependencies:
+      react: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+
   react-refresh@0.14.2:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
     engines: {node: '>=0.10.0'}
@@ -8267,8 +8217,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-resizable-panels@0.0.54:
-    resolution: {integrity: sha512-f8hHdQrqvXoiZGdRNuoOi/C2cdYT2nEpaOb1KIWVWorSTPZmnE+ZQiamGeu+AMx3iZ/tqBtlAkBOpKXzTnDCoA==}
+  react-resizable-panels@2.0.10:
+    resolution: {integrity: sha512-1cQl5rp3VDWRL04XXX92lzM1hej2Fe5x+vpjYXcldfOjKwLV5JVrt5T6q0cTB5yfp4Wh+JIdYQ9A5EnZypO1DQ==}
     peerDependencies:
       react: ^16.14.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0
@@ -8283,8 +8233,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-textarea-autosize@8.3.4:
-    resolution: {integrity: sha512-CdtmP8Dc19xL8/R6sWvtknD/eCXkQr30dtvC4VmGInhRsfF8X/ihXCq6+9l9qbxmKRiq407/7z5fxE7cVWQNgQ==}
+  react-textarea-autosize@8.5.3:
+    resolution: {integrity: sha512-XT1024o2pqCuZSuBt9FwHlaDeNtVrtCXu0Rnz88t1jUGheCLa3PhjE1GH8Ctm2axEtvdCl5SUHYschyQ0L5QHQ==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -9350,6 +9300,12 @@ packages:
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
+
+  vaul@0.9.1:
+    resolution: {integrity: sha512-fAhd7i4RNMinx+WEm6pF3nOl78DFkAazcN04ElLPFF9BMCNGbY/kou8UMhIcicm0rJCNePJP0Yyza60gGOD0Jw==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
 
   vm-browserify@1.1.2:
     resolution: {integrity: sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==}
@@ -10831,18 +10787,6 @@ snapshots:
       '@floating-ui/core': 1.6.5
       '@floating-ui/utils': 0.2.5
 
-  '@floating-ui/react-dom@1.3.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@floating-ui/dom': 1.6.8
-      react: 18.3.1
-      react-dom: 18.2.0(react@18.3.1)
-
-  '@floating-ui/react-dom@1.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@floating-ui/dom': 1.6.8
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
   '@floating-ui/react-dom@2.1.1(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@floating-ui/dom': 1.6.8
@@ -10855,18 +10799,18 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@floating-ui/react@0.19.2(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
+  '@floating-ui/react@0.26.20(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@floating-ui/react-dom': 1.3.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
-      aria-hidden: 1.2.4
+      '@floating-ui/react-dom': 2.1.1(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+      '@floating-ui/utils': 0.2.5
       react: 18.3.1
       react-dom: 18.2.0(react@18.3.1)
       tabbable: 6.2.0
 
-  '@floating-ui/react@0.19.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@floating-ui/react@0.26.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@floating-ui/react-dom': 1.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      aria-hidden: 1.2.4
+      '@floating-ui/react-dom': 2.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@floating-ui/utils': 0.2.5
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       tabbable: 6.2.0
@@ -10992,9 +10936,9 @@ snapshots:
       - encoding
       - utf-8-validate
 
-  '@libsql/client@0.7.0':
+  '@libsql/client@0.8.0':
     dependencies:
-      '@libsql/core': 0.7.0
+      '@libsql/core': 0.8.0
       '@libsql/hrana-client': 0.6.2
       js-base64: 3.7.7
       libsql: 0.3.19
@@ -11004,7 +10948,7 @@ snapshots:
       - utf-8-validate
     optional: true
 
-  '@libsql/core@0.7.0':
+  '@libsql/core@0.8.0':
     dependencies:
       js-base64: 3.7.7
     optional: true
@@ -11091,75 +11035,53 @@ snapshots:
   '@libsql/win32-x64-msvc@0.3.19':
     optional: true
 
-  '@mantine/core@6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
+  '@mantine/code-highlight@7.11.2(@mantine/core@7.11.2(@mantine/hooks@7.11.2(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.11.2(react@18.3.1))(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@floating-ui/react': 0.19.2(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 6.0.22(react@18.3.1)
-      '@mantine/styles': 6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
-      '@mantine/utils': 6.0.22(react@18.3.1)
-      '@radix-ui/react-scroll-area': 1.0.2(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+      '@mantine/core': 7.11.2(@mantine/hooks@7.11.2(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.11.2(react@18.3.1)
+      clsx: 2.1.1
+      highlight.js: 11.10.0
       react: 18.3.1
       react-dom: 18.2.0(react@18.3.1)
+
+  '@mantine/code-highlight@7.11.2(@mantine/core@7.11.2(@mantine/hooks@7.11.2(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.11.2(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@mantine/core': 7.11.2(@mantine/hooks@7.11.2(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.11.2(react@18.3.1)
+      clsx: 2.1.1
+      highlight.js: 11.10.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  '@mantine/core@7.11.2(@mantine/hooks@7.11.2(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@floating-ui/react': 0.26.20(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.11.2(react@18.3.1)
+      clsx: 2.1.1
+      react: 18.3.1
+      react-dom: 18.2.0(react@18.3.1)
+      react-number-format: 5.4.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       react-remove-scroll: 2.5.10(@types/react@18.3.3)(react@18.3.1)
-      react-textarea-autosize: 8.3.4(@types/react@18.3.3)(react@18.3.1)
+      react-textarea-autosize: 8.5.3(@types/react@18.3.3)(react@18.3.1)
+      type-fest: 4.23.0
     transitivePeerDependencies:
-      - '@emotion/react'
       - '@types/react'
 
-  '@mantine/core@6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@mantine/core@7.11.2(@mantine/hooks@7.11.2(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@floating-ui/react': 0.19.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 6.0.22(react@18.3.1)
-      '@mantine/styles': 6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/utils': 6.0.22(react@18.3.1)
-      '@radix-ui/react-scroll-area': 1.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@floating-ui/react': 0.26.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.11.2(react@18.3.1)
+      clsx: 2.1.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+      react-number-format: 5.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-remove-scroll: 2.5.10(@types/react@18.3.3)(react@18.3.1)
-      react-textarea-autosize: 8.3.4(@types/react@18.3.3)(react@18.3.1)
+      react-textarea-autosize: 8.5.3(@types/react@18.3.3)(react@18.3.1)
+      type-fest: 4.23.0
     transitivePeerDependencies:
-      - '@emotion/react'
       - '@types/react'
 
-  '@mantine/hooks@6.0.22(react@18.3.1)':
-    dependencies:
-      react: 18.3.1
-
-  '@mantine/prism@6.0.22(@mantine/core@6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@mantine/core': 6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 6.0.22(react@18.3.1)
-      '@mantine/utils': 6.0.22(react@18.3.1)
-      prism-react-renderer: 1.3.5(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.2.0(react@18.3.1)
-
-  '@mantine/prism@6.0.22(@mantine/core@6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@mantine/core': 6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 6.0.22(react@18.3.1)
-      '@mantine/utils': 6.0.22(react@18.3.1)
-      prism-react-renderer: 1.3.5(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  '@mantine/styles@6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@emotion/react': 11.13.0(@types/react@18.3.3)(react@18.3.1)
-      clsx: 1.1.1
-      csstype: 3.0.9
-      react: 18.3.1
-      react-dom: 18.2.0(react@18.3.1)
-
-  '@mantine/styles@6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@emotion/react': 11.13.0(@types/react@18.3.3)(react@18.3.1)
-      clsx: 1.1.1
-      csstype: 3.0.9
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  '@mantine/utils@6.0.22(react@18.3.1)':
+  '@mantine/hooks@7.11.2(react@18.3.1)':
     dependencies:
       react: 18.3.1
 
@@ -11268,10 +11190,6 @@ snapshots:
     optionalDependencies:
       type-fest: 4.23.0
       webpack-hot-middleware: 2.26.1
-
-  '@radix-ui/number@1.0.0':
-    dependencies:
-      '@babel/runtime': 7.25.0
 
   '@radix-ui/number@1.0.1':
     dependencies:
@@ -11584,11 +11502,6 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.3.3
       '@types/react-dom': 18.3.0
-
-  '@radix-ui/react-direction@1.0.0(react@18.3.1)':
-    dependencies:
-      '@babel/runtime': 7.25.0
-      react: 18.3.1
 
   '@radix-ui/react-direction@1.0.1(@types/react@18.3.3)(react@18.3.1)':
     dependencies:
@@ -12044,20 +11957,6 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@radix-ui/react-primitive@1.0.1(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@babel/runtime': 7.25.0
-      '@radix-ui/react-slot': 1.0.1(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.2.0(react@18.3.1)
-
-  '@radix-ui/react-primitive@1.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@babel/runtime': 7.25.0
-      '@radix-ui/react-slot': 1.0.1(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
   '@radix-ui/react-primitive@1.0.3(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.25.0
@@ -12119,36 +12018,6 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.3.3
       '@types/react-dom': 18.3.0
-
-  '@radix-ui/react-scroll-area@1.0.2(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@babel/runtime': 7.25.0
-      '@radix-ui/number': 1.0.0
-      '@radix-ui/primitive': 1.0.0
-      '@radix-ui/react-compose-refs': 1.0.0(react@18.3.1)
-      '@radix-ui/react-context': 1.0.0(react@18.3.1)
-      '@radix-ui/react-direction': 1.0.0(react@18.3.1)
-      '@radix-ui/react-presence': 1.0.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-primitive': 1.0.1(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-use-callback-ref': 1.0.0(react@18.3.1)
-      '@radix-ui/react-use-layout-effect': 1.0.0(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.2.0(react@18.3.1)
-
-  '@radix-ui/react-scroll-area@1.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@babel/runtime': 7.25.0
-      '@radix-ui/number': 1.0.0
-      '@radix-ui/primitive': 1.0.0
-      '@radix-ui/react-compose-refs': 1.0.0(react@18.3.1)
-      '@radix-ui/react-context': 1.0.0(react@18.3.1)
-      '@radix-ui/react-direction': 1.0.0(react@18.3.1)
-      '@radix-ui/react-presence': 1.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-primitive': 1.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-use-callback-ref': 1.0.0(react@18.3.1)
-      '@radix-ui/react-use-layout-effect': 1.0.0(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
 
   '@radix-ui/react-scroll-area@1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
@@ -12283,12 +12152,6 @@ snapshots:
       '@types/react-dom': 18.3.0
 
   '@radix-ui/react-slot@1.0.0(react@18.3.1)':
-    dependencies:
-      '@babel/runtime': 7.25.0
-      '@radix-ui/react-compose-refs': 1.0.0(react@18.3.1)
-      react: 18.3.1
-
-  '@radix-ui/react-slot@1.0.1(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.25.0
       '@radix-ui/react-compose-refs': 1.0.0(react@18.3.1)
@@ -15059,8 +14922,6 @@ snapshots:
 
   clone@1.0.4: {}
 
-  clsx@1.1.1: {}
-
   clsx@1.2.1: {}
 
   clsx@2.0.0: {}
@@ -15283,8 +15144,6 @@ snapshots:
   css-what@6.1.0: {}
 
   cssesc@3.0.0: {}
-
-  csstype@3.0.9: {}
 
   csstype@3.1.3: {}
 
@@ -15598,9 +15457,9 @@ snapshots:
       better-sqlite3: 11.1.2
       react: 18.3.1
 
-  drizzle-orm@0.32.1(@libsql/client@0.7.0)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1):
+  drizzle-orm@0.32.1(@libsql/client@0.8.0)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1):
     optionalDependencies:
-      '@libsql/client': 0.7.0
+      '@libsql/client': 0.8.0
       '@types/react': 18.3.3
       better-sqlite3: 11.1.2
       react: 18.3.1
@@ -15610,9 +15469,9 @@ snapshots:
       drizzle-orm: 0.32.1(@libsql/client@0.3.6)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1)
       zod: 3.23.8
 
-  drizzle-zod@0.5.1(drizzle-orm@0.32.1(@libsql/client@0.7.0)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1))(zod@3.23.8):
+  drizzle-zod@0.5.1(drizzle-orm@0.32.1(@libsql/client@0.8.0)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.32.1(@libsql/client@0.7.0)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1)
+      drizzle-orm: 0.32.1(@libsql/client@0.8.0)(@types/react@18.3.3)(better-sqlite3@11.1.2)(react@18.3.1)
       zod: 3.23.8
 
   duplexify@3.7.1:
@@ -17151,6 +17010,8 @@ snapshots:
       no-case: 2.3.2
       upper-case: 1.1.3
 
+  highlight.js@11.10.0: {}
+
   hmac-drbg@1.0.1:
     dependencies:
       hash.js: 1.1.7
@@ -17582,55 +17443,39 @@ snapshots:
 
   jose@4.15.9: {}
 
-  jotai-devtools@0.6.3(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(redux@5.0.1):
+  jotai-devtools@0.10.0(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)(redux@5.0.1):
     dependencies:
-      '@emotion/react': 11.13.0(@types/react@18.3.3)(react@18.3.1)
-      '@mantine/core': 6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 6.0.22(react@18.3.1)
-      '@mantine/prism': 6.0.22(@mantine/core@6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/code-highlight': 7.11.2(@mantine/core@7.11.2(@mantine/hooks@7.11.2(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.11.2(react@18.3.1))(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+      '@mantine/core': 7.11.2(@mantine/hooks@7.11.2(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.11.2(react@18.3.1)
       '@redux-devtools/extension': 3.3.0(redux@5.0.1)
+      clsx: 2.1.1
       javascript-stringify: 2.1.0
       jsondiffpatch: 0.5.0
       react: 18.3.1
+      react-base16-styling: 0.9.1
       react-error-boundary: 4.0.13(react@18.3.1)
       react-json-tree: 0.18.0(@types/react@18.3.3)(react@18.3.1)
-      react-resizable-panels: 0.0.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-resizable-panels: 2.0.10(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
       - react-dom
       - redux
 
-  jotai-devtools@0.8.0(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)(redux@5.0.1):
+  jotai-devtools@0.10.0(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(redux@5.0.1):
     dependencies:
-      '@emotion/react': 11.13.0(@types/react@18.3.3)(react@18.3.1)
-      '@mantine/core': 6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 6.0.22(react@18.3.1)
-      '@mantine/prism': 6.0.22(@mantine/core@6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+      '@mantine/code-highlight': 7.11.2(@mantine/core@7.11.2(@mantine/hooks@7.11.2(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.11.2(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/core': 7.11.2(@mantine/hooks@7.11.2(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@mantine/hooks': 7.11.2(react@18.3.1)
       '@redux-devtools/extension': 3.3.0(redux@5.0.1)
+      clsx: 2.1.1
       javascript-stringify: 2.1.0
       jsondiffpatch: 0.5.0
       react: 18.3.1
+      react-base16-styling: 0.9.1
       react-error-boundary: 4.0.13(react@18.3.1)
       react-json-tree: 0.18.0(@types/react@18.3.3)(react@18.3.1)
-      react-resizable-panels: 0.0.54(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
-    transitivePeerDependencies:
-      - '@types/react'
-      - react-dom
-      - redux
-
-  jotai-devtools@0.8.0(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(redux@5.0.1):
-    dependencies:
-      '@emotion/react': 11.13.0(@types/react@18.3.3)(react@18.3.1)
-      '@mantine/core': 6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/hooks': 6.0.22(react@18.3.1)
-      '@mantine/prism': 6.0.22(@mantine/core@6.0.22(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@6.0.22(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@redux-devtools/extension': 3.3.0(redux@5.0.1)
-      javascript-stringify: 2.1.0
-      jsondiffpatch: 0.5.0
-      react: 18.3.1
-      react-error-boundary: 4.0.13(react@18.3.1)
-      react-json-tree: 0.18.0(@types/react@18.3.3)(react@18.3.1)
-      react-resizable-panels: 0.0.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-resizable-panels: 2.0.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
       - react-dom
@@ -18663,7 +18508,7 @@ snapshots:
       yaml: 2.5.0
     optionalDependencies:
       postcss: 8.4.40
-      ts-node: 10.9.2(@swc/core@1.7.3)(@types/node@20.14.13)(typescript@5.5.4)
+      ts-node: 10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@20.14.13)(typescript@5.5.4)
 
   postcss-load-config@4.0.2(postcss@8.4.40)(ts-node@10.9.2):
     dependencies:
@@ -18671,7 +18516,7 @@ snapshots:
       yaml: 2.5.0
     optionalDependencies:
       postcss: 8.4.40
-      ts-node: 10.9.2(@swc/core@1.7.3)(@types/node@20.14.13)(typescript@5.5.4)
+      ts-node: 10.9.2(@swc/core@1.7.3(@swc/helpers@0.5.12))(@types/node@20.14.13)(typescript@5.5.4)
 
   postcss-loader@7.3.4(postcss@8.4.23)(typescript@5.5.4)(webpack@5.93.0(@swc/core@1.7.3(@swc/helpers@0.5.12))(esbuild@0.18.20)):
     dependencies:
@@ -18793,10 +18638,6 @@ snapshots:
   pretty-format@3.8.0: {}
 
   pretty-hrtime@1.0.3: {}
-
-  prism-react-renderer@1.3.5(react@18.3.1):
-    dependencies:
-      react: 18.3.1
 
   process-nextick-args@2.0.1: {}
 
@@ -19038,6 +18879,18 @@ snapshots:
       react: 18.3.1
       react-base16-styling: 0.9.1
 
+  react-number-format@5.4.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1):
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.2.0(react@18.3.1)
+
+  react-number-format@5.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   react-refresh@0.14.2: {}
 
   react-remove-scroll-bar@2.3.6(@types/react@18.3.3)(react@18.3.1):
@@ -19092,12 +18945,12 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.3.3
 
-  react-resizable-panels@0.0.54(react-dom@18.2.0(react@18.3.1))(react@18.3.1):
+  react-resizable-panels@2.0.10(react-dom@18.2.0(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.2.0(react@18.3.1)
 
-  react-resizable-panels@0.0.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-resizable-panels@2.0.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -19111,7 +18964,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.3.3
 
-  react-textarea-autosize@8.3.4(@types/react@18.3.3)(react@18.3.1):
+  react-textarea-autosize@8.5.3(@types/react@18.3.3)(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.25.0
       react: 18.3.1
@@ -20192,8 +20045,7 @@ snapshots:
 
   type-fest@2.19.0: {}
 
-  type-fest@4.23.0:
-    optional: true
+  type-fest@4.23.0: {}
 
   type-is@1.6.18:
     dependencies:
@@ -20394,6 +20246,15 @@ snapshots:
   validate-npm-package-name@5.0.1: {}
 
   vary@1.1.2: {}
+
+  vaul@0.9.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@radix-ui/react-dialog': 1.1.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
 
   vm-browserify@1.1.2: {}
 
