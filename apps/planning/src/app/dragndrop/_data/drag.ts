@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { uuidSchema } from "./schema";
+import { uuidSchema } from "@planning/store/configs";
 
 const prefixedUuidSchema = z
   .custom<`category_${string}`>((val) => {

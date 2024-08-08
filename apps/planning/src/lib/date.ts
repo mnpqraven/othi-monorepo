@@ -1,5 +1,7 @@
 import { range } from "lib";
 import { subDays } from "date-fns";
+import type { z } from "zod";
+import type { timeSchema } from "@planning/store/configs";
 
 /**
  * @param month - 1-based index of the month, january is 0
@@ -61,3 +63,24 @@ export const dayCols = [
   { label: "Sat", value: 6 },
   { label: "Sun", value: 0 },
 ];
+
+/** parses a HH:MM format to object
+ * */
+export function parseSimpleTime(
+  dateString: string,
+): z.TypeOf<typeof timeSchema> {
+  // throw on multiple or no colon
+  const colonCount = (dateString.match(/:/g) || []).length;
+  if (colonCount !== 1)
+    throw Error(`invalid short date string: ${dateString} is not HH:mm`);
+  const colonI = dateString.indexOf(":");
+
+  const hour = Number(dateString.substring(0, colonI));
+  const min = Number(dateString.substring(colonI + 1, dateString.length));
+  return {
+    hour,
+    min,
+    label: dateString,
+    index: hour * 2 + (min % 30),
+  };
+}
