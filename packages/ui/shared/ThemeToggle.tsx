@@ -12,7 +12,6 @@ export const ThemeToggle = forwardRef<HTMLButtonElement, Props>(
     const { theme, setTheme } = t;
 
     function toggleTheme() {
-      console.log(t);
       setTheme(theme === "light" ? "dark" : "light");
     }
     return (
