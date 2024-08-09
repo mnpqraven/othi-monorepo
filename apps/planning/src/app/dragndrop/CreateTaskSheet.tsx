@@ -23,8 +23,8 @@ export function CreateTaskSheet() {
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{JSON.stringify(preInfo)}</DialogTitle>
-          <DialogDescription>This action cannot be undone.</DialogDescription>
+          <DialogTitle>New Task</DialogTitle>
+          <DialogDescription aria-describedby={undefined} />
         </DialogHeader>
 
         {currentCategory && startTime ? (

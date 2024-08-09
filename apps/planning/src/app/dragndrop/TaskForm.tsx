@@ -129,7 +129,7 @@ export function TaskForm({ category, startTime }: Prop) {
               name="time.start.min"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Start Min {field.value}</FormLabel>
+                  <FormLabel>Start Min</FormLabel>
                   <Select
                     defaultValue={String(field.value)}
                     onValueChange={(e) => {
