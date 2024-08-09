@@ -1,5 +1,4 @@
 /* eslint-disable react/no-array-index-key */
-import { sameDate } from "lib/utils";
 import { useMemo } from "react";
 import { useQueries } from "@tanstack/react-query";
 import API from "@hsr/server/typedEndpoints";
@@ -17,6 +16,7 @@ import {
 } from "ui/primitive";
 import { cn } from "lib";
 import { trpc } from "protocol";
+import { isSameDay } from "date-fns";
 
 interface Prop {
   date: Date;
@@ -66,7 +66,7 @@ function CalendarFooter({ date }: Prop) {
     })),
   });
 
-  const start = sameDate(date, currentPatch(date).startDate);
+  const start = isSameDay(date, currentPatch(date).startDate);
 
   return (
     <div className="mt-2.5 flex w-full flex-col items-center justify-center gap-2.5">
