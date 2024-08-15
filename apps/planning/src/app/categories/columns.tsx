@@ -1,9 +1,6 @@
 import { useReducerAtom } from "@planning/hooks/useReducerAtom";
-import {
-  categoriesAtom,
-  categoryReducer,
-  type Category,
-} from "@planning/store/configs";
+import type { Category } from "@planning/schemas/category";
+import { categoriesAtom, categoryReducer } from "@planning/schemas/category";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Trash } from "lucide-react";
 import { Button } from "ui/primitive";

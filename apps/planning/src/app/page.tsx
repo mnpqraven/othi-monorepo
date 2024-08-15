@@ -18,7 +18,7 @@ export default function Home() {
       </div>
 
       {/* viewer */}
-      {groupMode === "GAME" ? <GameChecklistGame /> : <GameChecklistType />}
+      {/* {groupMode === "GAME" ? <GameChecklistGame /> : <GameChecklistType />} */}
       <div />
     </div>
   );

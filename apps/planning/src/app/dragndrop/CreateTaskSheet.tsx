@@ -8,7 +8,8 @@ import {
   DialogTitle,
 } from "ui/primitive";
 import { useAtomValue } from "jotai";
-import { categoriesAtom, toTimeSchema } from "@planning/store/configs";
+import { categoriesAtom } from "@planning/schemas/category";
+import { toTimeSchema } from "@planning/schemas/datetime";
 import { useCreateTaskDialog } from "./useCreateTaskDialog";
 import { TaskForm } from "./TaskForm";
 

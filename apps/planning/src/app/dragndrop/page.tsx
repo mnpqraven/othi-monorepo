@@ -12,7 +12,7 @@ import {
 } from "ui/primitive";
 import { useState } from "react";
 import { useAtomValue } from "jotai";
-import { categoriesAtom } from "@planning/store/configs";
+import { categoriesAtom } from "@planning/schemas/category";
 import { MonthTable } from "./MonthTable";
 import { WeekTable } from "./WeekTable";
 import { DraggableCategory } from "./DraggableCategory";

@@ -1,7 +1,7 @@
 import { range } from "lib";
 import { subDays } from "date-fns";
 import type { z } from "zod";
-import type { timeSchema } from "@planning/store/configs";
+import type { timeSchema } from "@planning/schemas/datetime";
 
 /**
  * @param month - 1-based index of the month, january is 0

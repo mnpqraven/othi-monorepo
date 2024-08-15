@@ -1,12 +1,5 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Category } from "@planning/store/configs";
-import {
-  categoriesAtom,
-  categoryReducer,
-  categorySchema,
-  defaultCategory,
-} from "@planning/store/configs";
 import {
   Button,
   Form,
@@ -23,6 +16,13 @@ import {
   SelectValue,
 } from "ui/primitive";
 import { useReducerAtom } from "@planning/hooks/useReducerAtom";
+import type { Category } from "@planning/schemas/category";
+import {
+  categoriesAtom,
+  categoryReducer,
+  categorySchema,
+  defaultCategory,
+} from "@planning/schemas/category";
 
 export function CategoryForm() {
   const form = useForm<Category>({

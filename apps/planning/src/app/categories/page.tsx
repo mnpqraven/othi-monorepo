@@ -1,6 +1,6 @@
 "use client";
 
-import { categoriesAtom } from "@planning/store/configs";
+import { categoriesAtom } from "@planning/schemas/category";
 import { useTable } from "lib";
 import { DataTable } from "ui/shared/table";
 import { useAtomValue } from "jotai";

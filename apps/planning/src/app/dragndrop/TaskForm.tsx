@@ -1,8 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Category, Task, toTimeSchema } from "@planning/store/configs";
 import { useForm } from "react-hook-form";
 import { v4 } from "uuid";
-import { taskSchema } from "@planning/store/configs";
 import {
   Button,
   Form,
@@ -20,6 +18,10 @@ import {
 } from "ui/primitive";
 import type { z } from "zod";
 import { range } from "lib";
+import type { Category } from "@planning/schemas/category";
+import type { toTimeSchema } from "@planning/schemas/datetime";
+import type { Task } from "@planning/schemas/task";
+import { taskSchema } from "@planning/schemas/task";
 
 interface Prop {
   category: Category;
@@ -35,6 +37,7 @@ export function TaskForm({ category, startTime }: Prop) {
       category: { id: category.id },
       time: {
         start: startTime,
+        end: startTime,
       },
     },
   });
