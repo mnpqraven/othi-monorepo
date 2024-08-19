@@ -1,4 +1,3 @@
-
 "use client";
 
 import { ThemeProvider } from "next-themes";
@@ -10,6 +9,7 @@ import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experime
 import { DevTools } from "jotai-devtools";
 import { TRPCReactProvider } from "protocol/trpc/react";
 import { transformer } from "protocol/trpc/react/transformer";
+import { SessionProvider } from "next-auth/react";
 
 interface RootProps {
   children: React.ReactNode;
@@ -19,21 +19,23 @@ export function AppProvider({ children }: RootProps) {
   const transport = createTransport();
 
   return (
-    <ThemeProvider attribute="class">
-      <TooltipProvider delayDuration={300}>
-        <TRPCReactProvider>
-          <TransportProvider transport={transport}>
-            <Provider>
-              <ReactQueryStreamedHydration transformer={transformer}>
-                {children}
-              </ReactQueryStreamedHydration>
+    <SessionProvider>
+      <ThemeProvider attribute="class">
+        <TooltipProvider delayDuration={300}>
+          <TRPCReactProvider>
+            <TransportProvider transport={transport}>
+              <Provider>
+                <ReactQueryStreamedHydration transformer={transformer}>
+                  {children}
+                </ReactQueryStreamedHydration>
 
-              <DevTools isInitialOpen={false} theme="dark" />
-              <ReactQueryDevtools initialIsOpen={false} />
-            </Provider>
-          </TransportProvider>
-        </TRPCReactProvider>
-      </TooltipProvider>
-    </ThemeProvider>
+                <DevTools isInitialOpen={false} theme="dark" />
+                <ReactQueryDevtools initialIsOpen={false} />
+              </Provider>
+            </TransportProvider>
+          </TRPCReactProvider>
+        </TooltipProvider>
+      </ThemeProvider>
+    </SessionProvider>
   );
 }

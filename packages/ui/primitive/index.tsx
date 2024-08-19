@@ -1,6 +1,7 @@
 "use client";
 
 export * from "./accordion";
+export * from "./avatar";
 export * from "./button";
 export * from "./badge";
 export * from "./card";

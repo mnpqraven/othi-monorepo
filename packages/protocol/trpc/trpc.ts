@@ -1,8 +1,10 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 import { ZodError } from "zod";
-// import { type ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
-// import { getAuth, parseCookie } from "@/lib/utils";
+import { type Account } from "next-auth";
+import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import { COOKIES_KEY } from "lib/constants";
 import { transformer } from "./react/transformer";
+import { isSuperAdmin } from "./utils/github";
 
 /**
  * some chunks are copied from t3 app
@@ -11,9 +13,8 @@ import { transformer } from "./react/transformer";
 
 export interface Context {
   // this is where we put in context data e.g bearer token
-  // TODO: this + error formatting
   token?: string;
-  refreshToken?: string;
+  role: "public" | "authed" | "sudo";
 }
 
 /**
@@ -28,20 +29,36 @@ export interface Context {
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = (opts: {
+interface ContextOpts {
   headers: Headers;
-  // cookies?: () => ReadonlyRequestCookies;
-}) => {
+  cookies?: () => ReadonlyRequestCookies;
+}
+export const createTRPCContext = async (
+  opts: ContextOpts,
+): Promise<ContextOpts & Context> => {
   // NOTE: THIS UNDEFINED CHECK IS VERY IMPORTANT! ERROR WON'T SHOW UP IN
   // STACK TRACE, CHECK THIS IF YOU SEE ON VERCEL
   // 'undefined' is not valid JSON
-  //
-  // const { session } = parseCookie(opts.headers.get("cookie") ?? undefined);
-  // const token = session?.token ?? getAuth(opts.cookies);
+
+  let token: string | undefined;
+  let role: "public" | "authed" | "sudo" = "public";
+
+  if (opts.cookies) {
+    const ghstr = opts.cookies().get(COOKIES_KEY.github)?.value;
+    if (ghstr) {
+      const ghAccount = JSON.parse(ghstr) as unknown as Account;
+      const isSudo = await isSuperAdmin(ghAccount.access_token);
+
+      if (isSudo) {
+        token = ghAccount.access_token;
+        role = "sudo";
+      }
+    }
+  }
 
   return {
-    // token,
-    token: "abc",
+    role,
+    token,
     ...opts,
   };
 };
@@ -79,13 +96,24 @@ export const router = t.router;
 
 export const publicProcedure = t.procedure;
 
-export const authedProcedure = t.procedure.use(function isAuthed(opts) {
-  // BUG: page reload cause this to be {} in server
-  if (!opts.ctx.token) {
+export const authedProcedure = t.procedure.use((opts) => {
+  const { ctx } = opts;
+  const { role, token } = ctx;
+
+  if (!token || role === "public")
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });
-  }
+
+  // Infers the `session` as non-nullable
+  return opts.next({ ctx: opts.ctx });
+});
+
+export const superAdminProcedure = t.procedure.use(async (opts) => {
+  if (opts.ctx.role !== "sudo")
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
 
   // Infers the `session` as non-nullable
   return opts.next({ ctx: opts.ctx });

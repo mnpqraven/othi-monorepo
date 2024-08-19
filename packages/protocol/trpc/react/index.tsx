@@ -50,11 +50,9 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
         unstable_httpBatchStreamLink({
           transformer,
           url: `${getBaseUrl()}/api/trpc`,
-          headers: () => {
-            return {
-              "x-trpc-source": "nextjs-react",
-            };
-          },
+          headers: () => ({
+            "x-trpc-source": "nextjs-react",
+          }),
         }),
       ],
     }),

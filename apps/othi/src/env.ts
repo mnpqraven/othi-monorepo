@@ -3,14 +3,10 @@ import * as z from "zod";
 
 export const env = createEnv({
   server: {
-    // EDGE_CONFIG: z.string().url(),
+    NEXTAUTH_SECRET: z.string(),
+    OTHI_GITHUB_ID: z.string(),
+    OTHI_GITHUB_SECRET: z.string(),
   },
-  client: {
-    // NEXT_PUBLIC_HOST_HSR: z.string().url(),
-    // NEXT_PUBLIC_HOST_NAS_WS: z.string().url(),
-  },
-  experimental__runtimeEnv: {
-    // NEXT_PUBLIC_HOST_HSR: process.env.NEXT_PUBLIC_HOST_HSR,
-    // NEXT_PUBLIC_HOST_NAS_WS: process.env.NEXT_PUBLIC_HOST_NAS_WS,
-  },
+  client: {},
+  experimental__runtimeEnv: {},
 });
