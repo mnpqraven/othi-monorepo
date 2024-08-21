@@ -7,7 +7,7 @@ import { serverSignIn } from "./action";
 export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/login",
+    signIn: "/sudo",
   },
   providers: [
     GithubProvider({
