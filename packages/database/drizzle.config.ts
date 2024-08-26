@@ -1,5 +1,4 @@
 import type { Config } from "drizzle-kit";
-import { z } from "zod";
 import { env } from "./env";
 
 export default {
@@ -7,8 +6,9 @@ export default {
   out: "drizzle",
   driver: "turso",
   dbCredentials: {
-    url: z.string().parse(env.DB_URL),
+    url: env.DB_URL,
     authToken: env.DB_AUTH_TOKEN,
   },
   verbose: true,
+  dialect: "sqlite",
 } satisfies Config;

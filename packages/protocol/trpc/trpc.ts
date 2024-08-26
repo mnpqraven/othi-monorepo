@@ -4,7 +4,7 @@ import { type Account } from "next-auth";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { COOKIES_KEY } from "lib/constants";
 import { transformer } from "./react/transformer";
-import { isSuperAdmin } from "./utils/github";
+import { getGithubUser, isSuperAdmin } from "./utils/github";
 
 /**
  * some chunks are copied from t3 app
@@ -44,13 +44,13 @@ export const createTRPCContext = async (
   let role: "public" | "authed" | "sudo" = "public";
 
   if (opts.cookies) {
-    const ghstr = opts.cookies().get(COOKIES_KEY.github)?.value;
-    if (ghstr) {
-      const ghAccount = JSON.parse(ghstr) as unknown as Account;
-      const isSudo = await isSuperAdmin(ghAccount.access_token);
+    const user = await getGithubUser(opts.cookies);
+    if (user) {
+      const { ghUser, account } = user;
+      const isSudo = isSuperAdmin(ghUser);
 
       if (isSudo) {
-        token = ghAccount.access_token;
+        token = account.access_token;
         role = "sudo";
       }
     }
