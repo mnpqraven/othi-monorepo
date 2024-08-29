@@ -4,7 +4,8 @@ import { NextResponse } from "next/server";
 import { getGithubUser, isSuperAdmin } from "protocol/trpc/utils/github";
 
 async function middleware(req: NextRequestWithAuth) {
-  const data = await getGithubUser(req.cookies);
+  // @ts-expect-error during dev
+  const data = await getGithubUser(req.nextauth.token.access_token);
   const isSudo = isSuperAdmin(data?.ghUser);
 
   if (isSudo) NextResponse.next();

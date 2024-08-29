@@ -39,7 +39,11 @@ export default function Page() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit((e) => mutate(e))}>
+      <form
+        onSubmit={form.handleSubmit((e) => {
+          mutate(e);
+        })}
+      >
         <FormField
           control={form.control}
           name="name"

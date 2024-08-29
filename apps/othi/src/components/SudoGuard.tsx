@@ -1,4 +1,5 @@
-import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
+import { authOptions } from "protocol/trpc/utils/authOptions";
 import { getGithubUser, isSuperAdmin } from "protocol/trpc/utils/github";
 import type { ReactNode } from "react";
 
@@ -8,7 +9,9 @@ interface Prop {
 }
 
 export async function SudoGuard({ children }: Prop) {
-  const isSudo = await getGithubUser(cookies).then((e) =>
+  const sess = await getServerSession(authOptions);
+  // @ts-expect-error during dev
+  const isSudo = await getGithubUser(sess?.user?.access_token).then((e) =>
     isSuperAdmin(e?.ghUser),
   );
 

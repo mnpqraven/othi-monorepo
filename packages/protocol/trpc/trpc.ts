@@ -1,10 +1,10 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 import { ZodError } from "zod";
-import { type Account } from "next-auth";
+import { getServerSession } from "next-auth";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
-import { COOKIES_KEY } from "lib/constants";
 import { transformer } from "./react/transformer";
 import { getGithubUser, isSuperAdmin } from "./utils/github";
+import { authOptions } from "./utils/authOptions";
 
 /**
  * some chunks are copied from t3 app
@@ -40,17 +40,18 @@ export const createTRPCContext = async (
   // STACK TRACE, CHECK THIS IF YOU SEE ON VERCEL
   // 'undefined' is not valid JSON
 
-  let token: string | undefined;
   let role: "public" | "authed" | "sudo" = "public";
 
+  const sess = await getServerSession(authOptions);
+
+  const accessToken = sess?.user?.access_token;
   if (opts.cookies) {
-    const user = await getGithubUser(opts.cookies);
+    const user = await getGithubUser(accessToken);
     if (user) {
-      const { ghUser, account } = user;
+      const { ghUser } = user;
       const isSudo = isSuperAdmin(ghUser);
 
       if (isSudo) {
-        token = account.access_token;
         role = "sudo";
       }
     }
@@ -58,7 +59,7 @@ export const createTRPCContext = async (
 
   return {
     role,
-    token,
+    token: accessToken,
     ...opts,
   };
 };

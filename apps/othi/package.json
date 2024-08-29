@@ -35,6 +35,7 @@
     "@tanstack/react-query": "^5.51.15",
     "@tanstack/react-query-devtools": "^5.51.15",
     "@tanstack/react-query-next-experimental": "^5.51.15",
+    "@tanstack/react-table": "^8.19.3",
     "@trpc/client": "11.0.0-rc.477",
     "@trpc/next": "11.0.0-next.320",
     "@trpc/react-query": "11.0.0-next-beta.289",

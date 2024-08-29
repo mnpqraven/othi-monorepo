@@ -1,4 +1,4 @@
-import { authOptions } from "@othi/lib/auth/authOptions";
+import { authOptions } from "protocol/trpc/utils/authOptions";
 import NextAuth from "next-auth";
 
 const handler = NextAuth(authOptions);

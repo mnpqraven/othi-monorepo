@@ -3,6 +3,9 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
+    NEXTAUTH_SECRET: z.string(),
+    OTHI_GITHUB_ID: z.string(),
+    OTHI_GITHUB_SECRET: z.string(),
     GITHUB_IDENT: z.coerce.number(),
     DB_URL: z.string(),
     DB_AUTH_TOKEN: z.string(),
