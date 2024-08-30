@@ -1,17 +1,12 @@
 "use client";
 
-import { inferProcedureOutput } from "@trpc/server";
 import { useTable } from "lib";
-import { AppRouter } from "protocol/trpc";
-import { blogTagColumns } from "./columns";
 import { DataTable } from "ui/shared/table";
+import { trpc } from "protocol";
+import { blogTagColumns } from "./columns";
 
-interface Prop {
-  data: inferProcedureOutput<
-    AppRouter["_def"]["procedures"]["othi"]["blogTag"]["list"]
-  >;
-}
-export function BlogTagTable({ data }: Prop) {
+export function BlogTagTable() {
+  const [data] = trpc.othi.blogTag.list.useSuspenseQuery();
   const { table } = useTable({
     data,
     columns: blogTagColumns,

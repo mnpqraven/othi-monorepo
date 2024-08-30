@@ -10,6 +10,7 @@ import { DevTools } from "jotai-devtools";
 import { TRPCReactProvider } from "protocol/trpc/react";
 import { transformer } from "protocol/trpc/react/transformer";
 import { SessionProvider } from "next-auth/react";
+import { toast } from "ui/primitive/sonner";
 
 interface RootProps {
   children: React.ReactNode;
@@ -22,7 +23,7 @@ export function AppProvider({ children }: RootProps) {
     <SessionProvider>
       <ThemeProvider attribute="class">
         <TooltipProvider delayDuration={300}>
-          <TRPCReactProvider>
+          <TRPCReactProvider toastFn={toast}>
             <TransportProvider transport={transport}>
               <Provider>
                 <ReactQueryStreamedHydration transformer={transformer}>

@@ -36,4 +36,9 @@ export const blogTags = sqliteTable("blog_tag", {
   label: text("label", { length: 256 }).notNull(),
 });
 
+export const insertBlogTagSchema = createInsertSchema(blogTags, {
+  code: (schema) => schema.code.min(1),
+  label: (schema) => schema.code.min(1),
+});
+
 export type BlogTag = typeof blogTags.$inferSelect;

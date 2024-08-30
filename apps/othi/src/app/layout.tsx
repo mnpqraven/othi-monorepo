@@ -4,6 +4,7 @@ import "jotai-devtools/styles.css";
 import { AppProvider } from "@othi/components/AppProvider";
 import { AppListener } from "@othi/components/AppListener";
 import { Toaster } from "ui/primitive";
+import { ToasterSonner } from "ui/primitive/sonner";
 import { GeistSans } from "geist/font/sans";
 import { Navbar } from "@othi/components/Navbar";
 import { MainCommandCenter } from "@othi/components/MainCommandCenter";
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: RootProps) {
 
             <main>{children}</main>
 
+            <ToasterSonner />
             <Toaster />
             <MainCommandCenter />
           </AppListener>

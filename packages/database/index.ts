@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client";
+import { createClient, LibsqlError } from "@libsql/client";
 import * as schema from "./schema";
 import { env } from "./env";
 
@@ -11,3 +11,5 @@ const client = createClient({
 /** database instance
  * @usage server only */
 export const db = drizzle(client, { schema });
+
+export { LibsqlError };
