@@ -7,14 +7,12 @@
       }
     ]
   },
-  "exclude": [
-    "node_modules"
-  ],
+  "exclude": ["node_modules"],
   "include": [
     "next-env.d.ts",
-    ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
+    ".next/types/**/*.ts",
     "../../packages/auth/types/*.ts"
   ]
 }
