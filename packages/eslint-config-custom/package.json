@@ -6,7 +6,7 @@
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.51.15",
     "@vercel/style-guide": "^5.2.0",
-    "eslint-config-turbo": "^1.13.4",
+    "eslint-config-turbo": "^2.1.0",
     "eslint-plugin-storybook": "^0.6.15",
     "typescript": "^5.5.4"
   },

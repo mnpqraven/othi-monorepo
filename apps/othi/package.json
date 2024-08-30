@@ -11,6 +11,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "auth": "workspace:*",
     "@bufbuild/protobuf": "^1.10.0",
     "@emotion/react": "^11.13.0",
     "@hookform/resolvers": "^3.9.0",

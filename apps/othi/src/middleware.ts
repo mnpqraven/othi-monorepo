@@ -1,12 +1,12 @@
 import { withAuth } from "next-auth/middleware";
 import type { NextRequestWithAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-import { getGithubUser, isSuperAdmin } from "protocol/trpc/utils/github";
+import { isSuperAdmin } from "auth";
 
 async function middleware(req: NextRequestWithAuth) {
-  // @ts-expect-error during dev
-  const data = await getGithubUser(req.nextauth.token.access_token);
-  const isSudo = isSuperAdmin(data?.ghUser);
+  const isSudo = await isSuperAdmin({
+    nextauth: req.nextauth,
+  });
 
   if (isSudo) NextResponse.next();
   else {

@@ -1,14 +1,13 @@
 {
   "name": "protocol",
   "version": "1.0.0",
-  "main": "index.ts",
-  "types": "index.ts",
   "license": "MIT",
   "scripts": {
     "codegen": "npx buf generate",
     "lint": "eslint ."
   },
   "dependencies": {
+    "auth": "workspace:*",
     "@bufbuild/protobuf": "^1.10.0",
     "@connectrpc/connect": "^1.4.0",
     "@connectrpc/connect-query": "^0.6.0",

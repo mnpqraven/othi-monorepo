@@ -18,15 +18,15 @@ module.exports = {
     "@vercel/style-guide/eslint/typescript",
     "@vercel/style-guide/eslint/react",
     "@vercel/style-guide/eslint/next",
-    "eslint-config-turbo",
   ]
     .map(require.resolve)
     .concat([
       "plugin:@tanstack/eslint-plugin-query/recommended",
       "plugin:storybook/recommended",
+      "turbo",
     ]),
   parserOptions: {
-    project: true,
+    project,
     tsconfigRootDir: process.cwd(),
   },
   globals: {

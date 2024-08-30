@@ -1,4 +1,4 @@
-import { authOptions } from "protocol/trpc/utils/authOptions";
+import { authOptions } from "auth";
 import NextAuth from "next-auth";
 
 const handler = NextAuth(authOptions);

@@ -2,9 +2,8 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import { ZodError } from "zod";
 import { getServerSession } from "next-auth";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import { isSuperAdmin } from "auth";
 import { transformer } from "./react/transformer";
-import { getGithubUser, isSuperAdmin } from "./utils/github";
-import { authOptions } from "./utils/authOptions";
 
 /**
  * some chunks are copied from t3 app
@@ -13,7 +12,7 @@ import { authOptions } from "./utils/authOptions";
 
 export interface Context {
   // this is where we put in context data e.g bearer token
-  token?: string;
+  // token?: string;
   role: "public" | "authed" | "sudo";
 }
 
@@ -42,24 +41,16 @@ export const createTRPCContext = async (
 
   let role: "public" | "authed" | "sudo" = "public";
 
-  const sess = await getServerSession(authOptions);
-
-  const accessToken = sess?.user?.access_token;
   if (opts.cookies) {
-    const user = await getGithubUser(accessToken);
-    if (user) {
-      const { ghUser } = user;
-      const isSudo = isSuperAdmin(ghUser);
+    const isSudo = await isSuperAdmin({
+      sessionFn: getServerSession,
+    });
 
-      if (isSudo) {
-        role = "sudo";
-      }
-    }
+    if (isSudo) role = "sudo";
   }
 
   return {
     role,
-    token: accessToken,
     ...opts,
   };
 };
@@ -99,9 +90,9 @@ export const publicProcedure = t.procedure;
 
 export const authedProcedure = t.procedure.use((opts) => {
   const { ctx } = opts;
-  const { role, token } = ctx;
+  const { role } = ctx;
 
-  if (!token || role === "public")
+  if (role === "public")
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });
