@@ -3,8 +3,6 @@
 import { useAtomValue } from "jotai";
 import { GroupBySelector } from "./home/_components/GroupBySelector";
 import { groupModeAtom } from "./home/_schema/store";
-import { GameChecklistGame } from "./home/_components/GameChecklistGame";
-import { GameChecklistType } from "./home/_components/GameChecklistType";
 
 export default function Home() {
   const groupMode = useAtomValue(groupModeAtom);
@@ -18,7 +16,6 @@ export default function Home() {
       </div>
 
       {/* viewer */}
-      {/* {groupMode === "GAME" ? <GameChecklistGame /> : <GameChecklistType />} */}
       <div />
     </div>
   );

@@ -31,8 +31,6 @@ export function TaskForm() {
     //
   }
 
-  console.log(form.formState.errors);
-
   return (
     <Form {...form}>
       <form>

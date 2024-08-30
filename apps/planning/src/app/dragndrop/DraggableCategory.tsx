@@ -1,5 +1,5 @@
 import { useDraggable } from "@dnd-kit/core";
-import type { Category } from "@planning/store/configs";
+import type { Category } from "@planning/schemas/category";
 import { Badge } from "ui/primitive";
 import type { Transform } from "@dnd-kit/utilities";
 import { CategoryDragId } from "./_data/drag";
