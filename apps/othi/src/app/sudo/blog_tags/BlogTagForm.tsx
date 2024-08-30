@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { BlogTag } from "database/schema";
 import { insertBlogTagSchema } from "database/schema";
-import { revalidatePath } from "next/cache";
 import { trpc } from "protocol";
 import { useForm } from "react-hook-form";
 import {
@@ -30,6 +29,7 @@ export function BlogTagForm() {
   const { mutate } = trpc.othi.blogTag.create.useMutation({
     onSuccess() {
       void utils.othi.blogTag.list.invalidate();
+      form.reset();
       toast("Success");
     },
   });
