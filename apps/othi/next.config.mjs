@@ -16,7 +16,7 @@ const nextConfig = {
     ],
     serverComponentsExternalPackages: ["@libsql/client"],
   },
-  transpilePackages: ["lib", "ui", "database", "protocol"],
+  transpilePackages: ["lib", "ui", "database", "protocol", "auth"],
 };
 
 export default nextConfig;

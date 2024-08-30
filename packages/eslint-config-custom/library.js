@@ -17,7 +17,7 @@ module.exports = {
     "@vercel/style-guide/eslint/typescript",
   ].map(require.resolve),
   parserOptions: {
-    project: true,
+    project,
     tsconfigRootDir: process.cwd(),
   },
   globals: {
@@ -32,7 +32,6 @@ module.exports = {
     },
   },
   ignorePatterns: ["node_modules/", "dist/", ".eslintrc.js"],
-
   rules: {
     "import/no-default-export": "off",
     "import/no-cycle": "off",

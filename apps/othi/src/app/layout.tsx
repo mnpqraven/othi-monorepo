@@ -6,6 +6,7 @@ import { AppListener } from "@othi/components/AppListener";
 import { Toaster } from "ui/primitive";
 import { GeistSans } from "geist/font/sans";
 import { Navbar } from "@othi/components/Navbar";
+import { MainCommandCenter } from "@othi/components/MainCommandCenter";
 
 export const metadata = {
   title: "Othi",
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: RootProps) {
             <Navbar />
 
             <main>{children}</main>
+
             <Toaster />
+            <MainCommandCenter />
           </AppListener>
         </AppProvider>
       </body>

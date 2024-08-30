@@ -1,6 +1,7 @@
 "use client";
 
 export * from "./accordion";
+export * from "./avatar";
 export * from "./button";
 export * from "./badge";
 export * from "./card";
@@ -26,6 +27,7 @@ export * from "./sheet";
 export * from "./skeleton";
 export * from "./table";
 export * from "./tabs";
+export * from "./textarea";
 export * from "./toggle";
 export * from "./toast";
 export * from "./toaster";

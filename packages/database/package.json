@@ -7,26 +7,27 @@
   "scripts": {
     "lint": "eslint .",
     "start": "docker kill $(docker ps -qf expose=4010) 2> /dev/null || echo 'No container running on port 4010' && docker run -p 4010:8080 -d -v sqld-data:/var/lib/sqld ghcr.io/libsql/sqld:latest",
-    "db:generate": "drizzle-kit generate:sqlite",
+    "db:generate": "drizzle-kit generate",
     "db:migrate": "npx tsx ./migrate.ts",
-    "db:push": "drizzle-kit push:sqlite",
-    "db:pull": "drizzle-kit introspect:sqlite",
+    "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit introspect",
     "db:drop": "drizzle-kit drop",
-    "db:studio": "drizzle-kit studio --port 4009 --host 127.0.0.1 --verbose"
+    "db:studio": "drizzle-kit studio --port 4009 --host 127.0.0.1 --verbose",
+    "db:up": "drizzle-kit up"
   },
   "dependencies": {
     "@libsql/client": "^0.3.6",
     "@t3-oss/env-nextjs": "^0.6.1",
-    "better-sqlite3": "^11.1.2",
+    "better-sqlite3": "^11.2.1",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.32.1",
+    "drizzle-orm": "^0.33.0",
     "drizzle-zod": "^0.5.1",
     "ulid": "^2.3.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/node": "^20.14.13",
-    "drizzle-kit": "^0.23.0",
+    "@types/node": "^22.5.0",
+    "drizzle-kit": "^0.24.1",
     "eslint": "^8.57.0",
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "14.0.0",

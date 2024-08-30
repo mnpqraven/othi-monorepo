@@ -3,11 +3,13 @@ import "server-only";
 import { createCallerFactory, router } from "./trpc";
 import { tableRouter } from "./routers/table";
 import { honkaiRouter } from "./routers/honkai";
+import { othiRouter } from "./routers/othi";
 import type { RouterInputs, RouterOutputs } from "./react/client";
 
 export const appRouter = router({
   honkai: honkaiRouter,
   table: tableRouter,
+  othi: othiRouter,
 });
 
 // NOTE: Export type router type signature,

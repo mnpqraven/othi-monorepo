@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { ulid } from "ulid";
@@ -10,10 +11,10 @@ export const blogs = sqliteTable("blogs", {
   content: text("content").notNull(),
   createdAt: int("created_at", { mode: "timestamp" })
     .notNull()
-    .$defaultFn(() => new Date()),
+    .default(sql`(unixepoch())`),
   updatedAt: int("updated_at", { mode: "timestamp" })
     .notNull()
-    .$defaultFn(() => new Date()),
+    .default(sql`(unixepoch())`),
 });
 
 export const insertBlogSchema = createInsertSchema(blogs, {
@@ -21,7 +22,18 @@ export const insertBlogSchema = createInsertSchema(blogs, {
     schema.name.min(1, {
       message: "Blog title must be at least 1 character long",
     }),
+  content: (schema) =>
+    schema.content.min(1, {
+      message: "Blog content must be at least 1 character long",
+    }),
 });
 
 export type Blog = typeof blogs.$inferSelect;
-export type NewBlog = typeof blogs.$inferInsert;
+export type BlogInsert = typeof blogs.$inferInsert;
+
+export const blogTags = sqliteTable("blog_tag", {
+  code: text("code").primaryKey().notNull(),
+  label: text("label", { length: 256 }).notNull(),
+});
+
+export type BlogTag = typeof blogTags.$inferSelect;

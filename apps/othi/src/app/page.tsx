@@ -1,10 +1,15 @@
+import { HydrateClient } from "protocol/trpc/react/server";
+import { Authed } from "./Authed";
+
 export default function Page() {
   return (
-    <>
-      <div className="h-96 border rounded-md">hello</div>
-      <div className="h-96 border rounded-md">hello</div>
-      <div className="h-96 border rounded-md">hello</div>
-      <div className="h-96 border rounded-md">hello</div>
-    </>
+    <HydrateClient>
+      <Authed />
+
+      <div className="h-96 rounded-md border">hello</div>
+      <div className="h-96 rounded-md border">hello</div>
+      <div className="h-96 rounded-md border">hello</div>
+      <div className="h-96 rounded-md border">hello</div>
+    </HydrateClient>
   );
 }
