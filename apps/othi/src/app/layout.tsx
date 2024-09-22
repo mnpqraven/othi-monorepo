@@ -8,6 +8,7 @@ import { ToasterSonner } from "ui/primitive/sonner";
 import { GeistSans } from "geist/font/sans";
 import { Navbar } from "@othi/components/Navbar";
 import { MainCommandCenter } from "@othi/components/MainCommandCenter";
+import { cn } from "lib";
 
 export const metadata = {
   title: "Othi",
@@ -20,12 +21,12 @@ interface RootProps {
 export default function RootLayout({ children }: RootProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={GeistSans.className}>
+      <body className={cn(GeistSans.className, "h-screen")}>
         <AppProvider>
           <AppListener>
             <Navbar />
 
-            <main>{children}</main>
+            <main className="h-full">{children}</main>
 
             <ToasterSonner />
             <Toaster />

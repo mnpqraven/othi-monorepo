@@ -1,9 +1,15 @@
+/* eslint-disable @typescript-eslint/no-throw-literal */
+/* eslint-disable no-console */
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
+// Fake auth function
+// eslint-disable-next-line @typescript-eslint/require-await
+async function auth(req: Request): Promise<{ id: string } | undefined> {
+  return { id: "fakeId" };
+}
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -15,7 +21,11 @@ export const ourFileRouter = {
       const user = await auth(req);
 
       // If you throw, the user will not be able to upload
-      if (!user) throw new UploadThingError("Unauthorized");
+      if (!user)
+        throw new UploadThingError({
+          message: "Unauthorized",
+          code: "FORBIDDEN",
+        });
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };
@@ -35,7 +45,11 @@ export const ourFileRouter = {
       const user = await auth(req);
 
       // If you throw, the user will not be able to upload
-      if (!user) throw new UploadThingError("Unauthorized");
+      if (!user)
+        throw new UploadThingError({
+          code: "FORBIDDEN",
+          message: "Unauthorized",
+        });
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };

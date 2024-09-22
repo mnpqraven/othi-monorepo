@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
+/* eslint-disable no-alert */
+
 "use client";
 
 import { UploadButton } from "@othi/lib/uploadthing";
-import { buttonVariants } from "ui/primitive";
 
 export function DemoUploadButton() {
   // TODO: cva on button + generic

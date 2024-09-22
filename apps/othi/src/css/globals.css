@@ -88,3 +88,20 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+.tiptap {
+  a {
+    cursor: pointer;
+  }
+
+  img {
+    border-width: 3px;
+    border-color: transparent;
+    border-radius: calc(var(--radius) - 2px);
+    margin: 1.5rem 0;
+
+    &.ProseMirror-selectednode {
+      border-color: hsl(var(--muted-foreground));
+    }
+  }
+}
