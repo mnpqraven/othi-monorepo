@@ -1,6 +1,7 @@
 import { SudoGuard } from "@othi/components/SudoGuard";
 import Link from "next/link";
 import { Button } from "ui/primitive";
+import { DemoUploadButton } from "./DemoUploadButton";
 
 export default function Page() {
   return (
@@ -11,6 +12,7 @@ export default function Page() {
         <Link href="/blog/create">
           <Button>create</Button>
         </Link>
+        <DemoUploadButton />
       </SudoGuard>
     </div>
   );

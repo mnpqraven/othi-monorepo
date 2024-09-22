@@ -6,6 +6,8 @@ export const env = createEnv({
     NEXTAUTH_SECRET: z.string(),
     OTHI_GITHUB_ID: z.string(),
     OTHI_GITHUB_SECRET: z.string(),
+    UPLOADTHING_TOKEN: z.string(),
+    NEXTAUTH_URL: z.string().default("http://localhost:4004"),
   },
   client: {},
   experimental__runtimeEnv: {},

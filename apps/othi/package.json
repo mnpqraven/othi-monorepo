@@ -11,7 +11,6 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "auth": "workspace:*",
     "@bufbuild/protobuf": "^1.10.0",
     "@emotion/react": "^11.13.0",
     "@hookform/resolvers": "^3.9.0",
@@ -41,6 +40,7 @@
     "@trpc/next": "11.0.0-next.320",
     "@trpc/react-query": "11.0.0-next-beta.289",
     "@trpc/server": "11.0.0-rc.477",
+    "@uploadthing/react": "^7.0.2",
     "@vercel/edge-config": "^0.2.1",
     "@visx/axis": "^3.10.1",
     "@visx/event": "^3.3.0",
@@ -51,6 +51,7 @@
     "@visx/shape": "^3.5.0",
     "@visx/tooltip": "^3.3.0",
     "@visx/voronoi": "^3.3.0",
+    "auth": "workspace:*",
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
     "cmdk": "^0.2.1",
@@ -84,6 +85,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "ui": "workspace:*",
+    "uploadthing": "^7.0.2",
     "use-immer": "^0.9.0",
     "wonka": "^6.3.4",
     "zod": "^3.23.8"
