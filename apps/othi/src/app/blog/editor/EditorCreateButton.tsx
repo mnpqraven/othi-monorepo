@@ -2,15 +2,21 @@
 
 import { useCurrentEditor } from "@tiptap/react";
 import { Button } from "ui/primitive";
+import { trpc } from "protocol";
 
 export function EditorCreateButton() {
   const { editor } = useCurrentEditor();
+  const { mutate: upload } = trpc.utils.blog.uploadMarkdown.useMutation();
+  const { mutate } = trpc.utils.blog.convertToMD.useMutation({
+    onSuccess(data) {
+      console.log(data);
+      upload({ markdownString: data });
+    },
+  });
 
   function onCreate() {
     if (editor) {
-      const data = editor.getHTML();
-      // eslint-disable-next-line no-console
-      console.log(data);
+      mutate({ htmlString: editor.getHTML() });
     }
   }
 

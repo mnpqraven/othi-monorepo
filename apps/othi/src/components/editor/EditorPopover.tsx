@@ -1,10 +1,19 @@
 import { BubbleMenu, useCurrentEditor } from "@tiptap/react";
-import { EditorBold, EditorItalic, EditorStrike, EditorUnderline } from "./modifiers";
+import {
+  EditorBold,
+  EditorItalic,
+  EditorStrike,
+  EditorUnderline,
+} from "./modifiers";
 
 export function EditorPopover() {
   const { editor } = useCurrentEditor();
 
   if (!editor) return null;
+
+  const isImage = editor.isActive("image");
+
+  // TODO: buttons for image
 
   return (
     <BubbleMenu
@@ -12,10 +21,14 @@ export function EditorPopover() {
       editor={editor}
       tippyOptions={{ duration: 100 }}
     >
-      <EditorBold />
-      <EditorItalic />
-      <EditorUnderline />
-      <EditorStrike />
+      {isImage ? null : (
+        <>
+          <EditorBold />
+          <EditorItalic />
+          <EditorUnderline />
+          <EditorStrike />
+        </>
+      )}
     </BubbleMenu>
   );
 }
