@@ -17,7 +17,7 @@ export function EditorPopover() {
 
   return (
     <BubbleMenu
-      className="flex gap-1 rounded-md bg-background border p-1"
+      className="bg-background flex gap-1 rounded-md border p-1"
       editor={editor}
       tippyOptions={{ duration: 100 }}
     >

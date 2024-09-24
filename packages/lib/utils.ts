@@ -2,6 +2,7 @@ import { PaginationState } from "@tanstack/react-table";
 import { type ClassValue, clsx } from "clsx";
 import Fuse, { FuseOptionKey } from "fuse.js";
 import { twMerge } from "tailwind-merge";
+import { ulid } from "ulid";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -84,4 +85,8 @@ export function rotate<T>(by: number, data: T[]): T[] {
 
 export function isEmpty(value: unknown[] | string) {
   return value.length === 0;
+}
+
+export function generateUlid() {
+  return ulid();
 }

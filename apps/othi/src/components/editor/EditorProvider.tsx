@@ -1,8 +1,8 @@
 /* eslint-disable import/no-named-as-default */
 "use client";
 
-import type { ComponentProps, ReactNode } from "react";
-import type { Extensions } from "@tiptap/react";
+import { type ComponentProps, type ReactNode } from "react";
+import type { Editor, Extensions } from "@tiptap/react";
 import { EditorProvider as PrimitiveProvider } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -13,13 +13,41 @@ import TextAlign from "@tiptap/extension-text-align";
 import FileHandler from "@tiptap-pro/extension-file-handler";
 import Link from "@tiptap/extension-link";
 import { cva } from "class-variance-authority";
-import { useToast } from "ui/primitive";
+import { trpc } from "protocol";
+import { generateUlid } from "lib";
 import { EditorMenubar } from "./EditorMenubar";
 import { EditorListener } from "./EditorListener";
 import { EditorPopover } from "./EditorPopover";
+import { atom, useAtomValue } from "jotai";
+
+type MediaInsert = { mode: "drop"; pos: number } | { mode: "paste" };
+
+export const editorTempBlogIdAtom = atom(generateUlid());
 
 function useExtensions() {
-  const { toast } = useToast();
+  const tempBlogId = useAtomValue(editorTempBlogIdAtom);
+  const { mutate: uploadTempImage } =
+    trpc.utils.blog.uploadTempImage.useMutation();
+
+  function editorMediaInsert(editor: Editor, files: File[], opt: MediaInsert) {
+    uploadTempImage({ files, tempBlogId });
+
+    files.forEach((file) => {
+      const fileReader = new FileReader();
+
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        editor
+          .chain()
+          .insertContentAt(
+            opt.mode === "drop" ? opt.pos : editor.state.selection.anchor,
+            { type: "image", attrs: { src: fileReader.result } },
+          )
+          .focus()
+          .run();
+      };
+    });
+  }
 
   const extensions: Extensions = [
     StarterKit,
@@ -36,60 +64,12 @@ function useExtensions() {
     FileHandler.configure({
       allowedMimeTypes: ["image/png", "image/jpeg", "image/gif", "image/webp"],
       onDrop: (currentEditor, files, pos) => {
-        toast({
-          title: "onDrop",
-          description: "onDrop",
-        });
-
-        files.forEach((file) => {
-          const fileReader = new FileReader();
-
-          fileReader.readAsDataURL(file);
-          fileReader.onload = () => {
-            currentEditor
-              .chain()
-              .insertContentAt(pos, {
-                type: "image",
-                attrs: {
-                  src: fileReader.result,
-                },
-              })
-              .focus()
-              .run();
-          };
-        });
+        editorMediaInsert(currentEditor, files, { mode: "drop", pos });
       },
       onPaste: (currentEditor, files, htmlContent) => {
-        toast({
-          title: "onPaste",
-          description: "onPaste",
-        });
-        // TODO: uploadthing temp upload
+        if (htmlContent) return;
 
-        files.forEach((file) => {
-          if (htmlContent) {
-            // if there is htmlContent, stop manual insertion & let other extensions handle insertion via inputRule
-            // you could extract the pasted file from this url string and upload it to a server for example
-            console.log(htmlContent); // eslint-disable-line no-console
-            return false;
-          }
-
-          const fileReader = new FileReader();
-
-          fileReader.readAsDataURL(file);
-          fileReader.onload = () => {
-            currentEditor
-              .chain()
-              .insertContentAt(currentEditor.state.selection.anchor, {
-                type: "image",
-                attrs: {
-                  src: fileReader.result,
-                },
-              })
-              .focus()
-              .run();
-          };
-        });
+        editorMediaInsert(currentEditor, files, { mode: "paste" });
       },
     }),
   ];
@@ -108,6 +88,7 @@ export function EditorProvider({
     "border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring min-h-[80px] w-full rounded-md border px-4 py-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
   );
   const { extensions } = useExtensions();
+
   return (
     <PrimitiveProvider
       content={content}

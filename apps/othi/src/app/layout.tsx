@@ -26,7 +26,7 @@ export default function RootLayout({ children }: RootProps) {
           <AppListener>
             <Navbar />
 
-            <main className="h-full">{children}</main>
+            <main className="h-[100vh-32px]">{children}</main>
 
             <ToasterSonner />
             <Toaster />
