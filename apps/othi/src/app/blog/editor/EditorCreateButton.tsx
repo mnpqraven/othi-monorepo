@@ -3,25 +3,27 @@
 import { useCurrentEditor } from "@tiptap/react";
 import { Button } from "ui/primitive";
 import { trpc } from "protocol";
-import { useAtomValue } from "jotai";
-import { editorTempBlogIdAtom } from "@othi/components/editor/EditorProvider";
+import { useAtom } from "jotai";
+import { editorTempBlogIdAtom } from "@othi/components/editor/store";
+import { RESET } from "jotai/utils";
 
 export function EditorCreateButton() {
   const { editor } = useCurrentEditor();
-  const tempBlogId = useAtomValue(editorTempBlogIdAtom);
+  const [tempBlogId, reset] = useAtom(editorTempBlogIdAtom);
 
   const { mutate: promoteMedia } =
     trpc.utils.blog.upload.promoteTempImage.useMutation();
-  const { mutate: uploadMdMeta } =
-    trpc.utils.blog.upload.blogMeta.useMutation({
-      onSuccess({ data }) {
-        if (data)
-          promoteMedia({
-            blogId: data.id,
-            tempBlogId,
-          });
-      },
-    });
+  const { mutate: uploadMdMeta } = trpc.utils.blog.upload.blogMeta.useMutation({
+    onSuccess({ data }) {
+      if (data) {
+        promoteMedia({
+          blogId: data.id,
+          tempBlogId,
+        });
+        reset(RESET);
+      }
+    },
+  });
   const { mutate: uploadMdBlob } =
     trpc.utils.blog.upload.markdownFile.useMutation({
       onSuccess(uploadedFile) {

@@ -3,12 +3,14 @@
 import { useTable } from "lib";
 import { DataTable } from "ui/shared/table";
 import { trpc } from "protocol";
+import { useMemo } from "react";
 import { blogTagColumns } from "./columns";
 
 export function BlogTagTable() {
-  const [data] = trpc.othi.blogTag.list.useSuspenseQuery();
+  const { data } = trpc.othi.blogTag.list.useQuery();
+  const tableData = useMemo(() => data ?? [], [data]);
   const { table } = useTable({
-    data,
+    data: tableData,
     columns: blogTagColumns,
   });
 

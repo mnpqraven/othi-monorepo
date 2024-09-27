@@ -1,5 +1,5 @@
-/* eslint-disable import/no-named-as-default */
 "use client";
+/* eslint-disable import/no-named-as-default */
 
 import { type ComponentProps, type ReactNode } from "react";
 import type { Editor, Extensions } from "@tiptap/react";
@@ -14,20 +14,18 @@ import FileHandler from "@tiptap-pro/extension-file-handler";
 import Link from "@tiptap/extension-link";
 import { cva } from "class-variance-authority";
 import { trpc } from "protocol";
-import { generateUlid } from "lib";
+import { useAtomValue } from "jotai";
 import { EditorMenubar } from "./EditorMenubar";
 import { EditorListener } from "./EditorListener";
 import { EditorPopover } from "./EditorPopover";
-import { atom, useAtomValue } from "jotai";
+import { editorTempBlogIdAtom } from "./store";
 
 type MediaInsert = { mode: "drop"; pos: number } | { mode: "paste" };
-
-export const editorTempBlogIdAtom = atom(generateUlid());
 
 function useExtensions() {
   const tempBlogId = useAtomValue(editorTempBlogIdAtom);
   const { mutate: uploadTempImage } =
-    trpc.utils.blog.uploadTempImage.useMutation();
+    trpc.utils.blog.upload.tempImage.useMutation();
 
   function editorMediaInsert(editor: Editor, files: File[], opt: MediaInsert) {
     uploadTempImage({ files, tempBlogId });
