@@ -14,6 +14,7 @@ async fn teardown() -> Result<(), WorkerError> {
         "honkai_avatarSkill",
         "honkai_avatarTrace",
         "honkai_avatarPromotion",
+        "honkai_avatarPromotion_item",
         "honkai_avatarEidolon",
         "honkai_lightConeSkill",
         "honkai_traceMaterial",
@@ -43,7 +44,7 @@ async fn teardown() -> Result<(), WorkerError> {
             table_list
                 .into_iter()
                 .map(|name| {
-                    let st = format!("DROP TABLE IF EXISTS {}", name);
+                    let st = format!("DROP TABLE IF EXISTS {name}");
                     Statement::new(st)
                 })
                 .collect::<Vec<Statement>>(),
@@ -55,8 +56,8 @@ async fn teardown() -> Result<(), WorkerError> {
 // TODO: clap
 #[tokio::main]
 pub async fn main() -> Result<(), WorkerError> {
-    // teardown().await?;
-    seed_common().await?;
-    seed_table().await?;
+    teardown().await?;
+    // seed_common().await?;
+    // seed_table().await?;
     Ok(())
 }
