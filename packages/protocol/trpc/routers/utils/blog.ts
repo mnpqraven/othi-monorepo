@@ -5,18 +5,20 @@ import TurndownService from "turndown";
 import createDOMPurify from "dompurify";
 import { JSDOM } from "jsdom";
 import { db } from "database";
-import { blogs, medias } from "database/schema";
+import { blogs, insertBlogSchema, medias } from "database/schema";
 import { generateUlid } from "lib";
 import { eq, isNull } from "drizzle-orm";
 import { authedProcedure, publicProcedure, router } from "../../trpc";
 import { utapi } from "../../../server/uploadthing";
 
-export const blogRouter = router({
+export const blogUtilsRouter = router({
   metaList: publicProcedure
     // TODO:
     // .input
     .query(async () => {
-      const res = await db.query.blogs.findMany();
+      const res = await db.query.blogs.findMany({
+        orderBy: ({ createdAt }, op) => [op.desc(createdAt)],
+      });
       return res;
     }),
   convertToMD: authedProcedure
@@ -47,19 +49,17 @@ export const blogRouter = router({
      */
     blogMeta: authedProcedure
       .input(
-        z.object({
-          name: z.string().describe("title of the markdown document"),
-          url: z.string().describe("url of the md file"),
-        }),
+        insertBlogSchema.pick({ title: true, mdUrl: true, fileName: true }),
       )
       .mutation(async ({ input }) => {
-        const { name, url } = input;
+        const { title, mdUrl, fileName } = input;
         const metaReq = await db
           .insert(blogs)
           .values({
             id: generateUlid(),
-            name,
-            mdUrl: url,
+            title,
+            mdUrl,
+            fileName,
           })
           .returning();
         return { data: metaReq.at(0) };

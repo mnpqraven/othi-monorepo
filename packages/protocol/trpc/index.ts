@@ -4,15 +4,17 @@ import { createCallerFactory, router } from "./trpc";
 import { tableRouter } from "./routers/table";
 import { honkaiRouter } from "./routers/honkai";
 import { othiRouter } from "./routers/othi";
-import { blogRouter } from "./routers/utils/blog";
+import { blogUtilsRouter } from "./routers/utils/blog";
 import type { RouterInputs, RouterOutputs } from "./react/client";
+import { blogRouter } from "./blog";
 
 export const appRouter = router({
   honkai: honkaiRouter,
   table: tableRouter,
   utils: {
-    blog: blogRouter,
+    blog: blogUtilsRouter,
   },
+  blog: blogRouter,
   othi: othiRouter,
 });
 

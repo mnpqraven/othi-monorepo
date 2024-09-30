@@ -19,7 +19,7 @@ export function EditorPopover() {
     <BubbleMenu
       className="bg-background flex gap-1 rounded-md border p-1"
       editor={editor}
-      tippyOptions={{ duration: 100 }}
+      tippyOptions={{ duration: 100, appendTo: "parent" }}
     >
       {isImage ? null : (
         <>

@@ -1,24 +1,20 @@
 import { SudoGuard } from "@othi/components/SudoGuard";
 import Link from "next/link";
 import { Button } from "ui/primitive";
-import { trpcServer } from "protocol/trpc/react/server";
-import { DemoUploadButton } from "./DemoUploadButton";
+import { BlogList } from "./BlogList";
 
-export default async function Page() {
-  const list = await trpcServer.utils.blog.metaList();
-
+export default function Page() {
   return (
-    <div>
-      <span>blog list</span>
-
+    <div className="flex flex-col gap-4">
       <SudoGuard>
-        <Link href="/blog/create">
-          <Button>create</Button>
-        </Link>
-        <DemoUploadButton />
+        <div className="flex items-center justify-end">
+          <Link href="/blog/editor">
+            <Button>New</Button>
+          </Link>
+        </div>
       </SudoGuard>
 
-      {JSON.stringify(list)}
+      <BlogList />
     </div>
   );
 }

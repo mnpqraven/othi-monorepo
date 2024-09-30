@@ -2,6 +2,7 @@ import { useCurrentEditor } from "@tiptap/react";
 import {
   EditorBold,
   EditorCode,
+  EditorHeadingGroup,
   EditorItalic,
   EditorLink,
   EditorUnderline,
@@ -18,6 +19,7 @@ export function EditorMenubar() {
       <EditorUnderline />
       <EditorCode />
       <EditorLink />
+      <EditorHeadingGroup />
     </div>
   );
 }

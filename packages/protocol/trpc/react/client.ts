@@ -35,10 +35,8 @@ const TANSTACK_OPTIONS = (toastFn?: ToastFn): QueryClientConfig => ({
       refetchOnWindowFocus: false,
     },
     mutations: {
-      onError(e, variables, context) {
-        if (toastFn) {
-          toast.error(e.message);
-        }
+      onError(e) {
+        if (toastFn) toast.error(e.message);
       },
     },
     dehydrate: {

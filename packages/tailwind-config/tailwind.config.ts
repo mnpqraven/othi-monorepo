@@ -3,7 +3,12 @@ import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   darkMode: "class",
-  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}", "../../packages/**/*.{ts,tsx}"],
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../packages/src/*.{ts,tsx}",
+    "../../packages/ui/primitive/*.{ts,tsx}",
+    "../../packages/ui/shared/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,

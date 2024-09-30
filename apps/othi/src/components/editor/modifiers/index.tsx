@@ -11,10 +11,15 @@ import {
   PopoverContent,
   Toggle,
 } from "ui/primitive";
+import type { LucideIcon } from "lucide-react";
 import {
   Bold,
   Check,
   Code,
+  Heading,
+  Heading1,
+  Heading3,
+  Heading4,
   Italic,
   Link,
   Strikethrough,
@@ -23,6 +28,7 @@ import {
   Underline,
   Undo,
   X,
+  Heading2,
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -229,7 +235,7 @@ export function EditorLink() {
         </Toggle>
       </PopoverAnchor>
 
-      <PopoverContent>
+      <PopoverContent className="p-2">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
@@ -257,6 +263,50 @@ export function EditorLink() {
             />
           </form>
         </Form>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+export function EditorHeadingGroup() {
+  const { editor } = useCurrentEditor();
+  const [open, setOpen] = useState(false);
+
+  if (!editor) return null;
+  const headings: { level: 1 | 2 | 3 | 4 | 5 | 6; icon: LucideIcon }[] = [
+    { level: 1, icon: Heading1 },
+    { level: 2, icon: Heading2 },
+    { level: 3, icon: Heading3 },
+    { level: 4, icon: Heading4 },
+  ];
+  return (
+    <Popover onOpenChange={setOpen} open={open}>
+      <PopoverAnchor asChild>
+        <Toggle
+          onClick={() => {
+            setOpen(true);
+          }}
+          pressed={editor.isActive("heading")}
+          size="sm"
+        >
+          <Heading className="h-4 w-4" />
+        </Toggle>
+      </PopoverAnchor>
+
+      <PopoverContent className="w-fit p-2">
+        <div className="flex gap-1">
+          {headings.map(({ level, icon: Icon }) => (
+            <Toggle
+              key={level}
+              onPressedChange={() => {
+                editor.chain().focus().toggleHeading({ level }).run();
+              }}
+              pressed={editor.isActive("heading", { level })}
+            >
+              <Icon className="h-4 w-4" />
+            </Toggle>
+          ))}
+        </div>
       </PopoverContent>
     </Popover>
   );

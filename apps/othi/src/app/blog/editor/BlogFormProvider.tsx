@@ -1,11 +1,12 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Blog } from "database/schema/blog/blog";
-import { insertBlogSchema } from "database/schema/blog/blog";
+import type { Blog } from "database/schema";
+import { insertBlogSchema } from "database/schema";
+import type { ReactNode } from "react";
+import type { UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
-  Button,
   Form,
   FormControl,
   FormField,
@@ -15,11 +16,16 @@ import {
   Input,
 } from "ui/primitive";
 
-export default function Page() {
+interface Prop {
+  children: ReactNode;
+  form: UseFormReturn<Blog>;
+}
+
+export function useBlogForm() {
   const form = useForm<Blog>({
-    resolver: zodResolver(insertBlogSchema),
+    resolver: zodResolver(insertBlogSchema.pick({ title: true })),
     defaultValues: {
-      name: "",
+      title: "",
     },
   });
 
@@ -28,12 +34,21 @@ export default function Page() {
     console.log(e);
   }
 
+  return { form, onSubmit };
+}
+
+export function BlogFormProvider({ form, children }: Prop) {
+  const { onSubmit } = useBlogForm();
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
-          name="name"
+          name="title"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
@@ -45,7 +60,7 @@ export default function Page() {
           )}
         />
 
-        <Button type="submit">Create</Button>
+        {children}
       </form>
     </Form>
   );
