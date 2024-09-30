@@ -28,7 +28,7 @@ function useExtensions() {
     trpc.utils.blog.upload.tempImage.useMutation();
 
   function editorMediaInsert(editor: Editor, files: File[], opt: MediaInsert) {
-    uploadTempImage({ files, tempBlogId });
+    if (tempBlogId) uploadTempImage({ files, tempBlogId });
 
     files.forEach((file) => {
       const fileReader = new FileReader();
