@@ -1,6 +1,6 @@
 import { createClient } from "@vercel/edge-config";
 import { publicProcedure, router } from "../../trpc";
-import { env } from "../../../env";
+import { env } from "env";
 
 export const bannerRouter = router({
   patchList: publicProcedure.query(async () => {
