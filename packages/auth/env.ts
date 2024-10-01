@@ -8,14 +8,7 @@ export const env = createEnv({
     NEXTAUTH_SECRET: z.string(),
     OTHI_GITHUB_ID: z.string(),
     OTHI_GITHUB_SECRET: z.string(),
-    AUTH_GITHUB_IDENT: z
-      .string({ message: "must be string" })
-      .transform((e) => {
-        console.log("debug", e);
-        return e;
-      })
-      .or(z.number({ message: "must be number" }))
-      .pipe(z.coerce.number({ message: "throw on coercion" })),
+    AUTH_GITHUB_IDENT: z.coerce.number(),
   },
   client: {},
   experimental__runtimeEnv: {},
