@@ -24,8 +24,7 @@
       "@hsr/*": ["../../apps/hsr/src/*"],
       "@planning/*": ["../../apps/planning/src/*"],
       "@blog/*": ["../../apps/blog/src/*"],
-      "@othi/*": ["../../apps/othi/src/*"],
-      "env": ["../../packages/env/src/*"]
+      "@othi/*": ["../../apps/othi/src/*"]
     }
   },
   "exclude": ["node_modules"]

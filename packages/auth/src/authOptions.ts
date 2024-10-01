@@ -2,12 +2,7 @@
 
 import GithubProvider from "next-auth/providers/github";
 import type { NextAuthOptions } from "next-auth";
-import type { JWT } from "next-auth/jwt";
-import { env } from "../env";
-
-const _t: JWT = {
-  access_token: "arst",
-};
+import { env } from "env";
 
 export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,

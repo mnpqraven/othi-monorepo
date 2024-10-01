@@ -4,7 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "ui/primitive/tooltip";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider } from "jotai";
-import { createTransport, TransportProvider } from "protocol/rpc";
+import { RpcProvider } from "protocol/rpc";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { DevTools } from "jotai-devtools";
 import { TRPCReactProvider } from "protocol/trpc/react";
@@ -15,13 +15,11 @@ interface RootProps {
 }
 
 export function AppProvider({ children }: RootProps) {
-  const transport = createTransport();
-
   return (
     <ThemeProvider attribute="class">
       <TooltipProvider delayDuration={300}>
         <TRPCReactProvider>
-          <TransportProvider transport={transport}>
+          <RpcProvider>
             <Provider>
               <ReactQueryStreamedHydration transformer={transformer}>
                 {children}
@@ -30,7 +28,7 @@ export function AppProvider({ children }: RootProps) {
               <DevTools isInitialOpen={false} theme="dark" />
               <ReactQueryDevtools initialIsOpen={false} />
             </Provider>
-          </TransportProvider>
+          </RpcProvider>
         </TRPCReactProvider>
       </TooltipProvider>
     </ThemeProvider>

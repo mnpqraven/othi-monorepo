@@ -4,7 +4,6 @@ import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "ui/primitive/tooltip";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider } from "jotai";
-import { createTransport, TransportProvider } from "protocol/rpc";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { DevTools } from "jotai-devtools";
 import { TRPCReactProvider } from "protocol/trpc/react";
@@ -20,32 +19,28 @@ interface RootProps {
 }
 
 export function AppProvider({ children }: RootProps) {
-  const transport = createTransport();
-
   return (
     <SessionProvider>
       <ThemeProvider attribute="class">
         <TooltipProvider delayDuration={300}>
           <TRPCReactProvider toastFn={toast}>
-            <TransportProvider transport={transport}>
-              <Provider>
-                <ReactQueryStreamedHydration transformer={transformer}>
-                  <NextSSRPlugin
-                    /**
-                     * The `extractRouterConfig` will extract **only** the route configs
-                     * from the router to prevent additional information from being
-                     * leaked to the client. The data passed to the client is the same
-                     * as if you were to fetch `/api/uploadthing` directly.
-                     */
-                    routerConfig={extractRouterConfig(ourFileRouter)}
-                  />
-                  {children}
-                </ReactQueryStreamedHydration>
+            <Provider>
+              <ReactQueryStreamedHydration transformer={transformer}>
+                <NextSSRPlugin
+                  /**
+                   * The `extractRouterConfig` will extract **only** the route configs
+                   * from the router to prevent additional information from being
+                   * leaked to the client. The data passed to the client is the same
+                   * as if you were to fetch `/api/uploadthing` directly.
+                   */
+                  routerConfig={extractRouterConfig(ourFileRouter)}
+                />
+                {children}
+              </ReactQueryStreamedHydration>
 
-                <DevTools isInitialOpen={false} theme="dark" />
-                <ReactQueryDevtools initialIsOpen={false} />
-              </Provider>
-            </TransportProvider>
+              <DevTools isInitialOpen={false} theme="dark" />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </Provider>
           </TRPCReactProvider>
         </TooltipProvider>
       </ThemeProvider>

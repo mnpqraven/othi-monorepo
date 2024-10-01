@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",
-    "@t3-oss/env-nextjs": "^0.11.1",
+    "env": "workspace:*",
     "better-sqlite3": "^11.3.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
