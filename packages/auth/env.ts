@@ -6,7 +6,7 @@ export const env = createEnv({
     NEXTAUTH_SECRET: z.string(),
     OTHI_GITHUB_ID: z.string(),
     OTHI_GITHUB_SECRET: z.string(),
-    GITHUB_IDENT: z.string(),
+    GITHUB_IDENT: z.number().or(z.string()).pipe(z.coerce.number()),
   },
   client: {},
   experimental__runtimeEnv: {},

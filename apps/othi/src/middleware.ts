@@ -9,9 +9,7 @@ async function middleware(req: NextRequestWithAuth) {
   });
 
   if (isSudo) NextResponse.next();
-  else {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
+  else return NextResponse.redirect(new URL("/whoami", req.url));
 }
 
 export default withAuth(middleware);
