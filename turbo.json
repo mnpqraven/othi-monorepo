@@ -14,7 +14,6 @@
   "globalEnv": [
     "DB_URL",
     "DB_AUTH_TOKEN",
-    "ADMIN_IDENT",
     "EDGE_CONFIG",
     "NEXTAUTH_SECRET",
     "NEXT_PUBLIC_BASE_URL",

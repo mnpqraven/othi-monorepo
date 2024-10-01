@@ -6,7 +6,6 @@ export const env = createEnv({
     DB_URL: z.string(),
     DB_AUTH_TOKEN: z.string(),
     NEXTAUTH_SECRET: z.string(),
-    ADMIN_IDENT: z.string(),
     GITHUB_ID: z.string(),
     GITHUB_SECRET: z.string(),
   },
