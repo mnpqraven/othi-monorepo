@@ -77,5 +77,5 @@ export function internalIsSudo(user?: GithubUser): boolean {
   if (!user) return false;
 
   // id is public data but this is a safe assert
-  return user.id === env.GITHUB_IDENT;
+  return user.id === env.AUTH_GITHUB_IDENT;
 }
