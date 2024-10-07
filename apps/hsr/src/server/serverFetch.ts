@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { env } from "@hsr/env";
+import { env } from "env";
 import { extractError } from "./handle";
 
 export async function serverFetch<TPayload, TResponse>(

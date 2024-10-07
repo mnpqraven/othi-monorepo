@@ -2,7 +2,7 @@ import type { ServiceType } from "@bufbuild/protobuf";
 import type { PromiseClient } from "@connectrpc/connect";
 import { createPromiseClient } from "@connectrpc/connect";
 import { createGrpcWebTransport } from "@connectrpc/connect-web";
-import { env } from "../env";
+import { env } from "env";
 
 export function createTransport() {
   return createGrpcWebTransport({

@@ -11,7 +11,7 @@ import type { HTMLAttributes } from "react";
 import { forwardRef } from "react";
 import { Share2 as ShareIcon } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { env } from "@hsr/env";
+import { env } from "env";
 
 export const Share = forwardRef<
   HTMLButtonElement,
