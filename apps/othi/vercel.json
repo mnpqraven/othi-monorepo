@@ -1,0 +1,4 @@
+{
+  "installCommand": "pnpm config set --global \"@tiptap-pro:registry\" https://registry.tiptap.dev/ && pnpm config set \"//registry.tiptap.dev/:_authToken\" $TIPTAP_PRO_TOKEN && pnpm install",
+  "buildCommand": "cd ../.. && pnpm dlx turbo run build --filter=othi"
+}
