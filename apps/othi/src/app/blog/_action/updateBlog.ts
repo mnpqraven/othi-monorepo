@@ -1,13 +1,13 @@
-"use server";
-
 import { createCaller } from "protocol/trpc";
 
 export interface CreateBlogParams {
+  oldFileName: string;
   tempBlogId: string;
   title: string;
   htmlString: string;
 }
-export async function createBlog({
+export async function updateBlog({
+  oldFileName,
   tempBlogId,
   htmlString,
   title,
@@ -18,20 +18,15 @@ export async function createBlog({
   const markdownString = await caller.utils.blog.convertToMD({ htmlString });
 
   // upload MD blob
-  const uploadedMDBlob = await caller.utils.blog.upload.markdownFile({
+  const uploadedMDBlob = await caller.utils.blog.update.markdownFile({
+    oldFileName,
     markdownString,
     tempBlogId,
     title,
   });
 
   if (uploadedMDBlob) {
-    const { name, url } = uploadedMDBlob;
-    // upload MD meta to db index
-    const _uploadedMeta = await caller.utils.blog.upload.blogMeta({
-      title,
-      fileName: name,
-      mdUrl: url,
-    });
+    // updates MD meta in the db
 
     return { success: true };
   }
