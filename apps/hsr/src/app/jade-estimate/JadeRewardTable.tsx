@@ -2,7 +2,7 @@
 
 import { AlertCircle } from "lucide-react";
 import type { PlainMessage } from "@bufbuild/protobuf";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import type { JadeEstimateResponse } from "protocol/ts";
 import {
@@ -18,13 +18,13 @@ import {
   TableRow,
 } from "ui/primitive";
 import { post } from "protocol/ts/jadeestimate-JadeEstimateService_connectquery";
+import { useRpcQuery } from "protocol";
 import { estimateFormAtom } from "./_store/main";
 import { placeholderTableData } from "./defaultTableData";
 
 function JadeRewardTable() {
   const formPayload = useAtomValue(estimateFormAtom);
-  const { data: rewardTable } = useQuery({
-    ...post.useQuery(formPayload),
+  const { data: rewardTable } = useRpcQuery(post, formPayload, {
     placeholderData: keepPreviousData,
   });
   const data = rewardTable ?? placeholderTableData;

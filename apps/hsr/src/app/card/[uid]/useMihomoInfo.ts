@@ -11,7 +11,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { env } from "@hsr/env";
+import { env } from "env";
 import type { LANGS } from "@hsr/lib/constants";
 import { useToast } from "ui/primitive";
 import type { MihomoResponse } from "../types";
@@ -31,10 +31,10 @@ export const optionsMihomoInfo = (
     queryFn: () =>
       uid
         ? getMihomoInfo(
-            uid,
-            lang,
-            isServer ? env.NEXT_PUBLIC_HOST_HSR : undefined,
-          )
+          uid,
+          lang,
+          isServer ? env.NEXT_PUBLIC_HOST_HSR : undefined,
+        )
         : Promise.reject(new Error()),
     enabled: Boolean(uid),
   });

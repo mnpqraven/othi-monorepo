@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
 import { BannerType } from "protocol/ts";
 import {
@@ -10,6 +10,7 @@ import {
 } from "@hsr/hooks/queries/useGachaBannerList";
 import { useAtomValue } from "jotai";
 import { post } from "protocol/ts/probabilityrate-ProbabilityRateService_connectquery";
+import { useRpcQuery } from "protocol";
 import { ReactECharts } from "../components/ReactEcharts";
 import { chartOptions } from "./chartOptions";
 import { GachaForm } from "./GachaForm";
@@ -25,8 +26,7 @@ export default function Page() {
     bannerList.find((e) => e.bannerType === BannerType[storagedForm.banner]) ??
     defaultBanner;
 
-  const { data } = useQuery({
-    ...post.useQuery(storagedForm),
+  const { data } = useRpcQuery(post, undefined, {
     placeholderData: keepPreviousData,
   });
 
