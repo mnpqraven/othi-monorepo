@@ -21,10 +21,10 @@ interface Prop {
   form: UseFormReturn<Blog>;
 }
 
-export function useBlogForm() {
+export function useBlogForm(defaultValue?: Partial<Blog>) {
   const form = useForm<Blog>({
     resolver: zodResolver(insertBlogSchema.pick({ title: true })),
-    defaultValues: {
+    defaultValues: defaultValue ?? {
       title: "",
     },
   });

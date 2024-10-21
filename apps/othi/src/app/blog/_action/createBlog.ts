@@ -15,21 +15,22 @@ export async function createBlog({
   // TODO: dynamic fn for context retrieval
   const caller = createCaller({ role: "sudo" });
   // converting to MD string
-  const markdownString = await caller.utils.blog.convertToMD({ htmlString });
+  const markdownString = await caller.blog.convertToMD({ htmlString });
 
   // upload MD blob
-  const uploadedMDBlob = await caller.utils.blog.upload.markdownFile({
+  const uploadedMDBlob = await caller.blog.create.markdownFile({
     markdownString,
     tempBlogId,
     title,
   });
 
   if (uploadedMDBlob) {
-    const { name, url } = uploadedMDBlob;
+    const { name, url, key: fileKey } = uploadedMDBlob;
     // upload MD meta to db index
-    const _uploadedMeta = await caller.utils.blog.upload.blogMeta({
+    const _uploadedMeta = await caller.blog.create.meta({
       title,
       fileName: name,
+      fileKey,
       mdUrl: url,
     });
 

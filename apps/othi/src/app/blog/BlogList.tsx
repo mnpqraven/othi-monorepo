@@ -9,7 +9,7 @@ import { Button } from "ui/primitive";
  * using client-side for now in case searching and filtering is needed
  */
 export function BlogList() {
-  const { data, isLoading } = trpc.utils.blog.metaList.useQuery();
+  const { data, isLoading } = trpc.blog.listMeta.useQuery();
   if (isLoading) return <div className="flex gap-2">Loading...</div>;
   return (
     <>

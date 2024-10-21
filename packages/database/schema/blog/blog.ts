@@ -5,7 +5,8 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 export const blogs = sqliteTable("blogs", {
   id: text("blog_id").primaryKey(),
   title: text("title", { length: 256 }).notNull(),
-  fileName: text("fileName", { length: 256 }).notNull(),
+  fileName: text("file_name", { length: 256 }).notNull(),
+  fileKey: text("file_key", { length: 256 }).notNull(),
   mdUrl: text("md_url").notNull(),
   createdAt: int("created_at", { mode: "timestamp" })
     .notNull()
