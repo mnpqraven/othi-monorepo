@@ -24,8 +24,7 @@ type MediaInsert = { mode: "drop"; pos: number } | { mode: "paste" };
 
 function useExtensions() {
   const tempBlogId = useAtomValue(editorTempBlogIdAtom);
-  const { mutate: uploadTempImage } =
-    trpc.utils.blog.upload.tempImage.useMutation();
+  const { mutate: uploadTempImage } = trpc.blog.tempImage.append.useMutation();
 
   function editorMediaInsert(editor: Editor, files: File[], opt: MediaInsert) {
     if (tempBlogId) uploadTempImage({ files, tempBlogId });
