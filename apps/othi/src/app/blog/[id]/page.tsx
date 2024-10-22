@@ -5,6 +5,20 @@ import Link from "next/link";
 import { trpcServer } from "protocol/trpc/react/server";
 import { Button } from "ui/primitive";
 import { HtmlContent } from "@othi/components/typography";
+import type { Metadata } from "next";
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const id = params?.id as string;
+  const data = await trpcServer.blog.byId({ id });
+  return {
+    title: data?.meta.title,
+    // TODO: dynamic
+    authors: {
+      name: "Othi",
+      url: "https://github.com/mnpqraven",
+    },
+  };
+}
 
 export default async function Page({ params }: Params) {
   const id = params?.id as string;

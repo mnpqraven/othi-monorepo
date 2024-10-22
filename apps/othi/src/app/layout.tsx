@@ -21,12 +21,12 @@ interface RootProps {
 export default function RootLayout({ children }: RootProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(GeistSans.className, "h-screen")}>
+      <body className={cn(GeistSans.className)}>
         <AppProvider>
           <AppListener>
             <Navbar />
 
-            <main className="h-[100vh-32px] flex flex-col">{children}</main>
+            <main className="flex flex-col mt-4">{children}</main>
 
             <ToasterSonner />
             <Toaster />
