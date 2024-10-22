@@ -16,14 +16,38 @@ import {
   CommandItem,
   CommandList,
 } from "ui/primitive";
+import { z } from "zod";
+
+const routeConfSchema = z
+  .object({
+    name: z.string(),
+    path: z.custom<`/${string}`>((val) => {
+      return typeof val === "string" ? val.startsWith("/") : false;
+    }),
+    guard: z.boolean().optional().default(false),
+  })
+  .array();
+
+const _routeConf: z.input<typeof routeConfSchema> = [
+  { name: "sudo", path: "/sudo", guard: true },
+  { name: "About me", path: "/about-me" },
+  { name: "Blog", path: "/blog" },
+];
+
+const routeConf = routeConfSchema.parse(_routeConf);
 
 export function MainCommandCenter() {
   const [commandOpen, setCommandOpen] = useAtom(commandOpenAtom);
   const [search, setSearch] = useAtom(commandSearchInputAtom);
   const reset = useResetAtom(commandAtom);
   const router = useRouter();
-
   const isSudo = search === "sudo";
+
+  function viewable(guardOpt?: boolean) {
+    // no guard = no check needed
+    if (!guardOpt) return true;
+    return isSudo;
+  }
 
   return (
     <CommandDialog onOpenChange={setCommandOpen} open={commandOpen}>
@@ -35,20 +59,19 @@ export function MainCommandCenter() {
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Suggestions">
-          {isSudo ? (
-            <CommandItem
-              onSelect={() => {
-                reset();
-                router.push("/sudo");
-              }}
-              value="sudo"
-            >
-              sudo
-            </CommandItem>
-          ) : null}
-          <CommandItem>Calendar</CommandItem>
-          <CommandItem>Search Emoji</CommandItem>
-          <CommandItem>Calculator</CommandItem>
+          {routeConf.map(({ name, path, guard }) =>
+            viewable(guard) ? (
+              <CommandItem
+                key={name}
+                onSelect={() => {
+                  reset();
+                  router.push(path);
+                }}
+              >
+                {name}
+              </CommandItem>
+            ) : null,
+          )}
         </CommandGroup>
       </CommandList>
     </CommandDialog>

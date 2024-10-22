@@ -29,7 +29,14 @@ export const blogRouter = router({
     // TODO: input
     .query(async () => {
       const res = await db.query.blogs.findMany({
-        orderBy: ({ createdAt }, op) => [op.desc(createdAt)],
+        orderBy({ createdAt }, op) {
+          return [op.desc(createdAt)];
+        },
+        columns: {
+          createdAt: true,
+          title: true,
+          id: true,
+        },
       });
       return res;
     }),
@@ -39,6 +46,7 @@ export const blogRouter = router({
       const meta = await db.query.blogs.findFirst({
         where: ({ id }, opt) => opt.eq(id, input.id),
       });
+
       if (meta) {
         const fileContents = await fetch(meta.mdUrl).then((data) =>
           data.text(),

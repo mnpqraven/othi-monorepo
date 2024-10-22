@@ -49,7 +49,7 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-misused-promises": "warn",
     "@typescript-eslint/no-unused-vars": "warn",
-    "@typescript-eslint/require-await": "warn",
+    "@typescript-eslint/require-await": "off",
     "@typescript-eslint/no-non-null-assertion": "warn",
     "@typescript-eslint/no-unsafe-return": "warn",
     "@typescript-eslint/no-unsafe-call": "off",
