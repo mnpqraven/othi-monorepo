@@ -46,7 +46,7 @@ export default async function Page({ params }: Params) {
         </SudoGuard>
       </div>
 
-      <span>{meta.title}</span>
+      <span className="text-2xl font-semibold capitalize">{meta.title}</span>
 
       <HtmlContent html={contentHtml} />
     </div>
