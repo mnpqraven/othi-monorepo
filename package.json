@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "setup:registry": "dotenv -c -- pnpm config set --global \"@tiptap-pro:registry\" https://registry.tiptap.dev/ && pnpm config set \"//registry.tiptap.dev/:_authToken\" $TIPTAP_PRO_TOKEN",
+    "setup:registry": "pnpm dlx dotenv -c -- pnpm config set --global \"@tiptap-pro:registry\" https://registry.tiptap.dev/ && pnpm config set \"//registry.tiptap.dev/:_authToken\" $TIPTAP_PRO_TOKEN",
     "build": "dotenv -c -- turbo run build --no-daemon",
     "dev": "dotenv -c development -- turbo run dev --parallel",
     "db:push": "dotenv -c -- turbo run db:push",
