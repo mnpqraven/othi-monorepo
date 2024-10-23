@@ -26,7 +26,9 @@ export default function RootLayout({ children }: RootProps) {
           <AppListener>
             <Navbar />
 
-            <main className="flex flex-col mt-4">{children}</main>
+            <main className="flex flex-col">
+              <div className="p-4 md:w-2/3 justify-center place-self-center">{children}</div>
+            </main>
 
             <ToasterSonner />
             <Toaster />

@@ -4,6 +4,12 @@ import { Button } from "ui/primitive";
 import { HydrateClient, trpcServer } from "protocol/trpc/react/server";
 import { Suspense } from "react";
 import { BlogList } from "./BlogList";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Othi's blogs",
+  description: "My personal blogs, random opinions, rants etc.",
+};
 
 export default async function Page() {
   void trpcServer.blog.listMeta.prefetch();
