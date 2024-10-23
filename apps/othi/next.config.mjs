@@ -9,6 +9,11 @@ const nextConfig = {
       },
     ],
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   experimental: {
     swcPlugins: [
       ["@swc-jotai/react-refresh", {}],
