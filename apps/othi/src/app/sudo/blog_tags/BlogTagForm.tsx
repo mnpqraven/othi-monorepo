@@ -37,7 +37,7 @@ export function BlogTagForm() {
   return (
     <Form {...form}>
       <form
-        className="flex justify-start gap-4"
+        className="flex gap-4"
         onSubmit={form.handleSubmit((e: BlogTag) => {
           mutate(e);
         })}
@@ -69,7 +69,7 @@ export function BlogTagForm() {
           )}
         />
 
-        <Button type="submit">Create</Button>
+        <Button type="submit" className="place-self-end">Create</Button>
       </form>
     </Form>
   );

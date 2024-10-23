@@ -14,13 +14,23 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   // TODO: cache the meta queries
   const id = params?.id as string;
   const data = await trpcServer.blog.byId({ id });
+  const title = data?.meta.title;
+  const description = "Othi's blog";
   return {
-    title: data?.meta.title,
+    title,
     // TODO: dynamic
-    description: "Othi's blog",
+    description,
     authors: {
       name: "Othi",
       url: "https://github.com/mnpqraven",
+    },
+    openGraph: {
+      title,
+      description,
+      siteName: "othi.dev",
+      url: `/blog/${id}`,
+      locale: "en-US",
+      type: "article",
     },
   };
 }

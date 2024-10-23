@@ -6,8 +6,9 @@ import {
   commandSearchInputAtom,
 } from "@othi/lib/store";
 import { useAtom } from "jotai";
-import { useResetAtom } from "jotai/utils";
+import { RESET, useResetAtom } from "jotai/utils";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -30,6 +31,7 @@ const routeConfSchema = z
 
 const _routeConf: z.input<typeof routeConfSchema> = [
   { name: "sudo", path: "/sudo", guard: true },
+  { name: "Home", path: "/" },
   { name: "About me", path: "/about-me" },
   { name: "Blog", path: "/blog" },
 ];
@@ -48,6 +50,10 @@ export function MainCommandCenter() {
     if (!guardOpt) return true;
     return isSudo;
   }
+
+  useEffect(() => {
+    if (!commandOpen) reset();
+  }, [commandOpen]);
 
   return (
     <CommandDialog onOpenChange={setCommandOpen} open={commandOpen}>

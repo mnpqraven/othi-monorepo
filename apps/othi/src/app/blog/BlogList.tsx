@@ -4,6 +4,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { trpc } from "protocol";
 import { Button } from "ui/primitive";
+import { cn } from "lib";
 
 /**
  * using client-side for now in case searching and filtering is needed
@@ -15,10 +16,16 @@ export function BlogList() {
     <div className="flex flex-col gap-4">
       {data.map(({ title, id, createdAt }) => (
         <Link href={`/blog/${id}`} key={id}>
-          <Button className="w-full justify-between p-4" variant="outline">
+          <Button
+            className={cn(
+              "w-full flex-col p-4 flex items-start h-fit",
+              "md:flex-row md:justify-between md:items-center",
+            )}
+            variant="outline"
+          >
             <span>{title}</span>
             <span className="text-muted-foreground">
-              {format(new Date(createdAt), "dd MMM yyyy")}
+              {format(createdAt, "dd MMM yyyy")}
             </span>
           </Button>
         </Link>
