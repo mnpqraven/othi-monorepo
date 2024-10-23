@@ -62,7 +62,7 @@ export default async function Page({ params }: Params) {
       </div>
 
       <div className="flex flex-col gap-2">
-        <span className="text-2xl font-semibold capitalize">{meta.title}</span>
+        <h1 className="text-2xl font-semibold capitalize">{meta.title}</h1>
 
         <span className="text-muted-foreground text-sm">
           Published at {format(meta.createdAt, "PPP")}

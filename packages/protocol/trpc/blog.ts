@@ -23,34 +23,45 @@ import {
   router,
   superAdminProcedure,
 } from "./trpc";
+import { unstable_cache } from "./react/server";
+
+async function getBlogs() {
+  return await db.query.blogs.findMany({
+    orderBy({ createdAt }, op) {
+      return [op.desc(createdAt)];
+    },
+    columns: { createdAt: true, title: true, id: true },
+  });
+}
+async function getBlogById({
+  id,
+}: Pick<z.TypeOf<typeof selectBlogSchema>, "id">) {
+  return await db.query.blogs.findFirst({
+    where: ({ id: _id }, opt) => opt.eq(_id, id),
+  });
+}
 
 export const blogRouter = router({
   listMeta: publicProcedure
     // TODO: input
     .query(async () => {
-      const res = await db.query.blogs.findMany({
-        orderBy({ createdAt }, op) {
-          return [op.desc(createdAt)];
-        },
-        columns: {
-          createdAt: true,
-          title: true,
-          id: true,
-        },
-      });
+      const cacheFn = unstable_cache(getBlogs, ["blogs"], { tags: ["blogs"] });
+      const res = await cacheFn();
       return res;
     }),
   byId: publicProcedure
     .input(selectBlogSchema.pick({ id: true }))
     .query(async ({ input }) => {
-      const meta = await db.query.blogs.findFirst({
-        where: ({ id }, opt) => opt.eq(id, input.id),
+      const { id } = input;
+      const query = unstable_cache(getBlogById, ["blog", id], {
+        tags: ["blog", id],
       });
+      const meta = await query({ id });
 
       if (meta) {
-        const fileContents = await fetch(meta.mdUrl).then((data) =>
-          data.text(),
-        );
+        const fileContents = await fetch(meta.mdUrl, {
+          cache: "force-cache",
+        }).then((data) => data.text());
 
         // convert markdown into HTML string
         const dataPipe = await remark().use(html).process(fileContents);

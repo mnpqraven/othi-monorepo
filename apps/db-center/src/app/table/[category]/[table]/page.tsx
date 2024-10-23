@@ -17,6 +17,7 @@ import { trpc } from "protocol";
 import { keepPreviousData } from "@tanstack/react-query";
 import { TABLE_DICT } from "./_data/dataset";
 import type { Categories } from "./types";
+import { Metadata } from "next";
 
 interface Params {
   params: {
@@ -24,6 +25,12 @@ interface Params {
     table: ValidTableNames;
   };
 }
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+  },
+};
 
 export default function Page({ params }: Params) {
   const { category: _categorySlug, table: tableName } = params;
