@@ -23,7 +23,7 @@ import {
   router,
   superAdminProcedure,
 } from "./trpc";
-import { cache } from "./react/server";
+// import { cache } from "./react/server";
 
 async function getBlogs() {
   console.log("CACHE MISS: GET ALL BLOGS");
@@ -56,16 +56,18 @@ export const blogRouter = router({
   listMeta: publicProcedure
     // TODO: input
     .query(async () => {
-      const cacheFn = cache(getBlogs, ["blogs"]);
-      const res = await cacheFn();
+      // BUG: this breaks build
+      // const cacheFn = cache(getBlogs, ["blogs"]);
+      const res = await getBlogs();
       return res;
     }),
   byId: publicProcedure
     .input(selectBlogSchema.pick({ id: true }))
     .query(async ({ input }) => {
       const { id } = input;
-      const query = cache(getBlogById, ["blog", id]);
-      const meta = await query({ id });
+      // BUG: this breaks build
+      // const query = cache(getBlogById, ["blog", id]);
+      const meta = await getBlogById({ id });
 
       if (meta) {
         const fileContents = await fetch(meta.mdUrl, {
