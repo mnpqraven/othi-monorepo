@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Button } from "ui/primitive";
 import { HydrateClient, trpcServer } from "protocol/trpc/react/server";
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { BlogList } from "./BlogList";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Othi's blogs",
