@@ -23,29 +23,40 @@ import {
   router,
   superAdminProcedure,
 } from "./trpc";
-import { unstable_cache } from "./react/server";
+import { cache } from "./react/server";
 
 async function getBlogs() {
-  return await db.query.blogs.findMany({
+  console.log("CACHE MISS: GET ALL BLOGS");
+  const start = performance.now();
+  const query = await db.query.blogs.findMany({
     orderBy({ createdAt }, op) {
       return [op.desc(createdAt)];
     },
     columns: { createdAt: true, title: true, id: true },
   });
+  const end = performance.now();
+  console.log(`GET ALL BLOGS: ${end - start} MS`);
+  return query;
 }
+
 async function getBlogById({
   id,
 }: Pick<z.TypeOf<typeof selectBlogSchema>, "id">) {
-  return await db.query.blogs.findFirst({
+  console.log("CACHE MISS: GET BLOG BY ID");
+  const start = performance.now();
+  const query = await db.query.blogs.findFirst({
     where: ({ id: _id }, opt) => opt.eq(_id, id),
   });
+  const end = performance.now();
+  console.log(`GET BLOG BY ID: ${end - start} MS`);
+  return query;
 }
 
 export const blogRouter = router({
   listMeta: publicProcedure
     // TODO: input
     .query(async () => {
-      const cacheFn = unstable_cache(getBlogs, ["blogs"], { tags: ["blogs"] });
+      const cacheFn = cache(getBlogs, ["blogs"]);
       const res = await cacheFn();
       return res;
     }),
@@ -53,9 +64,7 @@ export const blogRouter = router({
     .input(selectBlogSchema.pick({ id: true }))
     .query(async ({ input }) => {
       const { id } = input;
-      const query = unstable_cache(getBlogById, ["blog", id], {
-        tags: ["blog", id],
-      });
+      const query = cache(getBlogById, ["blog", id]);
       const meta = await query({ id });
 
       if (meta) {

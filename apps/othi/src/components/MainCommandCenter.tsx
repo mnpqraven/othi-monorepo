@@ -6,7 +6,7 @@ import {
   commandSearchInputAtom,
 } from "@othi/lib/store";
 import { useAtom } from "jotai";
-import { RESET, useResetAtom } from "jotai/utils";
+import { useResetAtom } from "jotai/utils";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import {
@@ -53,7 +53,7 @@ export function MainCommandCenter() {
 
   useEffect(() => {
     if (!commandOpen) reset();
-  }, [commandOpen]);
+  }, [commandOpen, reset]);
 
   return (
     <CommandDialog onOpenChange={setCommandOpen} open={commandOpen}>
