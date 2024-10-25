@@ -26,7 +26,6 @@ import {
 // import { cache } from "./react/server";
 
 async function getBlogs() {
-  console.log("CACHE MISS: GET ALL BLOGS");
   const start = performance.now();
   const query = await db.query.blogs.findMany({
     orderBy({ createdAt }, op) {
@@ -42,7 +41,6 @@ async function getBlogs() {
 async function getBlogById({
   id,
 }: Pick<z.TypeOf<typeof selectBlogSchema>, "id">) {
-  console.log("CACHE MISS: GET BLOG BY ID");
   const start = performance.now();
   const query = await db.query.blogs.findFirst({
     where: ({ id: _id }, opt) => opt.eq(_id, id),

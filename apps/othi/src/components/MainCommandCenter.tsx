@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  commandAtom,
-  commandOpenAtom,
-  commandSearchInputAtom,
-} from "@othi/lib/store";
+import { commandOpenAtom, commandSearchInputAtom } from "@othi/lib/store";
 import { useAtom } from "jotai";
-import { useResetAtom } from "jotai/utils";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import {
@@ -41,7 +36,6 @@ const routeConf = routeConfSchema.parse(_routeConf);
 export function MainCommandCenter() {
   const [commandOpen, setCommandOpen] = useAtom(commandOpenAtom);
   const [search, setSearch] = useAtom(commandSearchInputAtom);
-  const reset = useResetAtom(commandAtom);
   const router = useRouter();
   const isSudo = search === "sudo";
 
@@ -52,11 +46,13 @@ export function MainCommandCenter() {
   }
 
   useEffect(() => {
-    if (!commandOpen) reset();
-  }, [commandOpen, reset]);
+    // reset on open instead of on close to avoid content shift when the dialog
+    // starts to close
+    if (commandOpen) setSearch("");
+  }, [commandOpen, setSearch]);
 
   return (
-    <CommandDialog onOpenChange={setCommandOpen} open={commandOpen}>
+    <CommandDialog loop onOpenChange={setCommandOpen} open={commandOpen}>
       <CommandInput
         onValueChange={setSearch}
         placeholder="Type a command or search..."
@@ -64,13 +60,13 @@ export function MainCommandCenter() {
       />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="Suggestions">
+        <CommandGroup>
           {routeConf.map(({ name, path, guard }) =>
             viewable(guard) ? (
               <CommandItem
                 key={name}
                 onSelect={() => {
-                  reset();
+                  setCommandOpen(false);
                   router.push(path);
                 }}
               >

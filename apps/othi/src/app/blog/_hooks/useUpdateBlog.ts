@@ -1,6 +1,8 @@
 import type { UseMutationOptions } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { trpc } from "protocol";
+import { toast } from "ui/primitive/sonner";
 
 export interface UpdateBlogParams {
   blogId: string;
@@ -15,10 +17,22 @@ export function useUpdateBlog(
   opt?: UseMutationOptions<unknown, Error, UpdateBlogParams>,
 ) {
   // TODO: dynamic fn for context retrieval
+
+  const router = useRouter();
+  const utils = trpc.useUtils();
+
   const [currentMeta] = trpc.blog.byId.useSuspenseQuery({ id: blogId });
   const convertToMD = trpc.blog.convertToMD.useMutation();
   const updateMarkdownFile = trpc.blog.update.markdownFile.useMutation();
-  const updateMeta = trpc.blog.update.meta.useMutation();
+  const updateMeta = trpc.blog.update.meta.useMutation({
+    onSuccess() {
+      void utils.blog.listMeta.invalidate();
+      void utils.blog.byId.invalidate({ id: blogId });
+
+      toast("updated");
+      router.back();
+    },
+  });
 
   async function action({ htmlString, title }: UpdateBlogParams) {
     if (!currentMeta)

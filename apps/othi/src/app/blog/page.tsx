@@ -27,7 +27,7 @@ export default async function Page() {
 
         <Suspense
           fallback={
-            <Button className="w-full justify-between p-4" variant="outline">
+            <Button className="w-full justify-between p-4 animate-pulse" variant="outline">
               Loading...
             </Button>
           }

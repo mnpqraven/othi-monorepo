@@ -10,7 +10,10 @@ import { cn } from "lib";
  * using client-side for now in case searching and filtering is needed
  */
 export function BlogList() {
-  const [data] = trpc.blog.listMeta.useSuspenseQuery();
+  const [data] = trpc.blog.listMeta.useSuspenseQuery(undefined, {
+    // client caches for an hour
+    staleTime: 60 * 60 * 1000,
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -23,7 +26,7 @@ export function BlogList() {
             )}
             variant="outline"
           >
-            <span>{title}</span>
+            <span className="capitalize">{title}</span>
             <span className="text-muted-foreground">
               {format(createdAt, "dd MMM yyyy")}
             </span>

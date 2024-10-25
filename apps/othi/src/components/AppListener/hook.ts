@@ -2,7 +2,7 @@ import { useAtom } from "jotai";
 import { isScrolledAtom } from "./store";
 
 export function useViewportInfo() {
-  const [isScrolled, _setIsScrolled] = useAtom(isScrolledAtom);
+  const [isScrolled, setIsScrolled] = useAtom(isScrolledAtom);
 
-  return { isScrolled, _setIsScrolled };
+  return { isScrolled, setIsScrolled };
 }

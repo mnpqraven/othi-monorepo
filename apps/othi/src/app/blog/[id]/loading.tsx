@@ -16,7 +16,9 @@ export default function Loading() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <span className="text-2xl font-semibold capitalize">Loading...</span>
+        <span className="text-2xl font-semibold capitalize animate-pulse">
+          Loading...
+        </span>
 
         <span className="text-muted-foreground text-sm">Published at</span>
       </div>

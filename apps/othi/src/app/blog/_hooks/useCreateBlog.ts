@@ -12,13 +12,18 @@ export function useCreateBlog(
 ) {
   // TODO: dynamic fn for context retrieval
 
+  const utils = trpc.useUtils();
   // converting to MD string
   const convertToMD = trpc.blog.convertToMD.useMutation();
 
   // upload MD blob
   const createMarkdownFile = trpc.blog.create.markdownFile.useMutation();
 
-  const uploadedMeta = trpc.blog.create.meta.useMutation();
+  const uploadedMeta = trpc.blog.create.meta.useMutation({
+    onSuccess() {
+      void utils.blog.listMeta.invalidate();
+    },
+  });
 
   async function action({ htmlString, tempBlogId, title }: CreateBlogParams) {
     // converting to MD string

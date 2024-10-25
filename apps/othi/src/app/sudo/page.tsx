@@ -7,7 +7,7 @@ export default function Page() {
     { path: "/sudo/blog_tags", label: "Blog Tags" },
   ];
   return (
-    <div>
+    <div className="flex gap-4">
       {routes.map(({ path, label }) => (
         <Link href={path} key={path}>
           <Button variant="outline">{label}</Button>
