@@ -16,14 +16,13 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { generateUlid } from "lib";
 import { revalidatePath } from "next/cache";
-import { utapi } from "../server/uploadthing";
+import { utapi } from "../../server/uploadthing";
 import {
   authedProcedure,
   publicProcedure,
   router,
   superAdminProcedure,
-} from "./trpc";
-// import { cache } from "./react/server";
+} from "../trpc";
 
 async function getBlogs() {
   const start = performance.now();

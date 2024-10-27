@@ -6,7 +6,7 @@ import { honkaiRouter } from "./routers/honkai";
 import { othiRouter } from "./routers/othi";
 import { blogUtilsRouter } from "./routers/utils/blog";
 import type { RouterInputs, RouterOutputs } from "./react/client";
-import { blogRouter } from "./blog";
+import { blogRouter } from "./routers/blog";
 
 export const appRouter = router({
   honkai: honkaiRouter,
