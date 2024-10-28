@@ -8,17 +8,17 @@ import { useViewportInfo } from "./hook";
 const TOP_SCROLL_HEIGHT = 40;
 
 export function AppListener({ children }: { children: ReactNode }) {
-  const { isScrolled, _setIsScrolled } = useViewportInfo();
+  const { isScrolled, setIsScrolled } = useViewportInfo();
   const setCommandOpen = useSetAtom(commandOpenAtom);
 
   const scrollFn = useCallback(
     (_e: Event) => {
       if (window.scrollY > TOP_SCROLL_HEIGHT) {
         // avoid unnecessary true re-assigning
-        if (!isScrolled) _setIsScrolled(true);
-      } else _setIsScrolled(false);
+        if (!isScrolled) setIsScrolled(true);
+      } else setIsScrolled(false);
     },
-    [_setIsScrolled, isScrolled],
+    [setIsScrolled, isScrolled],
   );
 
   const commandCenterFn = useCallback(

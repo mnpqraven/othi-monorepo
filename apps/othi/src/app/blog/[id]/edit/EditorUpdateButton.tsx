@@ -6,9 +6,8 @@ import type { UseFormReturn } from "react-hook-form";
 import type { Blog } from "database/schema";
 import { toast } from "ui/primitive/sonner";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { updateBlog } from "../../_action/updateBlog";
+import { useUpdateBlog } from "../../_hooks/useUpdateBlog";
 
 interface Prop {
   blogId: string;
@@ -20,14 +19,15 @@ export function EditorUpdateButton({ form, blogId }: Prop) {
   const nameSubscriber = form.watch("title");
   const disabled = editor?.isEmpty || !nameSubscriber.length;
 
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["blog", "update"],
-    mutationFn: updateBlog,
-    onSuccess: () => {
-      toast("Update complete");
-      router.push("/blog");
+  const { mutate, isPending } = useUpdateBlog(
+    { blogId },
+    {
+      onSuccess: () => {
+        toast("Update complete");
+        router.push("/blog");
+      },
     },
-  });
+  );
 
   async function onCreate() {
     const valid = await form.trigger();

@@ -16,41 +16,60 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { generateUlid } from "lib";
 import { revalidatePath } from "next/cache";
-import { utapi } from "../server/uploadthing";
+import { utapi } from "../../server/uploadthing";
 import {
   authedProcedure,
   publicProcedure,
   router,
   superAdminProcedure,
-} from "./trpc";
+} from "../trpc";
+
+async function getBlogs() {
+  const start = performance.now();
+  const query = await db.query.blogs.findMany({
+    orderBy({ createdAt }, op) {
+      return [op.desc(createdAt)];
+    },
+    columns: { createdAt: true, title: true, id: true },
+  });
+  const end = performance.now();
+  console.log(`GET ALL BLOGS: ${end - start} MS`);
+  return query;
+}
+
+async function getBlogById({
+  id,
+}: Pick<z.TypeOf<typeof selectBlogSchema>, "id">) {
+  const start = performance.now();
+  const query = await db.query.blogs.findFirst({
+    where: ({ id: _id }, opt) => opt.eq(_id, id),
+  });
+  const end = performance.now();
+  console.log(`GET BLOG BY ID: ${end - start} MS`);
+  return query;
+}
 
 export const blogRouter = router({
   listMeta: publicProcedure
     // TODO: input
     .query(async () => {
-      const res = await db.query.blogs.findMany({
-        orderBy({ createdAt }, op) {
-          return [op.desc(createdAt)];
-        },
-        columns: {
-          createdAt: true,
-          title: true,
-          id: true,
-        },
-      });
+      // BUG: this breaks build
+      // const cacheFn = cache(getBlogs, ["blogs"]);
+      const res = await getBlogs();
       return res;
     }),
   byId: publicProcedure
     .input(selectBlogSchema.pick({ id: true }))
     .query(async ({ input }) => {
-      const meta = await db.query.blogs.findFirst({
-        where: ({ id }, opt) => opt.eq(id, input.id),
-      });
+      const { id } = input;
+      // BUG: this breaks build
+      // const query = cache(getBlogById, ["blog", id]);
+      const meta = await getBlogById({ id });
 
       if (meta) {
-        const fileContents = await fetch(meta.mdUrl).then((data) =>
-          data.text(),
-        );
+        const fileContents = await fetch(meta.mdUrl, {
+          cache: "force-cache",
+        }).then((data) => data.text());
 
         // convert markdown into HTML string
         const dataPipe = await remark().use(html).process(fileContents);

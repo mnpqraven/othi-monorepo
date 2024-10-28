@@ -4,12 +4,10 @@ import { NextResponse } from "next/server";
 import { isSuperAdmin } from "auth";
 
 async function middleware(req: NextRequestWithAuth) {
-  const isSudo = await isSuperAdmin({
-    nextauth: req.nextauth,
-  });
-
+  const { nextauth, url } = req;
+  const isSudo = await isSuperAdmin({ nextauth });
   if (isSudo) NextResponse.next();
-  else return NextResponse.redirect(new URL("/whoami", req.url));
+  else return NextResponse.redirect(new URL("/whoami", url));
 }
 
 export default withAuth(middleware);

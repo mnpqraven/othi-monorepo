@@ -12,7 +12,7 @@
     "db:push": "drizzle-kit push",
     "db:pull": "drizzle-kit introspect",
     "db:drop": "drizzle-kit drop",
-    "db:studio": "drizzle-kit studio --port 4009 --host 127.0.0.1 --verbose",
+    "db:studio": "dotenv -e ../../.env -c development -- drizzle-kit studio --port 4009 --host 127.0.0.1 --verbose",
     "db:up": "drizzle-kit up"
   },
   "dependencies": {

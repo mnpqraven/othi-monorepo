@@ -9,9 +9,8 @@ import type { UseFormReturn } from "react-hook-form";
 import type { Blog } from "database/schema";
 import { toast } from "ui/primitive/sonner";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { createBlog } from "../_action/createBlog";
+import { useCreateBlog } from "../_hooks/useCreateBlog";
 
 export function EditorCreateButton({ form }: { form: UseFormReturn<Blog> }) {
   const { editor } = useCurrentEditor();
@@ -20,9 +19,7 @@ export function EditorCreateButton({ form }: { form: UseFormReturn<Blog> }) {
   const disabled = editor?.isEmpty || !nameSubscriber.length;
   const [tempBlogId, reset] = useAtom(editorTempBlogIdAtom);
 
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["blog", "upload"],
-    mutationFn: createBlog,
+  const { mutate, isPending } = useCreateBlog({
     onSuccess: () => {
       toast("Upload complete");
       router.push("/blog");
@@ -34,7 +31,7 @@ export function EditorCreateButton({ form }: { form: UseFormReturn<Blog> }) {
     const valid = await form.trigger();
     if (editor && valid && tempBlogId) {
       await form.handleSubmit(({ title }) => {
-        mutate({ htmlString: editor.getHTML(), tempBlogId, title });
+        mutate({ htmlString: editor.getHTML(), title, tempBlogId });
       })();
     }
   }
