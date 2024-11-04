@@ -1,0 +1,9 @@
+**/.next
+**/.turbo
+**/.vercel
+**/node_modules
+**/target
+assets
+.dockerignore
+Dockerfile
+.git

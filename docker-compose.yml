@@ -1,0 +1,20 @@
+# TODO: https://github.com/vercel/turborepo/tree/main/examples/with-docker
+version: "1"
+
+services:
+  othi:
+    container_name: othi
+    build:
+      context: .
+      dockerfile: ./apps/othi/Dockerfile
+    restart: always
+    ports:
+      - 4004:4004
+    networks:
+      - app_network
+
+# Define a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+networks:
+  app_network:
+    external: true
