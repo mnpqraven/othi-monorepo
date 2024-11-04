@@ -5,21 +5,9 @@ import { useSetAtom } from "jotai";
 import { commandOpenAtom } from "@othi/lib/store";
 import { useViewportInfo } from "./hook";
 
-const TOP_SCROLL_HEIGHT = 40;
-
 export function AppListener({ children }: { children: ReactNode }) {
-  const { isScrolled, setIsScrolled } = useViewportInfo();
+  const { scrollEvent } = useViewportInfo();
   const setCommandOpen = useSetAtom(commandOpenAtom);
-
-  const scrollFn = useCallback(
-    (_e: Event) => {
-      if (window.scrollY > TOP_SCROLL_HEIGHT) {
-        // avoid unnecessary true re-assigning
-        if (!isScrolled) setIsScrolled(true);
-      } else setIsScrolled(false);
-    },
-    [setIsScrolled, isScrolled],
-  );
 
   const commandCenterFn = useCallback(
     (e: KeyboardEvent) => {
@@ -32,16 +20,17 @@ export function AppListener({ children }: { children: ReactNode }) {
   );
 
   const cleanup = useCallback(() => {
-    window.removeEventListener("scroll", scrollFn);
+    window.removeEventListener("scroll", scrollEvent);
     window.removeEventListener("keydown", commandCenterFn);
-  }, [commandCenterFn, scrollFn]);
+  }, [commandCenterFn, scrollEvent]);
 
   useEffect(() => {
-    window.addEventListener("scroll", scrollFn, { passive: true });
+    // PERF: use passive if we don't need `preventDefault()`
+    window.addEventListener("scroll", scrollEvent, { passive: true });
     window.addEventListener("keydown", commandCenterFn);
 
     return cleanup;
-  }, [cleanup, commandCenterFn, scrollFn]);
+  }, [cleanup, commandCenterFn, scrollEvent]);
 
   return children;
 }

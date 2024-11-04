@@ -9,6 +9,7 @@ import { GeistSans } from "geist/font/sans";
 import { Navbar } from "@othi/components/Navbar";
 import { MainCommandCenter } from "@othi/components/MainCommandCenter";
 import { cn } from "lib";
+import { ScrollToTop } from "@othi/components/ScrollToTop";
 
 export const metadata = {
   title: "Othi",
@@ -27,9 +28,12 @@ export default function RootLayout({ children }: RootProps) {
             <Navbar />
 
             <main className="flex flex-col">
-              <div className="p-4 md:w-2/3 justify-center place-self-center">{children}</div>
+              <div className="p-4 md:w-2/3 justify-center place-self-center">
+                {children}
+              </div>
             </main>
 
+            <ScrollToTop />
             <ToasterSonner />
             <Toaster />
             <MainCommandCenter />
