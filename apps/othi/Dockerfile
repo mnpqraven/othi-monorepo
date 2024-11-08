@@ -7,7 +7,7 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 RUN pnpm add -g pnpm turbo
-
+ARG TIPTAP_PRO_TOKEN
 
 # This Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
 # Make sure you update both files!
@@ -30,11 +30,8 @@ WORKDIR /app
 
 # First install the dependencies (as they change less often)
 COPY --from=builder /app/out/json/ .
-# copy the damn envs
-COPY --from=builder /app/.env.production .
 
-# TODO: env loading
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm -w setup:registry
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm -w setup:registry_ci
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Build the project

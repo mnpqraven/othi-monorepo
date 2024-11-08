@@ -7,3 +7,5 @@ assets
 .dockerignore
 Dockerfile
 .git
+*.env
+*.env.*
