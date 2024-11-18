@@ -21,8 +21,9 @@ services:
         GITHUB_ID: ${GITHUB_ID}
         GITHUB_SECRET: ${GITHUB_SECRET}
     restart: always
+    # next start defaults to 3000
     ports:
-      - 4004:4004
+      - 4004:3000
     networks:
       - app_network
     env_file:
