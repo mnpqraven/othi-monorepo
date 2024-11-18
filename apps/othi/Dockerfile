@@ -7,7 +7,22 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 RUN pnpm add -g pnpm turbo
+# TODO: probably better to use copy env
 ARG TIPTAP_PRO_TOKEN
+ARG NEXTAUTH_SECRET
+ARG EDGE_CONFIG
+ARG DB_URL
+ARG DB_AUTH_TOKEN
+ARG NEXT_PUBLIC_HOST_HSR
+ARG OTHI_GITHUB_SECRET
+ARG OTHI_GITHUB_ID
+ARG NEXTAUTH_SECRET
+ARG ADMIN_IDENT
+ARG AUTH_GITHUB_IDENT
+ARG UPLOADTHING_TOKEN
+ARG NEXT_PUBLIC_HOST_NAS_WS
+ARG GITHUB_ID
+ARG GITHUB_SECRET
 
 # This Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
 # Make sure you update both files!
@@ -44,7 +59,6 @@ COPY --from=builder /app/out/full/ .
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN ls -la
 RUN turbo build --filter=othi
 
 FROM base AS runner
