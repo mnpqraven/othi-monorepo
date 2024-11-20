@@ -8,6 +8,7 @@ export * from "./card";
 export * from "./calendar";
 export * from "./checkbox";
 export * from "./combobox";
+export * from "./multicombobox";
 export * from "./command";
 export * from "./dialog";
 export * from "./drawer";

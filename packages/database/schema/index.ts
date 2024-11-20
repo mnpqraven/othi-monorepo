@@ -6,6 +6,7 @@ export * from "./avatarSignature";
 export * from "./avatarTrace";
 export * from "./blog/blog";
 export * from "./blog/media";
+export * from "./blog/blogAndTag";
 export * from "./element";
 export * from "./framework";
 export * from "./item";

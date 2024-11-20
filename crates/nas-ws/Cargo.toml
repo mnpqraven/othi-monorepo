@@ -68,6 +68,10 @@ path = "src-rust/codegen.rs"
 name = "rpc"
 path = "src-rust/rpc.rs"
 
+[[bin]]
+name = "warm_blog"
+path = "src-rust/runnables/serverless.rs"
+
 [lib]
 path = "src-rust/lib.rs"
 

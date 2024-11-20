@@ -8,6 +8,7 @@ use crate::routes::{
     cron::{dm_file_splitting, dm_repo_clone},
 };
 use handler::error::WorkerError;
+use nas_ws::runnables::serverless;
 use std::{net::SocketAddr, time::Duration};
 use tokio_cron_scheduler::{Job, JobScheduler};
 
@@ -43,6 +44,8 @@ async fn main() -> Result<(), WorkerError> {
             |_uuid, _l| {
                 Box::pin(async move {
                     let _ = write_db::execute().await;
+                    // warn serverless
+                    let _ = serverless::warm_blog().await;
                 })
             },
         )?)

@@ -7,6 +7,7 @@ export const blogs = sqliteTable("blogs", {
   title: text("title", { length: 256 }).notNull(),
   fileName: text("file_name", { length: 256 }).notNull(),
   fileKey: text("file_key", { length: 256 }).notNull(),
+  publish: int("publish", { mode: "boolean" }).default(false),
   mdUrl: text("md_url").notNull(),
   createdAt: int("created_at", { mode: "timestamp" })
     .notNull()
@@ -33,8 +34,8 @@ export const blogTags = sqliteTable("blog_tag", {
 });
 
 export const insertBlogTagSchema = createInsertSchema(blogTags, {
-  code: (schema) => schema.code.min(1, { message: "code is required" }),
-  label: (schema) => schema.code.min(1, { message: "label is required" }),
+  code: (schema) => schema.code.min(1, { message: "Required" }),
+  label: (schema) => schema.code.min(1, { message: "Required" }),
 });
 
 export type BlogTag = typeof blogTags.$inferSelect;

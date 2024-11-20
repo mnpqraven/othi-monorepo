@@ -4,6 +4,7 @@ import createDOMPurify from "dompurify";
 import { JSDOM } from "jsdom";
 import {
   blogs,
+  blogsAndTags,
   insertBlogSchema,
   medias,
   selectBlogSchema,
@@ -30,23 +31,231 @@ async function getBlogs() {
     orderBy({ createdAt }, op) {
       return [op.desc(createdAt)];
     },
-    columns: { createdAt: true, title: true, id: true },
+    columns: { createdAt: true, title: true, id: true, publish: true },
   });
   const end = performance.now();
   console.log(`GET ALL BLOGS: ${end - start} MS`);
   return query;
 }
 
-async function getBlogById({
+async function getBlog({
   id,
-}: Pick<z.TypeOf<typeof selectBlogSchema>, "id">) {
+  tags = false,
+}: Pick<z.TypeOf<typeof selectBlogSchema>, "id"> & { tags?: boolean }) {
   const start = performance.now();
+  if (tags) {
+    const query = await db.query.blogs.findFirst({
+      where: ({ id: blogId }, op) => op.eq(blogId, id),
+      with: { blogsAndTags: { with: { tag: true } } },
+    });
+    if (!query) return undefined;
+    const { blogsAndTags: _tags, ...rest } = query;
+    return { tags: _tags.map((e) => e.tag), ...rest };
+  }
+
   const query = await db.query.blogs.findFirst({
     where: ({ id: _id }, opt) => opt.eq(_id, id),
   });
   const end = performance.now();
   console.log(`GET BLOG BY ID: ${end - start} MS`);
   return query;
+}
+
+/**
+ * converts a html string into a markdown string
+ *
+ * does not communicate with any db, only sanitize and string transformation
+ */
+function convertToMD(htmlString: string) {
+  // SANITIZATION
+  const window = new JSDOM("").window;
+  const DOMPurify = createDOMPurify(window);
+  const clean = DOMPurify.sanitize(htmlString);
+
+  const turndownService = new TurndownService();
+  const markdown = turndownService.turndown(clean);
+
+  return markdown;
+}
+
+async function createMarkdownFile(input: {
+  markdownString: string;
+  title?: string;
+  tempBlogId?: string;
+}) {
+  // unix time
+  const unix = new Date().getTime();
+  const fileName = `${unix}.md`;
+  const blob = new Blob([input.markdownString]);
+
+  const response = await utapi.uploadFiles([new File([blob], fileName)]);
+
+  console.log("UPLOAD RESPONSE", response);
+  return response.map((e) => e.data).at(0);
+}
+
+async function updateMarkdownFile(input: {
+  markdownString: string;
+  oldFileKey: string;
+}) {
+  console.log("updating md file");
+  const { markdownString, oldFileKey } = input;
+  const unix = new Date().getTime();
+  const fileName = `${unix}.md`;
+  const blob = new Blob([markdownString]);
+
+  console.log("deleting", oldFileKey);
+  const _deletion = await utapi.deleteFiles([oldFileKey]);
+  console.log("deleted", _deletion);
+
+  const upload = await utapi.uploadFiles([new File([blob], fileName)]);
+  const res = upload.at(0);
+
+  console.log("uploaded", res);
+
+  if (!res?.data) {
+    console.log("error encountered", res?.error);
+    return undefined;
+  }
+  const { key, name, url } = res.data;
+  return { fileName: name, fileKey: key, mdUrl: url };
+}
+
+const createMetaSchema = insertBlogSchema.pick({
+  title: true,
+  mdUrl: true,
+  fileName: true,
+  fileKey: true,
+});
+async function createMeta(input: z.TypeOf<typeof createMetaSchema>) {
+  const { title, mdUrl, fileName, fileKey } = input;
+  const metaReq = await db
+    .insert(blogs)
+    .values({
+      id: generateUlid(),
+      title,
+      mdUrl,
+      fileName,
+      fileKey,
+    })
+    .returning();
+  return metaReq.at(0);
+}
+
+const updateParamSchema = insertBlogSchema.partial().required({ id: true });
+async function updateMeta(input: z.TypeOf<typeof updateParamSchema>) {
+  try {
+    const { id: blogId, ...rest } = input;
+
+    if (rest.mdUrl) revalidatePath(rest.mdUrl);
+
+    return db
+      .update(blogs)
+      .set({ ...rest })
+      .where(eq(blogs.id, blogId))
+      .returning();
+  } catch (e) {
+    const message =
+      e instanceof LibsqlError
+        ? e.message
+        : "undefined message, server-side debug needed";
+    throw new TRPCError({ code: "FORBIDDEN", message });
+  }
+}
+
+/**
+ * insert entry in the bind table (which blog has which tag)
+ */
+async function createTagsBinds(input: { blogId: string; tags: string[] }) {
+  const values = input.tags.map((tagCode) => ({
+    blogId: input.blogId,
+    tagCode,
+  }));
+  await db.insert(blogsAndTags).values(values);
+}
+
+async function updateTags(input: { blogId: string; tags: string[] }) {
+  // delete all involving tags then re-insert
+  const insertValues = input.tags.map((e) => ({
+    blogId: input.blogId,
+    tagCode: e,
+  }));
+  const _batchQuery = await db.batch([
+    db.delete(blogsAndTags).where(eq(blogsAndTags.blogId, input.blogId)),
+    db.insert(blogsAndTags).values(insertValues),
+  ]);
+}
+
+const updateBlogSchema = z.object({
+  blogId: z.string(),
+  title: z.string(),
+  htmlString: z.string(),
+  tags: z.string().array().optional(),
+});
+async function updateBlog({
+  blogId,
+  htmlString,
+  title,
+  tags,
+}: z.TypeOf<typeof updateBlogSchema>) {
+  const oldFileKey = (await getBlog({ id: blogId }))?.fileKey;
+  if (!oldFileKey)
+    return { success: false as const, error: "current meta null" };
+
+  if (tags) void updateTags({ blogId, tags });
+
+  const markdownString = convertToMD(htmlString);
+  const mdBlob = await updateMarkdownFile({
+    markdownString,
+    oldFileKey,
+  });
+
+  if (!mdBlob) return { success: false as const, error: "updatedMD is null" };
+
+  const { fileKey, fileName, mdUrl } = mdBlob;
+  const updatedMeta = await updateMeta({
+    id: blogId,
+    title,
+    fileKey,
+    fileName,
+    mdUrl,
+  });
+  // TODO: media
+  return { success: true as const, data: updatedMeta.at(0) };
+}
+
+const createBlogSchema = z.object({
+  tempBlogId: z.string(),
+  title: z.string(),
+  htmlString: z.string(),
+  tags: z.string().array().optional(),
+});
+async function createBlog({
+  tempBlogId,
+  htmlString,
+  title,
+  tags,
+}: z.TypeOf<typeof createBlogSchema>) {
+  const markdownString = convertToMD(htmlString);
+  const mdBlob = await createMarkdownFile({
+    markdownString,
+    tempBlogId,
+    title,
+  });
+
+  if (!mdBlob) return { success: false as const, error: "updatedMD is null" };
+
+  const { name, url, key } = mdBlob;
+  const createdMeta = await createMeta({
+    title,
+    fileKey: key,
+    fileName: name,
+    mdUrl: url,
+  });
+  if (tags && createdMeta)
+    await createTagsBinds({ blogId: createdMeta.id, tags });
+  // TODO: media
+  return { success: true as const, data: createdMeta };
 }
 
 export const blogRouter = router({
@@ -59,12 +268,16 @@ export const blogRouter = router({
       return res;
     }),
   byId: publicProcedure
-    .input(selectBlogSchema.pick({ id: true }))
+    .input(
+      selectBlogSchema
+        .pick({ id: true })
+        .extend({ tags: z.boolean().optional().default(false) }),
+    )
     .query(async ({ input }) => {
-      const { id } = input;
+      const { id, tags } = input;
       // BUG: this breaks build
       // const query = cache(getBlogById, ["blog", id]);
-      const meta = await getBlogById({ id });
+      const meta = await getBlog({ id, tags });
 
       if (meta) {
         const fileContents = await fetch(meta.mdUrl, {
@@ -81,29 +294,12 @@ export const blogRouter = router({
       return undefined;
     }),
   create: {
-    meta: authedProcedure
-      .input(
-        insertBlogSchema.pick({
-          title: true,
-          mdUrl: true,
-          fileName: true,
-          fileKey: true,
-        }),
-      )
-      .mutation(async ({ input }) => {
-        const { title, mdUrl, fileName, fileKey } = input;
-        const metaReq = await db
-          .insert(blogs)
-          .values({
-            id: generateUlid(),
-            title,
-            mdUrl,
-            fileName,
-            fileKey,
-          })
-          .returning();
-        return { data: metaReq.at(0) };
-      }),
+    everything: superAdminProcedure
+      .input(createBlogSchema)
+      .mutation(({ input }) => createBlog(input)),
+    meta: superAdminProcedure
+      .input(createMetaSchema)
+      .mutation(({ input }) => createMeta(input)),
     /**
      * uploads a markdown file to UT bucket
      */
@@ -115,108 +311,39 @@ export const blogRouter = router({
           title: z.string().optional(),
         }),
       )
-      .mutation(async ({ input }) => {
-        // unix time
-        const unix = new Date().getTime();
-        const fileName = `${unix}.md`;
-        const blob = new Blob([input.markdownString]);
-
-        const response = await utapi.uploadFiles([new File([blob], fileName)]);
-
-        console.log("UPLOAD RESPONSE", response);
-        return response.map((e) => e.data).at(0);
-      }),
+      .mutation(({ input }) => createMarkdownFile(input)),
   },
   update: {
+    everything: superAdminProcedure
+      .input(updateBlogSchema)
+      .mutation(({ input }) => updateBlog(input)),
     meta: superAdminProcedure
-      .input(insertBlogSchema.partial().required({ id: true }))
-      .mutation(async ({ input }) => {
-        try {
-          const { id: blogId, ...rest } = input;
-
-          if (rest.mdUrl) revalidatePath(rest.mdUrl);
-
-          return db
-            .update(blogs)
-            .set({ ...rest })
-            .where(eq(blogs.id, blogId))
-            .returning();
-        } catch (e) {
-          const message =
-            e instanceof LibsqlError
-              ? e.message
-              : "undefined message, server-side debug needed";
-          throw new TRPCError({ code: "FORBIDDEN", message });
-        }
-      }),
+      .input(updateParamSchema)
+      .mutation(({ input }) => updateMeta(input)),
     /**
      * this replaces a markdown file on UT by uploading the new file and delete the old file
      */
     markdownFile: superAdminProcedure
-      .input(
-        z.object({
-          markdownString: z.string(),
-          oldFileKey: z.string(),
-        }),
-      )
-      .mutation(async ({ input }) => {
-        console.log("updating md file");
-        const { markdownString, oldFileKey } = input;
-        const unix = new Date().getTime();
-        const fileName = `${unix}.md`;
-        const blob = new Blob([markdownString]);
-
-        console.log("deleting", oldFileKey);
-        const _deletion = await utapi.deleteFiles([oldFileKey]);
-        console.log("deleted", _deletion);
-
-        const upload = await utapi.uploadFiles([new File([blob], fileName)]);
-        const res = upload.at(0);
-
-        console.log("uploaded", res);
-
-        if (!res?.data) {
-          console.log("error encountered", res?.error);
-          return undefined;
-        }
-        const { key, name, url } = res.data;
-        return { fileName: name, fileKey: key, mdUrl: url };
-      }),
+      .input(z.object({ markdownString: z.string(), oldFileKey: z.string() }))
+      .mutation(({ input }) => updateMarkdownFile(input)),
+    tags: superAdminProcedure
+      .input(z.object({ blogId: z.string(), tags: z.string().array() }))
+      .mutation(({ input }) => updateTags(input)),
   },
   /**
-   * this converts a html string into a markdown string
+   * converts a html string into a markdown string
    *
    * does not communicate with any db, only sanitize and string transformation
    */
-  convertToMD: authedProcedure
-    .input(
-      z.object({
-        htmlString: z.string(),
-      }),
-    )
-    .mutation(({ input }) => {
-      // SANITIZATION
-      const window = new JSDOM("").window;
-      const DOMPurify = createDOMPurify(window);
-      const clean = DOMPurify.sanitize(input.htmlString);
-
-      const turndownService = new TurndownService();
-      const markdown = turndownService.turndown(clean);
-
-      return markdown;
-    }),
-
+  convertToMD: superAdminProcedure
+    .input(z.object({ htmlString: z.string() }))
+    .mutation(({ input }) => convertToMD(input.htmlString)),
   tempImage: {
     /**
      * promote a temp image from draft status
      */
-    promote: authedProcedure
-      .input(
-        z.object({
-          tempBlogId: z.string(),
-          blogId: z.string(),
-        }),
-      )
+    promote: superAdminProcedure
+      .input(z.object({ tempBlogId: z.string(), blogId: z.string() }))
       .mutation(async ({ input }) => {
         const { blogId, tempBlogId } = input;
         const st = await db
@@ -230,7 +357,7 @@ export const blogRouter = router({
     /**
      * uploads a draft image meta to local db + UT
      */
-    append: authedProcedure
+    append: superAdminProcedure
       .input(
         z.object({
           tempBlogId: z.string(),
@@ -286,8 +413,17 @@ export const blogRouter = router({
     /**
      * delete all images not attached to a blog
      */
-    clear: authedProcedure.mutation(async () => {
+    clear: superAdminProcedure.mutation(async () => {
       await db.delete(medias).where(isNull(medias.blogId));
     }),
+  },
+  tag: {
+    list: publicProcedure
+      // TODO: input
+      // also querying blog content or not
+      .query(async () => {
+        const query = await db.query.blogTags.findMany();
+        return query;
+      }),
   },
 });

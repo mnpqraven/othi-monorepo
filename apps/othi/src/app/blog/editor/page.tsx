@@ -8,11 +8,13 @@ import {
   generateEditorTempBlogIdAtom,
 } from "@othi/components/editor/store";
 import { RESET } from "jotai/utils";
-import { EditorCreateButton } from "./EditorCreateButton";
-import { BlogFormProvider, useBlogForm } from "./BlogFormProvider";
+import Link from "next/link";
+import { MoveLeft } from "lucide-react";
+import { BlogFormProvider } from "../[id]/_provider/BlogFormProvider";
+import { EditorSubmitButton } from "../[id]/_provider/EditorSubmitButton";
+import { BlogForm } from "../[id]/_provider/BlogForm";
 
 export default function Page() {
-  const { form } = useBlogForm();
   const createTempBlogId = useSetAtom(generateEditorTempBlogIdAtom);
   const reset = useSetAtom(editorTempBlogIdAtom);
 
@@ -25,10 +27,21 @@ export default function Page() {
   }, [createTempBlogId, reset]);
 
   return (
-    <BlogFormProvider form={form}>
-      <EditorProvider>
-        <EditorCreateButton form={form} />
-      </EditorProvider>
+    <BlogFormProvider>
+      <div className="flex flex-col gap-2">
+        <Link
+          className="text-muted-foreground flex items-center gap-2 hover:underline"
+          href="/blog"
+        >
+          <MoveLeft className="h-4 w-4" />
+          Blog
+        </Link>
+        <BlogForm />
+
+        <EditorProvider>
+          <EditorSubmitButton mode="create" />
+        </EditorProvider>
+      </div>
     </BlogFormProvider>
   );
 }

@@ -77,7 +77,7 @@ export function EditorProvider({
   children,
   content,
 }: {
-  children: ReactNode;
+  children?: ReactNode;
   content?: ComponentProps<typeof PrimitiveProvider>["content"];
 }) {
   // from textarea
