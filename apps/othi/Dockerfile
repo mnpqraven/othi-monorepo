@@ -5,8 +5,9 @@ WORKDIR /app
 # config pnpm
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
-RUN pnpm add -g pnpm turbo
+RUN npm install -g corepack@latest
+RUN corepack enable pnpm
+RUN pnpm add -g turbo
 # TODO: probably better to use copy env
 ARG TIPTAP_PRO_TOKEN
 ARG NEXTAUTH_SECRET
@@ -23,6 +24,7 @@ ARG UPLOADTHING_TOKEN
 ARG NEXT_PUBLIC_HOST_NAS_WS
 ARG GITHUB_ID
 ARG GITHUB_SECRET
+ARG NEXTAUTH_URL
 
 # This Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
 # Make sure you update both files!
@@ -33,8 +35,8 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 
 COPY . .
-RUN pnpm add -g turbo
-RUN turbo prune othi --docker
+# RUN pnpm add -g turbo
+RUN pnpm dlx turbo prune othi --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 
@@ -74,5 +76,10 @@ USER nextjs
 COPY --from=installer --chown=nextjs:nodejs /app/apps/othi/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/othi/.next/static ./apps/othi/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/othi/public ./apps/othi/public
+
+EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
 
 CMD node apps/othi/server.js

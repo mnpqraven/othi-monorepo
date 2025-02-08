@@ -8,6 +8,7 @@ services:
       args:
         TIPTAP_PRO_TOKEN: ${TIPTAP_PRO_TOKEN}
         NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+        NEXTAUTH_URL: ${NEXTAUTH_URL}
         EDGE_CONFIG: ${EDGE_CONFIG}
         DB_URL: ${DB_URL}
         DB_AUTH_TOKEN: ${DB_AUTH_TOKEN}

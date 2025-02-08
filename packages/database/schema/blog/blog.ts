@@ -19,7 +19,7 @@ export const blogs = sqliteTable("blogs", {
 
 export const insertBlogSchema = createInsertSchema(blogs, {
   title: (schema) =>
-    schema.title.min(1, {
+    schema.min(1, {
       message: "Blog title must be at least 1 character long",
     }),
 });
@@ -34,8 +34,8 @@ export const blogTags = sqliteTable("blog_tag", {
 });
 
 export const insertBlogTagSchema = createInsertSchema(blogTags, {
-  code: (schema) => schema.code.min(1, { message: "Required" }),
-  label: (schema) => schema.code.min(1, { message: "Required" }),
+  code: (schema) => schema.min(1, { message: "Required" }),
+  label: (schema) => schema.min(1, { message: "Required" }),
 });
 
 export type BlogTag = typeof blogTags.$inferSelect;
