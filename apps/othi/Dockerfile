@@ -77,6 +77,10 @@ COPY --from=installer --chown=nextjs:nodejs /app/apps/othi/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/othi/.next/static ./apps/othi/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/othi/public ./apps/othi/public
 
+# alleviate libsql error, remove when issue is fixed
+# https://github.com/tursodatabase/libsql-client-ts/issues/295
+COPY --from=installer /app/node_modules ./node_modules
+
 EXPOSE 3000
 
 ENV PORT 3000
