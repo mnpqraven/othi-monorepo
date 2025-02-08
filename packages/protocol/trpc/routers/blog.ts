@@ -261,10 +261,12 @@ async function createBlog({
 export const blogRouter = router({
   listMeta: publicProcedure
     // TODO: input
-    .query(async () => {
+    .query(async ({ ctx }) => {
       // BUG: this breaks build
       // const cacheFn = cache(getBlogs, ["blogs"]);
       const res = await getBlogs();
+
+      if (ctx.role === "public") return res.filter((e) => e.publish);
       return res;
     }),
   byId: publicProcedure

@@ -2,7 +2,7 @@ import type { Params } from "lib/generics";
 import { trpcServer } from "protocol/trpc/react/server";
 import { EditorProvider } from "@othi/components/editor/EditorProvider";
 import Link from "next/link";
-import { MoveLeft } from "lucide-react";
+import { Info, MoveLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 import { isSuperAdmin } from "auth";
 import { getServerSession } from "next-auth";
@@ -27,8 +27,8 @@ export default async function Page({ params }: Params) {
   const tags = "tags" in meta ? meta.tags.map((e) => e.code) : undefined;
 
   return (
-    <BlogFormProvider defaultValue={{ ...meta, tags }} id={id}>
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
+      <div className="flex justify-between items-center">
         <Link
           className="text-muted-foreground flex items-center gap-2 hover:underline"
           href="/blog"
@@ -36,12 +36,19 @@ export default async function Page({ params }: Params) {
           <MoveLeft className="h-4 w-4" />
           Blog
         </Link>
+        <span className="inline-flex gap-1 text-sm text-muted-foreground items-center">
+          <Info className="h-4 w-4" />
+          Open help menu with Ctrl + /
+        </span>
+      </div>
+
+      <BlogFormProvider defaultValue={{ ...meta, tags }} id={id} mode="update">
         <BlogForm />
 
         <EditorProvider content={contentHtml}>
           <EditorSubmitButton mode="update" />
         </EditorProvider>
-      </div>
-    </BlogFormProvider>
+      </BlogFormProvider>
+    </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Checkbox,
   Form,
   FormControl,
   FormField,
@@ -10,6 +9,7 @@ import {
   FormMessage,
   Input,
   MultiCombobox,
+  Switch,
 } from "ui/primitive";
 import { trpc } from "protocol";
 import type { HTMLAttributes } from "react";
@@ -74,13 +74,15 @@ export const BlogForm = forwardRef<
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Published</FormLabel>
-                <FormControl>
-                  <Checkbox
-                    checked={field.value ?? undefined}
-                    className="block"
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
+                <div className="h-10 flex items-center">
+                  <FormControl>
+                    <Switch
+                      checked={field.value ?? undefined}
+                      className="block"
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </div>
                 <FormMessage />
               </FormItem>
             )}

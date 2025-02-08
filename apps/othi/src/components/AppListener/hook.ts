@@ -16,6 +16,9 @@ export function useViewportInfo(TOP_SCROLL_HEIGHT = 40) {
     [TOP_SCROLL_HEIGHT, setIsScrolled, isScrolled],
   );
 
+  /**
+   * scrolls to top
+   */
   function scrollFn() {
     if (typeof window !== "undefined")
       window.scrollTo({

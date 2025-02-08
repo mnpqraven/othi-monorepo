@@ -3,6 +3,21 @@
 @tailwind utilities;
 
 @layer base {
+  /* revert bullet style */
+  .editor {
+    ul,
+    ol {
+      list-style: revert;
+      margin: revert;
+      padding: revert;
+    }
+    blockquote {
+      border-left: 3px solid hsl(var(--muted));
+      margin: 1.5rem 0;
+      padding-left: 1rem;
+    }
+  }
+
   /* hiding arrows in number inputs */
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button,

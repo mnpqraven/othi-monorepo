@@ -6,7 +6,7 @@ import { cva } from "class-variance-authority";
 import { useViewportInfo } from "./AppListener/hook";
 
 const style = cva(
-  "rounded-full right-20 bottom-20 fixed p-4 h-auto transition-all duration-500 ease-in",
+  "rounded-full right-20 bottom-20 fixed p-4 h-auto transition-all duration-200 ease-in",
   {
     variants: {
       variant: {

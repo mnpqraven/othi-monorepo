@@ -29,6 +29,10 @@ import {
   Undo,
   X,
   Heading2,
+  List,
+  ListOrdered,
+  Redo,
+  TextQuote,
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -119,6 +123,7 @@ export function EditorSubscript() {
     </Toggle>
   );
 }
+
 export function EditorSuperscript() {
   const { editor } = useCurrentEditor();
   if (!editor) return null;
@@ -164,6 +169,7 @@ export function EditorUndo() {
         editor.chain().focus().undo().run();
       }}
       size="sm"
+      variant="ghost"
     >
       <Undo className="w-4 h-4" />
     </Button>
@@ -181,8 +187,9 @@ export function EditorRedo() {
         editor.chain().focus().undo().run();
       }}
       size="sm"
+      variant="ghost"
     >
-      <Undo className="w-4 h-4" />
+      <Redo className="w-4 h-4" />
     </Button>
   );
 }
@@ -309,5 +316,56 @@ export function EditorHeadingGroup() {
         </div>
       </PopoverContent>
     </Popover>
+  );
+}
+
+export function EditorBulletList() {
+  const { editor } = useCurrentEditor();
+  if (!editor) return null;
+
+  return (
+    <Toggle
+      onClick={() => {
+        editor.chain().focus().toggleBulletList().run();
+      }}
+      pressed={editor.isActive("bulletList")}
+      size="sm"
+    >
+      <List className="w-4 h-4" />
+    </Toggle>
+  );
+}
+
+export function EditorOrderedList() {
+  const { editor } = useCurrentEditor();
+  if (!editor) return null;
+
+  return (
+    <Toggle
+      onClick={() => {
+        editor.chain().focus().toggleOrderedList().run();
+      }}
+      pressed={editor.isActive("orderedList")}
+      size="sm"
+    >
+      <ListOrdered className="w-4 h-4" />
+    </Toggle>
+  );
+}
+
+export function EditorBlockquote() {
+  const { editor } = useCurrentEditor();
+  if (!editor) return null;
+
+  return (
+    <Toggle
+      onClick={() => {
+        editor.chain().focus().toggleBlockquote().run();
+      }}
+      pressed={editor.isActive("blockquote")}
+      size="sm"
+    >
+      <TextQuote className="w-4 h-4" />
+    </Toggle>
   );
 }

@@ -3,7 +3,7 @@ import type { NextRequestWithAuth } from "next-auth/middleware";
 import { env } from "env";
 import { authOptions } from "./authOptions";
 
-const DEV = process.env.NODE_ENV === "development";
+const DEV = env.DEBUG_AUTH;
 
 interface GithubUser {
   id: number;

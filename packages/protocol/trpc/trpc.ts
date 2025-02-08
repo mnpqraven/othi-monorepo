@@ -35,10 +35,6 @@ interface ContextOpts {
 export const createTRPCContext = async (
   opts: ContextOpts,
 ): Promise<ContextOpts & Context> => {
-  // NOTE: THIS UNDEFINED CHECK IS VERY IMPORTANT! ERROR WON'T SHOW UP IN
-  // STACK TRACE, CHECK THIS IF YOU SEE ON VERCEL
-  // 'undefined' is not valid JSON
-
   let role: "public" | "authed" | "sudo" = "public";
 
   if (opts.cookies) {

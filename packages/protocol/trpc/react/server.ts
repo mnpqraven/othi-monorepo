@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import "server-only";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { createHydrationHelpers } from "@trpc/react-query/rsc";
 import { cache as reactCache } from "react";
 import { unstable_cache } from "next/cache";
@@ -16,6 +16,7 @@ const createContext = reactCache(() => {
 
   return createTRPCContext({
     headers: heads,
+    cookies,
   });
 });
 

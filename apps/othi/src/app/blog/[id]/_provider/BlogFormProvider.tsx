@@ -1,14 +1,17 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editorTempBlogIdAtom } from "@othi/components/editor/store";
+import {
+  editorTempBlogIdAtom,
+  generateEditorTempBlogIdAtom,
+} from "@othi/components/editor/store";
 import { insertBlogSchema, insertBlogTagSchema } from "database/schema";
 import { useSetAtom } from "jotai";
 import { RESET } from "jotai/utils";
 import { useRouter } from "next/navigation";
 import type { RouterInputs } from "protocol";
 import { trpc } from "protocol";
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useEffect, type ReactNode } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { toast } from "ui/primitive/sonner";
@@ -53,11 +56,13 @@ interface ProviderProps {
   children: ReactNode;
   id?: string;
   defaultValue?: MetaForm;
+  mode: "create" | "update";
 }
 export function BlogFormProvider({
   children,
   id,
   defaultValue,
+  mode,
 }: ProviderProps) {
   const router = useRouter();
   const form = useForm<MetaForm>({
@@ -67,7 +72,16 @@ export function BlogFormProvider({
       ...defaultValue,
     },
   });
+  const createTempBlogId = useSetAtom(generateEditorTempBlogIdAtom);
   const reset = useSetAtom(editorTempBlogIdAtom);
+
+  // generates a new id on render
+  useEffect(() => {
+    if (mode === "create") createTempBlogId();
+    return () => {
+      reset(RESET);
+    };
+  }, [createTempBlogId, reset, mode]);
 
   const { mutate: update, isPending: isUpdating } =
     trpc.blog.update.everything.useMutation({
