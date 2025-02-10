@@ -1,9 +1,10 @@
 "use client";
 
-import { commandOpenAtom } from "@othi/lib/store";
+import { commandAtom } from "@othi/lib/store";
 import { useCurrentEditor } from "@tiptap/react";
 import { useAtom, useAtomValue } from "jotai";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { focusAtom } from "jotai-optics";
 import { editorHelpDialogOpen } from "./store";
 
 /**
@@ -16,7 +17,11 @@ import { editorHelpDialogOpen } from "./store";
  * - opens help menu with ctlr + /
  */
 export function EditorListener() {
-  const open = useAtomValue(commandOpenAtom);
+  const _openAtom = useMemo(
+    () => focusAtom(commandAtom, (optic) => optic.prop("openState")),
+    [],
+  );
+  const open = useAtomValue(_openAtom);
   const { editor } = useCurrentEditor();
 
   // KEYBOARD TRAPPING
