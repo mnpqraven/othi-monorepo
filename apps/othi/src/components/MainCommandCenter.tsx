@@ -1,7 +1,11 @@
 "use client";
 
-import { commandOpenAtom, commandSearchInputAtom } from "@othi/lib/store";
-import { useAtom } from "jotai";
+import {
+  commandSearchInputAtom,
+  useCommandReducer,
+  useSetCommandReducer,
+} from "@othi/lib/store";
+import { useAtom, useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import {
@@ -13,6 +17,7 @@ import {
   CommandList,
 } from "ui/primitive";
 import { z } from "zod";
+import { useTheme } from "next-themes";
 
 const routeConfSchema = z
   .object({
@@ -34,48 +39,136 @@ const _routeConf: z.input<typeof routeConfSchema> = [
 const routeConf = routeConfSchema.parse(_routeConf);
 
 export function MainCommandCenter() {
-  const [commandOpen, setCommandOpen] = useAtom(commandOpenAtom);
   const [search, setSearch] = useAtom(commandSearchInputAtom);
-  const router = useRouter();
+
+  const [commandCenter, dispatch] = useCommandReducer();
+
+  useEffect(() => {
+    const keyFn = (e: KeyboardEvent) => {
+      if (e.key === "Backspace" && !search.length) {
+        dispatch({ type: "goParent", payload: undefined });
+      }
+    };
+
+    window.addEventListener("keydown", keyFn);
+
+    return () => {
+      window.removeEventListener("keydown", keyFn);
+    };
+  }, [dispatch, search.length]);
+
+  return (
+    <CommandDialog
+      loop
+      onOpenChange={(payload) => {
+        dispatch({ type: "toggleOpen", payload });
+      }}
+      open={commandCenter.openState}
+    >
+      <CommandInput
+        onValueChange={setSearch}
+        placeholder="Type a command or search..."
+        slotBefore={
+          <div className="mr-2 inline-flex flex-nowrap gap-1">
+            {commandCenter.levelName.map((n) => (
+              <code className="text-nowrap" key={n}>{`/${n}`}</code>
+            ))}
+          </div>
+        }
+        value={search}
+      />
+      <CommandList>
+        <CommandEmpty>No results found.</CommandEmpty>
+        {commandCenter.levelDepth === 0 ? <CommandGroupRoot /> : null}
+        {commandCenter.levelDepth === 1 &&
+        commandCenter.levelName.at(0) === "theme" ? (
+          <CommandGroupTheme />
+        ) : null}
+        {commandCenter.levelDepth === 1 &&
+        commandCenter.levelName.at(0) === "go" ? (
+          <CommandGroupGo />
+        ) : null}
+      </CommandList>
+    </CommandDialog>
+  );
+}
+
+function CommandGroupRoot() {
+  const dispatch = useSetCommandReducer();
+  return (
+    <CommandGroup heading="Command">
+      <CommandItem
+        onSelect={() => {
+          dispatch({ type: "goLevel", payload: { levelName: "theme" } });
+        }}
+      >
+        <code className="mr-2">/theme</code> Set theme
+      </CommandItem>
+      <CommandItem
+        onSelect={() => {
+          dispatch({ type: "goLevel", payload: { levelName: "go" } });
+        }}
+      >
+        <code className="mr-2">/go</code> Go to page
+      </CommandItem>
+    </CommandGroup>
+  );
+}
+
+function CommandGroupTheme() {
+  const { setTheme } = useTheme();
+  return (
+    <CommandGroup heading="Theme">
+      <CommandItem
+        onSelect={() => {
+          setTheme("dark");
+        }}
+      >
+        Dark
+      </CommandItem>
+      <CommandItem
+        onSelect={() => {
+          setTheme("light");
+        }}
+      >
+        Light
+      </CommandItem>
+      <CommandItem
+        onSelect={() => {
+          setTheme("system");
+        }}
+      >
+        System
+      </CommandItem>
+    </CommandGroup>
+  );
+}
+
+function CommandGroupGo() {
+  const search = useAtomValue(commandSearchInputAtom);
+  const dispatch = useSetCommandReducer();
   const isSudo = search === "sudo";
+  const routes = routeConf.filter(({ guard }) => viewable(guard));
+  const router = useRouter();
 
   function viewable(guardOpt?: boolean) {
     // no guard = no check needed
     if (!guardOpt) return true;
     return isSudo;
   }
-
-  useEffect(() => {
-    // reset on open instead of on close to avoid content shift when the dialog
-    // starts to close
-    if (commandOpen) setSearch("");
-  }, [commandOpen, setSearch]);
-
   return (
-    <CommandDialog loop onOpenChange={setCommandOpen} open={commandOpen}>
-      <CommandInput
-        onValueChange={setSearch}
-        placeholder="Type a command or search..."
-        value={search}
-      />
-      <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup>
-          {routeConf.map(({ name, path, guard }) =>
-            viewable(guard) ? (
-              <CommandItem
-                key={name}
-                onSelect={() => {
-                  setCommandOpen(false);
-                  router.push(path);
-                }}
-              >
-                {name}
-              </CommandItem>
-            ) : null,
-          )}
-        </CommandGroup>
-      </CommandList>
-    </CommandDialog>
+    <CommandGroup heading="Command">
+      {routes.map((route) => (
+        <CommandItem
+          key={route.path}
+          onSelect={() => {
+            router.push(route.path);
+            dispatch({ type: "toggleOpen", payload: false });
+          }}
+        >
+          {route.name}
+        </CommandItem>
+      ))}
+    </CommandGroup>
   );
 }

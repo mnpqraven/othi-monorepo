@@ -1,22 +1,21 @@
 "use client";
 
 import { useCallback, useEffect, type ReactNode } from "react";
-import { useSetAtom } from "jotai";
-import { commandOpenAtom } from "@othi/lib/store";
+import { useSetCommandReducer } from "@othi/lib/store";
 import { useViewportInfo } from "./hook";
 
 export function AppListener({ children }: { children: ReactNode }) {
   const { scrollEvent } = useViewportInfo();
-  const setCommandOpen = useSetAtom(commandOpenAtom);
+  const setCommand = useSetCommandReducer();
 
   const commandCenterFn = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setCommandOpen((open) => !open);
+        setCommand({ type: "toggleOpen", payload: undefined });
       }
     },
-    [setCommandOpen],
+    [setCommand],
   );
 
   const cleanup = useCallback(() => {
