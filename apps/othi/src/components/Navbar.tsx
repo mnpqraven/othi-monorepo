@@ -7,6 +7,7 @@ import { forwardRef } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useViewportInfo } from "./AppListener/hook";
+import { LoggedAvatar } from "./LoggedAvatar";
 
 const HEADER_HEIGHT = 64; // in px
 
@@ -24,15 +25,15 @@ export const Navbar = forwardRef<
   return (
     <div
       className={cn(
-        "sticky top-0 flex gap-2 duration-1000 pl-4 items-center z-50 justify-between",
-        isScrolled ? "bg-slate-700/50 backdrop-blur-md" : "bg-slate-700",
+        "sticky top-0 z-50 flex items-center justify-between gap-2 border-b px-4 duration-1000",
+        isScrolled ? "bg-background/50 backdrop-blur-md" : "bg-background",
         className,
       )}
       ref={ref}
       style={{ height: `${HEADER_HEIGHT}px` }}
       {...props}
     >
-      <div className="text-2xl font-bold font-mono flex gap-2">
+      <div className="flex gap-2 font-mono text-2xl font-bold">
         <span>{truncatedPath.toUpperCase()}</span>
         {(status === "authenticated" ? adminRoutes : []).map((route) => (
           <Link href={route} key={route}>
@@ -40,6 +41,8 @@ export const Navbar = forwardRef<
           </Link>
         ))}
       </div>
+
+      {status === "authenticated" ? <LoggedAvatar /> : null}
     </div>
   );
 });
