@@ -194,17 +194,20 @@ async function updateTags(input: { blogId: string; tags: string[] }) {
   ]);
 }
 
+// WARN: why are we using this instead of insertschema
 const updateBlogSchema = z.object({
   blogId: z.string(),
   title: z.string(),
   htmlString: z.string(),
   tags: z.string().array().optional(),
+  publish: z.boolean().nullish().optional(),
 });
 async function updateBlog({
   blogId,
   htmlString,
   title,
   tags,
+  publish,
 }: z.TypeOf<typeof updateBlogSchema>) {
   const oldFileKey = (await getBlog({ id: blogId }))?.fileKey;
   if (!oldFileKey)
@@ -227,6 +230,7 @@ async function updateBlog({
     fileKey,
     fileName,
     mdUrl,
+    publish,
   });
   // TODO: media
   return { success: true as const, data: updatedMeta.at(0) };

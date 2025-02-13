@@ -23,10 +23,10 @@ export function EditorSubmitButton({ mode }: Prop) {
     if (editor && valid && blogId) {
       await form.handleSubmit(({ title, ...rest }) => {
         update({
+          ...rest,
           htmlString: editor.getHTML(),
           blogId,
           title,
-          tags: rest.tags,
         });
       })();
     }
