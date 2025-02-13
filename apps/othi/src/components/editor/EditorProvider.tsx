@@ -86,7 +86,12 @@ export function EditorProvider({
 }) {
   // from textarea
   const editorStyle = cva(
-    "border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring min-h-[80px] w-full rounded-md border px-4 py-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 editor",
+    // custom name
+    [
+      "markdown",
+      // some of these styles need to move to globals.css
+      "border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring min-h-[80px] w-full rounded-md border px-4 py-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+    ],
   );
   const { extensions } = useExtensions();
 
@@ -100,7 +105,7 @@ export function EditorProvider({
       }}
       extensions={extensions}
       immediatelyRender={false}
-      slotBefore={<EditorMenubar />}
+      slotBefore={<EditorMenubar className="sticky top-16 z-20" />}
     >
       <EditorPopover />
       <EditorListener />

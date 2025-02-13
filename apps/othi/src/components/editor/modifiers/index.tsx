@@ -51,7 +51,7 @@ export function EditorBold() {
       pressed={editor.isActive("bold")}
       size="sm"
     >
-      <Bold className="w-4 h-4" />
+      <Bold className="h-4 w-4" />
     </Toggle>
   );
 }
@@ -68,7 +68,7 @@ export function EditorItalic() {
       pressed={editor.isActive("italic")}
       size="sm"
     >
-      <Italic className="w-4 h-4" />
+      <Italic className="h-4 w-4" />
     </Toggle>
   );
 }
@@ -85,7 +85,7 @@ export function EditorUnderline() {
       pressed={editor.isActive("underline")}
       size="sm"
     >
-      <Underline className="w-4 h-4" />
+      <Underline className="h-4 w-4" />
     </Toggle>
   );
 }
@@ -102,7 +102,7 @@ export function EditorStrike() {
       pressed={editor.isActive("strike")}
       size="sm"
     >
-      <Strikethrough className="w-4 h-4" />
+      <Strikethrough className="h-4 w-4" />
     </Toggle>
   );
 }
@@ -119,7 +119,7 @@ export function EditorSubscript() {
       pressed={editor.isActive("strike")}
       size="sm"
     >
-      <Subscript className="w-4 h-4" />
+      <Subscript className="h-4 w-4" />
     </Toggle>
   );
 }
@@ -136,7 +136,7 @@ export function EditorSuperscript() {
       pressed={editor.isActive("strike")}
       size="sm"
     >
-      <Superscript className="w-4 h-4" />
+      <Superscript className="h-4 w-4" />
     </Toggle>
   );
 }
@@ -153,7 +153,7 @@ export function EditorCode() {
       pressed={editor.isActive("code")}
       size="sm"
     >
-      <Code className="w-4 h-4" />
+      <Code className="h-4 w-4" />
     </Toggle>
   );
 }
@@ -164,6 +164,7 @@ export function EditorUndo() {
 
   return (
     <Button
+      className="h-8"
       disabled={!editor.can().undo()}
       onClick={() => {
         editor.chain().focus().undo().run();
@@ -171,7 +172,7 @@ export function EditorUndo() {
       size="sm"
       variant="ghost"
     >
-      <Undo className="w-4 h-4" />
+      <Undo className="h-4 w-4" />
     </Button>
   );
 }
@@ -182,6 +183,7 @@ export function EditorRedo() {
 
   return (
     <Button
+      className="h-8"
       disabled={!editor.can().redo()}
       onClick={() => {
         editor.chain().focus().undo().run();
@@ -189,7 +191,7 @@ export function EditorRedo() {
       size="sm"
       variant="ghost"
     >
-      <Redo className="w-4 h-4" />
+      <Redo className="h-4 w-4" />
     </Button>
   );
 }
@@ -253,7 +255,7 @@ export function EditorLink() {
                   <div className="flex gap-2">
                     <Input autoComplete="off" placeholder="Link" {...field} />
                     <Button className="p-2" type="submit" variant="outline">
-                      <Check className="w-4 h-4" />
+                      <Check className="h-4 w-4" />
                     </Button>
                     <Button
                       className="p-2"
@@ -261,7 +263,7 @@ export function EditorLink() {
                       type="button"
                       variant="outline"
                     >
-                      <X className="w-4 h-4" />
+                      <X className="h-4 w-4" />
                     </Button>
                   </div>
                   <FormMessage />
@@ -331,7 +333,7 @@ export function EditorBulletList() {
       pressed={editor.isActive("bulletList")}
       size="sm"
     >
-      <List className="w-4 h-4" />
+      <List className="h-4 w-4" />
     </Toggle>
   );
 }
@@ -348,7 +350,7 @@ export function EditorOrderedList() {
       pressed={editor.isActive("orderedList")}
       size="sm"
     >
-      <ListOrdered className="w-4 h-4" />
+      <ListOrdered className="h-4 w-4" />
     </Toggle>
   );
 }
@@ -365,7 +367,7 @@ export function EditorBlockquote() {
       pressed={editor.isActive("blockquote")}
       size="sm"
     >
-      <TextQuote className="w-4 h-4" />
+      <TextQuote className="h-4 w-4" />
     </Toggle>
   );
 }

@@ -52,7 +52,7 @@ export function EditorSubmitButton({ mode }: Prop) {
   if (mode === "update")
     return (
       <Button
-        className="gap-1 items-center"
+        className="sticky bottom-0 items-center gap-1"
         disabled={disabled || isPending}
         onClick={onUpdate}
         type="button"
@@ -64,7 +64,7 @@ export function EditorSubmitButton({ mode }: Prop) {
 
   return (
     <Button
-      className="gap-1 items-center"
+      className="items-center gap-1"
       disabled={disabled || isPending}
       onClick={onCreate}
       type="button"

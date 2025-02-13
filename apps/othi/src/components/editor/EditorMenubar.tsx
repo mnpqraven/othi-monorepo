@@ -1,4 +1,7 @@
 import { useCurrentEditor } from "@tiptap/react";
+import type { HTMLAttributes } from "react";
+import { forwardRef } from "react";
+import { cn } from "lib";
 import {
   EditorBlockquote,
   EditorBold,
@@ -14,12 +17,22 @@ import {
   EditorUndo,
 } from "./modifiers";
 
-export function EditorMenubar() {
+export const EditorMenubar = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement>
+>(function EditorMenubar({ className, ...props }, ref) {
   const { editor } = useCurrentEditor();
   if (!editor) return null;
 
   return (
-    <div className="flex gap-2">
+    <div
+      className={cn(
+        "bg-background flex gap-2 rounded-md border p-1",
+        className,
+      )}
+      {...props}
+      ref={ref}
+    >
       <EditorUndo />
       <EditorRedo />
       <EditorBold />
@@ -34,4 +47,4 @@ export function EditorMenubar() {
       <EditorBlockquote />
     </div>
   );
-}
+});

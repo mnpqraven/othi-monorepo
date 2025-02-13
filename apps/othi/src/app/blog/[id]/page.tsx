@@ -71,7 +71,7 @@ export default async function Page({ params }: Params) {
 
       <Separator />
 
-      <HtmlContent html={contentHtml} />
+      <HtmlContent html={contentHtml} markdown />
     </div>
   );
 }

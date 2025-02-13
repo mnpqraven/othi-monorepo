@@ -3,18 +3,29 @@
 @tailwind utilities;
 
 @layer base {
+
   /* revert bullet style */
-  .editor {
+  .markdown {
+
     ul,
     ol {
       list-style: revert;
       margin: revert;
       padding: revert;
     }
+
+    a {
+      text-decoration-line: underline;
+    }
+
     blockquote {
-      border-left: 3px solid hsl(var(--muted));
+      border-left: 3px solid hsl(var(--muted-foreground));
       margin: 1.5rem 0;
       padding-left: 1rem;
+    }
+
+    code {
+      @apply bg-muted text-muted-foreground relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
     }
   }
 
@@ -98,6 +109,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
@@ -126,25 +138,30 @@ h1 {
   margin: 0.67em 0;
   font-weight: bold;
 }
+
 h2 {
   font-size: 1.5em;
   margin: 0.83em 0;
   font-weight: bold;
 }
+
 h3 {
   font-size: 1.17em;
   margin: 1em 0;
   font-weight: bold;
 }
+
 h4 {
   margin: 1.33em 0;
   font-weight: bold;
 }
+
 h5 {
   font-size: 0.83em;
   margin: 1.67em 0;
   font-weight: bold;
 }
+
 h6 {
   font-size: 0.67em;
   margin: 2em 0;
