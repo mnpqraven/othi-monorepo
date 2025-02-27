@@ -12,7 +12,10 @@ import {
 import { eq, isNull } from "drizzle-orm";
 import { db, LibsqlError } from "database";
 import { remark } from "remark";
-import html from "remark-html";
+import remarkGfm from "remark-gfm";
+import remarkRehype from "remark-rehype";
+import rehypeStringify from "rehype-stringify";
+import remarkParse from "remark-parse";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { generateUlid } from "lib";
@@ -72,7 +75,12 @@ function convertToMD(htmlString: string) {
   const DOMPurify = createDOMPurify(window);
   const clean = DOMPurify.sanitize(htmlString);
 
-  const turndownService = new TurndownService();
+  const _turndownService = new TurndownService();
+  const turndownService = _turndownService.addRule("strikethrough", {
+    filter: ["del", "s"],
+
+    replacement: (content) => `~~${content}~~`,
+  });
   const markdown = turndownService.turndown(clean);
 
   return markdown;
@@ -186,17 +194,20 @@ async function updateTags(input: { blogId: string; tags: string[] }) {
   ]);
 }
 
+// WARN: why are we using this instead of insertschema
 const updateBlogSchema = z.object({
   blogId: z.string(),
   title: z.string(),
   htmlString: z.string(),
   tags: z.string().array().optional(),
+  publish: z.boolean().nullish().optional(),
 });
 async function updateBlog({
   blogId,
   htmlString,
   title,
   tags,
+  publish,
 }: z.TypeOf<typeof updateBlogSchema>) {
   const oldFileKey = (await getBlog({ id: blogId }))?.fileKey;
   if (!oldFileKey)
@@ -219,6 +230,7 @@ async function updateBlog({
     fileKey,
     fileName,
     mdUrl,
+    publish,
   });
   // TODO: media
   return { success: true as const, data: updatedMeta.at(0) };
@@ -282,12 +294,17 @@ export const blogRouter = router({
       const meta = await getBlog({ id, tags });
 
       if (meta) {
-        const fileContents = await fetch(meta.mdUrl, {
+        const readFile = fetch(meta.mdUrl, {
           cache: "force-cache",
         }).then((data) => data.text());
 
         // convert markdown into HTML string
-        const dataPipe = await remark().use(html).process(fileContents);
+        const dataPipe = await remark()
+          .use(remarkParse)
+          .use(remarkGfm)
+          .use(remarkRehype)
+          .use(rehypeStringify)
+          .process(await readFile);
         const contentHtml = dataPipe.toString();
 
         return { meta, contentHtml };
