@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Othi's box",
@@ -7,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return redirect("/blog");
+  return "WIP";
 }
