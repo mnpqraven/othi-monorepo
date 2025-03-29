@@ -1,9 +1,6 @@
 name: web_othi
 #
-on:
-  push:
-    paths:
-      - "apps/othi/**/*"
+on: [push]
 jobs:
   lint:
     runs-on: ubuntu-latest
