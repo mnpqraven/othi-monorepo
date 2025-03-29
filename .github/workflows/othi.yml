@@ -32,8 +32,8 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           username: ubuntu
-          host: ${{ secrets.HOST }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.VPS_HOST }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd service_repos/othi-monorepo
             git pull --rebase
