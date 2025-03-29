@@ -1,0 +1,30 @@
+name: web_othi
+
+on:
+  push:
+    paths:
+      - "apps/othi/**/*"
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Try build
+        run: docker compose build
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: ssh deploy
+        uses: appleboy/ssh-action@v1
+        with:
+          username: ubuntu
+          host: ${{ secrets.HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd service_repos/othi-monorepo
+            git pull --rebase
+            sudo docker compose build
+            sudo docker compose up --detach othi
