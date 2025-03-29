@@ -1,5 +1,5 @@
 name: web_othi
-#
+
 on: [push]
 jobs:
   lint:
@@ -8,6 +8,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Try build
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_AUTH_TOKEN: ${{secrets.DB_AUTH_TOKEN}}
+          ADMIN_IDENT: ${{secrets.ADMIN_IDENT}}
+          EDGE_CONFIG: ${{secrets.EDGE_CONFIG}}
+          AUTH_GITHUB_IDENT: ${{secrets.AUTH_GITHUB_IDENT}}
+          GITHUB_ID: ${{secrets.GGITHUB_ID }}
+          GITHUB_SECRET: ${{secrets.GGITHUB_SECRET }}
+          OTHI_GITHUB_ID: ${{secrets.OTHI_GITHUB_ID}}
+          OTHI_GITHUB_SECRET: ${{secrets.OTHI_GITHUB_SECRET}}
+          NEXTAUTH_SECRET: ${{secrets.NEXTAUTH_SECRET}}
+          NEXT_PUBLIC_HOST_NAS_WS: ${{secrets.NEXT_PUBLIC_HOST_NAS_WS}}
+          UPLOADTHING_TOKEN: ${{secrets.UPLOADTHING_TOKEN}}
+          TIPTAP_PRO_TOKEN: ${{secrets.TIPTAP_PRO_TOKEN}}
         run: docker compose build
   deploy:
     runs-on: ubuntu-latest
