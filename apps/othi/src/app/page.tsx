@@ -6,5 +6,10 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return "WIP";
+  return (
+    <div className="flex flex-col gap-4">
+      <h1>Othi&apos;s ramblings</h1>
+      <h2>Blogs, rants and random snippets regarding tech, gaming and music</h2>
+    </div>
+  );
 }

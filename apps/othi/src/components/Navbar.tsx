@@ -35,7 +35,7 @@ export const Navbar = forwardRef<
     >
       <div className="flex gap-2 font-mono text-2xl font-bold">
         <span>{truncatedPath.toUpperCase()}</span>
-        {(status === "authenticated" ? adminRoutes : []).map((route) => (
+        {(status === "authenticated" ? adminRoutes : ["/blog"]).map((route) => (
           <Link href={route} key={route}>
             {route.toUpperCase()}
           </Link>
