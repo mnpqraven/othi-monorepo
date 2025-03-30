@@ -27,7 +27,7 @@
     "env": "workspace:*",
     "jsdom": "^25.0.1",
     "lib": "workspace:*",
-    "next": "^15.2.4",
+    "next": "^15.0.4",
     "next-auth": "^4.24.7",
     "react": "^19.1.0",
     "rehype-stringify": "^10.0.1",

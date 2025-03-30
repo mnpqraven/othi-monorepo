@@ -80,7 +80,7 @@
     "jotai-tanstack-query": "^0.8.5",
     "lib": "workspace:*",
     "lucide-react": "^0.258.0",
-    "next": "15.2.4",
+    "next": "15.0.4",
     "next-auth": "^4.24.7",
     "next-themes": "^0.2.1",
     "optics-ts": "^2.4.1",

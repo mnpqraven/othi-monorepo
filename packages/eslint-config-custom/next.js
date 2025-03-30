@@ -13,7 +13,7 @@ import pluginQuery from "@tanstack/eslint-plugin-query";
  *
  * @type {import("eslint").Linter.Config[]}
  * */
-export const nextJsConfig = [
+export const config = [
   ...baseConfig,
   js.configs.recommended,
   eslintConfigPrettier,
