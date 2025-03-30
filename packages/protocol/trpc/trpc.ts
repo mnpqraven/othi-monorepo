@@ -30,7 +30,7 @@ export interface Context {
  */
 interface ContextOpts {
   headers: Headers;
-  cookies?: () => ReadonlyRequestCookies;
+  cookies?: () => Promise<ReadonlyRequestCookies>;
 }
 export const createTRPCContext = async (
   opts: ContextOpts,

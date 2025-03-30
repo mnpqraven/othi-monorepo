@@ -1,7 +1,7 @@
 "use client";
 
-import type { ForwardedRef, HTMLAttributes } from "react";
-import { forwardRef, useState } from "react";
+import type { HTMLAttributes } from "react";
+import { useState } from "react";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { cn } from "lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
@@ -26,25 +26,21 @@ interface Prop<T> extends HTMLAttributes<HTMLButtonElement> {
   onValueChange?: (to: string) => void;
   isLoading?: boolean;
 }
-export const Combobox = forwardRef(ComboboxInner);
 
-function ComboboxInner<T>(
-  {
-    options,
-    labelAccessor,
-    valueAccessor,
-    className,
-    onValueChange,
-    value: outerValue,
-    defaultValue = "",
-    isLoading = false,
-    placeholder = "Select...",
-    searchLabel = "Search...",
-    emptyLabel = "No result found.",
-    ...props
-  }: Prop<T>,
-  ref: ForwardedRef<HTMLButtonElement>,
-) {
+function Combobox<T>({
+  options,
+  labelAccessor,
+  valueAccessor,
+  className,
+  onValueChange,
+  value: outerValue,
+  defaultValue = "",
+  isLoading = false,
+  placeholder = "Select...",
+  searchLabel = "Search...",
+  emptyLabel = "No result found.",
+  ...props
+}: Prop<T>) {
   const [open, setOpen] = useState(false);
   const [stateValue, setValue] = useState(defaultValue);
 
@@ -60,7 +56,6 @@ function ComboboxInner<T>(
         <Button
           aria-expanded={open}
           className={cn("h-full w-full justify-between", className)}
-          ref={ref}
           role="combobox"
           variant="outline"
           {...props}

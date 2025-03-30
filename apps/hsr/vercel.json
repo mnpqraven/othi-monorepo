@@ -1,3 +1,0 @@
-{
-  "buildCommand": "cd ../.. && pnpm dlx turbo run build --filter=hsr"
-}

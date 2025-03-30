@@ -79,11 +79,6 @@ type Join<T extends string[], D extends string> = T extends []
         : never
       : string;
 
-export interface Params {
-  params?: Record<string, string | string[]>;
-  searchParams?: Record<string, string>;
-}
-
 /**
  * NOTE: internal helper
  */

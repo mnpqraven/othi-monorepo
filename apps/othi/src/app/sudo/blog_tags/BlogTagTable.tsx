@@ -1,7 +1,7 @@
 "use client";
 
 import { useTable } from "lib";
-import { DataTable } from "ui/shared/table";
+import { DataTable } from "ui/shared/table/DataTable";
 import { trpc } from "protocol";
 import { useMemo } from "react";
 import { blogTagColumns } from "./columns";

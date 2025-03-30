@@ -3,24 +3,9 @@
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { cn } from "lib";
 import { Button, ButtonProps } from "./button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "./command";
+import { Command, CommandGroup, CommandInput, CommandItem } from "./command";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import {
-  ElementRef,
-  forwardRef,
-  HTMLAttributes,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
 import { Badge } from "./badge";
 import { z } from "zod";
 import Fuse, { FuseOptionKey } from "fuse.js";
@@ -355,27 +340,30 @@ interface LoadingDisplayProp extends HTMLAttributes<HTMLDivElement> {
   dataLength: number;
   emptyLabel?: string;
 }
-const LoadingDisplay = forwardRef<HTMLDivElement, LoadingDisplayProp>(function (
-  { dataLength, isLoading, emptyLabel, className, ...props },
-  ref,
-) {
+const LoadingDisplay = function ({
+  dataLength,
+  isLoading,
+  emptyLabel,
+  className,
+  ...props
+}: LoadingDisplayProp) {
   const st = cva(
     "flex gap-2 justify-center text-muted-foreground items-center p-2",
   );
 
   if (isLoading)
     return (
-      <div {...props} ref={ref} className={st({ className })}>
+      <div {...props} className={st({ className })}>
         <Loader2 className="h-4 w-4 animate-spin" />
         Loading...
       </div>
     );
   if (!isLoading && dataLength <= 0)
     return (
-      <div {...props} ref={ref} className={st({ className })}>
+      <div {...props} className={st({ className })}>
         {emptyLabel}
       </div>
     );
 
   return null;
-});
+};

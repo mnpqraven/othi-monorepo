@@ -20,10 +20,6 @@
     "target": "es5",
     "baseUrl": ".",
     "paths": {
-      "@db-center/*": ["../../apps/db-center/src/*"],
-      "@hsr/*": ["../../apps/hsr/src/*"],
-      "@planning/*": ["../../apps/planning/src/*"],
-      "@blog/*": ["../../apps/blog/src/*"],
       "@othi/*": ["../../apps/othi/src/*"]
     }
   },

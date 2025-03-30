@@ -10,8 +10,8 @@ import { createTRPCContext } from "../trpc";
 import { createQueryClient } from "./client";
 import { transformer } from "./transformer";
 
-const createContext = reactCache(() => {
-  const heads = new Headers(headers());
+const createContext = reactCache(async () => {
+  const heads = new Headers(await headers());
   heads.set("x-trpc-source", "rsc");
 
   return createTRPCContext({

@@ -1,9 +1,4 @@
-import {
-  forwardRef,
-  useState,
-  type ComponentPropsWithoutRef,
-  type ReactNode,
-} from "react";
+import { useState, type ComponentPropsWithoutRef, type ReactNode } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -52,24 +47,22 @@ export function ConfirmPopover(props: Prop) {
   );
 }
 
-const InnerPopover = forwardRef<HTMLButtonElement, Prop>(function InnerPopover(
-  {
-    children,
-    noLabel = "Cancel",
-    yesLabel = "Delete",
-    variants,
-    onConfirm,
-    text,
-    asChild,
-    // NOTE: do NOT omit this, this includes hidden props from radix as well
-    ...props
-  },
-  ref,
-) {
+const InnerPopover = function InnerPopover({
+  children,
+  noLabel = "Cancel",
+  yesLabel = "Delete",
+  variants,
+  onConfirm,
+  text,
+  asChild,
+
+  // NOTE: do NOT omit this, this includes hidden props from radix as well
+  ...props
+}: Prop) {
   const [open, setOpen] = useState(false);
   return (
     <Popover onOpenChange={setOpen} open={open}>
-      <PopoverTrigger asChild={asChild} ref={ref} {...props}>
+      <PopoverTrigger asChild={asChild} {...props}>
         {children}
       </PopoverTrigger>
       <PopoverContent className="space-y-2">
@@ -104,4 +97,4 @@ const InnerPopover = forwardRef<HTMLButtonElement, Prop>(function InnerPopover(
       </PopoverContent>
     </Popover>
   );
-});
+};

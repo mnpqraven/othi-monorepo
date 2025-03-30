@@ -21,20 +21,17 @@ interface Prop<TData> extends HTMLAttributes<HTMLDivElement> {
   renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement;
 }
 
-function DataTableInner<TData>(
-  {
-    table,
-    renderSubComponent,
-    stickyHeader = false,
-    isLoading = false,
-    spacing = "md",
-    className,
-    ...props
-  }: Prop<TData>,
-  ref: ForwardedRef<HTMLDivElement>,
-) {
+export function DataTable<TData>({
+  table,
+  renderSubComponent,
+  stickyHeader = false,
+  isLoading = false,
+  spacing = "md",
+  className,
+  ...props
+}: Prop<TData>) {
   return (
-    <div className={className} ref={ref} {...props}>
+    <div className={className} {...props}>
       <Table className="border-separate border-spacing-0">
         <TableHeader
           className={cn(
@@ -128,5 +125,3 @@ function DataTableInner<TData>(
     </div>
   );
 }
-
-export const DataTable = forwardRef(DataTableInner);
