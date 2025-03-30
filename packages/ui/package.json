@@ -7,6 +7,7 @@
   "exports": {
     "./primitive/*": "./primitive/*.tsx",
     "./primitive": "./primitive/index.tsx",
+    "./shared/*": "./shared/*.tsx",
     "./postcss.config": "./postcss.config.js",
     "./styles/globals.css": "./styles/globals.css"
   },
