@@ -9,13 +9,14 @@ interface ScrollAreaProps
   viewportClassName?: string;
 }
 
-const ScrollArea = React.forwardRef<
-  React.ElementRef<typeof ScrollAreaPrimitive.Root>,
-  ScrollAreaProps
->(({ className, viewportClassName, children, ...props }, ref) => (
+const ScrollArea = ({
+  className,
+  viewportClassName,
+  children,
+  ...props
+}: ScrollAreaProps) => (
   <ScrollAreaPrimitive.Root
     className={cn("relative overflow-hidden", className)}
-    ref={ref}
     {...props}
   >
     <ScrollAreaPrimitive.Viewport
@@ -26,14 +27,15 @@ const ScrollArea = React.forwardRef<
     <ScrollBar />
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>
-));
-// @ts-ignore override
-ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
+);
 
-const ScrollBar = React.forwardRef<
-  React.ElementRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
-  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>
->(({ className, orientation = "vertical", ...props }, ref) => (
+const ScrollBar = ({
+  className,
+  orientation = "vertical",
+  ...props
+}: React.ComponentPropsWithoutRef<
+  typeof ScrollAreaPrimitive.ScrollAreaScrollbar
+>) => (
   <ScrollAreaPrimitive.ScrollAreaScrollbar
     className={cn(
       "flex touch-none select-none transition-colors",
@@ -44,7 +46,6 @@ const ScrollBar = React.forwardRef<
       className,
     )}
     orientation={orientation}
-    ref={ref}
     {...props}
   >
     <ScrollAreaPrimitive.ScrollAreaThumb
@@ -54,8 +55,6 @@ const ScrollBar = React.forwardRef<
       )}
     />
   </ScrollAreaPrimitive.ScrollAreaScrollbar>
-));
-// @ts-ignore override
-ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
+);
 
 export { ScrollArea, ScrollBar };
