@@ -1,4 +1,3 @@
-import type { Params } from "lib/generics";
 import { trpcServer } from "protocol/trpc/react/server";
 import { EditorProvider } from "@othi/components/editor/EditorProvider";
 import Link from "next/link";
@@ -10,13 +9,17 @@ import { BlogFormProvider } from "../_provider/BlogFormProvider";
 import { BlogForm } from "../_provider/BlogForm";
 import { EditorSubmitButton } from "../_provider/EditorSubmitButton";
 
-export default async function Page({ params }: Params) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<Record<string, string>>;
+}) {
   const isSudo = await isSuperAdmin({
     sessionFn: getServerSession,
   });
   if (!isSudo) return redirect("/blog");
 
-  const id = params?.id as string;
+  const id = (await params).id as string;
   const data = await trpcServer.blog.byId({ id, tags: true });
 
   if (!data) return "not found";
